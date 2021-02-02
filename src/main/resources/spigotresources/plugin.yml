@@ -1,0 +1,14 @@
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
+author: Zeanon
+website: ${project.url}
+main: de.zeanon.testutils.TestUtils
+softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
+commands:
+  testutils:
+    description: The basic command for TestUtils
+    aliases: tu
+  testblock:
+    description: testblock
+    aliases: tb
