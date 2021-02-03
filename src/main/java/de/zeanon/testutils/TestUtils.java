@@ -1,7 +1,9 @@
 package de.zeanon.testutils;
 
-import com.sun.corba.se.impl.activation.CommandHandler;
-import de.zeanon.storagemanager.internal.utility.basic.Objects;
+import de.zeanon.testutils.init.InitMode;
+import de.zeanon.testutils.plugin.handlers.CommandHandler;
+import de.zeanon.testutils.plugin.handlers.TabCompleter;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +27,14 @@ public final class TestUtils extends JavaPlugin {
 	public void onEnable() {
 		TestUtils.setInstance(this);
 		TestUtils.setPluginManager(Bukkit.getPluginManager());
-		Objects.notNull(this.getCommand("testutils")).setExecutor(new CommandHandler());
-		Objects.notNull(this.getCommand("testutils")).setTabCompleter(new SchemManagerTabCompleter());
+		CommandHandler commandHandler = new CommandHandler();
+		TabCompleter tabCompleter = new TabCompleter();
+		Objects.requireNonNull(this.getCommand("testutils")).setExecutor(commandHandler);
+		Objects.requireNonNull(this.getCommand("testutils")).setTabCompleter(tabCompleter);
+		Objects.requireNonNull(this.getCommand("testblock")).setExecutor(commandHandler);
+		Objects.requireNonNull(this.getCommand("testblock")).setTabCompleter(tabCompleter);
+		Objects.requireNonNull(this.getCommand("tnt")).setExecutor(commandHandler);
+		Objects.requireNonNull(this.getCommand("tnt")).setTabCompleter(tabCompleter);
 		InitMode.initPlugin();
 	}
 

@@ -12,3 +12,5 @@ commands:
   testblock:
     description: testblock
     aliases: tb
+  tnt:
+    description: tnt
