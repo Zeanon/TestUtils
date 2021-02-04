@@ -3,6 +3,7 @@ package de.zeanon.testutils;
 import de.zeanon.storagemanager.internal.utility.basic.Objects;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.handlers.CommandHandler;
+import de.zeanon.testutils.plugin.handlers.EventListener;
 import de.zeanon.testutils.plugin.handlers.LocalTabCompleter;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public final class TestUtils extends JavaPlugin {
 		Objects.notNull(this.getCommand("testblock")).setTabCompleter(localTabCompleter);
 		Objects.notNull(this.getCommand("tnt")).setExecutor(commandHandler);
 		Objects.notNull(this.getCommand("tnt")).setTabCompleter(localTabCompleter);
+		TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 		InitMode.initPlugin();
 	}
 
