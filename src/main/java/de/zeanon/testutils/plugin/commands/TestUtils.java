@@ -53,12 +53,12 @@ public class TestUtils {
 						p.sendMessage(ChatColor.GOLD + "Created TG with name 'testarea_" + name + "'");
 					} else if (args[0].equalsIgnoreCase("update")) {
 						if (Bukkit.getVersion().contains("git-Paper")) {
-							Update.updatePlugin(de.zeanon.testutils.TestUtils.getInstance());
+							Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
 						} else {
 							new BukkitRunnable() {
 								@Override
 								public void run() {
-									Update.updatePlugin(de.zeanon.testutils.TestUtils.getInstance());
+									Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
 								}
 							}.runTask(de.zeanon.testutils.TestUtils.getInstance());
 						}
