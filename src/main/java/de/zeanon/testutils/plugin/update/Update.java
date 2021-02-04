@@ -39,7 +39,7 @@ public class Update {
 	}
 
 	public void updateAvailable(final @NotNull Player p) {
-		if ((p.hasPermission("TestUtils.update")) && Update.checkForUpdate()) {
+		if ((p.hasPermission("testutils.update")) && Update.checkForUpdate()) {
 			GlobalMessageUtils.sendCommandMessage("",
 												  ChatColor.RED + ""
 												  + ChatColor.BOLD + "There is a new Update available, click here to update.",
