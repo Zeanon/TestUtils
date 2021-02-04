@@ -37,28 +37,15 @@ public class LocalTabCompleter implements org.bukkit.command.TabCompleter {
 
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0], "registerblock", "registertg", "update");
+				return this.getCompletions(args[0], "registerblock", "deleteblock", "registertg", "update");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt") && args[0].equalsIgnoreCase("other")) {
 				return this.getCompletions(args[1], "allow", "deny");
+			} else if (command.getName().equalsIgnoreCase("testutils") && args[0].equalsIgnoreCase("deleteblock")) {
+				return this.getBlocks(args[1], (Player) sender);
 			} else if (command.getName().equalsIgnoreCase("testblock") && args[0].equalsIgnoreCase("here")) {
-				final @NotNull List<String> completions = new GapList<>();
-
-				try {
-					File tempDirectory = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + ((Player) sender).getUniqueId().toString());
-					if (tempDirectory.exists() && tempDirectory.isDirectory()) {
-						for (File tempFile : BaseFileUtils.listFiles(tempDirectory)) {
-							if (tempFile.getName().startsWith(args[1].toLowerCase())) {
-								completions.add(BaseFileUtils.removeExtension(tempFile.getName()));
-							}
-						}
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return completions;
+				return this.getBlocks(args[1], (Player) sender);
 			}
 		}
 		return Collections.emptyList();
@@ -72,5 +59,24 @@ public class LocalTabCompleter implements org.bukkit.command.TabCompleter {
 			}
 		}
 		return result;
+	}
+
+	private List<String> getBlocks(final @NotNull String arg, final @NotNull Player p) {
+		final @NotNull List<String> completions = new GapList<>();
+
+		try {
+			File tempDirectory = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString());
+			if (tempDirectory.exists() && tempDirectory.isDirectory()) {
+				for (File tempFile : BaseFileUtils.listFiles(tempDirectory)) {
+					if (tempFile.getName().startsWith(arg.toLowerCase())) {
+						completions.add(BaseFileUtils.removeExtension(tempFile.getName()));
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return completions;
 	}
 }

@@ -1,8 +1,12 @@
 package de.zeanon.testutils.plugin.commands;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import de.zeanon.storagemanager.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -26,6 +30,18 @@ public class TestUtils {
 							TestBlock.registerBlock(p, args[1]);
 						} else {
 							p.sendMessage(ChatColor.RED + "Too many arguments.");
+						}
+					} else if (args.length == 2 && args[0].equalsIgnoreCase("deleteblock")) {
+						final @NotNull File tempFile = new File(de.zeanon.testutils.TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString(), args[1] + ".schem");
+						if (tempFile.exists() && tempFile.isFile()) {
+							try {
+								Files.delete(tempFile.toPath());
+								p.sendMessage(ChatColor.RED + "'" + BaseFileUtils.removeExtension(tempFile.getName()) + "' has been deleted.");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						} else {
+							p.sendMessage(ChatColor.RED + "You have no TestBlock with the given name.");
 						}
 					} else if (args[0].equalsIgnoreCase("registertg")) {
 						final @NotNull String name = args.length > 1 ? args[1] : p.getName();
