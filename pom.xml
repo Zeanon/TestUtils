@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -74,7 +74,7 @@
             </resource>
 
             <resource>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <targetPath>resources</targetPath>
                 <directory>src/main/resources/pluginresources/</directory>
             </resource>

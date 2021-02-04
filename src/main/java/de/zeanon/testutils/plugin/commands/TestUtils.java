@@ -5,6 +5,7 @@ import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -18,15 +19,15 @@ public class TestUtils {
 			@Override
 			public void run() {
 				if (args.length > 0) {
-					if (args[0].equalsIgnoreCase("register")) {
+					if (args[0].equalsIgnoreCase("registerblock")) {
 						if (args.length == 1) {
-							TestAreaUtils.registerBlock(p, null);
+							TestBlock.registerBlock(p, null);
 						} else if (args.length == 2) {
-							TestAreaUtils.registerBlock(p, args[1]);
+							TestBlock.registerBlock(p, args[1]);
 						} else {
 							p.sendMessage(ChatColor.RED + "Too many arguments.");
 						}
-					} else if (args[0].equalsIgnoreCase("tg")) {
+					} else if (args[0].equalsIgnoreCase("registertg")) {
 						final @NotNull String name = args.length > 1 ? args[1] : p.getName();
 						TestAreaUtils.generate(new BukkitWorld(p.getWorld()),
 											   p.getLocation().getBlockX(),
@@ -35,7 +36,16 @@ public class TestUtils {
 											   name);
 						p.sendMessage(ChatColor.GOLD + "Created TG with name 'testarea_" + name + "'");
 					} else if (args[0].equalsIgnoreCase("update")) {
-						Update.updatePlugin(p);
+						if (Bukkit.getVersion().contains("git-Paper")) {
+							Update.updatePlugin(de.zeanon.testutils.TestUtils.getInstance());
+						} else {
+							new BukkitRunnable() {
+								@Override
+								public void run() {
+									Update.updatePlugin(de.zeanon.testutils.TestUtils.getInstance());
+								}
+							}.runTask(de.zeanon.testutils.TestUtils.getInstance());
+						}
 					}
 				} else {
 					p.sendMessage(ChatColor.RED + "Missing argument.");

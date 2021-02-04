@@ -11,14 +11,15 @@ import java.net.URL;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 
 @UtilityClass
 class PlugManEnabledUpdate {
 
-	void updatePlugin(final boolean autoReload) {
-		System.out.println(TestUtils.getInstance().getName() + " is updating...");
+	void updatePlugin(final @NotNull JavaPlugin instance) {
+		System.out.println(instance.getName() + " is updating...");
 		try {
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
@@ -28,18 +29,16 @@ class PlugManEnabledUpdate {
 											  .getCanonicalFile(), new BufferedInputStream(
 					new URL(Update.DOWNLOAD_URL)
 							.openStream()));
-			System.out.println(TestUtils.getInstance().getName() + " was updated successfully.");
-			if (autoReload) {
-				PluginUtil.reload(TestUtils.getInstance());
-			}
+			System.out.println(instance.getName() + " was updated successfully.");
+			PluginUtil.reload(instance);
 		} catch (@NotNull IOException | URISyntaxException e) {
 			e.printStackTrace();
-			System.out.println(TestUtils.getInstance().getName() + " could not be updated.");
+			System.out.println(instance.getName() + " could not be updated.");
 		}
 	}
 
-	void updatePlugin(final @NotNull Player p, final boolean autoReload) {
-		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+	void updatePlugin(final @NotNull Player p, final @NotNull JavaPlugin instance) {
+		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 					  ChatColor.RED + "updating plugin...");
 		try {
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
@@ -50,16 +49,14 @@ class PlugManEnabledUpdate {
 											  .getCanonicalFile(), new BufferedInputStream(
 					new URL(Update.DOWNLOAD_URL)
 							.openStream()));
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 						  ChatColor.RED + "update successful.");
-			if (autoReload) {
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.RED + "reloading plugin.");
-				PluginUtil.reload(TestUtils.getInstance());
-			}
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.RED + "reloading plugin.");
+			PluginUtil.reload(instance);
 		} catch (@NotNull IOException | URISyntaxException e) {
 			e.printStackTrace();
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 						  ChatColor.RED + "could not update.");
 		}
 	}

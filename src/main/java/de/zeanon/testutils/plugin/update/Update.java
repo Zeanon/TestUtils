@@ -1,11 +1,14 @@
 package de.zeanon.testutils.plugin.update;
 
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -15,23 +18,37 @@ public class Update {
 	final String DOWNLOAD_URL = Update.RELEASE_URL + "/download/TestUtils.jar";
 	private final String RELEASE_URL = "https://github.com/Zeanon/TestUtils/releases/latest";
 
-	public void updatePlugin() {
+	public void updatePlugin(final @NotNull JavaPlugin instance) {
 		if (TestUtils.getPluginManager().getPlugin("PlugMan") != null
 			&& TestUtils.getPluginManager()
 						.isPluginEnabled(TestUtils.getPluginManager().getPlugin("PlugMan"))) {
-			PlugManEnabledUpdate.updatePlugin(true);
+			PlugManEnabledUpdate.updatePlugin(instance);
 		} else {
-			DefaultUpdate.updatePlugin(false, TestUtils.getInstance());
+			DefaultUpdate.updatePlugin(instance);
 		}
 	}
 
-	public void updatePlugin(final @NotNull Player p) {
+	public void updatePlugin(final @NotNull Player p, final @NotNull JavaPlugin instance) {
 		if (TestUtils.getPluginManager().getPlugin("PlugMan") != null
 			&& TestUtils.getPluginManager()
 						.isPluginEnabled(TestUtils.getPluginManager().getPlugin("PlugMan"))) {
-			PlugManEnabledUpdate.updatePlugin(p, true);
+			PlugManEnabledUpdate.updatePlugin(p, instance);
 		} else {
-			DefaultUpdate.updatePlugin(p, false, TestUtils.getInstance());
+			DefaultUpdate.updatePlugin(p, instance);
+		}
+	}
+
+	public void updateAvailable(final @NotNull Player p) {
+		if ((p.hasPermission("TestUtils.update")) && Update.checkForUpdate()) {
+			GlobalMessageUtils.sendCommandMessage("",
+												  ChatColor.RED + ""
+												  + ChatColor.BOLD + "There is a new Update available, click here to update.",
+												  ChatColor.DARK_GREEN + ""
+												  + ChatColor.UNDERLINE + ""
+												  + ChatColor.ITALIC + ""
+												  + ChatColor.BOLD + "!!UPDATE BABY!!",
+												  "/tu update",
+												  p);
 		}
 	}
 

@@ -1,9 +1,9 @@
 package de.zeanon.testutils;
 
+import de.zeanon.storagemanager.internal.utility.basic.Objects;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.handlers.CommandHandler;
-import de.zeanon.testutils.plugin.handlers.TabCompleter;
-import java.util.Objects;
+import de.zeanon.testutils.plugin.handlers.LocalTabCompleter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,13 +28,13 @@ public final class TestUtils extends JavaPlugin {
 		TestUtils.setInstance(this);
 		TestUtils.setPluginManager(Bukkit.getPluginManager());
 		CommandHandler commandHandler = new CommandHandler();
-		TabCompleter tabCompleter = new TabCompleter();
-		Objects.requireNonNull(this.getCommand("testutils")).setExecutor(commandHandler);
-		Objects.requireNonNull(this.getCommand("testutils")).setTabCompleter(tabCompleter);
-		Objects.requireNonNull(this.getCommand("testblock")).setExecutor(commandHandler);
-		Objects.requireNonNull(this.getCommand("testblock")).setTabCompleter(tabCompleter);
-		Objects.requireNonNull(this.getCommand("tnt")).setExecutor(commandHandler);
-		Objects.requireNonNull(this.getCommand("tnt")).setTabCompleter(tabCompleter);
+		LocalTabCompleter localTabCompleter = new LocalTabCompleter();
+		Objects.notNull(this.getCommand("testutils")).setExecutor(commandHandler);
+		Objects.notNull(this.getCommand("testutils")).setTabCompleter(localTabCompleter);
+		Objects.notNull(this.getCommand("testblock")).setExecutor(commandHandler);
+		Objects.notNull(this.getCommand("testblock")).setTabCompleter(localTabCompleter);
+		Objects.notNull(this.getCommand("tnt")).setExecutor(commandHandler);
+		Objects.notNull(this.getCommand("tnt")).setTabCompleter(localTabCompleter);
 		InitMode.initPlugin();
 	}
 
