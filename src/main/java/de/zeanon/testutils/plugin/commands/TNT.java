@@ -29,7 +29,7 @@ public class TNT {
 					p.sendMessage(ChatColor.RED + "You are not standing in an applicable region.");
 					return;
 				}
-				p.sendMessage(ChatColor.RED + "TNT is now " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
+				p.sendMessage(ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
 			} else if (args[0].equalsIgnoreCase("allow")) {
 				final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 				if (tempRegion == null) {
@@ -63,7 +63,7 @@ public class TNT {
 						p.sendMessage(ChatColor.RED + "You are not standing in an applicable region.");
 						return;
 					}
-					p.sendMessage(ChatColor.RED + "TNT is now " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
+					p.sendMessage(ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
 				} else if (args[1].equalsIgnoreCase("allow")) {
 					final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 					if (tempRegion == null) {
@@ -87,7 +87,7 @@ public class TNT {
 					p.sendMessage(ChatColor.RED + "You are not standing in an applicable region.");
 					return;
 				}
-				p.sendMessage(ChatColor.RED + "TNT is now " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
+				p.sendMessage(ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in " + tempRegion.getId() + ".");
 			}
 		} else {
 			p.sendMessage(ChatColor.RED + "Incorrect Syntax.");

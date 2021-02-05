@@ -19,7 +19,7 @@ public class LocalTabCompleter implements org.bukkit.command.TabCompleter {
 	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {
 		if (args.length == 1) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
-				return this.getCompletions(args[0], "allow", "deny", "other");
+				return this.getCompletions(args[0], "allow", "deny", "other", "info");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				final @NotNull List<String> completions = this.getCompletions(args[0], "undo", "here");
 				try {
@@ -41,7 +41,9 @@ public class LocalTabCompleter implements org.bukkit.command.TabCompleter {
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt") && args[0].equalsIgnoreCase("other")) {
-				return this.getCompletions(args[1], "allow", "deny");
+				return this.getCompletions(args[1], "allow", "deny", "info");
+			} else if (command.getName().equalsIgnoreCase("tnt") && args[0].equalsIgnoreCase("info")) {
+				return this.getCompletions(args[1], "other");
 			} else if (command.getName().equalsIgnoreCase("testutils") && args[0].equalsIgnoreCase("deleteblock")) {
 				return this.getBlocks(args[1], (Player) sender);
 			} else if (command.getName().equalsIgnoreCase("testblock") && args[0].equalsIgnoreCase("here")) {
