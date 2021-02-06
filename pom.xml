@@ -101,6 +101,7 @@
                             <goal>install-file</goal>
                         </goals>
                     </execution>
+
                     <execution>
                         <id>install-lixfel-worldedit</id>
                         <phase>clean</phase>

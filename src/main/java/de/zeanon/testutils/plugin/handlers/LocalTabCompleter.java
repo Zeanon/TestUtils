@@ -40,10 +40,12 @@ public class LocalTabCompleter implements org.bukkit.command.TabCompleter {
 				return this.getCompletions(args[0], "registerblock", "deleteblock", "registertg", "update");
 			}
 		} else if (args.length == 2) {
-			if (command.getName().equalsIgnoreCase("tnt") && args[0].equalsIgnoreCase("other")) {
-				return this.getCompletions(args[1], "allow", "deny", "info");
-			} else if (command.getName().equalsIgnoreCase("tnt") && args[0].equalsIgnoreCase("info")) {
-				return this.getCompletions(args[1], "other");
+			if (command.getName().equalsIgnoreCase("tnt")) {
+				if (args[0].equalsIgnoreCase("other")) {
+					return this.getCompletions(args[1], "allow", "deny", "info");
+				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
+					return this.getCompletions(args[1], "other");
+				}
 			} else if (command.getName().equalsIgnoreCase("testutils") && args[0].equalsIgnoreCase("deleteblock")) {
 				return this.getBlocks(args[1], (Player) sender);
 			} else if (command.getName().equalsIgnoreCase("testblock") && args[0].equalsIgnoreCase("here")) {
