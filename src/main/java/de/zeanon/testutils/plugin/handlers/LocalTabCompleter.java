@@ -1,8 +1,8 @@
 package de.zeanon.testutils.plugin.handlers;
 
-import de.zeanon.storagemanager.external.browniescollections.GapList;
-import de.zeanon.storagemanager.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.browniescollections.GapList;
+import de.zeanon.testutils.plugin.utils.BaseFileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;

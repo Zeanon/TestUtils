@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.update;
 
-import de.zeanon.storagemanager.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.BaseFileUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;

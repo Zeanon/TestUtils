@@ -1,10 +1,10 @@
 package de.zeanon.testutils;
 
-import de.zeanon.storagemanager.internal.utility.basic.Objects;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.handlers.CommandHandler;
 import de.zeanon.testutils.plugin.handlers.EventListener;
 import de.zeanon.testutils.plugin.handlers.LocalTabCompleter;
+import de.zeanon.testutils.plugin.utils.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
