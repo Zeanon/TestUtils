@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 
+@SuppressWarnings("unused")
 @UtilityClass
 public class Update {
 

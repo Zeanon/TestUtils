@@ -145,15 +145,19 @@ public class TestBlock {
 			if (tempFile.exists() && tempFile.isFile()) {
 				return tempFile;
 			} else {
-				return TestBlock.getBlock(uuid, null);
+				return TestBlock.getDefaultBlock(uuid);
 			}
 		} else {
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, "default.schem");
-			if (tempFile.exists() && tempFile.isFile()) {
-				return tempFile;
-			} else {
-				return null;
-			}
+			return TestBlock.getDefaultBlock(uuid);
+		}
+	}
+
+	private @Nullable File getDefaultBlock(final @NotNull String uuid) {
+		final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, "default.schem");
+		if (tempFile.exists() && tempFile.isFile()) {
+			return tempFile;
+		} else {
+			return null;
 		}
 	}
 }
