@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.6-Alpha</version>
+    <version>1.0.7-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -108,8 +108,8 @@
                         <configuration>
                             <groupId>de.zeanon</groupId>
                             <artifactId>storagemanagercore</artifactId>
-                            <version>1.1.83</version>
-                            <file>src/main/resources/dependencies/storagemanagercore.jar</file>
+                            <version>1.1.85</version>
+                            <file>src/main/resources/dependencies/StorageManagerCore.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -274,7 +274,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>storagemanagercore</artifactId>
-            <version>1.1.83</version>
+            <version>1.1.85</version>
             <scope>compile</scope>
         </dependency>
 
