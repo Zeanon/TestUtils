@@ -103,6 +103,22 @@
                     </execution>
 
                     <execution>
+                        <id>install-storagemanagercore</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>de.zeanon</groupId>
+                            <artifactId>storagemanagercore</artifactId>
+                            <version>1.1.83</version>
+                            <file>src/main/resources/dependencies/storagemanagercore.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
                         <id>install-lixfel-worldedit</id>
                         <phase>clean</phase>
                         <configuration>
@@ -118,6 +134,37 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>de.zeanon.thunderfilemanager</pattern>
+                            <shadedPattern>de.zeanon.schemmanager.shaded.thunderfilemanager</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>de.zeanon.yamlfilemanager</pattern>
+                            <shadedPattern>de.zeanon.schemmanager.shaded.yamlfilemanager</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>de.zeanon.storagemanagercore</pattern>
+                            <shadedPattern>de.zeanon.schemmanager.shaded.storagemanagercore</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -219,6 +266,15 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <!-- StorageManager by Zeanon-->
+        <dependency>
+            <groupId>de.zeanon</groupId>
+            <artifactId>storagemanagercore</artifactId>
+            <version>1.1.83</version>
             <scope>compile</scope>
         </dependency>
 
