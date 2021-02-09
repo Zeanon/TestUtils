@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.7-Alpha</version>
+    <version>1.0.8-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -119,13 +119,13 @@
                     </execution>
 
                     <execution>
-                        <id>install-lixfel-worldedit</id>
+                        <id>install-thunderfilemanager</id>
                         <phase>clean</phase>
                         <configuration>
-                            <groupId>de.lixfel</groupId>
-                            <artifactId>worldedit</artifactId>
-                            <version>1.0.0</version>
-                            <file>src/main/resources/dependencies/WorldEdit.jar</file>
+                            <groupId>de.zeanon</groupId>
+                            <artifactId>thunderfilemanager</artifactId>
+                            <version>1.1.85</version>
+                            <file>src/main/resources/dependencies/ThunderFileManager.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -153,10 +153,6 @@
                         <relocation>
                             <pattern>de.zeanon.thunderfilemanager</pattern>
                             <shadedPattern>de.zeanon.schemmanager.shaded.thunderfilemanager</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>de.zeanon.yamlfilemanager</pattern>
-                            <shadedPattern>de.zeanon.schemmanager.shaded.yamlfilemanager</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.zeanon.storagemanagercore</pattern>
@@ -245,6 +241,22 @@
     </repositories>
 
     <dependencies>
+        <!-- StorageManager by Zeanon-->
+        <dependency>
+            <groupId>de.zeanon</groupId>
+            <artifactId>storagemanagercore</artifactId>
+            <version>1.1.85</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ThunderFileManager by Zeanon-->
+        <dependency>
+            <groupId>de.zeanon</groupId>
+            <artifactId>thunderfilemanager</artifactId>
+            <version>1.1.85</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -259,23 +271,6 @@
             <artifactId>paper-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Commons IO -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-            <scope>compile</scope>
-        </dependency>
-
-
-        <!-- StorageManager by Zeanon-->
-        <dependency>
-            <groupId>de.zeanon</groupId>
-            <artifactId>storagemanagercore</artifactId>
-            <version>1.1.85</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- WorldEdit API -->
