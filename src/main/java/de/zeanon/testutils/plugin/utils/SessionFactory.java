@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 @UtilityClass
 public class SessionFactory {
 
-	private static final int MAX_HISTORY = 10;
-
 	private static final Map<String, SizedStack<EditSession>> existingSessions;
 
 	static {
@@ -23,7 +21,7 @@ public class SessionFactory {
 
 	public EditSession createSession(final @NotNull Player p) {
 		if (!SessionFactory.existingSessions.containsKey(p.getUniqueId().toString())) {
-			SessionFactory.existingSessions.put(p.getUniqueId().toString(), new SizedStack<>(SessionFactory.MAX_HISTORY));
+			SessionFactory.existingSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
 		}
 		EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
 		SessionFactory.existingSessions.get(p.getUniqueId().toString()).push(tempSession);

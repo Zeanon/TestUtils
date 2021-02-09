@@ -14,6 +14,27 @@ import org.jetbrains.annotations.NotNull;
 public class ConfigUtils {
 
 	/**
+	 * get an int from the config.
+	 *
+	 * @param key the Config key.
+	 *
+	 * @return value.
+	 */
+	public int getInt(final @NotNull String key) {
+		try {
+			return Objects.notNull(InitMode.getConfig()).getIntUseArray(key);
+		} catch (ObjectNullException e) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					Update.updateConfig();
+				}
+			}.runTaskAsynchronously(TestUtils.getInstance());
+			return (int) ConfigUtils.getDefaultValue(key);
+		}
+	}
+
+	/**
 	 * get a boolean from the config.
 	 *
 	 * @param key the Config key.
