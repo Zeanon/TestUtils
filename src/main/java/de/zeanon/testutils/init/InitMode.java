@@ -8,6 +8,7 @@ import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.handlers.*;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
@@ -22,8 +23,6 @@ public class InitMode {
 
 	@Getter(onMethod_ = {@NotNull})
 	private RegionContainer regionContainer;
-	@Getter(onMethod_ = {@NotNull})
-	private String worldEditPluginName;
 	@Getter(onMethod_ = {@NotNull})
 	private ThunderConfig config;
 
@@ -54,7 +53,25 @@ public class InitMode {
 			return;
 		}
 
-		InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		if (TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") != null
+			&& TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit")
+			&& TestUtils.getPluginManager().getPlugin("WorldEdit") != null
+			&& TestUtils.getPluginManager().isPluginEnabled("WorldEdit")
+			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
+			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
+			CommandHandler commandHandler = new CommandHandler();
+			LocalTabCompleter localTabCompleter = new LocalTabCompleter();
+			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setExecutor(commandHandler);
+			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setExecutor(commandHandler);
+			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
+			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(localTabCompleter);
+			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
+			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		} else {
+			InitMode.enableSleepMode();
+		}
 	}
 
 	private void loadConfigs() {
@@ -94,5 +111,14 @@ public class InitMode {
 			System.err.println("[" + TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
 			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 		}
+	}
+
+	private void enableSleepMode() {
+		TestUtils.getPluginManager().registerEvents(new WakeupListener(), TestUtils.getInstance());
+		Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setExecutor(new SleepModeCommandHandler());
+		Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(new SleepModeTabCompleter());
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Could not load plugin, it needs FastAsyncWorldEdit or WorldEdit to work.");
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> " + TestUtils.getInstance().getName() + " will automatically activate when one of the above gets enabled.");
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Rudimentary function like updating and disabling will still work.");
 	}
 }

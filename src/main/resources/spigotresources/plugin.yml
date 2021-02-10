@@ -5,7 +5,7 @@ author: Zeanon
 website: ${project.url}
 main: de.zeanon.testutils.TestUtils
 depend: [ WorldGuard ]
-softdepend: [ PlugMan ]
+softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
 commands:
   testutils:
     description: The basic command for TestUtils
