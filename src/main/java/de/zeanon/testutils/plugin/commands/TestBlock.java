@@ -87,7 +87,7 @@ public class TestBlock {
 		} catch (WorldEditException | IOException e) {
 			e.printStackTrace();
 		}
-		p.sendMessage(ChatColor.RED + "You registered a new block with the name: " + (name == null ? "default" : name));
+		p.sendMessage(ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 	}
 
 	private void executeInternally(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion) {
@@ -119,7 +119,7 @@ public class TestBlock {
 						.build();
 				try {
 					Operations.complete(operation);
-					p.sendMessage(ChatColor.RED + "Testblock '" + (name != null && testBlock != null ? BaseFileUtils.removeExtension(testBlock.getName()) : "default") + "' was set.");
+					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? BaseFileUtils.removeExtension(testBlock.getName()) : "default") + ChatColor.RED + "' has been set.");
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
