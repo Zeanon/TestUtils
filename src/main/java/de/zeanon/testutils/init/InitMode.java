@@ -53,10 +53,10 @@ public class InitMode {
 			return;
 		}
 
-		if (TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") != null
-			&& TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit")
-			&& TestUtils.getPluginManager().getPlugin("WorldEdit") != null
-			&& TestUtils.getPluginManager().isPluginEnabled("WorldEdit")
+		if (((TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") != null
+			  && TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
+			 || (TestUtils.getPluginManager().getPlugin("WorldEdit") != null
+				 && TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))
 			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
 			CommandHandler commandHandler = new CommandHandler();
