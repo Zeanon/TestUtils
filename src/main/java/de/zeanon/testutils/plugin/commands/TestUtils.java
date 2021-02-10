@@ -62,6 +62,8 @@ public class TestUtils {
 								}
 							}.runTask(de.zeanon.testutils.TestUtils.getInstance());
 						}
+					} else {
+						p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-command '" + ChatColor.GOLD + args[0] + "'.");
 					}
 				} else {
 					p.sendMessage(ChatColor.RED + "Missing argument.");

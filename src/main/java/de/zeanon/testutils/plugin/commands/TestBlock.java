@@ -45,10 +45,10 @@ public class TestBlock {
 			} else {
 				TestBlock.executeInternally(p, args[0], TestAreaUtils.getRegion(p));
 			}
+		} else if (args.length == 2 && args[0].equalsIgnoreCase("here")) {
+			TestBlock.executeInternally(p, args[1], TestAreaUtils.getOppositeRegion(p));
 		} else {
-			if (args[0].equalsIgnoreCase("here")) {
-				TestBlock.executeInternally(p, args[1], TestAreaUtils.getOppositeRegion(p));
-			}
+			p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-command '" + ChatColor.GOLD + args[0] + "'.");
 		}
 	}
 

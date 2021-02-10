@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class CommandHandler implements CommandExecutor {
 
 	/**
-	 * Gets the user commands and processes them("/schemmanager")
+	 * Gets the user commands and processes them
 	 */
 	@Override
 	public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String[] args) {
