@@ -36,20 +36,20 @@ public class TestBlock {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 0) {
-			TestBlock.executeInternally(p, null, TestAreaUtils.getRegion(p));
+			TestBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p));
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("undo")) {
 				TestBlock.undo(p);
 			} else if (args[0].equalsIgnoreCase("here")) {
-				TestBlock.executeInternally(p, null, TestAreaUtils.getOppositeRegion(p));
+				TestBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p));
 			} else {
-				TestBlock.executeInternally(p, args[0], TestAreaUtils.getRegion(p));
+				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p));
 			}
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("here")) {
-				TestBlock.executeInternally(p, args[1], TestAreaUtils.getOppositeRegion(p));
+				TestBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p));
 			} else if (args[1].equalsIgnoreCase("here")) {
-				TestBlock.executeInternally(p, args[0], TestAreaUtils.getOppositeRegion(p));
+				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p));
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
 			}
@@ -96,7 +96,7 @@ public class TestBlock {
 		p.sendMessage(ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 	}
 
-	private void executeInternally(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion) {
+	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion) {
 		final File testBlock = TestBlock.getBlock(p.getUniqueId().toString(), name);
 		final ClipboardFormat format = testBlock != null ? ClipboardFormats.findByFile(testBlock) : ClipboardFormats.findByAlias("schem");
 		try (ClipboardReader reader = Objects.notNull(format).getReader(testBlock != null ? BaseFileUtils.createNewInputStreamFromFile(testBlock)
@@ -108,12 +108,12 @@ public class TestBlock {
 					return;
 				}
 
-				BlockVector3 pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ() - 98);
+				BlockVector3 pastePoint = tempRegion.getMinimumPoint();
 
 				ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-				if (tempRegion.getId().endsWith("_north")) {
-					pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ() + 98);
+				if (tempRegion.getId().endsWith("_south")) {
+					pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
 					clipboardHolder.setTransform(new AffineTransform().rotateY(180));
 				}
 
