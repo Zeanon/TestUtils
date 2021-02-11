@@ -97,19 +97,12 @@ public class InitMode {
 	}
 
 	private void initConfigs() {
-		try {
-			if (!InitMode.getConfig().hasKeyUseArray("Plugin Version")
-				|| !Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
-						   .equals(TestUtils.getInstance().getDescription().getVersion())) {
-				System.out.println("[" + TestUtils.getInstance().getName() + "] >> Updating Configs...");
-				Update.checkConfigUpdate();
-				System.out.println("[" + TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
-			}
-		} catch (RuntimeIOException e) {
-			System.err.println("[" + TestUtils.getInstance().getName() + "] >> Could not update config files.");
-			System.err.println("[" + TestUtils.getInstance().getName() + "] >> Maybe try to delete the Config File and reload the plugin.");
-			System.err.println("[" + TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
-			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
+		if (!InitMode.getConfig().hasKeyUseArray("Plugin Version")
+			|| !Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
+					   .equals(TestUtils.getInstance().getDescription().getVersion())) {
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Updating Configs...");
+			Update.checkConfigUpdate();
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
 		}
 	}
 

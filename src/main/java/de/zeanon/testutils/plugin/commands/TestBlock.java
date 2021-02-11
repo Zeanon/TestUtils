@@ -36,20 +36,20 @@ public class TestBlock {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 0) {
-			TestBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p));
+			TestBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), false);
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("undo")) {
 				TestBlock.undo(p);
 			} else if (args[0].equalsIgnoreCase("here")) {
-				TestBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p));
+				TestBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
 			} else {
-				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p));
+				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p), false);
 			}
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("here")) {
-				TestBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p));
+				TestBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
 			} else if (args[1].equalsIgnoreCase("here")) {
-				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p));
+				TestBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
 			}
@@ -61,9 +61,8 @@ public class TestBlock {
 	public void registerBlock(final @NotNull Player p, final @Nullable String name) {
 		final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
-		if (tempRegion == null || tempRegion.getId().endsWith("_south")) {
+		if (tempRegion == null) {
 			p.sendMessage(ChatColor.RED + "You are in no suitable region.");
-			p.sendMessage(ChatColor.RED + "Please move to the north region of a tg.");
 			return;
 		}
 
@@ -71,21 +70,29 @@ public class TestBlock {
 		CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 		BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
+		final BlockVector3 copyPoint;
+
+		if (tempRegion.getId().endsWith("_south")) {
+			copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
+		} else {
+			copyPoint = region.getMinimumPoint();
+		}
+
 		try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
 			ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-					editSession, region, region.getMinimumPoint(), clipboard, region.getMinimumPoint()
+					editSession, region, region.getMinimumPoint(), clipboard, copyPoint
 			);
+
+			if (tempRegion.getId().endsWith("_south")) {
+				forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+			}
 
 			Operations.complete(forwardExtentCopy);
 
-			if (name != null) {
-				BaseFileUtils.createFile(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem");
-			} else {
-				BaseFileUtils.createFile(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
-			}
-
 			File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem") //NOSONAR
 										 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
+
+			BaseFileUtils.createFile(tempFile);
 
 			try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
 				writer.write(clipboard);
@@ -96,7 +103,7 @@ public class TestBlock {
 		p.sendMessage(ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 	}
 
-	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion) {
+	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
 		final File testBlock = TestBlock.getBlock(p.getUniqueId().toString(), name);
 		final ClipboardFormat format = testBlock != null ? ClipboardFormats.findByFile(testBlock) : ClipboardFormats.findByAlias("schem");
 		try (ClipboardReader reader = Objects.notNull(format).getReader(testBlock != null ? BaseFileUtils.createNewInputStreamFromFile(testBlock)
@@ -108,24 +115,25 @@ public class TestBlock {
 					return;
 				}
 
-				BlockVector3 pastePoint = tempRegion.getMinimumPoint();
+				final BlockVector3 pastePoint;
 
 				ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
 				if (tempRegion.getId().endsWith("_south")) {
 					pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
 					clipboardHolder.setTransform(new AffineTransform().rotateY(180));
+				} else {
+					pastePoint = tempRegion.getMinimumPoint();
 				}
 
-				BlockVector3 finalPastePoint = pastePoint;
 				Operation operation = clipboardHolder
 						.createPaste(editSession)
-						.to(finalPastePoint)
+						.to(pastePoint)
 						.ignoreAirBlocks(true)
 						.build();
 				try {
 					Operations.complete(operation);
-					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? BaseFileUtils.removeExtension(testBlock.getName()) : "default") + ChatColor.RED + "' has been set.");
+					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side"));
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
