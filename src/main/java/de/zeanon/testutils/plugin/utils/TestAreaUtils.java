@@ -22,11 +22,11 @@ public class TestAreaUtils {
 	public void generate(final @NotNull World world, final double x, final double y, final double z, final @NotNull String name) {
 		ProtectedRegion regionSouth = new ProtectedCuboidRegion("testarea_" + name + "_south",
 																BlockVector3.at(x - 58, y, z + 1),
-																BlockVector3.at(x + 58, y + 66, z + 98));
+																BlockVector3.at(x + 58, y + 65, z + 98));
 
 		ProtectedRegion regionNorth = new ProtectedCuboidRegion("testarea_" + name + "_north",
-																BlockVector3.at(x - 58, y, z - 1),
-																BlockVector3.at(x + 58, y + 66, z - 98));
+																BlockVector3.at(x - 58, y, z),
+																BlockVector3.at(x + 58, y + 65, z - 97));
 
 		Objects.notNull(InitMode.getRegionContainer().get(world)).addRegion(regionSouth);
 		Objects.notNull(InitMode.getRegionContainer().get(world)).addRegion(regionNorth);
