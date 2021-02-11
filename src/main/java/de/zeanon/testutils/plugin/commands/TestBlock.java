@@ -133,7 +133,7 @@ public class TestBlock {
 						.build();
 				try {
 					Operations.complete(operation);
-					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side"));
+					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
