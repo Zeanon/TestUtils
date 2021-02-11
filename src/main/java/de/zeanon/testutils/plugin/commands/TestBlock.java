@@ -45,10 +45,16 @@ public class TestBlock {
 			} else {
 				TestBlock.executeInternally(p, args[0], TestAreaUtils.getRegion(p));
 			}
-		} else if (args.length == 2 && args[0].equalsIgnoreCase("here")) {
-			TestBlock.executeInternally(p, args[1], TestAreaUtils.getOppositeRegion(p));
+		} else if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("here")) {
+				TestBlock.executeInternally(p, args[1], TestAreaUtils.getOppositeRegion(p));
+			} else if (args[1].equalsIgnoreCase("here")) {
+				TestBlock.executeInternally(p, args[0], TestAreaUtils.getOppositeRegion(p));
+			} else {
+				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
+			}
 		} else {
-			p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-command '" + ChatColor.GOLD + args[0] + "'.");
+			p.sendMessage(ChatColor.DARK_AQUA + "Too many arguments.");
 		}
 	}
 
@@ -102,12 +108,12 @@ public class TestBlock {
 					return;
 				}
 
-				BlockVector3 pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ() - 99);
+				BlockVector3 pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ() - 98);
 
 				ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
 				if (tempRegion.getId().endsWith("_north")) {
-					pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ() + 99);
+					pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ() + 98);
 					clipboardHolder.setTransform(new AffineTransform().rotateY(180));
 				}
 
