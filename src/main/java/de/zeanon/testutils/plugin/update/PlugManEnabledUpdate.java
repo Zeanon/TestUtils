@@ -44,7 +44,7 @@ class PlugManEnabledUpdate {
 
 	void updatePlugin(final @NotNull Player p, final boolean autoReload, final @NotNull JavaPlugin instance) {
 		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-					  ChatColor.RED + "updating plugin...");
+					  ChatColor.RED + "Updating plugin...");
 		try {
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
@@ -55,17 +55,17 @@ class PlugManEnabledUpdate {
 					new URL(Update.DOWNLOAD_URL)
 							.openStream()));
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-						  ChatColor.RED + "update successful.");
+						  ChatColor.RED + "Update successful.");
 
 			if (autoReload) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.RED + "reloading plugin.");
+							  ChatColor.RED + "Reloading plugin.");
 				PluginUtil.reload(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			e.printStackTrace();
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-						  ChatColor.RED + "could not update.");
+						  ChatColor.RED + "Could not update.");
 		}
 	}
 }

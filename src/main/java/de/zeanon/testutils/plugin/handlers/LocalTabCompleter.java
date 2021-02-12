@@ -28,28 +28,7 @@ public class LocalTabCompleter implements TabCompleter {
 				return this.getCompletions(args[0], "allow", "deny", "other", "info");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				final @NotNull List<String> completions = this.getCompletions(args[0], "undo", "here");
-				try {
-					@NotNull Path tempDirectory = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + ((Player) sender).getUniqueId().toString());
-					final @NotNull String[] pathArgs = args[0].split("/");
-					if (!args[0].endsWith("/")) {
-						for (int i = 0; i < pathArgs.length - 1; i++) {
-							tempDirectory = tempDirectory.resolve(pathArgs[i]);
-						}
-					} else {
-						tempDirectory = tempDirectory.resolve(args[0]);
-					}
-
-					final @NotNull File pathFile = tempDirectory.toFile();
-					if (pathFile.exists() && pathFile.isDirectory()) {
-						final @NotNull String sequence = args[0].endsWith("/") ? "" : pathArgs[pathArgs.length - 1];
-						for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(pathFile, false, "schem")) {
-							this.addFileToCompletions(sequence, completions, file, Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + ((Player) sender).getUniqueId().toString()));
-						}
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
+				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				return this.getCompletions(args[0], "registerblock", "deleteblock", "registertg", "update");
@@ -61,7 +40,7 @@ public class LocalTabCompleter implements TabCompleter {
 				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
 					return this.getCompletions(args[1], "other");
 				}
-			} else if (command.getName().equalsIgnoreCase("testutils") && args[0].equalsIgnoreCase("deleteblock")) {
+			} else if (command.getName().equalsIgnoreCase("testutils") && (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("registerblock"))) {
 				return this.getBlocks(args[1], (Player) sender);
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				if (args[0].equalsIgnoreCase("here")) {
