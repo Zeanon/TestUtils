@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.16-Alpha</version>
+    <version>1.0.17-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -78,7 +78,7 @@
                 <targetPath>resources</targetPath>
                 <directory>src/main/resources/pluginresources/</directory>
                 <includes>
-                    <include>*.jar</include>
+                    <include>*.schem</include>
                 </includes>
             </resource>
 
@@ -87,7 +87,7 @@
                 <targetPath>resources</targetPath>
                 <directory>src/main/resources/pluginresources/</directory>
                 <excludes>
-                    <exclude>*.jar</exclude>
+                    <exclude>*.schem</exclude>
                 </excludes>
             </resource>
         </resources>
