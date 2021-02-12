@@ -36,9 +36,7 @@ public class LocalTabCompleter implements TabCompleter {
 							tempDirectory = tempDirectory.resolve(pathArgs[i]);
 						}
 					} else {
-						for (final @NotNull String pathArg : pathArgs) {
-							tempDirectory = tempDirectory.resolve(pathArg);
-						}
+						tempDirectory = tempDirectory.resolve(args[0]);
 					}
 
 					final @NotNull File pathFile = tempDirectory.toFile();
@@ -86,13 +84,22 @@ public class LocalTabCompleter implements TabCompleter {
 		final @NotNull List<String> completions = new GapList<>();
 
 		try {
-			File tempDirectory = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString());
-			if (tempDirectory.exists() && tempDirectory.isDirectory()) {
-				return BaseFileUtils.listFilesOfType(tempDirectory, "schem")
-									.stream()
-									.map(tempFile -> BaseFileUtils.removeExtension(tempFile.getName()))
-									.filter(tempFile -> tempFile.startsWith(arg.toLowerCase()))
-									.collect(Collectors.toList());
+			@NotNull Path tempDirectory = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString());
+			final @NotNull String[] pathArgs = arg.split("/");
+			if (!arg.endsWith("/")) {
+				for (int i = 0; i < pathArgs.length - 1; i++) {
+					tempDirectory = tempDirectory.resolve(pathArgs[i]);
+				}
+			} else {
+				tempDirectory = tempDirectory.resolve(arg);
+			}
+
+			final @NotNull File pathFile = tempDirectory.toFile();
+			if (pathFile.exists() && pathFile.isDirectory()) {
+				final @NotNull String sequence = arg.endsWith("/") ? "" : pathArgs[pathArgs.length - 1];
+				for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(pathFile, false, "schem")) {
+					this.addFileToCompletions(sequence, completions, file, Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()));
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

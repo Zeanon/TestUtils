@@ -19,11 +19,13 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -62,7 +64,8 @@ public class TestBlock {
 		final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 		if (tempRegion == null) {
-			p.sendMessage(ChatColor.RED + "You are in no suitable region.");
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.RED + "You are in no suitable region.");
 			return;
 		}
 
@@ -103,7 +106,31 @@ public class TestBlock {
 		} catch (WorldEditException | IOException e) {
 			e.printStackTrace();
 		}
-		p.sendMessage(ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
+		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+					  ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
+	}
+
+	public void deleteBlock(final @NotNull Player p, final @NotNull String name) {
+		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem"); //NOSONAR
+		try {
+			Files.delete(file.toPath());
+			@Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
+										  ? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks"))
+										  : null;
+
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.DARK_RED + name + ChatColor.RED + " was deleted successfully.");
+
+			if (parentName != null) {
+				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+							  ChatColor.RED + "Folder "
+							  + ChatColor.GREEN + parentName
+							  + ChatColor.RED + " was deleted successfully due to being empty.");
+			}
+		} catch (IOException e) {
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.DARK_RED + name + ChatColor.RED + " could not be deleted, for further information please see [console].");
+		}
 	}
 
 	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
@@ -114,7 +141,8 @@ public class TestBlock {
 			Clipboard clipboard = reader.read();
 			try (EditSession editSession = SessionFactory.createSession(p)) {
 				if (tempRegion == null) {
-					p.sendMessage(ChatColor.RED + "You are not standing in an applicable region.");
+					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+								  ChatColor.RED + "You are not standing in an applicable region.");
 					return;
 				}
 
@@ -136,7 +164,8 @@ public class TestBlock {
 						.build();
 				try {
 					Operations.complete(operation);
-					p.sendMessage(ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
+					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+								  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
@@ -149,10 +178,12 @@ public class TestBlock {
 	private void undo(final @NotNull Player p) {
 		EditSession tempSession = SessionFactory.getSession(p);
 		if (tempSession == null) {
-			p.sendMessage(ChatColor.RED + "Nothing left to undo.");
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.RED + "Nothing left to undo.");
 		} else {
 			tempSession.undo(tempSession);
-			p.sendMessage(ChatColor.RED + "You undid your last action.");
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.RED + "You undid your last action.");
 		}
 	}
 
