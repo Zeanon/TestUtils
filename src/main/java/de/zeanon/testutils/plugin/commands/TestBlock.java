@@ -84,6 +84,7 @@ public class TestBlock {
 			);
 
 			forwardExtentCopy.setCopyingEntities(false);
+			forwardExtentCopy.setCopyingBiomes(false);
 
 			if (tempRegion.getId().endsWith("_south")) {
 				forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
