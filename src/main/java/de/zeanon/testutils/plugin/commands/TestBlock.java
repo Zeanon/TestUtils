@@ -83,6 +83,8 @@ public class TestBlock {
 					editSession, region, region.getMinimumPoint(), clipboard, copyPoint
 			);
 
+			forwardExtentCopy.setCopyingEntities(false);
+
 			if (tempRegion.getId().endsWith("_south")) {
 				forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
 			}
