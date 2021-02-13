@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import javafx.util.Pair;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -134,10 +135,10 @@ public class TestBlock {
 	}
 
 	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
-		final File testBlock = TestBlock.getBlock(p.getUniqueId().toString(), name);
-		final ClipboardFormat format = testBlock != null ? ClipboardFormats.findByFile(testBlock) : ClipboardFormats.findByAlias("schem");
-		try (ClipboardReader reader = Objects.notNull(format).getReader(testBlock != null ? BaseFileUtils.createNewInputStreamFromFile(testBlock)
-																						  : BaseFileUtils.createNewInputStreamFromResource("resources/default.schem"))) {
+		final Pair<File, String> testBlock = TestBlock.getBlock(p.getUniqueId().toString(), name);
+		final ClipboardFormat format = testBlock.getKey() != null ? ClipboardFormats.findByFile(testBlock.getKey()) : ClipboardFormats.findByAlias("schem");
+		try (ClipboardReader reader = Objects.notNull(format).getReader(testBlock.getKey() != null ? BaseFileUtils.createNewInputStreamFromFile(testBlock.getKey())
+																								   : BaseFileUtils.createNewInputStreamFromResource("resources/default.schem"))) {
 			Clipboard clipboard = reader.read();
 			try (EditSession editSession = SessionFactory.createSession(p)) {
 				if (tempRegion == null) {
@@ -165,7 +166,7 @@ public class TestBlock {
 				try {
 					Operations.complete(operation);
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-								  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + (name != null && testBlock != null ? name : "default") + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
+								  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 				} catch (WorldEditException e) {
 					e.printStackTrace();
 				}
@@ -187,16 +188,16 @@ public class TestBlock {
 		}
 	}
 
-	private @Nullable File getBlock(final @NotNull String uuid, final @Nullable String name) {
+	private @NotNull Pair<File, String> getBlock(final @NotNull String uuid, final @Nullable String name) {
 		if (name != null) {
 			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, name + ".schem");
 			if (tempFile.exists() && tempFile.isFile()) {
-				return tempFile;
+				return new Pair<>(tempFile, name);
 			} else {
-				return TestBlock.getDefaultBlock(uuid);
+				return new Pair<>(TestBlock.getDefaultBlock(uuid), "default");
 			}
 		} else {
-			return TestBlock.getDefaultBlock(uuid);
+			return new Pair<>(TestBlock.getDefaultBlock(uuid), "default");
 		}
 	}
 
