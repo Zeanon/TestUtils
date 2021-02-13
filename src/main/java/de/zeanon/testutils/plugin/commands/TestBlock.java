@@ -163,15 +163,12 @@ public class TestBlock {
 						.to(pastePoint)
 						.ignoreAirBlocks(true)
 						.build();
-				try {
-					Operations.complete(operation);
-					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-								  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
-				} catch (WorldEditException e) {
-					e.printStackTrace();
-				}
+
+				Operations.complete(operation);
+				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+							  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 			}
-		} catch (IOException e) {
+		} catch (IOException | WorldEditException e) {
 			e.printStackTrace();
 		}
 	}
