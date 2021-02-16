@@ -137,7 +137,7 @@ public class TNT {
 
 	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion) {
 		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is now " + ChatColor.DARK_RED + "deactivated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+			   ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
 	}
 
 	private @NotNull String getActivated(final @NotNull ProtectedRegion tempRegion) {
@@ -147,6 +147,6 @@ public class TNT {
 
 	private @NotNull String getDeactivated(final @NotNull ProtectedRegion tempRegion) {
 		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is " + ChatColor.DARK_RED + "deactivated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+			   ChatColor.RED + "TNT is deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
 	}
 }
