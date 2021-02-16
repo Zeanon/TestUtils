@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
+import de.zeanon.testutils.TestUtils;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -14,6 +15,11 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 @UtilityClass
 public class GlobalMessageUtils {
+
+	public void sendNotApplicableRegion(final @NotNull Player p) {
+		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+					  ChatColor.RED + "You are not standing in an applicable region.");
+	}
 
 	/**
 	 * Sends a clickable message performing a command
