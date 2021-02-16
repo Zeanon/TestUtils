@@ -37,7 +37,7 @@ public class TestUtils {
 											   p.getLocation().getBlockZ(),
 											   name);
 						p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-									  ChatColor.RED + "You created TG with name '" + ChatColor.GOLD + "testarea_" + name + "" + ChatColor.RED + "'");
+									  ChatColor.RED + "You created TG with name '" + ChatColor.DARK_RED + "testarea_" + name + "" + ChatColor.RED + "'");
 					} else if (args[0].equalsIgnoreCase("update")) {
 						if (Bukkit.getVersion().contains("git-Paper")) {
 							Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());

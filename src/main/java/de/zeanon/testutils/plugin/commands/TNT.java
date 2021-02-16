@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -22,52 +23,48 @@ public class TNT {
 				if (args.length == 0) {
 					ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 					if (tempRegion == null) {
-						p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-									  ChatColor.RED + "You are not standing in an applicable region.");
+						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {
 						tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-						p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-									  ChatColor.RED + "TNT is now " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+						p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+									  ? TNT.getNowActivated(tempRegion)
+									  : TNT.getNowDeactivated(tempRegion));
 					}
 				} else if (args.length == 1) {
 					if (args[0].equalsIgnoreCase("info")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "You are not standing in an applicable region.");
+							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+										  ? TNT.getActivated(tempRegion)
+										  : TNT.getDeactivated(tempRegion));
 						}
 					} else if (args[0].equalsIgnoreCase("allow")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "You are not standing in an applicable region.");
+							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "TNT is now activated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+							p.sendMessage(TNT.getNowActivated(tempRegion));
 						}
 					} else if (args[0].equalsIgnoreCase("deny")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "You are not standing in an applicable region.");
+							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+							p.sendMessage(TNT.getNowDeactivated(tempRegion));
 						}
 					} else if (args[0].equalsIgnoreCase("other")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 						if (tempRegion == null) {
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "You are not standing in an applicable region.");
+							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-							p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-										  ChatColor.RED + "TNT is now " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+										  ? TNT.getNowActivated(tempRegion)
+										  : TNT.getNowDeactivated(tempRegion));
 						}
 					}
 				} else if (args.length == 2) {
@@ -75,62 +72,54 @@ public class TNT {
 						if (args[1].equalsIgnoreCase("info")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+											  ? TNT.getActivated(tempRegion)
+											  : TNT.getDeactivated(tempRegion));
 							}
 						} else if (args[1].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is now activated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(TNT.getNowActivated(tempRegion));
 							}
 						} else if (args[1].equalsIgnoreCase("deny")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 							}
 						}
 					} else if (args[1].equalsIgnoreCase("other")) {
 						if (args[0].equalsIgnoreCase("info")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is " + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW ? "activated" : "deactivated") + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+											  ? TNT.getActivated(tempRegion)
+											  : TNT.getDeactivated(tempRegion));
 							}
 						} else if (args[0].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is now activated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(TNT.getNowActivated(tempRegion));
 							}
 						} else if (args[0].equalsIgnoreCase("deny")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "You are not standing in an applicable region.");
+								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-											  ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.");
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 							}
 						}
 					}
@@ -139,5 +128,25 @@ public class TNT {
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
+	}
+
+	private @NotNull String getNowActivated(final @NotNull ProtectedRegion tempRegion) {
+		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			   ChatColor.RED + "TNT is now " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+	}
+
+	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion) {
+		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			   ChatColor.RED + "TNT is now " + ChatColor.DARK_RED + "deactivated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+	}
+
+	private @NotNull String getActivated(final @NotNull ProtectedRegion tempRegion) {
+		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			   ChatColor.RED + "TNT is " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+	}
+
+	private @NotNull String getDeactivated(final @NotNull ProtectedRegion tempRegion) {
+		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			   ChatColor.RED + "TNT is " + ChatColor.DARK_RED + "deactivated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
 	}
 }

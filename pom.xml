@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.21-Alpha</version>
+    <version>1.0.22-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -38,9 +38,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:git://github.com/Zeanon/SchemManager.git</connection>
-        <developerConnection>scm:git:ssh://github.com/Zeanon/SchemManager.git</developerConnection>
-        <url>//github.com/Zeanon/SchemManager</url>
+        <connection>scm:git:git://github.com/Zeanon/TestUtils.git</connection>
+        <developerConnection>scm:git:ssh://github.com/Zeanon/TestUtils.git</developerConnection>
+        <url>//github.com/Zeanon/TestUtils</url>
     </scm>
 
     <build>
@@ -273,14 +273,6 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- PaperMC API -->
-        <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

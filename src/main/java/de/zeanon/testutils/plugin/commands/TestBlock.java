@@ -19,6 +19,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -62,53 +63,57 @@ public class TestBlock {
 	}
 
 	public void registerBlock(final @NotNull Player p, final @Nullable String name) {
-		final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-
-		if (tempRegion == null) {
+		if (name != null && name.contains("./")) {
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-						  ChatColor.RED + "You are in no suitable region.");
-			return;
-		}
-
-		World tempWorld = new BukkitWorld(p.getWorld());
-		CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
-		BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-
-		final BlockVector3 copyPoint;
-
-		if (tempRegion.getId().endsWith("_south")) {
-			copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
+						  ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "'resolution error: Path is not allowed.");
 		} else {
-			copyPoint = region.getMinimumPoint();
-		}
+			final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
-		try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
-			ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-					editSession, region, region.getMinimumPoint(), clipboard, copyPoint
-			);
+			if (tempRegion == null) {
+				GlobalMessageUtils.sendNotApplicableRegion(p);
+				return;
+			}
 
-			forwardExtentCopy.setCopyingEntities(false);
-			forwardExtentCopy.setCopyingBiomes(false);
+			World tempWorld = new BukkitWorld(p.getWorld());
+			CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+			BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+			final BlockVector3 copyPoint;
 
 			if (tempRegion.getId().endsWith("_south")) {
-				forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+				copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
+			} else {
+				copyPoint = region.getMinimumPoint();
 			}
 
-			Operations.complete(forwardExtentCopy);
+			try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
+				ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+						editSession, region, region.getMinimumPoint(), clipboard, copyPoint
+				);
 
-			File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem") //NOSONAR
-										 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
+				forwardExtentCopy.setCopyingEntities(false);
+				forwardExtentCopy.setCopyingBiomes(false);
 
-			BaseFileUtils.createFile(tempFile);
+				if (tempRegion.getId().endsWith("_south")) {
+					forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+				}
 
-			try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
-				writer.write(clipboard);
+				Operations.complete(forwardExtentCopy);
+
+				File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem") //NOSONAR
+											 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
+
+				BaseFileUtils.createFile(tempFile);
+
+				try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
+					writer.write(clipboard);
+				}
+			} catch (WorldEditException | IOException e) {
+				e.printStackTrace();
 			}
-		} catch (WorldEditException | IOException e) {
-			e.printStackTrace();
+			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+						  ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 		}
-		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-					  ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 	}
 
 	public void deleteBlock(final @NotNull Player p, final @NotNull String name) {
@@ -142,8 +147,7 @@ public class TestBlock {
 			Clipboard clipboard = reader.read();
 			try (EditSession editSession = SessionFactory.createSession(p)) {
 				if (tempRegion == null) {
-					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-								  ChatColor.RED + "You are not standing in an applicable region.");
+					GlobalMessageUtils.sendNotApplicableRegion(p);
 					return;
 				}
 
