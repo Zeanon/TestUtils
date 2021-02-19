@@ -16,8 +16,10 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class GlobalMessageUtils {
 
+	public final String messageHead = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] ";
+
 	public void sendNotApplicableRegion(final @NotNull Player p) {
-		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+		p.sendMessage(GlobalMessageUtils.messageHead +
 					  ChatColor.RED + "You are not standing in an applicable region.");
 	}
 

@@ -38,6 +38,7 @@ public class SessionFactory {
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	public void removeSession(final @NotNull String uuid) {
 		SessionFactory.existingSessions.remove(uuid);
 	}

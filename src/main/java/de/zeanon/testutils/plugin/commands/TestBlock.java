@@ -64,21 +64,21 @@ public class TestBlock {
 
 	public void registerBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null && name.contains("./")) {
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "'resolution error: Path is not allowed.");
 		} else {
-			final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				return;
 			}
 
-			World tempWorld = new BukkitWorld(p.getWorld());
-			CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
-			BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+			final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+			final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+			final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-			final BlockVector3 copyPoint;
+			final @NotNull BlockVector3 copyPoint;
 
 			if (tempRegion.getId().endsWith("_south")) {
 				copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
@@ -111,7 +111,7 @@ public class TestBlock {
 			} catch (WorldEditException | IOException e) {
 				e.printStackTrace();
 			}
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 		}
 	}
@@ -124,24 +124,24 @@ public class TestBlock {
 										  ? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks"))
 										  : null;
 
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.DARK_RED + name + ChatColor.RED + " was deleted successfully.");
 
 			if (parentName != null) {
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+				p.sendMessage(GlobalMessageUtils.messageHead +
 							  ChatColor.RED + "Folder "
 							  + ChatColor.GREEN + parentName
 							  + ChatColor.RED + " was deleted successfully due to being empty.");
 			}
 		} catch (IOException e) {
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.DARK_RED + name + ChatColor.RED + " could not be deleted, for further information please see [console].");
 		}
 	}
 
 	private void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
-		final Pair<File, String> testBlock = TestBlock.getBlock(p.getUniqueId().toString(), name);
-		final ClipboardFormat format = testBlock.getKey() != null ? ClipboardFormats.findByFile(testBlock.getKey()) : ClipboardFormats.findByAlias("schem");
+		final @NotNull Pair<File, String> testBlock = TestBlock.getBlock(p, name);
+		final @Nullable ClipboardFormat format = testBlock.getKey() != null ? ClipboardFormats.findByFile(testBlock.getKey()) : ClipboardFormats.findByAlias("schem");
 		try (ClipboardReader reader = Objects.notNull(format).getReader(testBlock.getKey() != null ? BaseFileUtils.createNewInputStreamFromFile(testBlock.getKey())
 																								   : BaseFileUtils.createNewInputStreamFromResource("resources/default.schem"))) {
 			Clipboard clipboard = reader.read();
@@ -169,7 +169,7 @@ public class TestBlock {
 						.build();
 
 				Operations.complete(operation);
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+				p.sendMessage(GlobalMessageUtils.messageHead +
 							  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 			}
 		} catch (IOException | WorldEditException e) {
@@ -180,25 +180,29 @@ public class TestBlock {
 	private void undo(final @NotNull Player p) {
 		EditSession tempSession = SessionFactory.getSession(p);
 		if (tempSession == null) {
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "Nothing left to undo.");
 		} else {
 			tempSession.undo(tempSession);
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "You undid your last action.");
 		}
 	}
 
-	private @NotNull Pair<File, String> getBlock(final @NotNull String uuid, final @Nullable String name) {
+	private @NotNull Pair<File, String> getBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null) {
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, name + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString(), name + ".schem");
 			if (tempFile.exists() && tempFile.isFile()) {
 				return new Pair<>(tempFile, name);
 			} else {
-				return new Pair<>(TestBlock.getDefaultBlock(uuid), "default");
+				if (tempFile.exists() && tempFile.isDirectory()) {
+					p.sendMessage(GlobalMessageUtils.messageHead +
+								  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
+				}
+				return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 			}
 		} else {
-			return new Pair<>(TestBlock.getDefaultBlock(uuid), "default");
+			return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 		}
 	}
 

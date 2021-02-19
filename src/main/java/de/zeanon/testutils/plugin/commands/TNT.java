@@ -131,22 +131,22 @@ public class TNT {
 	}
 
 	private @NotNull String getNowActivated(final @NotNull ProtectedRegion tempRegion) {
-		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is now " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+		return GlobalMessageUtils.messageHead +
+			   ChatColor.RED + "TNT is now " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
 	}
 
 	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion) {
-		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+		return GlobalMessageUtils.messageHead +
+			   ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
 	}
 
 	private @NotNull String getActivated(final @NotNull ProtectedRegion tempRegion) {
-		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+		return GlobalMessageUtils.messageHead +
+			   ChatColor.RED + "TNT is " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
 	}
 
 	private @NotNull String getDeactivated(final @NotNull ProtectedRegion tempRegion) {
-		return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-			   ChatColor.RED + "TNT is deactivated in '" + ChatColor.DARK_RED + tempRegion.getId() + ChatColor.RED + "'.";
+		return GlobalMessageUtils.messageHead +
+			   ChatColor.RED + "TNT is deactivated in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
 	}
 }

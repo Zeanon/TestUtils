@@ -38,12 +38,12 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable ProtectedRegion getRegion(final @NotNull Player p) {
-		for (ProtectedRegion temp : Objects.notNull(InitMode.getRegionContainer()
-															.get(new BukkitWorld(p.getWorld())))
-										   .getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
-																				 p.getLocation().getY(),
-																				 p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_")) {
+		for (final @NotNull ProtectedRegion temp : Objects.notNull(InitMode.getRegionContainer()
+																		   .get(new BukkitWorld(p.getWorld())))
+														  .getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
+																								p.getLocation().getY(),
+																								p.getLocation().getZ()))) {
+			if (temp.getId().startsWith("testarea_") && (temp.getId().endsWith("_north") || temp.getId().endsWith("_south"))) {
 				return temp;
 			}
 		}
@@ -51,12 +51,12 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable ProtectedRegion getOppositeRegion(final @NotNull Player p) {
-		RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
-															.get(new BukkitWorld(p.getWorld())));
+		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
+																		   .get(new BukkitWorld(p.getWorld())));
 		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
 																					 p.getLocation().getY(),
 																					 p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_")) {
+			if (temp.getId().startsWith("testarea_") && (temp.getId().endsWith("_north") || temp.getId().endsWith("_south"))) {
 				return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 6) + (temp.getId().substring(temp.getId().length() - 6).equalsIgnoreCase("_north") ? "_south" : "_north"));
 			}
 		}
