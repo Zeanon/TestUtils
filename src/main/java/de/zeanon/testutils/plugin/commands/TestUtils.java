@@ -48,9 +48,11 @@ public class TestUtils {
 					} else if (args[0].equalsIgnoreCase("update")) {
 						if (args.length == 1) {
 							if (!Update.checkForUpdate()) {
-								p.sendMessage(ChatColor.RED + "You are already running the latest Version.");
+								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
+											  + ChatColor.RED + "You are already running the latest Version.");
 							}
-							GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you really want to update?"
+							GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
+																  + ChatColor.RED + "Do you really want to update?"
 									, "/tu update confirm"
 									, "/tu update deny"
 									, p);
@@ -72,7 +74,7 @@ public class TestUtils {
 									}.runTask(de.zeanon.testutils.TestUtils.getInstance());
 								}
 							} else {
-								p.sendMessage(ChatColor.DARK_PURPLE + de.zeanon.testutils.TestUtils.getInstance().getName()
+								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
 											  + ChatColor.RED + " will not be updated.");
 							}
 						} else {
@@ -97,6 +99,6 @@ public class TestUtils {
 											  + ChatColor.UNDERLINE + ""
 											  + ChatColor.ITALIC + ""
 											  + ChatColor.BOLD + "!!UPDATE BABY!!",
-											  "/testutils update", p);
+											  "/tu update", p);
 	}
 }
