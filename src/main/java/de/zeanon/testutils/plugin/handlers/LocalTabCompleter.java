@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.handlers;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,7 +32,7 @@ public class LocalTabCompleter implements TabCompleter {
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0], "registerblock", "deleteblock", "registertg", "update");
+				return this.getCompletions(args[0], "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registertg", "update");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -40,8 +41,12 @@ public class LocalTabCompleter implements TabCompleter {
 				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
 					return this.getCompletions(args[1], "other");
 				}
-			} else if (command.getName().equalsIgnoreCase("testutils") && (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("registerblock"))) {
-				return this.getBlocks(args[1], (Player) sender);
+			} else if (command.getName().equalsIgnoreCase("testutils")) {
+				if (args[0].equalsIgnoreCase("update") && GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId().toString())) {
+					return this.getCompletions(args[1], "confirm", "deny");
+				} else if (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("deletefolder") || args[0].equalsIgnoreCase("renameblock") || args[0].equalsIgnoreCase("renamefolder") || args[0].equalsIgnoreCase("registerblock")) {
+					return this.getBlocks(args[1], (Player) sender);
+				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				if (args[0].equalsIgnoreCase("here")) {
 					return this.getBlocks(args[1], (Player) sender);

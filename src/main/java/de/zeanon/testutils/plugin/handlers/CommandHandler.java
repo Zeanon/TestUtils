@@ -1,8 +1,8 @@
 package de.zeanon.testutils.plugin.handlers;
 
 import de.zeanon.testutils.plugin.commands.TNT;
-import de.zeanon.testutils.plugin.commands.TestBlock;
 import de.zeanon.testutils.plugin.commands.TestUtils;
+import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

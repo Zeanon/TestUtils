@@ -14,11 +14,21 @@ public class SleepModeTabCompleter implements TabCompleter {
 	@Override
 	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
 		if (command.getName().equalsIgnoreCase("testutils")) {
-			if (args.length == 0) {
-				return Collections.singletonList("update");
-			} else if (args.length == 1) {
+			if (args.length == 1) {
 				if ("update".startsWith(args[0].toLowerCase())) {
 					return Collections.singletonList("update");
+				} else {
+					return Collections.emptyList();
+				}
+			} else if (args.length == 2) {
+				if (args[0].equalsIgnoreCase("update")) {
+					if ("confirm".startsWith(args[1].toLowerCase())) {
+						return Collections.singletonList("confirm");
+					} else if ("deny".startsWith(args[1].toLowerCase())) {
+						return Collections.singletonList("deny");
+					} else {
+						return Collections.emptyList();
+					}
 				} else {
 					return Collections.emptyList();
 				}
