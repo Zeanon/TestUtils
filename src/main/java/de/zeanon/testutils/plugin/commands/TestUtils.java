@@ -59,23 +59,27 @@ public class TestUtils {
 							GlobalRequestUtils.addUpdateRequest(p.getUniqueId().toString());
 						} else if (args.length == 2
 								   && (args[1].equalsIgnoreCase("confirm")
-									   || args[1].equalsIgnoreCase("deny"))
-								   && GlobalRequestUtils.checkUpdateRequest(p.getUniqueId().toString())) {
-							GlobalRequestUtils.removeUpdateRequest(p.getUniqueId().toString());
-							if (args[1].equalsIgnoreCase("confirm")) {
-								if (Bukkit.getVersion().contains("git-Paper")) {
-									Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
+									   || args[1].equalsIgnoreCase("deny"))) {
+							if (GlobalRequestUtils.checkUpdateRequest(p.getUniqueId().toString())) {
+								GlobalRequestUtils.removeUpdateRequest(p.getUniqueId().toString());
+								if (args[1].equalsIgnoreCase("confirm")) {
+									if (Bukkit.getVersion().contains("git-Paper")) {
+										Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
+									} else {
+										new BukkitRunnable() {
+											@Override
+											public void run() {
+												Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
+											}
+										}.runTask(de.zeanon.testutils.TestUtils.getInstance());
+									}
 								} else {
-									new BukkitRunnable() {
-										@Override
-										public void run() {
-											Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
-										}
-									}.runTask(de.zeanon.testutils.TestUtils.getInstance());
+									p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
+												  + ChatColor.RED + "Plugin will not be updated.");
 								}
 							} else {
 								p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
-											  + ChatColor.RED + " will not be updated.");
+											  + ChatColor.RED + "You don't have a  pending update request.");
 							}
 						} else {
 							p.sendMessage(ChatColor.RED + "Too many arguments.");
