@@ -10,9 +10,9 @@ softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
 commands:
   testutils:
     description: The basic command for TestUtils
-    aliases: tu
+    aliases: [ tu ]
   testblock:
     description: testblock
-    aliases: tb
+    aliases: [ tb ]
   tnt:
     description: tnt
