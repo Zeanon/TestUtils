@@ -4,6 +4,7 @@ description: ${project.description}
 author: Zeanon
 website: ${project.url}
 main: de.zeanon.testutils.TestUtils
+api-version: 1.15
 depend: [ WorldGuard ]
 softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
 commands:
