@@ -44,17 +44,15 @@ public class TestBlock {
 	public @Nullable Pair<InputStream, String> getBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null) {
 			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString(), name + ".schem");
-			if (tempFile.exists()) {
-				if (tempFile.isFile()) {
-					return new Pair<>(BaseFileUtils.createNewInputStreamFromFile(tempFile), name);
-				} else if (BaseFileUtils.removeExtension(tempFile).isDirectory()) {
-					p.sendMessage(GlobalMessageUtils.messageHead +
-								  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
-					return null;
-				} else {
-					return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
-				}
+			if (tempFile.exists() && tempFile.isFile()) {
+				return new Pair<>(BaseFileUtils.createNewInputStreamFromFile(tempFile), name);
+			} else if (BaseFileUtils.removeExtension(tempFile).exists() && BaseFileUtils.removeExtension(tempFile).isDirectory()) {
+				p.sendMessage(GlobalMessageUtils.messageHead +
+							  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
+				return null;
 			} else {
+				p.sendMessage(GlobalMessageUtils.messageHead +
+							  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block.");
 				return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 			}
 		} else {
