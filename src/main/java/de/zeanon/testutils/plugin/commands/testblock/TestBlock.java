@@ -1,9 +1,11 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import java.io.File;
+import java.io.InputStream;
 import javafx.util.Pair;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -39,16 +41,20 @@ public class TestBlock {
 		}
 	}
 
-	public @NotNull Pair<File, String> getBlock(final @NotNull Player p, final @Nullable String name) {
+	public @Nullable Pair<InputStream, String> getBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null) {
 			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString(), name + ".schem");
-			if (tempFile.exists() && tempFile.isFile()) {
-				return new Pair<>(tempFile, name);
-			} else {
-				if (tempFile.exists() && tempFile.isDirectory()) {
+			if (tempFile.exists()) {
+				if (tempFile.isFile()) {
+					return new Pair<>(BaseFileUtils.createNewInputStreamFromFile(tempFile), name);
+				} else if (BaseFileUtils.removeExtension(tempFile).isDirectory()) {
 					p.sendMessage(GlobalMessageUtils.messageHead +
 								  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
+					return null;
+				} else {
+					return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 				}
+			} else {
 				return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 			}
 		} else {
@@ -56,12 +62,12 @@ public class TestBlock {
 		}
 	}
 
-	private @Nullable File getDefaultBlock(final @NotNull String uuid) {
+	private @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {
 		final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, "default.schem");
 		if (tempFile.exists() && tempFile.isFile()) {
-			return tempFile;
+			return BaseFileUtils.createNewInputStreamFromFile(tempFile);
 		} else {
-			return null;
+			return BaseFileUtils.createNewInputStreamFromResource("resources/default.schem");
 		}
 	}
 }
