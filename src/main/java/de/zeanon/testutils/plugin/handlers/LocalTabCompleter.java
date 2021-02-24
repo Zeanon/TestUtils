@@ -28,7 +28,7 @@ public class LocalTabCompleter implements TabCompleter {
 			if (command.getName().equalsIgnoreCase("tnt")) {
 				return this.getCompletions(args[0], "allow", "deny", "other", "info");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				final @NotNull List<String> completions = this.getCompletions(args[0], "undo", "here");
+				final @NotNull List<String> completions = this.getCompletions(args[0], "undo", "redo", "here");
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {

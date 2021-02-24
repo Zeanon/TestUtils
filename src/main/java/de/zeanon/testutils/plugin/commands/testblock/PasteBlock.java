@@ -68,7 +68,7 @@ public class PasteBlock {
 	}
 
 	public void undo(final @NotNull Player p) {
-		EditSession tempSession = SessionFactory.getSession(p);
+		EditSession tempSession = SessionFactory.getUndoSession(p.getUniqueId().toString());
 		if (tempSession == null) {
 			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "Nothing left to undo.");
@@ -76,6 +76,20 @@ public class PasteBlock {
 			tempSession.undo(tempSession);
 			p.sendMessage(GlobalMessageUtils.messageHead +
 						  ChatColor.RED + "You undid your last action.");
+			SessionFactory.registerRedoSession(p.getUniqueId().toString(), tempSession);
+		}
+	}
+
+	public void redo(final @NotNull Player p) {
+		EditSession tempSession = SessionFactory.getRedoSession(p.getUniqueId().toString());
+		if (tempSession == null) {
+			p.sendMessage(GlobalMessageUtils.messageHead +
+						  ChatColor.RED + "Nothing left to redo.");
+		} else {
+			tempSession.redo(tempSession);
+			p.sendMessage(GlobalMessageUtils.messageHead +
+						  ChatColor.RED + "You redid your last action.");
+			SessionFactory.registerUndoSession(p.getUniqueId().toString(), tempSession);
 		}
 	}
 }

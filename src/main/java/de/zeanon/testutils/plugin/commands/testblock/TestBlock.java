@@ -23,6 +23,8 @@ public class TestBlock {
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("undo")) {
 				PasteBlock.undo(p);
+			} else if (args[0].equalsIgnoreCase("redo")) {
+				PasteBlock.redo(p);
 			} else if (args[0].equalsIgnoreCase("here")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
 			} else {

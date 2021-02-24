@@ -8,29 +8,50 @@ import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
 public class SessionFactory {
 
-	private static final Map<String, SizedStack<EditSession>> existingSessions;
+	private static final Map<String, SizedStack<EditSession>> undoSessions;
+	private static final Map<String, SizedStack<EditSession>> redoSessions;
 
 	static {
-		existingSessions = new HashMap<>();
+		undoSessions = new HashMap<>();
+		redoSessions = new HashMap<>();
 	}
 
-	public EditSession createSession(final @NotNull Player p) {
-		if (!SessionFactory.existingSessions.containsKey(p.getUniqueId().toString())) {
-			SessionFactory.existingSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
-		}
+	public @Nullable EditSession createSession(final @NotNull Player p) {
+		SessionFactory.undoSessions.computeIfAbsent(p.getUniqueId().toString(), user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
 		EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
-		SessionFactory.existingSessions.get(p.getUniqueId().toString()).push(tempSession);
+		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(tempSession);
 		return tempSession;
 	}
 
-	public EditSession getSession(final @NotNull Player p) {
-		if (SessionFactory.existingSessions.containsKey(p.getUniqueId().toString())) {
-			SizedStack<EditSession> tempStack = SessionFactory.existingSessions.get(p.getUniqueId().toString());
+	public void registerUndoSession(final @NotNull String uuid, final @NotNull EditSession editSession) {
+		SessionFactory.undoSessions.computeIfAbsent(uuid, user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
+		SessionFactory.undoSessions.get(uuid).push(editSession);
+	}
+
+	public @Nullable EditSession getUndoSession(final @NotNull String uuid) {
+		if (SessionFactory.undoSessions.containsKey(uuid)) {
+			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(uuid);
+			if (!tempStack.isEmpty()) {
+				return tempStack.pop();
+			}
+		}
+		return null;
+	}
+
+	public void registerRedoSession(final @NotNull String uuid, final @NotNull EditSession editSession) {
+		SessionFactory.redoSessions.computeIfAbsent(uuid, user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
+		SessionFactory.redoSessions.get(uuid).push(editSession);
+	}
+
+	public @Nullable EditSession getRedoSession(final @NotNull String uuid) {
+		if (SessionFactory.redoSessions.containsKey(uuid)) {
+			SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(uuid);
 			if (!tempStack.isEmpty()) {
 				return tempStack.pop();
 			}
@@ -39,7 +60,8 @@ public class SessionFactory {
 	}
 
 	@SuppressWarnings("unused")
-	public void removeSession(final @NotNull String uuid) {
-		SessionFactory.existingSessions.remove(uuid);
+	public void removeSessions(final @NotNull String uuid) {
+		SessionFactory.undoSessions.remove(uuid);
+		SessionFactory.redoSessions.remove(uuid);
 	}
 }
