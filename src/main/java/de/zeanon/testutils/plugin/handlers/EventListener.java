@@ -19,8 +19,8 @@ public class EventListener implements Listener {
 		final @NotNull String[] args = event.getMessage().replace("worldguard:", "/").split("\\s+");
 		if ((args[0].equalsIgnoreCase("/rg") || args[0].equalsIgnoreCase("/region")) && args[1].equalsIgnoreCase("define") && args[2].toLowerCase().startsWith("testarea_") && (args[2].toLowerCase().endsWith("_north") || args[2].toLowerCase().endsWith("_south"))) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(GlobalMessageUtils.messageHead +
-										  ChatColor.RED + "You are not allowed to create a region which starts with '"
+			event.getPlayer().sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "You are not allowed to create a region which starts with '"
 										  + ChatColor.DARK_RED + "testarea_"
 										  + ChatColor.RED + "' and ends with '"
 										  + ChatColor.DARK_RED + args[2].substring(args[2].length() - 6)

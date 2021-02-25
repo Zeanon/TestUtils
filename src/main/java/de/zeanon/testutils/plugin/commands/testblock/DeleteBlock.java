@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,33 +19,28 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteBlock {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (args.length <= 3) {
-					if (args.length < 1) {
-						p.sendMessage(ChatColor.RED + "Missing argument for "
-									  + ChatColor.YELLOW + "<"
-									  + ChatColor.GOLD + "filename"
-									  + ChatColor.YELLOW + ">");
-						DeleteBlock.usage(p);
-					} else if (args[1].contains("./")) {
-						p.sendMessage(ChatColor.RED + "File '" + args[1] + "'resolution error: Path is not allowed.");
-						DeleteBlock.usage(p);
-					} else if (args.length == 3 && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
-							   && !args[2].equalsIgnoreCase("confirm")
-							   && !args[2].equalsIgnoreCase("deny")) {
-						p.sendMessage(ChatColor.RED + "Too many arguments.");
-						DeleteBlock.usage(p);
-					} else {
-						DeleteBlock.executeInternally(p, args);
-					}
-				} else {
-					p.sendMessage(ChatColor.RED + "Too many arguments.");
-					DeleteBlock.usage(p);
-				}
+		if (args.length <= 3) {
+			if (args.length < 1) {
+				p.sendMessage(ChatColor.RED + "Missing argument for "
+							  + ChatColor.YELLOW + "<"
+							  + ChatColor.GOLD + "filename"
+							  + ChatColor.YELLOW + ">");
+				DeleteBlock.usage(p);
+			} else if (args[1].contains("./")) {
+				p.sendMessage(ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
+				DeleteBlock.usage(p);
+			} else if (args.length == 3 && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
+					   && !args[2].equalsIgnoreCase("confirm")
+					   && !args[2].equalsIgnoreCase("deny")) {
+				p.sendMessage(ChatColor.RED + "Too many arguments.");
+				DeleteBlock.usage(p);
+			} else {
+				DeleteBlock.executeInternally(p, args);
 			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		} else {
+			p.sendMessage(ChatColor.RED + "Too many arguments.");
+			DeleteBlock.usage(p);
+		}
 	}
 
 	public @NotNull String usageMessage() {
@@ -93,18 +87,18 @@ public class DeleteBlock {
 															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks"))
 															: null;
 
-						p.sendMessage(GlobalMessageUtils.messageHead +
-									  ChatColor.DARK_RED + args[1] + ChatColor.RED + " was deleted successfully.");
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " was deleted successfully.");
 
 						if (parentName != null) {
-							p.sendMessage(GlobalMessageUtils.messageHead +
-										  ChatColor.RED + "Folder "
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Folder "
 										  + ChatColor.GREEN + parentName
 										  + ChatColor.RED + " was deleted successfully due to being empty.");
 						}
 					} catch (IOException e) {
-						p.sendMessage(GlobalMessageUtils.messageHead +
-									  ChatColor.DARK_RED + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
 					}
 				} else {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +

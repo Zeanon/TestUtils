@@ -17,7 +17,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,35 +25,30 @@ import org.jetbrains.annotations.Nullable;
 public class RenameFolder {
 
 	public void execute(final @NotNull String @NotNull [] args, final @NotNull Player p) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (args.length <= 5) {
-					if (args.length < 3) {
-						p.sendMessage(ChatColor.RED + "Missing argument for "
-									  + ChatColor.YELLOW + "<"
-									  + ChatColor.GREEN + "filename"
-									  + ChatColor.YELLOW + ">");
-						RenameFolder.usage(p);
-					} else if (args[1].contains("./") || args.length >= 4 && args[2].contains("./")) {
-						String name = args[1].contains("./") ? args[1] : args[2];
-						p.sendMessage(ChatColor.RED + "File '" + name + "'resolution error: Path is not allowed.");
-						RenameFolder.usage(p);
-					} else if (args.length == 5
-							   && !args[3].equalsIgnoreCase("confirm")
-							   && !args[3].equalsIgnoreCase("deny")
-							   && !CommandRequestUtils.checkRenameFolderRequest(p.getUniqueId().toString(), args[1])) {
-						p.sendMessage(ChatColor.RED + "Too many arguments.");
-						RenameFolder.usage(p);
-					} else {
-						RenameFolder.executeInternally(p, args);
-					}
-				} else {
-					p.sendMessage(ChatColor.RED + "Too many arguments.");
-					RenameFolder.usage(p);
-				}
+		if (args.length <= 5) {
+			if (args.length < 3) {
+				p.sendMessage(ChatColor.RED + "Missing argument for "
+							  + ChatColor.YELLOW + "<"
+							  + ChatColor.GREEN + "filename"
+							  + ChatColor.YELLOW + ">");
+				RenameFolder.usage(p);
+			} else if (args[1].contains("./") || args.length >= 4 && args[2].contains("./")) {
+				String name = args[1].contains("./") ? args[1] : args[2];
+				p.sendMessage(ChatColor.RED + "File '" + name + "' resolution error: Path is not allowed.");
+				RenameFolder.usage(p);
+			} else if (args.length == 5
+					   && !args[3].equalsIgnoreCase("confirm")
+					   && !args[3].equalsIgnoreCase("deny")
+					   && !CommandRequestUtils.checkRenameFolderRequest(p.getUniqueId().toString(), args[1])) {
+				p.sendMessage(ChatColor.RED + "Too many arguments.");
+				RenameFolder.usage(p);
+			} else {
+				RenameFolder.executeInternally(p, args);
 			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		} else {
+			p.sendMessage(ChatColor.RED + "Too many arguments.");
+			RenameFolder.usage(p);
+		}
 	}
 
 	public @NotNull

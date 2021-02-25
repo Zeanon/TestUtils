@@ -58,8 +58,8 @@ public class PasteBlock {
 							.build();
 
 					Operations.complete(operation);
-					p.sendMessage(GlobalMessageUtils.messageHead +
-								  ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
 				}
 			} catch (IOException | WorldEditException e) {
 				e.printStackTrace();
@@ -68,28 +68,14 @@ public class PasteBlock {
 	}
 
 	public void undo(final @NotNull Player p) {
-		EditSession tempSession = SessionFactory.getUndoSession(p.getUniqueId().toString());
+		EditSession tempSession = SessionFactory.getSession(p);
 		if (tempSession == null) {
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "Nothing left to undo.");
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Nothing left to undo.");
 		} else {
 			tempSession.undo(tempSession);
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "You undid your last action.");
-			SessionFactory.registerRedoSession(p.getUniqueId().toString(), tempSession);
-		}
-	}
-
-	public void redo(final @NotNull Player p) {
-		EditSession tempSession = SessionFactory.getRedoSession(p.getUniqueId().toString());
-		if (tempSession == null) {
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "Nothing left to redo.");
-		} else {
-			tempSession.redo(tempSession);
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "You redid your last action.");
-			SessionFactory.registerUndoSession(p.getUniqueId().toString(), tempSession);
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "You undid your last action.");
 		}
 	}
 }

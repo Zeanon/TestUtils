@@ -11,7 +11,6 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,34 +19,29 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteFolder {
 
 	public void execute(final @NotNull String @NotNull [] args, final @NotNull Player p) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (args.length <= 3) {
-					if (args.length < 1) {
-						p.sendMessage(ChatColor.RED + "Missing argument for "
-									  + ChatColor.YELLOW + "<"
-									  + ChatColor.GREEN + "filename"
-									  + ChatColor.YELLOW + ">");
-						DeleteFolder.usage(p);
-					} else if (args[1].contains("./")) {
-						p.sendMessage(ChatColor.RED + "File '" + args[1] + "'resolution error: Path is not allowed.");
-						DeleteFolder.usage(p);
-					} else if (args.length == 3
-							   && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
-							   && !args[2].equalsIgnoreCase("confirm")
-							   && !args[2].equalsIgnoreCase("deny")) {
-						p.sendMessage(ChatColor.RED + "Too many arguments.");
-						DeleteFolder.usage(p);
-					} else {
-						DeleteFolder.executeInternally(p, args);
-					}
-				} else {
-					p.sendMessage(ChatColor.RED + "Too many arguments.");
-					DeleteFolder.usage(p);
-				}
+		if (args.length <= 3) {
+			if (args.length < 1) {
+				p.sendMessage(ChatColor.RED + "Missing argument for "
+							  + ChatColor.YELLOW + "<"
+							  + ChatColor.GREEN + "filename"
+							  + ChatColor.YELLOW + ">");
+				DeleteFolder.usage(p);
+			} else if (args[1].contains("./")) {
+				p.sendMessage(ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
+				DeleteFolder.usage(p);
+			} else if (args.length == 3
+					   && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
+					   && !args[2].equalsIgnoreCase("confirm")
+					   && !args[2].equalsIgnoreCase("deny")) {
+				p.sendMessage(ChatColor.RED + "Too many arguments.");
+				DeleteFolder.usage(p);
+			} else {
+				DeleteFolder.executeInternally(p, args);
 			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		} else {
+			p.sendMessage(ChatColor.RED + "Too many arguments.");
+			DeleteFolder.usage(p);
+		}
 	}
 
 	public @NotNull String usageMessage() {

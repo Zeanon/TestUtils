@@ -23,8 +23,6 @@ public class TestBlock {
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("undo")) {
 				PasteBlock.undo(p);
-			} else if (args[0].equalsIgnoreCase("redo")) {
-				PasteBlock.redo(p);
 			} else if (args[0].equalsIgnoreCase("here")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
 			} else {
@@ -49,12 +47,12 @@ public class TestBlock {
 			if (tempFile.exists() && tempFile.isFile()) {
 				return new Pair<>(BaseFileUtils.createNewInputStreamFromFile(tempFile), name);
 			} else if (BaseFileUtils.removeExtension(tempFile).exists() && BaseFileUtils.removeExtension(tempFile).isDirectory()) {
-				p.sendMessage(GlobalMessageUtils.messageHead +
-							  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block but a directory.");
 				return null;
 			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead +
-							  ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "'" + ChatColor.DARK_RED + name + ChatColor.RED + "' is not a valid block.");
 				return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 			}
 		} else {

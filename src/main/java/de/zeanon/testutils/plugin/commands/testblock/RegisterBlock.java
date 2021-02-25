@@ -31,57 +31,74 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegisterBlock {
 
-	public void registerBlock(final @NotNull Player p, final @Nullable String name) {
+	public void execute(final @NotNull String[] args, final @NotNull Player p) {
+		if (args.length == 1) {
+			RegisterBlock.registerBlock(p, null);
+		} else if (args.length == 2) {
+			RegisterBlock.registerBlock(p, args[1]);
+		} else {
+			p.sendMessage(ChatColor.RED + "Too many arguments.");
+		}
+	}
+
+	private void registerBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null && name.contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "'resolution error: Path is not allowed.");
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "' resolution error: Path is not allowed.");
+		} else if (name != null && (name.equalsIgnoreCase("undo") || name.equalsIgnoreCase("here"))) {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "'"
+						  + ChatColor.DARK_RED + name + ChatColor.RED
+						  + "' is not allowed due to '"
+						  + ChatColor.DARK_RED + name + ChatColor.RED
+						  + "' being a sub-command of /testblock.");
 		} else {
 			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
-				return;
-			}
-
-			final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-			final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
-			final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-
-			final @NotNull BlockVector3 copyPoint;
-
-			if (tempRegion.getId().endsWith("_south")) {
-				copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
 			} else {
-				copyPoint = region.getMinimumPoint();
-			}
+				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-			try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
-				ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-						editSession, region, region.getMinimumPoint(), clipboard, copyPoint
-				);
-
-				forwardExtentCopy.setCopyingEntities(false);
-				forwardExtentCopy.setCopyingBiomes(false);
+				final @NotNull BlockVector3 copyPoint;
 
 				if (tempRegion.getId().endsWith("_south")) {
-					forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+					copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
+				} else {
+					copyPoint = region.getMinimumPoint();
 				}
 
-				Operations.complete(forwardExtentCopy);
+				try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
+					ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+							editSession, region, region.getMinimumPoint(), clipboard, copyPoint
+					);
 
-				File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem") //NOSONAR
-											 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
+					forwardExtentCopy.setCopyingEntities(false);
+					forwardExtentCopy.setCopyingBiomes(false);
 
-				BaseFileUtils.createFile(tempFile);
+					if (tempRegion.getId().endsWith("_south")) {
+						forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+					}
 
-				try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
-					writer.write(clipboard);
+					Operations.complete(forwardExtentCopy);
+
+					File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + name + ".schem") //NOSONAR
+												 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/default.schem");
+
+					BaseFileUtils.createFile(tempFile);
+
+					try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
+						writer.write(clipboard);
+					}
+				} catch (WorldEditException | IOException e) {
+					e.printStackTrace();
 				}
-			} catch (WorldEditException | IOException e) {
-				e.printStackTrace();
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "You registered a new block with the name: "
+							  + ChatColor.DARK_RED + (name == null ? "default" : name));
 			}
-			p.sendMessage(GlobalMessageUtils.messageHead +
-						  ChatColor.RED + "You registered a new block with the name: " + ChatColor.DARK_RED + (name == null ? "default" : name));
 		}
 	}
 }

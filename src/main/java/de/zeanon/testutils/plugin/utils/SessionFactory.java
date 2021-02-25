@@ -15,11 +15,9 @@ import org.jetbrains.annotations.Nullable;
 public class SessionFactory {
 
 	private static final Map<String, SizedStack<EditSession>> undoSessions;
-	private static final Map<String, SizedStack<EditSession>> redoSessions;
 
 	static {
 		undoSessions = new HashMap<>();
-		redoSessions = new HashMap<>();
 	}
 
 	public @Nullable EditSession createSession(final @NotNull Player p) {
@@ -29,29 +27,9 @@ public class SessionFactory {
 		return tempSession;
 	}
 
-	public void registerUndoSession(final @NotNull String uuid, final @NotNull EditSession editSession) {
-		SessionFactory.undoSessions.computeIfAbsent(uuid, user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
-		SessionFactory.undoSessions.get(uuid).push(editSession);
-	}
-
-	public @Nullable EditSession getUndoSession(final @NotNull String uuid) {
-		if (SessionFactory.undoSessions.containsKey(uuid)) {
-			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(uuid);
-			if (!tempStack.isEmpty()) {
-				return tempStack.pop();
-			}
-		}
-		return null;
-	}
-
-	public void registerRedoSession(final @NotNull String uuid, final @NotNull EditSession editSession) {
-		SessionFactory.redoSessions.computeIfAbsent(uuid, user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
-		SessionFactory.redoSessions.get(uuid).push(editSession);
-	}
-
-	public @Nullable EditSession getRedoSession(final @NotNull String uuid) {
-		if (SessionFactory.redoSessions.containsKey(uuid)) {
-			SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(uuid);
+	public @Nullable EditSession getSession(final @NotNull Player p) {
+		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
+			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
 			if (!tempStack.isEmpty()) {
 				return tempStack.pop();
 			}
@@ -60,8 +38,7 @@ public class SessionFactory {
 	}
 
 	@SuppressWarnings("unused")
-	public void removeSessions(final @NotNull String uuid) {
-		SessionFactory.undoSessions.remove(uuid);
-		SessionFactory.redoSessions.remove(uuid);
+	public void removeSessions(final @NotNull Player p) {
+		SessionFactory.undoSessions.remove(p.getUniqueId().toString());
 	}
 }
