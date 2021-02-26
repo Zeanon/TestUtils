@@ -20,9 +20,9 @@ public class SessionFactory {
 		undoSessions = new HashMap<>();
 	}
 
-	public @Nullable EditSession createSession(final @NotNull Player p) {
+	public @NotNull EditSession createSession(final @NotNull Player p) {
 		SessionFactory.undoSessions.computeIfAbsent(p.getUniqueId().toString(), user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
-		EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
+		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
 		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(tempSession);
 		return tempSession;
 	}

@@ -46,7 +46,7 @@ public class RegisterBlock {
 		if (name != null && name.contains("./")) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "' resolution error: Path is not allowed.");
-		} else if (name != null && (name.equalsIgnoreCase("undo") || name.equalsIgnoreCase("here"))) {
+		} else if (name != null && (name.equalsIgnoreCase("here") || name.equalsIgnoreCase("replace"))) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "'"
 						  + ChatColor.DARK_RED + name + ChatColor.RED
@@ -95,6 +95,9 @@ public class RegisterBlock {
 					}
 				} catch (WorldEditException | IOException e) {
 					e.printStackTrace();
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "There has been an error, registering a new block with the name: "
+								  + ChatColor.DARK_RED + (name == null ? "default" : name));
 				}
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "You registered a new block with the name: "

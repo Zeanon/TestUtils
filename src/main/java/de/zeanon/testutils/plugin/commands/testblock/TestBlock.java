@@ -1,8 +1,10 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
+import com.sk89q.worldedit.EditSession;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import java.io.File;
 import java.io.InputStream;
@@ -10,6 +12,7 @@ import javafx.util.Pair;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,8 +24,8 @@ public class TestBlock {
 		if (args.length == 0) {
 			PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), false);
 		} else if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("undo")) {
-				PasteBlock.undo(p);
+			if (args[0].equalsIgnoreCase("replace")) {
+				ReplaceBlock.replaceBlock(p, TestAreaUtils.getOppositeRegion(p), false);
 			} else if (args[0].equalsIgnoreCase("here")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
 			} else {
@@ -30,9 +33,17 @@ public class TestBlock {
 			}
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("here")) {
-				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
+				if (args[1].equalsIgnoreCase("replace")) {
+					ReplaceBlock.replaceBlock(p, TestAreaUtils.getRegion(p), true);
+				} else {
+					PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
+				}
 			} else if (args[1].equalsIgnoreCase("here")) {
-				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
+				if (args[0].equalsIgnoreCase("replace")) {
+					ReplaceBlock.replaceBlock(p, TestAreaUtils.getRegion(p), true);
+				} else {
+					PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
+				}
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
 			}
@@ -58,6 +69,23 @@ public class TestBlock {
 		} else {
 			return new Pair<>(TestBlock.getDefaultBlock(p.getUniqueId().toString()), "default");
 		}
+	}
+
+	public void undo(final @NotNull Player p) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				EditSession tempSession = SessionFactory.getSession(p);
+				if (tempSession == null) {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "Nothing left to undo.");
+				} else {
+					tempSession.undo(tempSession);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "You undid your last action.");
+				}
+			}
+		}.runTask(TestUtils.getInstance());
 	}
 
 	private @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {

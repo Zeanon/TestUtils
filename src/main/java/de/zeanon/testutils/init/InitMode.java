@@ -1,19 +1,27 @@
 package de.zeanon.testutils.init;
 
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.handlers.*;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,6 +77,8 @@ public class InitMode {
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(localTabCompleter);
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+			InitMode.cleanUpResets();
+			InitMode.config.setUseArray(new String[]{"Max History"}, 10);
 		} else {
 			InitMode.enableSleepMode();
 		}
@@ -103,6 +113,27 @@ public class InitMode {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Updating Configs...");
 			Update.checkConfigUpdate();
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
+		}
+	}
+
+	private void cleanUpResets() {
+		try {
+			for (final @NotNull File tempFile : BaseFileUtils.listFilesOfType(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"), "schem")) {
+				boolean exists = false;
+				@NotNull RegionManager tempManager;
+				for (final @NotNull World world : Bukkit.getWorlds()) {
+					tempManager = Objects.notNull(InitMode.regionContainer.get(new BukkitWorld(world)));
+					if (tempManager.hasRegion(BaseFileUtils.removeExtension(tempFile.getName()))) {
+						exists = true;
+						break;
+					}
+				}
+				if (!exists) {
+					Files.delete(tempFile.toPath());
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

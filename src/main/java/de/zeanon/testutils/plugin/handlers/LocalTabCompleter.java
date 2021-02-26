@@ -28,11 +28,11 @@ public class LocalTabCompleter implements TabCompleter {
 			if (command.getName().equalsIgnoreCase("tnt")) {
 				return this.getCompletions(args[0], "allow", "deny", "other", "info");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				final @NotNull List<String> completions = this.getCompletions(args[0], "undo", "here");
+				final @NotNull List<String> completions = this.getCompletions(args[0], "here", "replace");
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0], "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registerarea", "deletearea", "update");
+				return this.getCompletions(args[0], "undo", "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registerarea", "deletearea", "registerreset", "resetarea", "update");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -49,7 +49,9 @@ public class LocalTabCompleter implements TabCompleter {
 				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				if (args[0].equalsIgnoreCase("here")) {
-					return this.getBlocks(args[1], (Player) sender);
+					final @NotNull List<String> completions = this.getCompletions(args[1], "replace");
+					completions.addAll(this.getBlocks(args[1], (Player) sender));
+					return completions;
 				} else {
 					return this.getCompletions(args[1], "here");
 				}

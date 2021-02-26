@@ -3,7 +3,6 @@ package de.zeanon.testutils.plugin.commands.testblock;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operation;
@@ -29,53 +28,42 @@ import org.jetbrains.annotations.Nullable;
 public class PasteBlock {
 
 	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
-		final @Nullable Pair<InputStream, String> testBlock = TestBlock.getBlock(p, name);
-		if (testBlock != null) { //NOSONAR
-			final @Nullable ClipboardFormat format = ClipboardFormats.findByAlias("schem");
-			try (final @NotNull ClipboardReader reader = Objects.notNull(format).getReader(testBlock.getKey())) {
-				@NotNull Clipboard clipboard = reader.read();
-				try (EditSession editSession = SessionFactory.createSession(p)) {
-					if (tempRegion == null) {
-						GlobalMessageUtils.sendNotApplicableRegion(p);
-						return;
-					}
-
-					final BlockVector3 pastePoint;
-
-					ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
-
-					if (tempRegion.getId().endsWith("_south")) {
-						pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
-						clipboardHolder.setTransform(new AffineTransform().rotateY(180));
-					} else {
-						pastePoint = tempRegion.getMinimumPoint();
-					}
-
-					Operation operation = clipboardHolder
-							.createPaste(editSession)
-							.to(pastePoint)
-							.ignoreAirBlocks(true)
-							.build();
-
-					Operations.complete(operation);
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set " + (here ? "on your side." : "on the other side."));
-				}
-			} catch (IOException | WorldEditException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void undo(final @NotNull Player p) {
-		EditSession tempSession = SessionFactory.getSession(p);
-		if (tempSession == null) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Nothing left to undo.");
+		if (tempRegion == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
-			tempSession.undo(tempSession);
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "You undid your last action.");
+			final @Nullable Pair<InputStream, String> testBlock = TestBlock.getBlock(p, name);
+			if (testBlock != null) { //NOSONAR
+				try (final @NotNull ClipboardReader reader = Objects.notNull(ClipboardFormats.findByAlias("schem")).getReader(testBlock.getKey())) {
+					final @NotNull Clipboard clipboard = reader.read();
+					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+
+						final @NotNull BlockVector3 pastePoint;
+
+						final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
+
+						if (tempRegion.getId().endsWith("_south")) {
+							pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
+							clipboardHolder.setTransform(new AffineTransform().rotateY(180));
+						} else {
+							pastePoint = tempRegion.getMinimumPoint();
+						}
+
+						Operation operation = clipboardHolder
+								.createPaste(editSession)
+								.to(pastePoint)
+								.ignoreAirBlocks(true)
+								.build();
+
+						Operations.complete(operation);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set on " + (here ? "your side." : "the other side."));
+					}
+				} catch (IOException | WorldEditException e) {
+					e.printStackTrace();
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' on " + (here ? "your side." : "the other side."));
+				}
+			}
 		}
 	}
 }
