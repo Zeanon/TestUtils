@@ -78,7 +78,6 @@ public class InitMode {
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 			InitMode.cleanUpResets();
-			InitMode.config.setUseArray(new String[]{"Max History"}, 10);
 		} else {
 			InitMode.enableSleepMode();
 		}
