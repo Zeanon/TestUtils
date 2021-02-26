@@ -32,7 +32,7 @@ public class LocalTabCompleter implements TabCompleter {
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0], "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registertg", "update");
+				return this.getCompletions(args[0], "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registerarea", "deletearea", "update");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {

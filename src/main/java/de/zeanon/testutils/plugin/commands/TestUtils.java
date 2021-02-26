@@ -1,5 +1,7 @@
 package de.zeanon.testutils.plugin.commands;
 
+import de.zeanon.testutils.plugin.commands.testarea.DeleteArea;
+import de.zeanon.testutils.plugin.commands.testarea.RegisterArea;
 import de.zeanon.testutils.plugin.commands.testblock.*;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -26,8 +28,10 @@ public class TestUtils {
 						RenameBlock.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("renamefolder")) {
 						RenameFolder.execute(args, p);
-					} else if (args[0].equalsIgnoreCase("registertg")) {
-						RegisterTG.execute(args, p);
+					} else if (args[0].equalsIgnoreCase("registerarea")) {
+						RegisterArea.execute(args, p);
+					} else if (args[0].equalsIgnoreCase("deletearea")) {
+						DeleteArea.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("update")) {
 						Update.execute(args, p);
 					} else {

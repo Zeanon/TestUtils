@@ -21,24 +21,28 @@ public class DeleteBlock {
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length <= 3) {
 			if (args.length < 1) {
-				p.sendMessage(ChatColor.RED + "Missing argument for "
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Missing argument for "
 							  + ChatColor.YELLOW + "<"
 							  + ChatColor.GOLD + "filename"
 							  + ChatColor.YELLOW + ">");
 				DeleteBlock.usage(p);
 			} else if (args[1].contains("./")) {
-				p.sendMessage(ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
 				DeleteBlock.usage(p);
 			} else if (args.length == 3 && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
 					   && !args[2].equalsIgnoreCase("confirm")
 					   && !args[2].equalsIgnoreCase("deny")) {
-				p.sendMessage(ChatColor.RED + "Too many arguments.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Too many arguments.");
 				DeleteBlock.usage(p);
 			} else {
 				DeleteBlock.executeInternally(p, args);
 			}
 		} else {
-			p.sendMessage(ChatColor.RED + "Too many arguments.");
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Too many arguments.");
 			DeleteBlock.usage(p);
 		}
 	}
@@ -74,8 +78,8 @@ public class DeleteBlock {
 													  "/tu deleteblock " + args[1] + " deny", p);
 				CommandRequestUtils.addDeleteRequest(p.getUniqueId().toString(), args[1]);
 			} else {
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
 			}
 		} else if (args.length == 3 && CommandRequestUtils.checkDeleteRequest(p.getUniqueId().toString(), args[1])) {
 			if (args[2].equalsIgnoreCase("confirm")) {
@@ -84,7 +88,7 @@ public class DeleteBlock {
 					try {
 						Files.delete(file.toPath());
 						final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
-															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks"))
+															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()))
 															: null;
 
 						p.sendMessage(GlobalMessageUtils.messageHead
@@ -101,19 +105,20 @@ public class DeleteBlock {
 									  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
 					}
 				} else {
-					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-								  ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
 				}
 			} else if (args[2].equalsIgnoreCase("deny")) {
 				CommandRequestUtils.removeDeleteRequest(p.getUniqueId().toString());
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.GOLD + args[1] + ChatColor.RED + " was not deleted.");
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.GOLD + args[1] + ChatColor.RED + " was not deleted.");
 			}
 		}
 	}
 
 	private void usage(final @NotNull Player p) {
-		GlobalMessageUtils.sendSuggestMessage(ChatColor.RED + "Usage: ",
+		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.messageHead
+											  + ChatColor.RED + "Usage: ",
 											  DeleteBlock.usageMessage(),
 											  DeleteBlock.usageHoverMessage(),
 											  DeleteBlock.usageCommand(), p);

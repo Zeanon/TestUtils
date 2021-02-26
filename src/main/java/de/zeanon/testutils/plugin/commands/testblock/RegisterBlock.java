@@ -37,7 +37,8 @@ public class RegisterBlock {
 		} else if (args.length == 2) {
 			RegisterBlock.registerBlock(p, args[1]);
 		} else {
-			p.sendMessage(ChatColor.RED + "Too many arguments.");
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Too many arguments.");
 		}
 	}
 
