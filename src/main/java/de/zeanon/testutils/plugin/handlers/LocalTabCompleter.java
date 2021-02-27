@@ -32,7 +32,18 @@ public class LocalTabCompleter implements TabCompleter {
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0], "undo", "registerblock", "deleteblock", "deletefolder", "renameblock", "renamefolder", "registerarea", "deletearea", "registerreset", "resetarea", "update");
+				return this.getCompletions(args[0],
+										   "undo",
+										   "registerblock",
+										   "deleteblock",
+										   "deletefolder",
+										   "renameblock",
+										   "renamefolder",
+										   "registerarea",
+										   "deletearea",
+										   "registerreset",
+										   "resetarea",
+										   "update");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -44,7 +55,11 @@ public class LocalTabCompleter implements TabCompleter {
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				if (args[0].equalsIgnoreCase("update") && GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId().toString())) {
 					return this.getCompletions(args[1], "confirm", "deny");
-				} else if (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("deletefolder") || args[0].equalsIgnoreCase("renameblock") || args[0].equalsIgnoreCase("renamefolder") || args[0].equalsIgnoreCase("registerblock")) {
+				} else if (args[0].equalsIgnoreCase("deleteblock")
+						   || args[0].equalsIgnoreCase("deletefolder")
+						   || args[0].equalsIgnoreCase("renameblock")
+						   || args[0].equalsIgnoreCase("renamefolder")
+						   || args[0].equalsIgnoreCase("registerblock")) {
 					return this.getBlocks(args[1], (Player) sender);
 				} else if (args[0].equalsIgnoreCase("resetarea")) {
 					return this.getCompletions(args[1], "here", "other");
