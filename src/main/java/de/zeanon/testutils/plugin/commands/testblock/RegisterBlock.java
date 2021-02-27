@@ -62,7 +62,7 @@ public class RegisterBlock {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Registering new testblock as '"
 							  + ChatColor.DARK_RED + (name == null ? "default" : name)
-							  + ChatColor.RED + "'.");
+							  + ChatColor.RED + "'...");
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);

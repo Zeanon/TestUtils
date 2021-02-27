@@ -41,7 +41,8 @@ public class RegisterReset {
 				try {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Registering reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
+								  + ChatColor.RED + "'...");
 					RegisterReset.registerSide(p, tempRegion);
 					RegisterReset.registerSide(p, oppositeRegion);
 
