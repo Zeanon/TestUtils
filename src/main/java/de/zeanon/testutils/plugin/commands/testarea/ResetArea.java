@@ -126,6 +126,9 @@ public class ResetArea {
 											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
 							}
 						}
+					} else {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Too many arguments.");
 					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
