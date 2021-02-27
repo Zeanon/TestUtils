@@ -46,6 +46,8 @@ public class LocalTabCompleter implements TabCompleter {
 					return this.getCompletions(args[1], "confirm", "deny");
 				} else if (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("deletefolder") || args[0].equalsIgnoreCase("renameblock") || args[0].equalsIgnoreCase("renamefolder") || args[0].equalsIgnoreCase("registerblock")) {
 					return this.getBlocks(args[1], (Player) sender);
+				} else if (args[0].equalsIgnoreCase("resetarea")) {
+					return this.getCompletions(args[1], "here", "other");
 				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				if (args[0].equalsIgnoreCase("here")) {

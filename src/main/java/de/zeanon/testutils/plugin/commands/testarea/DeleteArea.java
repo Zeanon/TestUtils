@@ -5,8 +5,12 @@ import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.managers.RemovalStrategy;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,6 +47,25 @@ public class DeleteArea {
 			&& regionManager.getRegion("testarea_" + name + "_south") != null) {
 			regionManager.removeRegion("testarea_" + name + "_north", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
 			regionManager.removeRegion("testarea_" + name + "_south", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
+
+			try {
+				Files.deleteIfExists(Paths.get(TestUtils
+													   .getInstance()
+													   .getDataFolder()
+													   .getAbsolutePath() + "/TestAreas/testarea_" + name + "_north.schem"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				Files.deleteIfExists(Paths.get(TestUtils
+													   .getInstance()
+													   .getDataFolder()
+													   .getAbsolutePath() + "/TestAreas/testarea_" + name + "_south.schem"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			return true;
 		} else {
 			return false;

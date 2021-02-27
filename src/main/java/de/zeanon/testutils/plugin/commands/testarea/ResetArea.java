@@ -41,14 +41,14 @@ public class ResetArea {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {
 						try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-							File tempFile = new File(TestUtils
-															 .getInstance()
-															 .getDataFolder()
-															 .getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
-							File oppositeFile = new File(TestUtils
-																 .getInstance()
-																 .getDataFolder()
-																 .getAbsolutePath() + "/TestAreas/" + oppositeRegion.getId() + ".schem");
+							final @NotNull File tempFile = new File(TestUtils
+																			.getInstance()
+																			.getDataFolder()
+																			.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+							final @NotNull File oppositeFile = new File(TestUtils
+																				.getInstance()
+																				.getDataFolder()
+																				.getAbsolutePath() + "/TestAreas/" + oppositeRegion.getId() + ".schem");
 							if (tempFile.exists()
 								&& oppositeFile.exists()) {
 								ResetArea.pasteSide(tempRegion, editSession, tempFile);
@@ -67,6 +67,64 @@ public class ResetArea {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There has been an error, pasting the reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+						}
+					}
+				} else if (args.length == 2) {
+					if (args[1].equalsIgnoreCase("here")) {
+						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+						if (tempRegion == null) {
+							GlobalMessageUtils.sendNotApplicableRegion(p);
+						} else {
+							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+								final @NotNull File tempFile = new File(TestUtils
+																				.getInstance()
+																				.getDataFolder()
+																				.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+								if (tempFile.exists()) {
+									ResetArea.pasteSide(tempRegion, editSession, tempFile);
+
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "You pasted the reset for '"
+												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+								} else {
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "There is no reset for '"
+												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+								}
+							} catch (WorldEditException | IOException e) {
+								e.printStackTrace();
+								p.sendMessage(GlobalMessageUtils.messageHead
+											  + ChatColor.RED + "There has been an error, pasting the reset for '"
+											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+							}
+						}
+					} else if (args[1].equalsIgnoreCase("other")) {
+						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
+						if (tempRegion == null) {
+							GlobalMessageUtils.sendNotApplicableRegion(p);
+						} else {
+							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+								final @NotNull File tempFile = new File(TestUtils
+																				.getInstance()
+																				.getDataFolder()
+																				.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+								if (tempFile.exists()) {
+									ResetArea.pasteSide(tempRegion, editSession, tempFile);
+
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "You pasted the reset for '"
+												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
+								} else {
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "There is no reset for '"
+												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
+								}
+							} catch (WorldEditException | IOException e) {
+								e.printStackTrace();
+								p.sendMessage(GlobalMessageUtils.messageHead
+											  + ChatColor.RED + "There has been an error, pasting the reset for '"
+											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
+							}
 						}
 					}
 				} else {
