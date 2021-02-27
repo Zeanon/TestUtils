@@ -41,9 +41,9 @@ public class ReplaceBlock {
 							  + ChatColor.RED + "The testarea on " + (here ? "your" : "the other") + " side has been inverted.");
 			}
 		} catch (WorldEditException e) {
-			e.printStackTrace();
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + (here ? "your side." : "the other side."));
+			e.printStackTrace();
 		}
 	}
 }

@@ -59,6 +59,10 @@ public class RegisterBlock {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Registering new testblock as '"
+							  + ChatColor.DARK_RED + (name == null ? "default" : name)
+							  + ChatColor.RED + "'.");
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
@@ -93,15 +97,16 @@ public class RegisterBlock {
 					try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
 						writer.write(clipboard);
 					}
-				} catch (WorldEditException | IOException e) {
-					e.printStackTrace();
+
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, registering a new block with the name: "
+								  + ChatColor.RED + "You registered a new testblock with the name: "
 								  + ChatColor.DARK_RED + (name == null ? "default" : name));
+				} catch (WorldEditException | IOException e) {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "There has been an error, registering a new testblock with the name: "
+								  + ChatColor.DARK_RED + (name == null ? "default" : name));
+					e.printStackTrace();
 				}
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "You registered a new block with the name: "
-							  + ChatColor.DARK_RED + (name == null ? "default" : name));
 			}
 		}
 	}

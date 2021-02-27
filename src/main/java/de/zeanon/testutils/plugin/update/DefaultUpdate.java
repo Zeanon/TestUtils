@@ -38,8 +38,8 @@ class DefaultUpdate {
 				Bukkit.getServer().reload();
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
-			e.printStackTrace();
 			System.out.println(instance.getName() + " could not be updated.");
+			e.printStackTrace();
 		}
 	}
 
@@ -66,9 +66,9 @@ class DefaultUpdate {
 				Bukkit.getServer().reload();
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
-			e.printStackTrace();
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 						  ChatColor.RED + "Could not update.");
+			e.printStackTrace();
 		}
 	}
 }

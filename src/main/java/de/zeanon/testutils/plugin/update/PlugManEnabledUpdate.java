@@ -37,8 +37,8 @@ class PlugManEnabledUpdate {
 				PluginUtil.reload(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
-			e.printStackTrace();
 			System.out.println(instance.getName() + " could not be updated.");
+			e.printStackTrace();
 		}
 	}
 
@@ -63,9 +63,9 @@ class PlugManEnabledUpdate {
 				PluginUtil.reload(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
-			e.printStackTrace();
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 						  ChatColor.RED + "Could not update.");
+			e.printStackTrace();
 		}
 	}
 }

@@ -59,9 +59,9 @@ public class PasteBlock {
 									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set on " + (here ? "your side." : "the other side."));
 					}
 				} catch (IOException | WorldEditException e) {
-					e.printStackTrace();
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' on " + (here ? "your side." : "the other side."));
+					e.printStackTrace();
 				}
 			}
 		}

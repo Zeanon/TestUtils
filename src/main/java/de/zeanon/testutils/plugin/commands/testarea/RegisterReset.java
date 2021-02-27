@@ -39,17 +39,21 @@ public class RegisterReset {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				try {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "Registering reset for '"
+								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 					RegisterReset.registerSide(p, tempRegion);
 					RegisterReset.registerSide(p, oppositeRegion);
+
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "You registered a new reset for '"
+								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 				} catch (WorldEditException | IOException e) {
-					e.printStackTrace();
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error, registering a new reset for '"
 								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+					e.printStackTrace();
 				}
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "You registered a new reset for '"
-							  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 			}
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead

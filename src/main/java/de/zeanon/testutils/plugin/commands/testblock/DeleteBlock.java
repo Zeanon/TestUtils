@@ -103,6 +103,7 @@ public class DeleteBlock {
 					} catch (IOException e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
+						e.printStackTrace();
 					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead

@@ -106,9 +106,9 @@ public class DeleteFolder {
 										  + ChatColor.RED + "Folder " + ChatColor.GREEN + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.GREEN + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
+						e.printStackTrace();
 					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead

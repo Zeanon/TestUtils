@@ -63,10 +63,10 @@ public class ResetArea {
 											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 							}
 						} catch (WorldEditException | IOException e) {
-							e.printStackTrace();
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There has been an error, pasting the reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+							e.printStackTrace();
 						}
 					}
 				} else if (args.length == 2) {
@@ -92,10 +92,10 @@ public class ResetArea {
 												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
 								}
 							} catch (WorldEditException | IOException e) {
-								e.printStackTrace();
 								p.sendMessage(GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "There has been an error, pasting the reset for '"
 											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+								e.printStackTrace();
 							}
 						}
 					} else if (args[1].equalsIgnoreCase("other")) {
@@ -120,10 +120,10 @@ public class ResetArea {
 												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
 								}
 							} catch (WorldEditException | IOException e) {
-								e.printStackTrace();
 								p.sendMessage(GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "There has been an error, pasting the reset for '"
 											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
+								e.printStackTrace();
 							}
 						}
 					} else {
