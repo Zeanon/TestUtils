@@ -18,7 +18,7 @@
 
 Plugin Version = ${project.version}
 
-# Define the maximum amount of undos possible for the /tb command
+# Define the maximum amount of undos possible for the ""/tu undo" command
 Max History = 10
 
 # Should the plugin automatically reload the Server after it got updated?
