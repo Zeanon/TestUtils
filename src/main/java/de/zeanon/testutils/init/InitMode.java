@@ -75,8 +75,6 @@ public class InitMode {
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(localTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(localTabCompleter);
-			Objects.notNull(TestUtils.getInstance().getCommand("/update")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("/update")).setTabCompleter(localTabCompleter);
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 			InitMode.cleanUpResets();
