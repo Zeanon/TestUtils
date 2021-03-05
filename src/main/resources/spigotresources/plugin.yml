@@ -10,8 +10,10 @@ commands:
   testutils:
     description: The basic command for TestUtils
     aliases: [ tu ]
+
   testblock:
-    description: testblock
+    description: Paste a TestBlock
     aliases: [ tb ]
+
   tnt:
-    description: tnt
+    description: Toggle TNT

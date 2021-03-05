@@ -1,6 +1,7 @@
 package de.zeanon.testutils.init;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
@@ -29,10 +30,12 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class InitMode {
 
-	@Getter(onMethod_ = {@NotNull})
-	private RegionContainer regionContainer;
-	@Getter(onMethod_ = {@NotNull})
+	@Getter
 	private ThunderConfig config;
+	@Getter
+	private RegionContainer regionContainer;
+	@Getter
+	private WorldEditPlugin worldEditPlugin;
 
 	public void initPlugin() {
 		try {
@@ -75,8 +78,11 @@ public class InitMode {
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(localTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("/update")).setExecutor(commandHandler);
+			Objects.notNull(TestUtils.getInstance().getCommand("/update")).setTabCompleter(localTabCompleter);
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+			InitMode.worldEditPlugin = (WorldEditPlugin) TestUtils.getPluginManager().getPlugin("WorldEdit");
 			InitMode.cleanUpResets();
 		} else {
 			InitMode.enableSleepMode();

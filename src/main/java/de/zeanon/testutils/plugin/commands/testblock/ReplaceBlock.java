@@ -33,7 +33,7 @@ public class ReplaceBlock {
 
 				final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
 				airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
-				editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.LIME_STAINED_GLASS).getDefaultState().toBaseBlock());
+				editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.RED_STAINED_GLASS).getDefaultState().toBaseBlock());
 
 				editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
 
