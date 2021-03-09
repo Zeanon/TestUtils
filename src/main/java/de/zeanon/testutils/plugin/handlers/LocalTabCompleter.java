@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.command.Command;
@@ -24,53 +25,56 @@ public class LocalTabCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {
-		if (args.length == 1) {
-			if (command.getName().equalsIgnoreCase("tnt")) {
-				return this.getCompletions(args[0], "allow", "deny", "other", "info");
-			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				final @NotNull List<String> completions = this.getCompletions(args[0], "here", "replace");
-				completions.addAll(this.getBlocks(args[0], (Player) sender));
-				return completions;
-			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				return this.getCompletions(args[0],
-										   "undo",
-										   "registerblock",
-										   "deleteblock",
-										   "deletefolder",
-										   "renameblock",
-										   "renamefolder",
-										   "registerarea",
-										   "deletearea",
-										   "registerreset",
-										   "resetarea",
-										   "update");
-			}
-		} else if (args.length == 2) {
-			if (command.getName().equalsIgnoreCase("tnt")) {
-				if (args[0].equalsIgnoreCase("other")) {
-					return this.getCompletions(args[1], "allow", "deny", "info");
-				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
-					return this.getCompletions(args[1], "other");
-				}
-			} else if (command.getName().equalsIgnoreCase("testutils")) {
-				if (args[0].equalsIgnoreCase("update") && GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId().toString())) {
-					return this.getCompletions(args[1], "confirm", "deny");
-				} else if (args[0].equalsIgnoreCase("deleteblock")
-						   || args[0].equalsIgnoreCase("deletefolder")
-						   || args[0].equalsIgnoreCase("renameblock")
-						   || args[0].equalsIgnoreCase("renamefolder")
-						   || args[0].equalsIgnoreCase("registerblock")) {
-					return this.getBlocks(args[1], (Player) sender);
-				} else if (args[0].equalsIgnoreCase("resetarea")) {
-					return this.getCompletions(args[1], "here", "other");
-				}
-			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				if (args[0].equalsIgnoreCase("here")) {
-					final @NotNull List<String> completions = this.getCompletions(args[1], "replace");
-					completions.addAll(this.getBlocks(args[1], (Player) sender));
+		if (!((Player) sender).getUniqueId().equals(UUID.fromString("af91ea70-432e-4bbb-8330-0770a820962e"))) {
+			if (args.length == 1) {
+				if (command.getName().equalsIgnoreCase("tnt")) {
+					return this.getCompletions(args[0], "allow", "deny", "other", "info");
+				} else if (command.getName().equalsIgnoreCase("testblock")) {
+					final @NotNull List<String> completions = this.getCompletions(args[0], "here");
+					completions.addAll(this.getBlocks(args[0], (Player) sender));
 					return completions;
-				} else {
-					return this.getCompletions(args[1], "here");
+				} else if (command.getName().equalsIgnoreCase("testutils")) {
+					return this.getCompletions(args[0],
+											   "undo",
+											   "resetarea",
+											   "invertarea",
+											   "registerreset",
+											   "registerblock",
+											   "deleteblock",
+											   "deletefolder",
+											   "renameblock",
+											   "renamefolder",
+											   "registerarea",
+											   "deletearea",
+											   "update");
+				}
+			} else if (args.length == 2) {
+				if (command.getName().equalsIgnoreCase("tnt")) {
+					if (args[0].equalsIgnoreCase("other")) {
+						return this.getCompletions(args[1], "allow", "deny", "info");
+					} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
+						return this.getCompletions(args[1], "other");
+					}
+				} else if (command.getName().equalsIgnoreCase("testutils")) {
+					if (args[0].equalsIgnoreCase("update") && GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId().toString())) {
+						return this.getCompletions(args[1], "confirm", "deny");
+					} else if (args[0].equalsIgnoreCase("deleteblock")
+							   || args[0].equalsIgnoreCase("deletefolder")
+							   || args[0].equalsIgnoreCase("renameblock")
+							   || args[0].equalsIgnoreCase("renamefolder")
+							   || args[0].equalsIgnoreCase("registerblock")) {
+						return this.getBlocks(args[1], (Player) sender);
+					} else if (args[0].equalsIgnoreCase("resetarea")) {
+						return this.getCompletions(args[1], "here", "other");
+					} else if (args[0].equalsIgnoreCase("invertarea")) {
+						return this.getCompletions(args[1], "here");
+					}
+				} else if (command.getName().equalsIgnoreCase("testblock")) {
+					if (args[0].equalsIgnoreCase("here")) {
+						return this.getBlocks(args[1], (Player) sender);
+					} else {
+						return this.getCompletions(args[1], "here");
+					}
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.testblock;
+package de.zeanon.testutils.plugin.commands.testarea;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
@@ -11,6 +11,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -21,9 +22,25 @@ import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
-public class ReplaceBlock {
+public class InvertArea {
 
-	public void replaceBlock(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final boolean here) {
+	public void execute(final @NotNull String[] args, final @NotNull Player p) {
+		if (args.length == 2) {
+			if (args[1].equalsIgnoreCase("here")) {
+				InvertArea.replaceArea(p, TestAreaUtils.getRegion(p), true);
+			} else {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Too many arguments.");
+			}
+		} else if (args.length == 1) {
+			InvertArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), false);
+		} else {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Too many arguments.");
+		}
+	}
+
+	private void replaceArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final boolean here) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

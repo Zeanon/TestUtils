@@ -24,31 +24,22 @@ public class TestBlock {
 		if (args.length == 0) {
 			PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), false);
 		} else if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("replace")) {
-				ReplaceBlock.replaceBlock(p, TestAreaUtils.getOppositeRegion(p), false);
-			} else if (args[0].equalsIgnoreCase("here")) {
+			if (args[0].equalsIgnoreCase("here")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
 			} else {
 				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p), false);
 			}
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("here")) {
-				if (args[1].equalsIgnoreCase("replace")) {
-					ReplaceBlock.replaceBlock(p, TestAreaUtils.getRegion(p), true);
-				} else {
-					PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
-				}
+				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
 			} else if (args[1].equalsIgnoreCase("here")) {
-				if (args[0].equalsIgnoreCase("replace")) {
-					ReplaceBlock.replaceBlock(p, TestAreaUtils.getRegion(p), true);
-				} else {
-					PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
-				}
+				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
 			}
 		} else {
-			p.sendMessage(ChatColor.DARK_AQUA + "Too many arguments.");
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Too many arguments.");
 		}
 	}
 

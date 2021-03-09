@@ -1,9 +1,6 @@
 package de.zeanon.testutils.plugin.commands;
 
-import de.zeanon.testutils.plugin.commands.testarea.DeleteArea;
-import de.zeanon.testutils.plugin.commands.testarea.RegisterArea;
-import de.zeanon.testutils.plugin.commands.testarea.RegisterReset;
-import de.zeanon.testutils.plugin.commands.testarea.ResetArea;
+import de.zeanon.testutils.plugin.commands.testarea.*;
 import de.zeanon.testutils.plugin.commands.testblock.*;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -28,6 +25,8 @@ public class TestUtils {
 						RegisterReset.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("resetarea")) {
 						ResetArea.execute(args, p);
+					} else if (args[0].equalsIgnoreCase("invertarea")) {
+						InvertArea.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("deleteblock")) {
 						DeleteBlock.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("deletefolder")) {
