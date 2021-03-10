@@ -79,7 +79,7 @@ public class RegisterReset {
 
 			Operations.complete(forwardExtentCopy);
 
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempWorld.getName() + "/" + tempRegion.getId() + ".schem");
 
 			BaseFileUtils.createFile(tempFile);
 

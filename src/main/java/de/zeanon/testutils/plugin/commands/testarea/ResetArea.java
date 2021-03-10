@@ -34,6 +34,7 @@ public class ResetArea {
 			@Override
 			public void run() {
 				if (args.length == 1) {
+					final @NotNull String worldName = p.getWorld().getName();
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 					final @Nullable ProtectedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
@@ -44,11 +45,11 @@ public class ResetArea {
 							final @NotNull File tempFile = new File(TestUtils
 																			.getInstance()
 																			.getDataFolder()
-																			.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+																			.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
 							final @NotNull File oppositeFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + oppositeRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + oppositeRegion.getId() + ".schem");
 							if (tempFile.exists()
 								&& oppositeFile.exists()) {
 								ResetArea.pasteSide(tempRegion, editSession, tempFile);
@@ -71,6 +72,7 @@ public class ResetArea {
 					}
 				} else if (args.length == 2) {
 					if (args[1].equalsIgnoreCase("here")) {
+						final @NotNull String worldName = p.getWorld().getName();
 						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -79,7 +81,7 @@ public class ResetArea {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
 								if (tempFile.exists()) {
 									ResetArea.pasteSide(tempRegion, editSession, tempFile);
 
@@ -99,6 +101,7 @@ public class ResetArea {
 							}
 						}
 					} else if (args[1].equalsIgnoreCase("other")) {
+						final @NotNull String worldName = p.getWorld().getName();
 						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -107,7 +110,7 @@ public class ResetArea {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + tempRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
 								if (tempFile.exists()) {
 									ResetArea.pasteSide(tempRegion, editSession, tempFile);
 
