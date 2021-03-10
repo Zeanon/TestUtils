@@ -45,11 +45,11 @@ public class ResetArea {
 							final @NotNull File tempFile = new File(TestUtils
 																			.getInstance()
 																			.getDataFolder()
-																			.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
+																			.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
 							final @NotNull File oppositeFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + oppositeRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + oppositeRegion.getId().substring(9, oppositeRegion.getId().length() - 6) + "/" + oppositeRegion.getId().substring(oppositeRegion.getId().length() - 5) + ".schem");
 							if (tempFile.exists()
 								&& oppositeFile.exists()) {
 								ResetArea.pasteSide(tempRegion, editSession, tempFile);
@@ -81,7 +81,7 @@ public class ResetArea {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
 								if (tempFile.exists()) {
 									ResetArea.pasteSide(tempRegion, editSession, tempFile);
 
@@ -110,7 +110,7 @@ public class ResetArea {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
 																				.getDataFolder()
-																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId() + ".schem");
+																				.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
 								if (tempFile.exists()) {
 									ResetArea.pasteSide(tempRegion, editSession, tempFile);
 

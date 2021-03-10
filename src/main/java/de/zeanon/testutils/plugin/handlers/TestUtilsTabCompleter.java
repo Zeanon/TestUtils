@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-public class LocalTabCompleter implements TabCompleter {
+public class TestUtilsTabCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {

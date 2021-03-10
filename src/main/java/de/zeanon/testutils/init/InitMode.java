@@ -13,15 +13,17 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.handlers.*;
 import de.zeanon.testutils.plugin.update.Update;
+import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,16 +70,20 @@ public class InitMode {
 			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
 			CommandHandler commandHandler = new CommandHandler();
-			LocalTabCompleter localTabCompleter = new LocalTabCompleter();
+			TestUtilsTabCompleter testUtilsTabCompleter = new TestUtilsTabCompleter();
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(localTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(testUtilsTabCompleter);
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
+			TestUtils.getPluginManager().registerEvents(new StoplagTabCompleter(), TestUtils.getInstance());
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 			InitMode.cleanUpResets();
+			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
+				ScoreBoard.execute(p);
+			}
 		} else {
 			InitMode.enableSleepMode();
 		}
@@ -117,18 +123,14 @@ public class InitMode {
 
 	private void cleanUpResets() {
 		try {
-			for (final @NotNull File tempFile : BaseFileUtils.listFilesOfType(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"), "schem")) {
-				boolean exists = false;
-				@NotNull RegionManager tempManager;
-				for (final @NotNull World world : Bukkit.getWorlds()) {
-					tempManager = Objects.notNull(InitMode.regionContainer.get(new BukkitWorld(world)));
-					if (tempManager.hasRegion(BaseFileUtils.removeExtension(tempFile.getName()))) {
-						exists = true;
-						break;
+			@NotNull RegionManager tempManager;
+			for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
+				tempManager = Objects.notNull(InitMode.getRegionContainer().get(new BukkitWorld(Bukkit.getWorld(worldFolder.getName()))));
+				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
+					if (!tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") || !tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
+						FileUtils.deleteDirectory(regionFolder);
+						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
 					}
-				}
-				if (!exists) {
-					Files.delete(tempFile.toPath());
 				}
 			}
 		} catch (IOException e) {
