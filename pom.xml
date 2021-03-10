@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.38-Alpha</version>
+    <version>1.0.39-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
