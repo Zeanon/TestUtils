@@ -29,18 +29,27 @@ public class Stoplag {
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 1) {
 			ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			if (!Stoplag.stoplagRegions.contains(tempRegion)) {
-				Stoplag.stoplagRegions.add(tempRegion);
-				Stoplag.stoplagRegions.add(TestAreaUtils.getOppositeRegion(p));
+
+			if (tempRegion == null) {
+				GlobalMessageUtils.sendNotApplicableRegion(p);
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
+			} else {
+				if (!Stoplag.stoplagRegions.contains(tempRegion)) {
+					Stoplag.stoplagRegions.add(tempRegion);
+					Stoplag.stoplagRegions.add(TestAreaUtils.getOppositeRegion(p));
+				}
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
 			}
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-c")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
 					Stoplag.stoplagRegions.remove(tempRegion);
 					Stoplag.stoplagRegions.remove(TestAreaUtils.getOppositeRegion(p));
@@ -52,6 +61,8 @@ public class Stoplag {
 
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
 					Stoplag.stoplagRegions.add(tempRegion);
 					p.sendMessage(GlobalMessageUtils.messageHead
@@ -62,12 +73,14 @@ public class Stoplag {
 
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
 					Stoplag.stoplagRegions.add(tempRegion);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the other side of your TestArea.");
 				}
-			} else if (args[1].equalsIgnoreCase("global")) {
+			} else if (args[1].equalsIgnoreCase("global") || args[1].equalsIgnoreCase("confirm")) {
 				p.performCommand("stoplag confirm");
 			}
 		} else if (args.length == 3) {
@@ -79,6 +92,8 @@ public class Stoplag {
 
 					if (tempRegion == null) {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 					} else {
 						Stoplag.stoplagRegions.remove(tempRegion);
 						p.sendMessage(GlobalMessageUtils.messageHead
@@ -89,6 +104,8 @@ public class Stoplag {
 
 					if (tempRegion == null) {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 					} else {
 						Stoplag.stoplagRegions.remove(tempRegion);
 						p.sendMessage(GlobalMessageUtils.messageHead

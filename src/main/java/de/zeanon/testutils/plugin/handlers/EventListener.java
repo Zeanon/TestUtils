@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.handlers;
 
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.Stoplag;
 import de.zeanon.testutils.plugin.update.Update;
@@ -74,19 +73,19 @@ public class EventListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event) {
-		if (Stoplag.inStoplagRegion(Objects.notNull(event.getIgnitingBlock()).getLocation())) {
+		if (event.getIgnitingBlock() != null && Stoplag.inStoplagRegion(event.getIgnitingBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
-		if (Stoplag.inStoplagRegion(Objects.notNull(event.getIgnitingBlock()).getLocation())) {
+		if (event.getIgnitingBlock() != null && Stoplag.inStoplagRegion(event.getIgnitingBlock().getLocation())) {
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 		if (Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
 			event.setCancelled(true);
@@ -114,7 +113,7 @@ public class EventListener implements Listener {
 		}
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockExplode(BlockExplodeEvent event) {
 		boolean remove = false;
 		for (final @NotNull Block block : event.blockList()) {
