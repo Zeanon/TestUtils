@@ -82,10 +82,18 @@ public class ScoreBoard {
 
 		infoBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
 
+		final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
+		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
+		for (int i = 0; i < (Math.max(areaname.length(), 17)); i++) {
+			headerAndFooterLine.append("=");
+		}
+
+
 		final @NotNull Score header = infoBoard.getScore(ChatColor.DARK_GRAY
 														 + ""
 														 + ChatColor.BOLD
-														 + "!================!");
+														 + headerAndFooterLine
+														 + ChatColor.AQUA);
 		header.setScore(9);
 
 		final @NotNull Score area = infoBoard.getScore(ChatColor.DARK_GRAY
@@ -103,7 +111,7 @@ public class ScoreBoard {
 						   + ChatColor.BOLD
 						   + ">> "
 						   + ChatColor.RED
-						   + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
+						   + areaname
 						   + ChatColor.DARK_GRAY
 						   + ""
 						   + ChatColor.BOLD
@@ -181,7 +189,8 @@ public class ScoreBoard {
 		final @NotNull Score footer = infoBoard.getScore(ChatColor.DARK_GRAY
 														 + ""
 														 + ChatColor.BOLD
-														 + "¡================¡");
+														 + headerAndFooterLine
+														 + ChatColor.BLACK);
 		footer.setScore(0);
 
 		p.setScoreboard(scoreboard);
