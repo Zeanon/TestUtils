@@ -74,7 +74,7 @@ public class ScoreBoard {
 																			 + ChatColor.DARK_RED
 																			 + ""
 																			 + ChatColor.BOLD
-																			 + TestUtils.getInstance().getName()
+																			 + "TestArea"
 																			 + ChatColor.DARK_GRAY
 																			 + ""
 																			 + ChatColor.BOLD
@@ -100,7 +100,7 @@ public class ScoreBoard {
 		final @NotNull Score area = infoBoard.getScore(ChatColor.DARK_GRAY
 													   + " ["
 													   + ChatColor.DARK_RED
-													   + "TestArea"
+													   + "Name"
 													   + ChatColor.DARK_GRAY
 													   + "]");
 		area.setScore(8);
