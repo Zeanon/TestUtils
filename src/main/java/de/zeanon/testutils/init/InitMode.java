@@ -11,7 +11,14 @@ import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.handlers.*;
+import de.zeanon.testutils.plugin.handlers.CommandHandler;
+import de.zeanon.testutils.plugin.handlers.EventListener;
+import de.zeanon.testutils.plugin.handlers.SleepModeCommandHandler;
+import de.zeanon.testutils.plugin.handlers.WakeupListener;
+import de.zeanon.testutils.plugin.handlers.tabcompleter.SleepModeTabCompleter;
+import de.zeanon.testutils.plugin.handlers.tabcompleter.TestUtilsTabCompleter;
+import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplagTabListener;
+import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
@@ -69,18 +76,27 @@ public class InitMode {
 				 && TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))
 			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
+
 			CommandHandler commandHandler = new CommandHandler();
 			TestUtilsTabCompleter testUtilsTabCompleter = new TestUtilsTabCompleter();
+
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(testUtilsTabCompleter);
+
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
-			TestUtils.getPluginManager().registerEvents(new StoplagTabCompleter(), TestUtils.getInstance());
+			if (Bukkit.getVersion().contains("git-Paper")) {
+				TestUtils.getPluginManager().registerEvents(new PaperStoplagTabListener(), TestUtils.getInstance());
+			} else {
+				TestUtils.getPluginManager().registerEvents(new SpigotStoplagTabListener(), TestUtils.getInstance());
+			}
+
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 			InitMode.cleanUpResets();
+
 			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
 				ScoreBoard.initialize(p);
 			}

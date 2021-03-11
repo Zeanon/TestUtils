@@ -1,26 +1,15 @@
-package de.zeanon.testutils.plugin.handlers;
+package de.zeanon.testutils.plugin.handlers.tabcompleter;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.TabCompleteEvent;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 
-public class StoplagTabCompleter implements Listener {
-
-
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onTab(final @NotNull TabCompleteEvent event) {
-		if (event.getBuffer().toLowerCase().startsWith("/stoplag")) {
-			event.setCompletions(this.onTab(event.getBuffer()));
-		}
-	}
-
+@UtilityClass
+public class StoplagTabCompleter {
 
 	public @NotNull List<String> onTab(final @NotNull String buffer) {
 		final @NotNull String message = buffer.replaceAll("\\s+", " ");
@@ -30,7 +19,7 @@ public class StoplagTabCompleter implements Listener {
 			if (argumentEnded) {
 				return Arrays.asList("-c", "here", "other", "global");
 			} else {
-				return this.getCompletions(args[1], "-c", "here", "other", "global");
+				return StoplagTabCompleter.getCompletions(args[1], "-c", "here", "other", "global");
 			}
 		} else if (args.length == 3 && !argumentEnded || args.length == 2) {
 			if (argumentEnded) {
@@ -41,7 +30,7 @@ public class StoplagTabCompleter implements Listener {
 				}
 			} else {
 				if (!args[1].equalsIgnoreCase("-c")) {
-					return this.getCompletions(args[2], "-c");
+					return StoplagTabCompleter.getCompletions(args[2], "-c");
 				} else {
 					return Collections.emptyList();
 				}

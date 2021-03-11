@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.handlers;
+package de.zeanon.testutils.plugin.handlers.tabcompleter;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;

@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.handlers;
+package de.zeanon.testutils.plugin.handlers.tabcompleter;
 
 import java.util.Collections;
 import java.util.List;
