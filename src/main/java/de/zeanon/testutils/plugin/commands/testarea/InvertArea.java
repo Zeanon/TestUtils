@@ -27,22 +27,26 @@ import org.jetbrains.annotations.Nullable;
 public class InvertArea {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length == 2) {
+		if (args.length == 1) {
+			InvertArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), "the other");
+		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("here")) {
-				InvertArea.replaceArea(p, TestAreaUtils.getRegion(p), true);
+				InvertArea.replaceArea(p, TestAreaUtils.getRegion(p), "your");
+			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
+				InvertArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), "the north");
+			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
+				InvertArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), "the south");
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
 			}
-		} else if (args.length == 1) {
-			InvertArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), false);
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Too many arguments.");
 		}
 	}
 
-	private void replaceArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final boolean here) {
+	private void replaceArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -60,11 +64,11 @@ public class InvertArea {
 						editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
 
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "The testarea on " + (here ? "your" : "the other") + " side has been inverted.");
+									  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
 					}
 				} catch (WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, inverting the testarea on " + (here ? "your side." : "the other side."));
+								  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
 					e.printStackTrace();
 				}
 			}

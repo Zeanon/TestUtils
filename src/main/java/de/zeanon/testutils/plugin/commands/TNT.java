@@ -57,6 +57,26 @@ public class TNT {
 										  ? TNT.getNowActivated(tempRegion)
 										  : TNT.getNowDeactivated(tempRegion));
 						}
+					} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
+						final ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+						if (tempRegion == null) {
+							GlobalMessageUtils.sendNotApplicableRegion(p);
+						} else {
+							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
+							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+										  ? TNT.getNowActivated(tempRegion)
+										  : TNT.getNowDeactivated(tempRegion));
+						}
+					} else if (args[0].equalsIgnoreCase("-south") || args[0].equalsIgnoreCase("-s")) {
+						final ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+						if (tempRegion == null) {
+							GlobalMessageUtils.sendNotApplicableRegion(p);
+						} else {
+							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
+							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+										  ? TNT.getNowActivated(tempRegion)
+										  : TNT.getNowDeactivated(tempRegion));
+						}
 					}
 				} else if (args.length == 2) {
 					if (args[0].equalsIgnoreCase("other")) {
@@ -77,6 +97,42 @@ public class TNT {
 								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 							}
 						}
+					} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
+						if (args[1].equalsIgnoreCase("allow")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
+								p.sendMessage(TNT.getNowActivated(tempRegion));
+							}
+						} else if (args[1].equalsIgnoreCase("deny")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
+							}
+						}
+					} else if (args[0].equalsIgnoreCase("-south") || args[0].equalsIgnoreCase("-s")) {
+						if (args[1].equalsIgnoreCase("allow")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
+								p.sendMessage(TNT.getNowActivated(tempRegion));
+							}
+						} else if (args[1].equalsIgnoreCase("deny")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
+							}
+						}
 					} else if (args[1].equalsIgnoreCase("other")) {
 						if (args[0].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
@@ -88,6 +144,42 @@ public class TNT {
 							}
 						} else if (args[0].equalsIgnoreCase("deny")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
+							}
+						}
+					} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
+						if (args[0].equalsIgnoreCase("allow")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
+								p.sendMessage(TNT.getNowActivated(tempRegion));
+							}
+						} else if (args[0].equalsIgnoreCase("deny")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
+								p.sendMessage(TNT.getNowDeactivated(tempRegion));
+							}
+						}
+					} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
+						if (args[0].equalsIgnoreCase("allow")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+							if (tempRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
+								p.sendMessage(TNT.getNowActivated(tempRegion));
+							}
+						} else if (args[0].equalsIgnoreCase("deny")) {
+							final ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
 							if (tempRegion == null) {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {

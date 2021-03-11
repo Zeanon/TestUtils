@@ -22,18 +22,30 @@ public class TestBlock {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 0) {
-			PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), false);
+			PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), "the other");
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("here")) {
-				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), true);
+				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), "your");
+			} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
+				PasteBlock.pasteBlock(p, null, TestAreaUtils.getNorthRegion(p), "the north");
+			} else if (args[0].equalsIgnoreCase("-south") || args[0].equalsIgnoreCase("-s")) {
+				PasteBlock.pasteBlock(p, null, TestAreaUtils.getSouthRegion(p), "the south");
 			} else {
-				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p), false);
+				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p), "the other");
 			}
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("here")) {
-				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), true);
+				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), "your");
+			} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
+				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getNorthRegion(p), "the north");
+			} else if (args[0].equalsIgnoreCase("-south") || args[0].equalsIgnoreCase("-s")) {
+				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getSouthRegion(p), "the south");
 			} else if (args[1].equalsIgnoreCase("here")) {
-				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), true);
+				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), "your");
+			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
+				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getNorthRegion(p), "the north");
+			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
+				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getSouthRegion(p), "the south");
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-commands '" + ChatColor.GOLD + args[0] + ChatColor.DARK_AQUA + "' and '" + ChatColor.GOLD + args[1] + "'.");
 			}

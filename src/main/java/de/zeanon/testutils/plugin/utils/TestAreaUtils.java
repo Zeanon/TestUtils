@@ -35,7 +35,41 @@ public class TestAreaUtils {
 																					 p.getLocation().getY(),
 																					 p.getLocation().getZ()))) {
 			if (temp.getId().startsWith("testarea_") && (temp.getId().endsWith("_north") || temp.getId().endsWith("_south"))) {
-				return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 6) + (temp.getId().substring(temp.getId().length() - 6).equalsIgnoreCase("_north") ? "_south" : "_north"));
+				return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + (temp.getId().substring(temp.getId().length() - 5).equalsIgnoreCase("north") ? "south" : "north"));
+			}
+		}
+		return null;
+	}
+
+	public @Nullable ProtectedRegion getNorthRegion(final @NotNull Player p) {
+		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
+																		   .get(new BukkitWorld(p.getWorld())));
+		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
+																					 p.getLocation().getY(),
+																					 p.getLocation().getZ()))) {
+			if (temp.getId().startsWith("testarea_")) {
+				if (temp.getId().endsWith("_north")) {
+					return temp;
+				} else if (temp.getId().endsWith("_south")) {
+					return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + "north");
+				}
+			}
+		}
+		return null;
+	}
+
+	public @Nullable ProtectedRegion getSouthRegion(final @NotNull Player p) {
+		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
+																		   .get(new BukkitWorld(p.getWorld())));
+		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
+																					 p.getLocation().getY(),
+																					 p.getLocation().getZ()))) {
+			if (temp.getId().startsWith("testarea_")) {
+				if (temp.getId().endsWith("_south")) {
+					return temp;
+				} else if (temp.getId().endsWith("_north")) {
+					return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + "south");
+				}
 			}
 		}
 		return null;

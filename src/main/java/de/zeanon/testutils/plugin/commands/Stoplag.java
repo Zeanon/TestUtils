@@ -77,6 +77,30 @@ public class Stoplag {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the other side of your TestArea.");
 				}
+			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
+				ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+
+				if (tempRegion == null) {
+					GlobalMessageUtils.sendNotApplicableRegion(p);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
+				} else {
+					Stoplag.stoplagRegions.add(tempRegion.getId());
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the north side of your TestArea.");
+				}
+			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
+				ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+
+				if (tempRegion == null) {
+					GlobalMessageUtils.sendNotApplicableRegion(p);
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
+				} else {
+					Stoplag.stoplagRegions.add(tempRegion.getId());
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the south side of your TestArea.");
+				}
 			} else if (args[1].equalsIgnoreCase("global") || args[1].equalsIgnoreCase("confirm")) {
 				p.performCommand("stoplag confirm");
 			}
@@ -106,7 +130,31 @@ public class Stoplag {
 					} else {
 						Stoplag.stoplagRegions.remove(tempRegion.getId());
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Stoplag has been deactivated on the other side  of your TestArea.");
+									  + ChatColor.RED + "Stoplag has been deactivated on the other side of your TestArea.");
+					}
+				} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
+					ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+
+					if (tempRegion == null) {
+						GlobalMessageUtils.sendNotApplicableRegion(p);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
+					} else {
+						Stoplag.stoplagRegions.remove(tempRegion.getId());
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Stoplag has been deactivated on the north side of your TestArea.");
+					}
+				} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
+					ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+
+					if (tempRegion == null) {
+						GlobalMessageUtils.sendNotApplicableRegion(p);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
+					} else {
+						Stoplag.stoplagRegions.remove(tempRegion.getId());
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Stoplag has been deactivated on the south side of your TestArea.");
 					}
 				}
 			} else {

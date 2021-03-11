@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class PasteBlock {
 
-	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final boolean here) {
+	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
@@ -56,11 +56,11 @@ public class PasteBlock {
 
 						Operations.complete(operation);
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set on " + (here ? "your side." : "the other side."));
+									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set on " + area + " side.");
 					}
 				} catch (IOException | WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' on " + (here ? "your side." : "the other side."));
+								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' on " + area + " side.");
 					e.printStackTrace();
 				}
 			}
