@@ -31,16 +31,7 @@ public class TNT {
 									  : TNT.getNowDeactivated(tempRegion));
 					}
 				} else if (args.length == 1) {
-					if (args[0].equalsIgnoreCase("info")) {
-						final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-						if (tempRegion == null) {
-							GlobalMessageUtils.sendNotApplicableRegion(p);
-						} else {
-							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-										  ? TNT.getActivated(tempRegion)
-										  : TNT.getDeactivated(tempRegion));
-						}
-					} else if (args[0].equalsIgnoreCase("allow")) {
+					if (args[0].equalsIgnoreCase("allow")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -69,16 +60,7 @@ public class TNT {
 					}
 				} else if (args.length == 2) {
 					if (args[0].equalsIgnoreCase("other")) {
-						if (args[1].equalsIgnoreCase("info")) {
-							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
-							if (tempRegion == null) {
-								GlobalMessageUtils.sendNotApplicableRegion(p);
-							} else {
-								p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-											  ? TNT.getActivated(tempRegion)
-											  : TNT.getDeactivated(tempRegion));
-							}
-						} else if (args[1].equalsIgnoreCase("allow")) {
+						if (args[1].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -96,16 +78,7 @@ public class TNT {
 							}
 						}
 					} else if (args[1].equalsIgnoreCase("other")) {
-						if (args[0].equalsIgnoreCase("info")) {
-							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
-							if (tempRegion == null) {
-								GlobalMessageUtils.sendNotApplicableRegion(p);
-							} else {
-								p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-											  ? TNT.getActivated(tempRegion)
-											  : TNT.getDeactivated(tempRegion));
-							}
-						} else if (args[0].equalsIgnoreCase("allow")) {
+						if (args[0].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -138,15 +111,5 @@ public class TNT {
 	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion) {
 		return GlobalMessageUtils.messageHead
 			   + ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
-	}
-
-	private @NotNull String getActivated(final @NotNull ProtectedRegion tempRegion) {
-		return GlobalMessageUtils.messageHead
-			   + ChatColor.RED + "TNT is " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
-	}
-
-	private @NotNull String getDeactivated(final @NotNull ProtectedRegion tempRegion) {
-		return GlobalMessageUtils.messageHead
-			   + ChatColor.RED + "TNT is deactivated in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
 	}
 }

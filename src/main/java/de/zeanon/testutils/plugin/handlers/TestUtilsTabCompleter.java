@@ -26,7 +26,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {
 		if (args.length == 1) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
-				return this.getCompletions(args[0], "allow", "deny", "other", "info");
+				return this.getCompletions(args[0], "allow", "deny", "other");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				final @NotNull List<String> completions = this.getCompletions(args[0], "here");
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
@@ -49,8 +49,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
 				if (args[0].equalsIgnoreCase("other")) {
-					return this.getCompletions(args[1], "allow", "deny", "info");
-				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("info")) {
+					return this.getCompletions(args[1], "allow", "deny");
+				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny")) {
 					return this.getCompletions(args[1], "other");
 				}
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
