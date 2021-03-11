@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -133,14 +132,6 @@ public class EventListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onExplosionPrime(final @NotNull ExplosionPrimeEvent event) {
 		if (Stoplag.inStoplagRegion(event.getEntity().getLocation())) {
-			event.getEntity().remove();
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onCreatureSpawn(final @NotNull CreatureSpawnEvent event) {
-		if (Stoplag.inStoplagRegion(event.getLocation())) {
 			event.getEntity().remove();
 			event.setCancelled(true);
 		}
