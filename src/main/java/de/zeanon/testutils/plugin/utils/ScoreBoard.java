@@ -35,8 +35,9 @@ public class ScoreBoard {
 					ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
 
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-					if (tempRegion != null) {
-						ScoreBoard.setScoreBoard(p, tempRegion);
+					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+					if (tempRegion != null && otherRegion != null) {
+						ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 					} else {
 						p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
 					}
@@ -46,8 +47,8 @@ public class ScoreBoard {
 						public void run() {
 							if (Bukkit.getOnlinePlayers().contains(p)) {
 								final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-								if (tempRegion != null) {
-									ScoreBoard.updateScoreBoard(p, tempRegion);
+								if (tempRegion != null && otherRegion != null) {
+									ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion);
 								} else {
 									p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
 								}
@@ -62,7 +63,7 @@ public class ScoreBoard {
 		}.runTask(TestUtils.getInstance());
 	}
 
-	private void setScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion) {
+	private void setScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion) {
 		final @NotNull Scoreboard scoreboard = Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard();
 
 		final @NotNull Objective infoBoard = scoreboard.registerNewObjective("infoBoard",
@@ -83,19 +84,20 @@ public class ScoreBoard {
 		infoBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
 
 		final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
-		final boolean isStoplagRegion = Stoplag.isStopLagRegion(tempRegion);
+		final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
 		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
-		for (int i = 0; i < (Math.max(areaname.length() + 6, (isStoplagRegion ? 15 : 17))); i++) {
+		for (int i = 0; i < (Math.max(areaname.length() + 6, (stoplagOther ? 15 : 16))); i++) {
 			headerAndFooterLine.append("=");
 		}
 
 
-		final @NotNull Score header = infoBoard.getScore(ChatColor.DARK_GRAY
-														 + ""
-														 + ChatColor.BOLD
-														 + headerAndFooterLine
-														 + ChatColor.AQUA);
-		header.setScore(9);
+		final @NotNull Team header = scoreboard.registerNewTeam("header");
+		header.addEntry(ChatColor.AQUA + "" + ChatColor.AQUA);
+		header.setPrefix(ChatColor.DARK_GRAY
+						 + ""
+						 + ChatColor.BOLD
+						 + headerAndFooterLine);
+		infoBoard.getScore(ChatColor.AQUA + "" + ChatColor.AQUA).setScore(11);
 
 		final @NotNull Score area = infoBoard.getScore(ChatColor.DARK_GRAY
 													   + " ["
@@ -103,21 +105,17 @@ public class ScoreBoard {
 													   + "Name"
 													   + ChatColor.DARK_GRAY
 													   + "]");
-		area.setScore(8);
+		area.setScore(10);
 
 		final @NotNull Team areaName = scoreboard.registerNewTeam("areaname");
-		areaName.addEntry(ChatColor.AQUA + "" + ChatColor.AQUA);
+		areaName.addEntry(ChatColor.BLACK + "" + ChatColor.BLACK);
 		areaName.setPrefix(ChatColor.DARK_GRAY
 						   + "   "
 						   + ChatColor.BOLD
 						   + ">> "
 						   + ChatColor.RED
-						   + areaname
-						   + ChatColor.DARK_GRAY
-						   + ""
-						   + ChatColor.BOLD
-						   + " <<");
-		infoBoard.getScore(ChatColor.AQUA + "" + ChatColor.AQUA).setScore(7);
+						   + areaname);
+		infoBoard.getScore(ChatColor.BLACK + "" + ChatColor.BLACK).setScore(9);
 
 		final @NotNull Score side = infoBoard.getScore(ChatColor.DARK_GRAY
 													   + " ["
@@ -125,21 +123,17 @@ public class ScoreBoard {
 													   + "Side"
 													   + ChatColor.DARK_GRAY
 													   + "]");
-		side.setScore(6);
+		side.setScore(8);
 
 		final @NotNull Team sideName = scoreboard.registerNewTeam("sidename");
-		sideName.addEntry(ChatColor.BLACK + "" + ChatColor.BLACK);
+		sideName.addEntry(ChatColor.BLUE + "" + ChatColor.BLUE);
 		sideName.setPrefix(ChatColor.DARK_GRAY
 						   + "   "
 						   + ChatColor.BOLD
 						   + ">> "
 						   + ChatColor.RED
-						   + tempRegion.getId().substring(tempRegion.getId().length() - 5)
-						   + ChatColor.DARK_GRAY
-						   + ""
-						   + ChatColor.BOLD
-						   + " <<");
-		infoBoard.getScore(ChatColor.BLACK + "" + ChatColor.BLACK).setScore(5);
+						   + tempRegion.getId().substring(tempRegion.getId().length() - 5));
+		infoBoard.getScore(ChatColor.BLUE + "" + ChatColor.BLUE).setScore(7);
 
 		final @NotNull Score tnt = infoBoard.getScore(ChatColor.DARK_GRAY
 													  + " ["
@@ -147,107 +141,163 @@ public class ScoreBoard {
 													  + "TNT"
 													  + ChatColor.DARK_GRAY
 													  + "]");
-		tnt.setScore(4);
+		tnt.setScore(6);
 
-		final @NotNull Team tntInfo = scoreboard.registerNewTeam("tntinfo");
-		tntInfo.addEntry(ChatColor.BLUE + "" + ChatColor.BLUE);
-		tntInfo.setPrefix(ChatColor.DARK_GRAY
-						  + "   "
-						  + ChatColor.BOLD
-						  + ">> "
-						  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-							 ? ChatColor.GREEN + "allow"
-							 : ChatColor.RED + "deny")
-						  + ChatColor.DARK_GRAY
-						  + ""
-						  + ChatColor.BOLD
-						  + " <<");
-		infoBoard.getScore(ChatColor.BLUE + "" + ChatColor.BLUE).setScore(3);
+		final @NotNull Team tntInfoHere = scoreboard.registerNewTeam("tntinfohere");
+		tntInfoHere.addEntry(ChatColor.BOLD + "" + ChatColor.BOLD);
+		tntInfoHere.setPrefix(ChatColor.DARK_GRAY
+							  + "   "
+							  + ChatColor.BOLD
+							  + ">>"
+							  + ChatColor.DARK_RED
+							  + " here: "
+							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+								 ? ChatColor.GREEN + "allow"
+								 : ChatColor.RED + "deny"));
+		infoBoard.getScore(ChatColor.BOLD + "" + ChatColor.BOLD).setScore(5);
+
+		final @NotNull Team tntInfoOther = scoreboard.registerNewTeam("tntinfoother");
+		tntInfoOther.addEntry(ChatColor.DARK_AQUA + "" + ChatColor.DARK_AQUA);
+		tntInfoOther.setPrefix(ChatColor.DARK_GRAY
+							   + "   "
+							   + ChatColor.BOLD
+							   + ">>"
+							   + ChatColor.DARK_RED
+							   + " other: "
+							   + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+								  ? ChatColor.GREEN + "allow"
+								  : ChatColor.RED + "deny"));
+		infoBoard.getScore(ChatColor.DARK_AQUA + "" + ChatColor.DARK_AQUA).setScore(4);
 
 		final @NotNull Score stoplag = infoBoard.getScore(ChatColor.DARK_GRAY
 														  + " ["
 														  + ChatColor.DARK_RED
-														  + "Stoplag"
+														  + "Server-Activity"
 														  + ChatColor.DARK_GRAY
 														  + "]");
-		stoplag.setScore(2);
+		stoplag.setScore(3);
 
-		final @NotNull Team stoplagInfo = scoreboard.registerNewTeam("stoplaginfo");
-		stoplagInfo.addEntry(ChatColor.BOLD + "" + ChatColor.BOLD);
-		stoplagInfo.setPrefix(ChatColor.DARK_GRAY
-							  + "   "
-							  + ChatColor.BOLD
-							  + ">> "
-							  + (isStoplagRegion
-								 ? ChatColor.GREEN + "activated"
-								 : ChatColor.RED + "deactivated")
-							  + ChatColor.DARK_GRAY
-							  + ""
-							  + ChatColor.BOLD
-							  + " <<");
-		infoBoard.getScore(ChatColor.BOLD + "" + ChatColor.BOLD).setScore(1);
+		final @NotNull Team stoplagInfoHere = scoreboard.registerNewTeam("stoplaginfohere");
+		stoplagInfoHere.addEntry(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE);
+		stoplagInfoHere.setPrefix(ChatColor.DARK_GRAY
+								  + "   "
+								  + ChatColor.BOLD
+								  + ">>"
+								  + ChatColor.DARK_RED
+								  + " here: "
+								  + (Stoplag.isStopLagRegion(tempRegion)
+									 ? ChatColor.GREEN + "halted"
+									 : ChatColor.RED + "allowed"));
+		infoBoard.getScore(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE).setScore(2);
 
-		final @NotNull Score footer = infoBoard.getScore(ChatColor.DARK_GRAY
-														 + ""
-														 + ChatColor.BOLD
-														 + headerAndFooterLine
-														 + ChatColor.BLACK);
-		footer.setScore(0);
+		final @NotNull Team stoplagInfoOther = scoreboard.registerNewTeam("stoplaginfoother");
+		stoplagInfoOther.addEntry(ChatColor.DARK_GRAY + "" + ChatColor.DARK_GRAY);
+		stoplagInfoOther.setPrefix(ChatColor.DARK_GRAY
+								   + "   "
+								   + ChatColor.BOLD
+								   + ">>"
+								   + ChatColor.DARK_RED
+								   + " other: "
+								   + (stoplagOther
+									  ? ChatColor.GREEN + "halted"
+									  : ChatColor.RED + "allowed"));
+		infoBoard.getScore(ChatColor.DARK_GRAY + "" + ChatColor.DARK_GRAY).setScore(1);
+
+		final @NotNull Team footer = scoreboard.registerNewTeam("footer");
+		footer.addEntry(ChatColor.DARK_GREEN + "" + ChatColor.DARK_GREEN);
+		footer.setPrefix(ChatColor.DARK_GRAY
+						 + ""
+						 + ChatColor.BOLD
+						 + headerAndFooterLine);
+		infoBoard.getScore(ChatColor.DARK_GREEN + "" + ChatColor.DARK_GREEN).setScore(0);
 
 		p.setScoreboard(scoreboard);
 	}
 
-	private void updateScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion) {
+
+	private void updateScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion) {
 		final @NotNull Scoreboard scoreboard = p.getScoreboard();
 
 		if (scoreboard.getObjective("infoBoard") != null) {
+			final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
+			final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
+			final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
+			for (int i = 0; i < (Math.max(areaname.length() + 6, (stoplagOther ? 15 : 16))); i++) {
+				headerAndFooterLine.append("=");
+			}
+
+			Objects.notNull(scoreboard.getTeam("header"))
+				   .setPrefix(ChatColor.DARK_GRAY
+							  + ""
+							  + ChatColor.BOLD
+							  + headerAndFooterLine);
+
 			Objects.notNull(scoreboard.getTeam("areaname"))
 				   .setPrefix(ChatColor.DARK_GRAY + "   "
 							  + ChatColor.BOLD
 							  + ">> "
 							  + ChatColor.RED
-							  + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
-							  + ChatColor.DARK_GRAY
-							  + ""
-							  + ChatColor.BOLD
-							  + " <<");
+							  + areaname);
+
 			Objects.notNull(scoreboard.getTeam("sidename"))
 				   .setPrefix(ChatColor.DARK_GRAY
 							  + "   "
 							  + ChatColor.BOLD
 							  + ">> "
 							  + ChatColor.RED
-							  + tempRegion.getId().substring(tempRegion.getId().length() - 5)
-							  + ChatColor.DARK_GRAY
-							  + ""
-							  + ChatColor.BOLD
-							  + " <<");
-			Objects.notNull(scoreboard.getTeam("tntinfo"))
+							  + tempRegion.getId().substring(tempRegion.getId().length() - 5));
+
+			Objects.notNull(scoreboard.getTeam("tntinfohere"))
 				   .setPrefix(ChatColor.DARK_GRAY
 							  + "   "
 							  + ChatColor.BOLD
-							  + ">> "
+							  + ">>"
+							  + ChatColor.DARK_RED
+							  + " here: "
 							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
 								 ? ChatColor.GREEN + "allow"
-								 : ChatColor.RED + "deny")
-							  + ChatColor.DARK_GRAY
-							  + ""
-							  + ChatColor.BOLD
-							  + " <<");
-			Objects.notNull(scoreboard.getTeam("stoplaginfo"))
+								 : ChatColor.RED + "deny"));
+
+			Objects.notNull(scoreboard.getTeam("tntinfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
 							  + "   "
 							  + ChatColor.BOLD
-							  + ">> "
+							  + ">>"
+							  + ChatColor.DARK_RED
+							  + " other: "
+							  + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+								 ? ChatColor.GREEN + "allow"
+								 : ChatColor.RED + "deny"));
+
+			Objects.notNull(scoreboard.getTeam("stoplaginfohere"))
+				   .setPrefix(ChatColor.DARK_GRAY
+							  + "   "
+							  + ChatColor.BOLD
+							  + ">>"
+							  + ChatColor.DARK_RED
+							  + " here: "
 							  + (Stoplag.isStopLagRegion(tempRegion)
-								 ? ChatColor.GREEN + "activated"
-								 : ChatColor.RED + "deactivated")
-							  + ChatColor.DARK_GRAY
+								 ? ChatColor.GREEN + "halted"
+								 : ChatColor.RED + "allowed"));
+
+			Objects.notNull(scoreboard.getTeam("stoplaginfoother"))
+				   .setPrefix(ChatColor.DARK_GRAY
+							  + "   "
+							  + ChatColor.BOLD
+							  + ">>"
+							  + ChatColor.DARK_RED
+							  + " other: "
+							  + (stoplagOther
+								 ? ChatColor.GREEN + "halted"
+								 : ChatColor.RED + "allowed"));
+
+			Objects.notNull(scoreboard.getTeam("footer"))
+				   .setPrefix(ChatColor.DARK_GRAY
 							  + ""
 							  + ChatColor.BOLD
-							  + " <<");
+							  + headerAndFooterLine);
 		} else {
-			ScoreBoard.setScoreBoard(p, tempRegion);
+			ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 		}
 	}
 }
