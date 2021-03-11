@@ -13,7 +13,7 @@ public class StoplagTabCompleter {
 
 	public @NotNull List<String> onTab(final @NotNull String buffer) {
 		final @NotNull String message = buffer.replaceAll("\\s+", " ");
-		final @NotNull String[] args = buffer.replaceAll("\\s+", " ").split(" ");
+		final @NotNull String[] args = message.split(" ");
 		final boolean argumentEnded = message.endsWith(" ");
 		if ((args.length == 2 && !argumentEnded) || (args.length == 1 && argumentEnded)) {
 			if (argumentEnded) {

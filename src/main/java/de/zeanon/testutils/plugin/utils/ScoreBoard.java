@@ -47,6 +47,7 @@ public class ScoreBoard {
 						public void run() {
 							if (Bukkit.getOnlinePlayers().contains(p)) {
 								final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+								final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 								if (tempRegion != null && otherRegion != null) {
 									ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion);
 								} else {

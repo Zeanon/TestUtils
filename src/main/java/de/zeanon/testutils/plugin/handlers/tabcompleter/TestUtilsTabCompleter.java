@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
@@ -45,6 +44,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 										   "registerarea",
 										   "deletearea",
 										   "update");
+			} else if (command.getName().equalsIgnoreCase("stoplag")) {
+				this.getCompletions(args[0], "-c", "here", "other", "global");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -84,7 +85,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 				}
 			}
 		}
-		return Collections.emptyList();
+		return null;
 	}
 
 	private List<String> getCompletions(final @NotNull String arg, final @NotNull String... completions) {

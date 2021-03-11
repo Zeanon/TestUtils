@@ -18,7 +18,7 @@ public class SleepModeTabCompleter implements TabCompleter {
 				if ("update".startsWith(args[0].toLowerCase())) {
 					return Collections.singletonList("update");
 				} else {
-					return Collections.emptyList();
+					return null;
 				}
 			} else if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("update")) {
@@ -27,16 +27,16 @@ public class SleepModeTabCompleter implements TabCompleter {
 					} else if ("deny".startsWith(args[1].toLowerCase())) {
 						return Collections.singletonList("deny");
 					} else {
-						return Collections.emptyList();
+						return null;
 					}
 				} else {
-					return Collections.emptyList();
+					return null;
 				}
 			} else {
-				return Collections.emptyList();
+				return null;
 			}
 		} else {
-			return Collections.emptyList();
+			return null;
 		}
 	}
 }
