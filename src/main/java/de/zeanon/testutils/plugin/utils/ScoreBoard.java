@@ -85,7 +85,7 @@ public class ScoreBoard {
 		final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
 		final boolean isStoplagRegion = Stoplag.isStopLagRegion(tempRegion);
 		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
-		for (int i = 0; i < (Math.max(areaname.length() + 6, (isStoplagRegion ? 15 : 17))); i++) {
+		for (int i = 0; i < (Math.max(areaname.length() + 7, (isStoplagRegion ? 15 : 17))); i++) {
 			headerAndFooterLine.append("=");
 		}
 
