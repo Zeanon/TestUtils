@@ -18,7 +18,7 @@ public class TestUtils {
 			public void run() {
 				if (args.length > 0) {
 					if (args[0].equalsIgnoreCase("undo")) {
-						TestBlock.undo(p);
+						Undo.undo(p);
 					} else if (args[0].equalsIgnoreCase("registerblock")) {
 						RegisterBlock.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("registerreset")) {
