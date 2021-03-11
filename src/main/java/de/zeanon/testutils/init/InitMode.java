@@ -82,7 +82,7 @@ public class InitMode {
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 			InitMode.cleanUpResets();
 			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
-				ScoreBoard.execute(p);
+				ScoreBoard.initialize(p);
 			}
 		} else {
 			InitMode.enableSleepMode();

@@ -45,7 +45,7 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onJoin(final @NotNull PlayerJoinEvent event) {
 		Update.updateAvailable(event.getPlayer());
-		ScoreBoard.execute(event.getPlayer());
+		ScoreBoard.initialize(event.getPlayer());
 	}
 
 	@EventHandler

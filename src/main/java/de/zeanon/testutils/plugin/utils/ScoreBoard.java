@@ -27,34 +27,39 @@ public class ScoreBoard {
 	private final List<String> scoreBoards = new GapList<>();
 
 
-	public void execute(final @NotNull Player p) {
-		if (!ScoreBoard.scoreBoards.contains(p.getUniqueId().toString())) {
-			ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
+	public void initialize(final @NotNull Player p) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (!ScoreBoard.scoreBoards.contains(p.getUniqueId().toString())) {
+					ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
 
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			if (tempRegion != null) {
-				ScoreBoard.setScoreBoard(p, tempRegion);
-			} else {
-				p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
-			}
-
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					if (Bukkit.getOnlinePlayers().contains(p)) {
-						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-						if (tempRegion != null) {
-							ScoreBoard.updateScoreBoard(p, tempRegion);
-						} else {
-							p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
-						}
+					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+					if (tempRegion != null) {
+						ScoreBoard.setScoreBoard(p, tempRegion);
 					} else {
-						ScoreBoard.scoreBoards.remove(p.getUniqueId().toString());
-						this.cancel();
+						p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
 					}
+
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							if (Bukkit.getOnlinePlayers().contains(p)) {
+								final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+								if (tempRegion != null) {
+									ScoreBoard.updateScoreBoard(p, tempRegion);
+								} else {
+									p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
+								}
+							} else {
+								ScoreBoard.scoreBoards.remove(p.getUniqueId().toString());
+								this.cancel();
+							}
+						}
+					}.runTaskTimer(TestUtils.getInstance(), 0, 10);
 				}
-			}.runTaskTimer(TestUtils.getInstance(), 0, 10);
-		}
+			}
+		}.runTask(TestUtils.getInstance());
 	}
 
 	private void setScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion) {
