@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @UtilityClass
 public class StoplagTabCompleter {
 
-	public @NotNull List<String> onTab(final @NotNull String buffer) {
-		final @NotNull String message = buffer.replaceAll("\\s+", " ");
-		final @NotNull String[] args = message.split(" ");
-		final boolean argumentEnded = message.endsWith(" ");
+	public @NotNull List<String> onTab(final @NotNull String[] args, final boolean argumentEnded) {
 		if ((args.length == 2 && !argumentEnded) || (args.length == 1 && argumentEnded)) {
 			if (argumentEnded) {
 				return Arrays.asList("-c", "here", "other", "global");

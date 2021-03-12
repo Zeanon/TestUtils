@@ -14,8 +14,9 @@ public class PaperStoplagTabListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onTab(final @NotNull TabCompleteEvent event) {
-		if (event.getBuffer().toLowerCase().startsWith("/stoplag")) {
-			List<String> completions = StoplagTabCompleter.onTab(event.getBuffer());
+		if (event.getBuffer().startsWith("/stoplag")) {
+			final @NotNull String message = event.getBuffer().replaceAll("\\s+", " ");
+			List<String> completions = StoplagTabCompleter.onTab(message.split(" "), message.endsWith(" "));
 			if (completions.isEmpty()) {
 				event.setCancelled(true);
 			} else {

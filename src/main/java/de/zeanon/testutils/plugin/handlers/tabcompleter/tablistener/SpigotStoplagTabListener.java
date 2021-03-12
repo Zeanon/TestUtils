@@ -13,8 +13,9 @@ public class SpigotStoplagTabListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onTab(final @NotNull TabCompleteEvent event) {
 		System.out.println(event.getBuffer());
-		if (event.getBuffer().toLowerCase().startsWith("/stoplag")) {
-			event.setCompletions(StoplagTabCompleter.onTab(event.getBuffer()));
+		if (event.getBuffer().startsWith("/stoplag")) {
+			final @NotNull String message = event.getBuffer().replaceAll("\\s+", " ");
+			event.setCompletions(StoplagTabCompleter.onTab(message.split(" "), message.endsWith(" ")));
 		}
 	}
 }

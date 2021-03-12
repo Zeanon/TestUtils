@@ -13,7 +13,7 @@ public class SleepModeTabCompleter implements TabCompleter {
 
 	@Override
 	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-		if (command.getName().equalsIgnoreCase("testutils")) {
+		if (command.getName().equals("testutils")) {
 			if (args.length == 1) {
 				if ("update".startsWith(args[0].toLowerCase())) {
 					return Collections.singletonList("update");
