@@ -187,8 +187,8 @@ public class ScoreBoard {
 								  + ChatColor.DARK_RED
 								  + " here: "
 								  + (Stoplag.isStopLagRegion(tempRegion)
-									 ? ChatColor.GREEN + "halted"
-									 : ChatColor.RED + "allowed"));
+									 ? ChatColor.RED + "halted"
+									 : ChatColor.GREEN + "allowed"));
 		infoBoard.getScore(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE).setScore(2);
 
 		final @NotNull Team stoplagInfoOther = scoreboard.registerNewTeam("stoplaginfoother");
@@ -200,8 +200,8 @@ public class ScoreBoard {
 								   + ChatColor.DARK_RED
 								   + " other: "
 								   + (stoplagOther
-									  ? ChatColor.GREEN + "halted"
-									  : ChatColor.RED + "allowed"));
+									  ? ChatColor.RED + "halted"
+									  : ChatColor.GREEN + "allowed"));
 		infoBoard.getScore(ChatColor.DARK_GRAY + "" + ChatColor.DARK_GRAY).setScore(1);
 
 		final @NotNull Team footer = scoreboard.registerNewTeam("footer");
@@ -278,8 +278,8 @@ public class ScoreBoard {
 							  + ChatColor.DARK_RED
 							  + " here: "
 							  + (Stoplag.isStopLagRegion(tempRegion)
-								 ? ChatColor.GREEN + "halted"
-								 : ChatColor.RED + "allowed"));
+								 ? ChatColor.RED + "halted"
+								 : ChatColor.GREEN + "allowed"));
 
 			Objects.notNull(scoreboard.getTeam("stoplaginfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -289,8 +289,8 @@ public class ScoreBoard {
 							  + ChatColor.DARK_RED
 							  + " other: "
 							  + (stoplagOther
-								 ? ChatColor.GREEN + "halted"
-								 : ChatColor.RED + "allowed"));
+								 ? ChatColor.RED + "halted"
+								 : ChatColor.GREEN + "allowed"));
 
 			Objects.notNull(scoreboard.getTeam("footer"))
 				   .setPrefix(ChatColor.DARK_GRAY
