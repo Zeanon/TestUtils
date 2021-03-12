@@ -23,13 +23,13 @@ public class StoplagTabCompleter {
 				if (!args[1].equalsIgnoreCase("-c")) {
 					return Collections.singletonList("-c");
 				} else {
-					return Collections.emptyList();
+					return Arrays.asList("here", "other", "global", "-north", "-n", "-south", "-s");
 				}
 			} else {
 				if (!args[1].equalsIgnoreCase("-c")) {
 					return StoplagTabCompleter.getCompletions(args[2], "-c");
 				} else {
-					return Collections.emptyList();
+					return StoplagTabCompleter.getCompletions(args[1], "here", "other", "global", "-north", "-n", "-south", "-s");
 				}
 			}
 		} else {
