@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
@@ -18,14 +19,15 @@ public class Undo {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				EditSession tempSession = SessionFactory.getSession(p);
-				if (tempSession == null) {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Nothing left to undo.");
-				} else {
-					tempSession.undo(tempSession);
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "You undid your last action.");
+				try (final @Nullable EditSession tempSession = SessionFactory.getSession(p)) {
+					if (tempSession == null) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Nothing left to undo.");
+					} else {
+						tempSession.undo(tempSession);
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "You undid your last action.");
+					}
 				}
 			}
 		}.runTask(de.zeanon.testutils.TestUtils.getInstance());
