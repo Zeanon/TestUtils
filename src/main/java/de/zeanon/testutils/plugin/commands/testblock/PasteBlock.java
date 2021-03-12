@@ -3,7 +3,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
@@ -11,7 +11,6 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
@@ -33,7 +32,7 @@ public class PasteBlock {
 		} else {
 			final @Nullable Pair<InputStream, String> testBlock = TestBlock.getBlock(p, name);
 			if (testBlock != null) { //NOSONAR
-				try (final @NotNull ClipboardReader reader = Objects.notNull(ClipboardFormats.findByAlias("schem")).getReader(testBlock.getKey())) {
+				try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getKey())) {
 					final @NotNull Clipboard clipboard = reader.read();
 					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 
