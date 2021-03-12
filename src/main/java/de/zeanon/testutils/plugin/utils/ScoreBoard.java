@@ -87,7 +87,7 @@ public class ScoreBoard {
 		final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
 		final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
 		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
-		for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 16))); i++) {
+		for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 17))); i++) {
 			headerAndFooterLine.append("=");
 		}
 
@@ -187,8 +187,8 @@ public class ScoreBoard {
 								  + ChatColor.DARK_RED
 								  + " here: "
 								  + (Stoplag.isStopLagRegion(tempRegion)
-									 ? ChatColor.RED + "halted"
-									 : ChatColor.GREEN + "allowed"));
+									 ? ChatColor.GREEN + "active"
+									 : ChatColor.RED + "inactive"));
 		infoBoard.getScore(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE).setScore(2);
 
 		final @NotNull Team stoplagInfoOther = scoreboard.registerNewTeam("stoplaginfoother");
@@ -200,8 +200,8 @@ public class ScoreBoard {
 								   + ChatColor.DARK_RED
 								   + " other: "
 								   + (stoplagOther
-									  ? ChatColor.RED + "halted"
-									  : ChatColor.GREEN + "allowed"));
+									  ? ChatColor.GREEN + "active"
+									  : ChatColor.RED + "inactive"));
 		infoBoard.getScore(ChatColor.DARK_GRAY + "" + ChatColor.DARK_GRAY).setScore(1);
 
 		final @NotNull Team footer = scoreboard.registerNewTeam("footer");
@@ -223,7 +223,7 @@ public class ScoreBoard {
 			final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
 			final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
 			final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
-			for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 16))); i++) {
+			for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 17))); i++) {
 				headerAndFooterLine.append("=");
 			}
 
@@ -278,8 +278,8 @@ public class ScoreBoard {
 							  + ChatColor.DARK_RED
 							  + " here: "
 							  + (Stoplag.isStopLagRegion(tempRegion)
-								 ? ChatColor.RED + "halted"
-								 : ChatColor.GREEN + "allowed"));
+								 ? ChatColor.GREEN + "active"
+								 : ChatColor.RED + "inactive"));
 
 			Objects.notNull(scoreboard.getTeam("stoplaginfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -289,8 +289,8 @@ public class ScoreBoard {
 							  + ChatColor.DARK_RED
 							  + " other: "
 							  + (stoplagOther
-								 ? ChatColor.RED + "halted"
-								 : ChatColor.GREEN + "allowed"));
+								 ? ChatColor.GREEN + "active"
+								 : ChatColor.RED + "inactive"));
 
 			Objects.notNull(scoreboard.getTeam("footer"))
 				   .setPrefix(ChatColor.DARK_GRAY
