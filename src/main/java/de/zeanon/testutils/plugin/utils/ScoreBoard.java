@@ -173,7 +173,7 @@ public class ScoreBoard {
 		final @NotNull Score stoplag = infoBoard.getScore(ChatColor.DARK_GRAY
 														  + " ["
 														  + ChatColor.DARK_RED
-														  + "Server-Activity"
+														  + "Stoplag"
 														  + ChatColor.DARK_GRAY
 														  + "]");
 		stoplag.setScore(3);
