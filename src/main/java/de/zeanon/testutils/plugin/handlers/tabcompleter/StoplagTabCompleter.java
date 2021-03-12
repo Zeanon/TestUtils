@@ -14,9 +14,9 @@ public class StoplagTabCompleter {
 	public @NotNull List<String> onTab(final @NotNull String[] args, final boolean argumentEnded) {
 		if ((args.length == 2 && !argumentEnded) || (args.length == 1 && argumentEnded)) {
 			if (argumentEnded) {
-				return Arrays.asList("-c", "here", "other", "global");
+				return Arrays.asList("-c", "here", "other", "global", "-north", "-n", "-south", "-s");
 			} else {
-				return StoplagTabCompleter.getCompletions(args[1], "-c", "here", "other", "global");
+				return StoplagTabCompleter.getCompletions(args[1], "-c", "here", "other", "global", "-north", "-n", "-south", "-s");
 			}
 		} else if (args.length == 3 && !argumentEnded || args.length == 2) {
 			if (argumentEnded) {
