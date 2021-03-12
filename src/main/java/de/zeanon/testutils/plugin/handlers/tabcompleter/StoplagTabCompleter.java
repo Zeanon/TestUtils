@@ -14,22 +14,22 @@ public class StoplagTabCompleter {
 	public @NotNull List<String> onTab(final @NotNull String[] args, final boolean argumentEnded) {
 		if ((args.length == 2 && !argumentEnded) || (args.length == 1 && argumentEnded)) {
 			if (argumentEnded) {
-				return Arrays.asList("-c", "here", "other", "global", "-north", "-n", "-south", "-s");
+				return Arrays.asList("-c", "-here", "-other", "-global", "-north", "-n", "-south", "-s");
 			} else {
-				return StoplagTabCompleter.getCompletions(args[1], "-c", "here", "other", "global", "-north", "-n", "-south", "-s");
+				return StoplagTabCompleter.getCompletions(args[1], "-c", "-here", "-other", "-global", "-north", "-n", "-south", "-s");
 			}
 		} else if (args.length == 3 && !argumentEnded || args.length == 2) {
 			if (argumentEnded) {
 				if (!args[1].equalsIgnoreCase("-c")) {
 					return Collections.singletonList("-c");
 				} else {
-					return Arrays.asList("here", "other", "global", "-north", "-n", "-south", "-s");
+					return Arrays.asList("-here", "-other", "-global", "-north", "-n", "-south", "-s");
 				}
 			} else {
 				if (!args[1].equalsIgnoreCase("-c")) {
 					return StoplagTabCompleter.getCompletions(args[2], "-c");
 				} else {
-					return StoplagTabCompleter.getCompletions(args[1], "here", "other", "global", "-north", "-n", "-south", "-s");
+					return StoplagTabCompleter.getCompletions(args[1], "-here", "-other", "-global", "-north", "-n", "-south", "-s");
 				}
 			}
 		} else {

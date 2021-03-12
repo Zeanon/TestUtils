@@ -46,7 +46,7 @@ public class RegisterBlock {
 		if (name != null && name.contains("./")) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "' resolution error: Path is not allowed.");
-		} else if (name != null && (name.equalsIgnoreCase("here")
+		} else if (name != null && (name.equalsIgnoreCase("-here")
 									|| name.equalsIgnoreCase("-north")
 									|| name.equalsIgnoreCase("-n")
 									|| name.equalsIgnoreCase("-south")

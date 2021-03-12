@@ -53,7 +53,7 @@ public class Stoplag {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been deactivated in your TestArea.");
 				}
-			} else if (args[1].equalsIgnoreCase("here")) {
+			} else if (args[1].equalsIgnoreCase("-here")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 				if (tempRegion == null) {
@@ -65,7 +65,7 @@ public class Stoplag {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on your side of your TestArea.");
 				}
-			} else if (args[1].equalsIgnoreCase("other")) {
+			} else if (args[1].equalsIgnoreCase("-other")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 
 				if (tempRegion == null) {
@@ -101,7 +101,7 @@ public class Stoplag {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the south side of your TestArea.");
 				}
-			} else if (args[1].equalsIgnoreCase("global") || args[1].equalsIgnoreCase("confirm")) {
+			} else if (args[1].equalsIgnoreCase("-global") || args[1].equalsIgnoreCase("confirm")) {
 				p.performCommand("stoplag confirm");
 			}
 		} else if (args.length == 3) {
@@ -137,9 +137,9 @@ public class Stoplag {
 	}
 
 	private void deactivate(final @NotNull String arg, final @NotNull Player p) {
-		if (arg.equalsIgnoreCase("global")) {
+		if (arg.equalsIgnoreCase("-global")) {
 			p.performCommand("stoplag -c");
-		} else if (arg.equalsIgnoreCase("here")) {
+		} else if (arg.equalsIgnoreCase("-here")) {
 			ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null) {
@@ -151,7 +151,7 @@ public class Stoplag {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been deactivated on your side of your TestArea.");
 			}
-		} else if (arg.equalsIgnoreCase("other")) {
+		} else if (arg.equalsIgnoreCase("-other")) {
 			ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null) {

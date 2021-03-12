@@ -71,7 +71,7 @@ public class ResetArea {
 						}
 					}
 				} else if (args.length == 2) {
-					if (args[1].equalsIgnoreCase("here")) {
+					if (args[1].equalsIgnoreCase("-here")) {
 						final @NotNull String worldName = p.getWorld().getName();
 						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						if (tempRegion == null) {
@@ -100,7 +100,7 @@ public class ResetArea {
 								e.printStackTrace();
 							}
 						}
-					} else if (args[1].equalsIgnoreCase("other")) {
+					} else if (args[1].equalsIgnoreCase("-other")) {
 						final @NotNull String worldName = p.getWorld().getName();
 						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 						if (tempRegion == null) {

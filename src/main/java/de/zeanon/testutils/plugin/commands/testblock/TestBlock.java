@@ -21,7 +21,7 @@ public class TestBlock {
 		if (args.length == 0) {
 			PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), "the other");
 		} else if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("here")) {
+			if (args[0].equalsIgnoreCase("-here")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p), "your");
 			} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
 				PasteBlock.pasteBlock(p, null, TestAreaUtils.getNorthRegion(p), "the north");
@@ -31,13 +31,13 @@ public class TestBlock {
 				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getOppositeRegion(p), "the other");
 			}
 		} else if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("here")) {
+			if (args[0].equalsIgnoreCase("-here")) {
 				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getRegion(p), "your");
 			} else if (args[0].equalsIgnoreCase("-north") || args[0].equalsIgnoreCase("-n")) {
 				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getNorthRegion(p), "the north");
 			} else if (args[0].equalsIgnoreCase("-south") || args[0].equalsIgnoreCase("-s")) {
 				PasteBlock.pasteBlock(p, args[1], TestAreaUtils.getSouthRegion(p), "the south");
-			} else if (args[1].equalsIgnoreCase("here")) {
+			} else if (args[1].equalsIgnoreCase("-here")) {
 				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getRegion(p), "your");
 			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
 				PasteBlock.pasteBlock(p, args[0], TestAreaUtils.getNorthRegion(p), "the north");

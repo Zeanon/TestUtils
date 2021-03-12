@@ -30,7 +30,7 @@ public class InvertArea {
 		if (args.length == 1) {
 			InvertArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), "the other");
 		} else if (args.length == 2) {
-			if (args[1].equalsIgnoreCase("here")) {
+			if (args[1].equalsIgnoreCase("-here")) {
 				InvertArea.replaceArea(p, TestAreaUtils.getRegion(p), "your");
 			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
 				InvertArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), "the north");

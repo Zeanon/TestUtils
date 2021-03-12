@@ -25,9 +25,9 @@ public class TestUtilsTabCompleter implements TabCompleter {
 	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {
 		if (args.length == 1) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
-				return this.getCompletions(args[0], "allow", "deny", "other", "-n", "-north", "-s", "-south");
+				return this.getCompletions(args[0], "allow", "deny", "-other", "-n", "-north", "-s", "-south");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				final @NotNull List<String> completions = this.getCompletions(args[0], "here", "-n", "-north", "-s", "-south");
+				final @NotNull List<String> completions = this.getCompletions(args[0], "-here", "-n", "-north", "-s", "-south");
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
@@ -45,18 +45,18 @@ public class TestUtilsTabCompleter implements TabCompleter {
 										   "deletearea",
 										   "update");
 			} else if (command.getName().equalsIgnoreCase("stoplag")) {
-				this.getCompletions(args[0], "-c", "here", "other", "global");
+				this.getCompletions(args[0], "-c", "-here", "-other", "-global");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
-				if (args[0].equalsIgnoreCase("other")
+				if (args[0].equalsIgnoreCase("-other")
 					|| args[0].equalsIgnoreCase("-north")
 					|| args[0].equalsIgnoreCase("-n")
 					|| args[0].equalsIgnoreCase("-south")
 					|| args[0].equalsIgnoreCase("-s")) {
 					return this.getCompletions(args[1], "allow", "deny");
 				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny")) {
-					return this.getCompletions(args[1], "other", "-north", "-n", "-south", "-s");
+					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
 				}
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				if (args[0].equalsIgnoreCase("update")
@@ -69,19 +69,19 @@ public class TestUtilsTabCompleter implements TabCompleter {
 						   || args[0].equalsIgnoreCase("registerblock")) {
 					return this.getBlocks(args[1], (Player) sender);
 				} else if (args[0].equalsIgnoreCase("resetarea")) {
-					return this.getCompletions(args[1], "here", "other", "-north", "-n", "-south", "-s");
+					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("invertarea")) {
-					return this.getCompletions(args[1], "here", "other", "-north", "-n", "-south", "-s");
+					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				if (args[0].equalsIgnoreCase("here")
+				if (args[0].equalsIgnoreCase("-here")
 					|| args[0].equalsIgnoreCase("-n")
 					|| args[0].equalsIgnoreCase("-north")
 					|| args[0].equalsIgnoreCase("-s")
 					|| args[0].equalsIgnoreCase("-south")) {
 					return this.getBlocks(args[1], (Player) sender);
 				} else {
-					return this.getCompletions(args[1], "here", "-n", "-north", "-s", "-south");
+					return this.getCompletions(args[1], "-here", "-n", "-north", "-s", "-south");
 				}
 			}
 		}
@@ -126,7 +126,9 @@ public class TestUtilsTabCompleter implements TabCompleter {
 		try {
 			if (file.getName().toLowerCase().startsWith(sequence.toLowerCase()) && !file.getName().equalsIgnoreCase(sequence)) {
 				final @NotNull String path = BaseFileUtils.removeExtension(FilenameUtils.separatorsToUnix(basePath.toRealPath().relativize(file.toPath().toRealPath()).toString()));
-				completions.add(path);
+				if (!path.equalsIgnoreCase("default")) {
+					completions.add(path);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

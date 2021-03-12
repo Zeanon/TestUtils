@@ -47,7 +47,7 @@ public class TNT {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 							p.sendMessage(TNT.getNowDeactivated(tempRegion));
 						}
-					} else if (args[0].equalsIgnoreCase("other")) {
+					} else if (args[0].equalsIgnoreCase("-other")) {
 						final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -79,7 +79,7 @@ public class TNT {
 						}
 					}
 				} else if (args.length == 2) {
-					if (args[0].equalsIgnoreCase("other")) {
+					if (args[0].equalsIgnoreCase("-other")) {
 						if (args[1].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
@@ -133,7 +133,7 @@ public class TNT {
 								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 							}
 						}
-					} else if (args[1].equalsIgnoreCase("other")) {
+					} else if (args[1].equalsIgnoreCase("-other")) {
 						if (args[0].equalsIgnoreCase("allow")) {
 							final ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 							if (tempRegion == null) {
