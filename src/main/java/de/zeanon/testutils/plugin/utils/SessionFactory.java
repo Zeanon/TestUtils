@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.utils;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import de.zeanon.testutils.init.InitMode;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
@@ -30,6 +31,10 @@ public class SessionFactory {
 	public @Nullable EditSession getSession(final @NotNull Player p) {
 		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
 			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+			if (InitMode.getConfig().hasChanged()) {
+				SessionFactory.undoSessions.put(p.getUniqueId().toString(), tempStack.resize(ConfigUtils.getInt("Max History")));
+				tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+			}
 			if (!tempStack.isEmpty()) {
 				return tempStack.pop();
 			}

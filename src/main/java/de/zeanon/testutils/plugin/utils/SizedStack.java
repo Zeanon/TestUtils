@@ -1,6 +1,7 @@
 package de.zeanon.testutils.plugin.utils;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -11,11 +12,13 @@ public class SizedStack<T> {
 	@Getter
 	private int size;
 	private int head;
+	private int tail;
 
 	public SizedStack(int size) {
 		this.maxSize = size;
 		this.data = new Object[this.maxSize];
 		this.head = 0;
+		this.tail = 0;
 		this.size = 0;
 	}
 
@@ -34,8 +37,31 @@ public class SizedStack<T> {
 		return result;
 	}
 
+	/**
+	 * Shifts the contents of this SizedStack to a new one with the given size.
+	 * This SizedStack is depleted in the process.
+	 *
+	 * @param newSize the size the new SizedStack should have
+	 *
+	 * @return a new SizedStack with the given size
+	 */
+	public SizedStack<T> resize(final int newSize) {
+		final @NotNull SizedStack<T> temp = new SizedStack<>(newSize);
+		while (!this.isEmpty() && temp.size < newSize) {
+			temp.pushBottom(this.pop());
+		}
+		return temp;
+	}
+
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean isEmpty() {
 		return this.size == 0;
+	}
+
+	private void pushBottom(final @Nullable T element) {
+		this.decreaseTail();
+		this.data[this.tail] = element;
+		this.increaseSize();
 	}
 
 	private void increaseHead() {
@@ -43,12 +69,38 @@ public class SizedStack<T> {
 		while (this.head > this.maxSize - 1) {
 			this.head -= this.maxSize;
 		}
+		if (this.head == this.tail + 1) {
+			this.increaseTail();
+		}
 	}
 
 	private void decreaseHead() {
 		this.head--;
 		while (this.head < 0) {
 			this.head += this.maxSize;
+		}
+		if (this.head == this.tail - 1) {
+			this.decreaseTail();
+		}
+	}
+
+	private void increaseTail() {
+		this.tail++;
+		while (this.tail > this.maxSize - 1) {
+			this.tail -= this.maxSize;
+		}
+		if (this.tail == this.head + 1) {
+			this.increaseHead();
+		}
+	}
+
+	private void decreaseTail() {
+		this.tail--;
+		while (this.tail < 0) {
+			this.tail += this.maxSize;
+		}
+		if (this.tail == this.head - 1) {
+			this.decreaseHead();
 		}
 	}
 
