@@ -268,7 +268,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- WorldEdit API -->
@@ -276,7 +276,7 @@
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- WorldGuard API -->
@@ -284,7 +284,7 @@
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.3</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- PlugMan -->
@@ -292,7 +292,7 @@
             <groupId>com.rylinaux</groupId>
             <artifactId>plugman</artifactId>
             <version>2.1.7</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Lombok -->
@@ -300,7 +300,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.10</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- JetBrains -->
@@ -308,7 +308,7 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
