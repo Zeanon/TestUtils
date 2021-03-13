@@ -63,7 +63,7 @@ public class Update {
 		try {
 			final int maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
 								   ? InitMode.getConfig().getIntUseArray("Max History")
-								   : 5;
+								   : 10;
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 

@@ -29,6 +29,7 @@ public class RegisterArea {
 								  name);
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "You created a testarea with the name '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
+			RegisterReset.execute(new String[]{"registerreset"}, p);
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Too many arguments.");

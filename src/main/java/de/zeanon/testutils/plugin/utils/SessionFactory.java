@@ -3,7 +3,7 @@ package de.zeanon.testutils.plugin.utils;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import de.zeanon.testutils.init.InitMode;
+import de.zeanon.storagemanagercore.internal.utility.basic.SizedStack;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
@@ -22,7 +22,14 @@ public class SessionFactory {
 	}
 
 	public @NotNull EditSession createSession(final @NotNull Player p) {
-		SessionFactory.undoSessions.computeIfAbsent(p.getUniqueId().toString(), user -> new SizedStack<>(ConfigUtils.getInt("Max History")));
+		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
+			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
+				tempStack.resize(ConfigUtils.getInt("Max History"));
+			}
+		} else {
+			SessionFactory.undoSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
+		}
 		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
 		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(tempSession);
 		return tempSession;
@@ -31,11 +38,7 @@ public class SessionFactory {
 	public @Nullable EditSession getSession(final @NotNull Player p) {
 		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
 			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
-			if (InitMode.getConfig().hasChanged()) {
-				SessionFactory.undoSessions.put(p.getUniqueId().toString(), tempStack.resize(ConfigUtils.getInt("Max History")));
-				tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
-			}
-			if (!tempStack.isEmpty()) {
+			if (!tempStack.empty()) {
 				return tempStack.pop();
 			}
 		}

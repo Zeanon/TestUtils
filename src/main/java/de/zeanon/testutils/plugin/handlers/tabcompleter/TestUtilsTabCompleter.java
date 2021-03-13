@@ -1,5 +1,7 @@
 package de.zeanon.testutils.plugin.handlers.tabcompleter;
 
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
@@ -72,6 +74,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("invertarea")) {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
+				} else if (args[0].equalsIgnoreCase("deletearea")) {
+					return this.getRegions(args[1], new BukkitWorld(((Player) sender).getWorld()));
 				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				if (args[0].equalsIgnoreCase("-here")
@@ -125,13 +129,27 @@ public class TestUtilsTabCompleter implements TabCompleter {
 	private void addFileToCompletions(final @NotNull String sequence, final @NotNull List<String> completions, final @NotNull File file, final @NotNull Path basePath) {
 		try {
 			if (file.getName().toLowerCase().startsWith(sequence.toLowerCase()) && !file.getName().equalsIgnoreCase(sequence)) {
-				final @NotNull String path = BaseFileUtils.removeExtension(FilenameUtils.separatorsToUnix(basePath.toRealPath().relativize(file.toPath().toRealPath()).toString()));
-				if (!path.equalsIgnoreCase("default")) {
-					completions.add(path);
+				final @NotNull String relativePath = BaseFileUtils.removeExtension(FilenameUtils.separatorsToUnix(basePath.toRealPath().relativize(file.toPath().toRealPath()).toString()));
+				if (!relativePath.equalsIgnoreCase("default")) {
+					completions.add(relativePath);
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private List<String> getRegions(final @NotNull String arg, final @NotNull World world) {
+		final @NotNull List<String> completions = new GapList<>();
+		try {
+			for (final @NotNull File regionFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + world.getName()))) {
+				if (regionFolder.getName().toLowerCase().startsWith(arg.toLowerCase()) && !regionFolder.getName().equalsIgnoreCase(arg)) {
+					completions.add(regionFolder.getName());
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return completions;
 	}
 }

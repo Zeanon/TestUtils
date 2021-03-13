@@ -67,7 +67,7 @@ public class ConfigUtils {
 			case "Automatic Reload":
 				return true;
 			case "Max History":
-				return 5;
+				return 10;
 			case "Plugin Version":
 				return TestUtils.getInstance().getDescription().getVersion();
 			default:
