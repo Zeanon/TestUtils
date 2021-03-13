@@ -67,7 +67,7 @@ public class DeleteBlock {
 	}
 
 	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
-		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
+		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
 		if (args.length == 2) {
 			if (file.exists()) {
 				GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
@@ -88,7 +88,7 @@ public class DeleteBlock {
 					try {
 						Files.delete(file.toPath());
 						final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
-															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()))
+															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()))
 															: null;
 
 						p.sendMessage(GlobalMessageUtils.messageHead

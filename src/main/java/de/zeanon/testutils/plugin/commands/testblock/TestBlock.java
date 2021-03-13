@@ -54,7 +54,7 @@ public class TestBlock {
 
 	public @Nullable Pair<InputStream, String> getBlock(final @NotNull Player p, final @Nullable String name) {
 		if (name != null) {
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString(), name + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString(), name + ".schem");
 			if (tempFile.exists() && tempFile.isFile()) {
 				return new Pair<>(BaseFileUtils.createNewInputStreamFromFile(tempFile), name);
 			} else if (BaseFileUtils.removeExtension(tempFile).exists() && BaseFileUtils.removeExtension(tempFile).isDirectory()) {
@@ -72,7 +72,7 @@ public class TestBlock {
 	}
 
 	private @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {
-		final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + uuid, "default.schem");
+		final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + uuid, "default.schem");
 		if (tempFile.exists() && tempFile.isFile()) {
 			return BaseFileUtils.createNewInputStreamFromFile(tempFile);
 		} else {

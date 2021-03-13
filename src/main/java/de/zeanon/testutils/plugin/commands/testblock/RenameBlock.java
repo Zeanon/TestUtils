@@ -71,8 +71,8 @@ public class RenameBlock {
 	}
 
 	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
-		final @NotNull File oldFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
-		final @NotNull File newFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + args[2] + ".schem");
+		final @NotNull File oldFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
+		final @NotNull File newFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[2] + ".schem");
 
 		if (args.length == 3) {
 			if (oldFile.exists()) {
@@ -116,7 +116,7 @@ public class RenameBlock {
 			FileUtils.moveFile(oldFile, newFile);
 
 			final @Nullable String parentName = Objects.notNull(oldFile.getAbsoluteFile().getParentFile().listFiles()).length == 0
-												? InternalFileUtils.deleteEmptyParent(oldFile, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()))
+												? InternalFileUtils.deleteEmptyParent(oldFile, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()))
 												: null;
 
 			p.sendMessage(GlobalMessageUtils.messageHead

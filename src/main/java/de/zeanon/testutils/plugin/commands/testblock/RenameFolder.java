@@ -81,7 +81,7 @@ public class RenameFolder {
 	@SuppressWarnings("DuplicatedCode")
 	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
 		try {
-			final @NotNull Path filePath = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString());
+			final @NotNull Path filePath = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString());
 			final @NotNull File directoryOld = filePath.resolve(args[1]).toFile(); //NOSONAR
 			final @NotNull File directoryNew = filePath.resolve(args[2]).toFile(); //NOSONAR
 

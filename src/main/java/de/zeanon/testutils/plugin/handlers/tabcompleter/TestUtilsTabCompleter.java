@@ -102,7 +102,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 		final @NotNull List<String> completions = new GapList<>();
 
 		try {
-			@NotNull Path tempDirectory = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString());
+			@NotNull Path tempDirectory = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString());
 			final @NotNull String[] pathArgs = arg.split("/");
 			if (!arg.endsWith("/")) {
 				for (int i = 0; i < pathArgs.length - 1; i++) {

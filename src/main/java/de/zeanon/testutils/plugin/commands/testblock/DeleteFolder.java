@@ -68,7 +68,7 @@ public class DeleteFolder {
 	}
 
 	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
-		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString() + "/" + args[0]);
+		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[0]);
 
 		if (args.length == 3) {
 			if (file.exists() && file.isDirectory()) {
@@ -95,7 +95,7 @@ public class DeleteFolder {
 					try {
 						FileUtils.deleteDirectory(file);
 						final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
-															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()))
+															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()))
 															: null;
 
 						p.sendMessage(GlobalMessageUtils.messageHead
