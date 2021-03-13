@@ -40,6 +40,9 @@ public class ResetArea {
 					if (tempRegion == null || oppositeRegion == null) {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Pasting the reset for '"
+									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'...");
 						try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 							final @NotNull File tempFile = new File(TestUtils
 																			.getInstance()
@@ -76,6 +79,9 @@ public class ResetArea {
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Pasting the reset for '"
+										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side...");
 							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
@@ -105,6 +111,9 @@ public class ResetArea {
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Pasting the reset for '"
+										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side...");
 							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
@@ -134,6 +143,9 @@ public class ResetArea {
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Pasting the reset for '"
+										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the north side...");
 							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
@@ -163,6 +175,9 @@ public class ResetArea {
 						if (tempRegion == null) {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Pasting the reset for '"
+										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the south side...");
 							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 								final @NotNull File tempFile = new File(TestUtils
 																				.getInstance()
