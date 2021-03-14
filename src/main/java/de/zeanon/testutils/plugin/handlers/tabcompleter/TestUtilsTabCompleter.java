@@ -76,9 +76,9 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("invertarea")) {
 					return this.getCompletions(args[1], "-here", "-north", "-n", "-south", "-s");
-				} else if (args[0].equalsIgnoreCase("reaplacearea")) {
+				} else if (args[0].equalsIgnoreCase("replacearea")) {
 					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
-				} else if (args[0].equalsIgnoreCase("reaplacetnt")) {
+				} else if (args[0].equalsIgnoreCase("replacetnt")) {
 					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("deletearea")) {
 					return this.getRegions(args[1], new BukkitWorld(((Player) sender).getWorld()));
