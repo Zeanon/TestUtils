@@ -5,6 +5,7 @@ import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.BlockTypes;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				return this.getCompletions(args[0],
 										   "undo",
+										   "count",
 										   "resetarea",
 										   "invertarea",
 										   "replacearea",
@@ -76,8 +78,10 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("invertarea")) {
 					return this.getCompletions(args[1], "-here", "-north", "-n", "-south", "-s");
-				} else if (args[0].equalsIgnoreCase("replacearea")) {
-					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
+				} else if (args[0].equalsIgnoreCase("replacearea") || args[0].equalsIgnoreCase("count")) {
+					final @NotNull List<String> completions = this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
+					completions.addAll(this.getCompletions(args[1], BlockTypes.getBlocks()));
+					return completions;
 				} else if (args[0].equalsIgnoreCase("replacetnt")) {
 					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("deletearea")) {
@@ -94,11 +98,27 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					return this.getCompletions(args[1], "-here", "-n", "-north", "-s", "-south");
 				}
 			}
+		} else if (args.length == 3) {
+			if (args[0].equalsIgnoreCase("replacearea")) { //NOSONAR
+				return this.getCompletions(args[2], BlockTypes.getBlocks());
+			}
+		} else if (args.length == 4) {
+			if (args[0].equalsIgnoreCase("replacearea")) { //NOSONAR
+				if (args[1].equalsIgnoreCase("-other")
+					|| args[1].equalsIgnoreCase("-n")
+					|| args[1].equalsIgnoreCase("-north")
+					|| args[1].equalsIgnoreCase("-s")
+					|| args[1].equalsIgnoreCase("-south")) {
+					return this.getCompletions(args[3], BlockTypes.getBlocks());
+				} else {
+					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
+				}
+			}
 		}
 		return null;
 	}
 
-	private List<String> getCompletions(final @NotNull String arg, final @NotNull String... completions) {
+	private @NotNull List<String> getCompletions(final @NotNull String arg, final @NotNull String... completions) {
 		return Arrays.stream(completions)
 					 .filter(completion -> completion.startsWith(arg.toLowerCase()))
 					 .collect(Collectors.toList());
