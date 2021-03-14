@@ -23,7 +23,7 @@ public class Redo {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "Nothing left to redo.");
 					} else {
-						tempSession.undo(tempSession);
+						tempSession.redo(tempSession);
 						SessionFactory.registerUndoSession(p, tempSession);
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "You redid your last action.");
