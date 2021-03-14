@@ -12,21 +12,21 @@ import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
-public class Undo {
+public class Redo {
 
-	public void undo(final @NotNull Player p) {
+	public void redo(final @NotNull Player p) {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				try (final @Nullable EditSession tempSession = SessionFactory.getUndoSession(p)) {
+				try (final @Nullable EditSession tempSession = SessionFactory.getRedoSession(p)) {
 					if (tempSession == null) {
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Nothing left to undo.");
+									  + ChatColor.RED + "Nothing left to redo.");
 					} else {
 						tempSession.undo(tempSession);
-						SessionFactory.registerRedoSession(p, tempSession);
+						SessionFactory.registerUndoSession(p, tempSession);
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "You undid your last action.");
+									  + ChatColor.RED + "You redid your last action.");
 					}
 				}
 			}

@@ -19,6 +19,8 @@ public class TestUtils {
 				if (args.length > 0) {
 					if (args[0].equalsIgnoreCase("undo")) {
 						Undo.undo(p);
+					} else if (args[0].equalsIgnoreCase("redo")) {
+						Redo.redo(p);
 					} else if (args[0].equalsIgnoreCase("count")) {
 						Count.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("registerblock")) {

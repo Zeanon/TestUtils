@@ -36,6 +36,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				return this.getCompletions(args[0],
 										   "undo",
+										   "redo",
 										   "count",
 										   "resetarea",
 										   "invertarea",

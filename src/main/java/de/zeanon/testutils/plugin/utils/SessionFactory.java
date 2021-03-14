@@ -15,10 +15,12 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class SessionFactory {
 
-	private static final Map<String, SizedStack<EditSession>> undoSessions;
+	private final @NotNull Map<String, SizedStack<EditSession>> undoSessions;
+	private final @NotNull Map<String, SizedStack<EditSession>> redoSessions;
 
 	static {
 		undoSessions = new HashMap<>();
+		redoSessions = new HashMap<>();
 	}
 
 	public @NotNull EditSession createSession(final @NotNull Player p) {
@@ -35,9 +37,43 @@ public class SessionFactory {
 		return tempSession;
 	}
 
-	public @Nullable EditSession getSession(final @NotNull Player p) {
+	public void registerUndoSession(final @NotNull Player p, final @NotNull EditSession session) {
 		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
 			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
+				tempStack.resize(ConfigUtils.getInt("Max History"));
+			}
+		} else {
+			SessionFactory.undoSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
+		}
+		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(session);
+	}
+
+	public @Nullable EditSession getUndoSession(final @NotNull Player p) {
+		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
+			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+			if (!tempStack.empty()) {
+				return tempStack.pop();
+			}
+		}
+		return null;
+	}
+
+	public void registerRedoSession(final @NotNull Player p, final @NotNull EditSession session) {
+		if (SessionFactory.redoSessions.containsKey(p.getUniqueId().toString())) {
+			SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(p.getUniqueId().toString());
+			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
+				tempStack.resize(ConfigUtils.getInt("Max History"));
+			}
+		} else {
+			SessionFactory.redoSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
+		}
+		SessionFactory.redoSessions.get(p.getUniqueId().toString()).push(session);
+	}
+
+	public @Nullable EditSession getRedoSession(final @NotNull Player p) {
+		if (SessionFactory.redoSessions.containsKey(p.getUniqueId().toString())) {
+			SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(p.getUniqueId().toString());
 			if (!tempStack.empty()) {
 				return tempStack.pop();
 			}
