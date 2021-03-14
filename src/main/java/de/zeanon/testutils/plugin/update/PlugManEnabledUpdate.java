@@ -59,7 +59,7 @@ class PlugManEnabledUpdate {
 
 			if (autoReload) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.RED + "Reloading plugin.");
+							  ChatColor.RED + "Reloading plugin...");
 				PluginUtil.reload(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
