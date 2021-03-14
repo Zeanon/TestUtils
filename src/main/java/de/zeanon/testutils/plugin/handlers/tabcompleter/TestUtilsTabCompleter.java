@@ -37,6 +37,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 										   "undo",
 										   "resetarea",
 										   "invertarea",
+										   "replacearea",
+										   "replacetnt",
 										   "registerreset",
 										   "registerblock",
 										   "deleteblock",
@@ -70,9 +72,10 @@ public class TestUtilsTabCompleter implements TabCompleter {
 						   || args[0].equalsIgnoreCase("renamefolder")
 						   || args[0].equalsIgnoreCase("registerblock")) {
 					return this.getBlocks(args[1], (Player) sender);
-				} else if (args[0].equalsIgnoreCase("resetarea")) {
-					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
-				} else if (args[0].equalsIgnoreCase("invertarea")) {
+				} else if (args[0].equalsIgnoreCase("resetarea")
+						   || args[0].equalsIgnoreCase("invertarea")
+						   || args[0].equalsIgnoreCase("replacearea")
+						   || args[0].equalsIgnoreCase("replacetnt")) {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("deletearea")) {
 					return this.getRegions(args[1], new BukkitWorld(((Player) sender).getWorld()));
@@ -116,7 +119,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 			if (pathFile.exists() && pathFile.isDirectory()) {
 				final @NotNull String sequence = arg.endsWith("/") ? "" : pathArgs[pathArgs.length - 1];
 				for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(pathFile, false, "schem")) {
-					this.addFileToCompletions(sequence, completions, file, Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Blocks/" + p.getUniqueId().toString()));
+					this.addFileToCompletions(sequence, completions, file, Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()));
 				}
 			}
 		} catch (IOException e) {

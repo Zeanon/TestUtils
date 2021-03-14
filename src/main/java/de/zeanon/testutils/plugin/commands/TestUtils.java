@@ -27,6 +27,10 @@ public class TestUtils {
 						ResetArea.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("invertarea")) {
 						InvertArea.execute(args, p);
+					} else if (args[0].equalsIgnoreCase("replacearea")) {
+						ReplaceArea.execute(args, p, true);
+					} else if (args[0].equalsIgnoreCase("replacetnt")) {
+						ReplaceArea.execute(args, p, false);
 					} else if (args[0].equalsIgnoreCase("deleteblock")) {
 						DeleteBlock.execute(args, p);
 					} else if (args[0].equalsIgnoreCase("deletefolder")) {

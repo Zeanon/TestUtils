@@ -25,18 +25,18 @@ import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
-public class InvertArea {
+public class ReplaceArea {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
+	public void execute(final @NotNull String[] args, final @NotNull Player p, final boolean toTNT) {
 		if (args.length == 1) {
-			InvertArea.invertArea(p, TestAreaUtils.getOppositeRegion(p), "the other");
+			ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), "the other", toTNT);
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-here")) {
-				InvertArea.invertArea(p, TestAreaUtils.getRegion(p), "your");
+				ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), "your", toTNT);
 			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
-				InvertArea.invertArea(p, TestAreaUtils.getNorthRegion(p), "the north");
+				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), "the north", toTNT);
 			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
-				InvertArea.invertArea(p, TestAreaUtils.getSouthRegion(p), "the south");
+				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), "the south", toTNT);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
@@ -47,7 +47,7 @@ public class InvertArea {
 		}
 	}
 
-	private void invertArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
+	private void replaceArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area, final boolean toTNT) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -55,17 +55,22 @@ public class InvertArea {
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 
-				final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
-				airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
-
 				final WorldEditException[] error = new WorldEditException[1];
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						try {
-							editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.RED_STAINED_GLASS).getDefaultState().toBaseBlock());
+							if (toTNT) {
+								final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
+								obsidian.add(Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
 
-							editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+								editSession.replaceBlocks(region, obsidian, Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
+							} else {
+								final @NotNull Set<BaseBlock> tnt = new HashSet<>();
+								tnt.add(Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
+
+								editSession.replaceBlocks(region, tnt, Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
+							}
 						} catch (MaxChangedBlocksException e) {
 							error[0] = e;
 						}
@@ -74,10 +79,10 @@ public class InvertArea {
 
 				if (error[0] == null) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
+								  + ChatColor.RED + "The " + (toTNT ? "Obsidian" : "TNT") + " on " + area + " side has been replaced.");
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
+								  + ChatColor.RED + "There has been an error, replacing the " + (toTNT ? "Obsidian" : "TNT") + " on " + area + " side.");
 					error[0].printStackTrace();
 				}
 			}
