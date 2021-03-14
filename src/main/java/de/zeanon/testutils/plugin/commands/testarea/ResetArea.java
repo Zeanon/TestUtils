@@ -62,7 +62,7 @@ public class ResetArea {
 									  + ChatColor.RED + "There is no reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 					}
-				} catch (WorldEditException | IOException e) {
+				} catch (Exception e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error, pasting the reset for '"
 								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
@@ -95,7 +95,7 @@ public class ResetArea {
 										  + ChatColor.RED + "There is no reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
 						}
-					} catch (WorldEditException | IOException e) {
+					} catch (Exception e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "There has been an error, pasting the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
@@ -127,7 +127,7 @@ public class ResetArea {
 										  + ChatColor.RED + "There is no reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
 						}
-					} catch (WorldEditException | IOException e) {
+					} catch (Exception e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "There has been an error, pasting the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the other side.");
@@ -159,7 +159,7 @@ public class ResetArea {
 										  + ChatColor.RED + "There is no reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the north side.");
 						}
-					} catch (WorldEditException | IOException e) {
+					} catch (Exception e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "There has been an error, pasting the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the north side.");
@@ -191,7 +191,7 @@ public class ResetArea {
 										  + ChatColor.RED + "There is no reset for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the south side.");
 						}
-					} catch (WorldEditException | IOException e) {
+					} catch (Exception e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "There has been an error, pasting the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on the south side.");
@@ -208,34 +208,33 @@ public class ResetArea {
 		}
 	}
 
-	private void pasteSide(final @NotNull ProtectedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws WorldEditException, IOException {
-		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
-			final @NotNull Clipboard clipboard = reader.read();
+	private void pasteSide(final @NotNull ProtectedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws Exception { //NOSONAR
+		final Exception[] error = new Exception[1];
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
+					final @NotNull Clipboard clipboard = reader.read();
 
-			final @NotNull BlockVector3 pastePoint = tempRegion.getMinimumPoint();
+					final @NotNull BlockVector3 pastePoint = tempRegion.getMinimumPoint();
 
-			final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
+					final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-			final WorldEditException[] error = new WorldEditException[1];
-			new BukkitRunnable() {
-				@Override
-				public void run() {
 					Operation operation = clipboardHolder
 							.createPaste(editSession)
 							.to(pastePoint)
 							.ignoreAirBlocks(false)
 							.build();
 
-					try {
-						Operations.complete(operation);
-					} catch (WorldEditException e) {
-						error[0] = e;
-					}
+					Operations.complete(operation);
+				} catch (WorldEditException | IOException e) {
+					error[0] = e;
 				}
-			}.runTask(TestUtils.getInstance());
-			if (error[0] != null) {
-				throw error[0];
 			}
+		}.runTask(TestUtils.getInstance());
+
+		if (error[0] != null) {
+			throw error[0];
 		}
 	}
 }

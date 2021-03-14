@@ -72,11 +72,14 @@ public class TestUtilsTabCompleter implements TabCompleter {
 						   || args[0].equalsIgnoreCase("renamefolder")
 						   || args[0].equalsIgnoreCase("registerblock")) {
 					return this.getBlocks(args[1], (Player) sender);
-				} else if (args[0].equalsIgnoreCase("resetarea")
-						   || args[0].equalsIgnoreCase("invertarea")
-						   || args[0].equalsIgnoreCase("replacearea")
-						   || args[0].equalsIgnoreCase("replacetnt")) {
+				} else if (args[0].equalsIgnoreCase("resetarea")) {
 					return this.getCompletions(args[1], "-here", "-other", "-north", "-n", "-south", "-s");
+				} else if (args[0].equalsIgnoreCase("invertarea")) {
+					return this.getCompletions(args[1], "-here", "-north", "-n", "-south", "-s");
+				} else if (args[0].equalsIgnoreCase("reaplacearea")) {
+					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
+				} else if (args[0].equalsIgnoreCase("reaplacetnt")) {
+					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
 				} else if (args[0].equalsIgnoreCase("deletearea")) {
 					return this.getRegions(args[1], new BukkitWorld(((Player) sender).getWorld()));
 				}

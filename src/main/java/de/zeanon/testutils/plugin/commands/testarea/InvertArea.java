@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testarea;
 
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -48,39 +47,31 @@ public class InvertArea {
 	}
 
 	private void invertArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
-		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-			if (tempRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+					if (tempRegion == null) {
+						GlobalMessageUtils.sendNotApplicableRegion(p);
+					} else {
+						final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+						final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 
-				final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
-				airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+						final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
+						airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+						editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.RED_STAINED_GLASS).getDefaultState().toBaseBlock());
 
-				final WorldEditException[] error = new WorldEditException[1];
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						try {
-							editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.RED_STAINED_GLASS).getDefaultState().toBaseBlock());
+						editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
 
-							editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
-						} catch (MaxChangedBlocksException e) {
-							error[0] = e;
-						}
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
 					}
-				}.runTask(TestUtils.getInstance());
-
-				if (error[0] == null) {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
-				} else {
+				} catch (WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
-					error[0].printStackTrace();
+					e.printStackTrace();
 				}
 			}
-		}
+		}.runTask(TestUtils.getInstance());
 	}
 }

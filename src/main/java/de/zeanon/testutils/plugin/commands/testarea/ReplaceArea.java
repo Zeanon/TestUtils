@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testarea;
 
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -29,10 +28,10 @@ public class ReplaceArea {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p, final boolean toTNT) {
 		if (args.length == 1) {
-			ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), "the other", toTNT);
+			ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), "your", toTNT);
 		} else if (args.length == 2) {
-			if (args[1].equalsIgnoreCase("-here")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), "your", toTNT);
+			if (args[1].equalsIgnoreCase("-other")) {
+				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), "the other", toTNT);
 			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
 				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), "the north", toTNT);
 			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
@@ -48,44 +47,49 @@ public class ReplaceArea {
 	}
 
 	private void replaceArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area, final boolean toTNT) {
-		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-			if (tempRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+					if (tempRegion == null) {
+						GlobalMessageUtils.sendNotApplicableRegion(p);
+					} else {
+						final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+						final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 
-				final WorldEditException[] error = new WorldEditException[1];
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						try {
-							if (toTNT) {
-								final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
-								obsidian.add(Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
-
-								editSession.replaceBlocks(region, obsidian, Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
-							} else {
-								final @NotNull Set<BaseBlock> tnt = new HashSet<>();
-								tnt.add(Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
-
-								editSession.replaceBlocks(region, tnt, Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
-							}
-						} catch (MaxChangedBlocksException e) {
-							error[0] = e;
+						if (toTNT) {
+							final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
+							obsidian.add(Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
+							editSession.replaceBlocks(region, obsidian, Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
+						} else {
+							final @NotNull Set<BaseBlock> tnt = new HashSet<>();
+							tnt.add(Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
+							editSession.replaceBlocks(region, tnt, Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
 						}
-					}
-				}.runTask(TestUtils.getInstance());
 
-				if (error[0] == null) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED
+									  + "The "
+									  + ChatColor.DARK_RED
+									  + (toTNT ? "Obsidian" : "TNT")
+									  + ChatColor.RED
+									  + " on "
+									  + area
+									  + " side has been replaced.");
+					}
+				} catch (WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "The " + (toTNT ? "Obsidian" : "TNT") + " on " + area + " side has been replaced.");
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, replacing the " + (toTNT ? "Obsidian" : "TNT") + " on " + area + " side.");
-					error[0].printStackTrace();
+								  + ChatColor.RED
+								  + "There has been an error, replacing the "
+								  + ChatColor.DARK_RED
+								  + (toTNT ? "Obsidian" : "TNT")
+								  + ChatColor.RED
+								  + " on "
+								  + area
+								  + " side.");
+					e.printStackTrace();
 				}
 			}
-		}
+		}.runTask(TestUtils.getInstance());
 	}
 }
