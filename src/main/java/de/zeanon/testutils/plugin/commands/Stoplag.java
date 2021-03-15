@@ -37,6 +37,13 @@ public class Stoplag {
 				}
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
+						 || oppositeRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
+					}
+				}
 			}
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-c")) {
@@ -52,6 +59,13 @@ public class Stoplag {
 					Stoplag.stoplagRegions.remove(oppositeRegion.getId());
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been deactivated in your TestArea.");
+					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+						if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
+							 || oppositeRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been deactivated in your TestArea.");
+						}
+					}
 				}
 			} else if (args[1].equalsIgnoreCase("-here")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
@@ -64,6 +78,12 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on your side of your TestArea.");
+					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on your side of your TestArea.");
+						}
+					}
 				}
 			} else if (args[1].equalsIgnoreCase("-other")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
@@ -76,6 +96,12 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the other side of your TestArea.");
+					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the other side of your TestArea.");
+						}
+					}
 				}
 			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
@@ -88,6 +114,12 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the north side of your TestArea.");
+					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the north side of your TestArea.");
+						}
+					}
 				}
 			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
 				ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
@@ -100,6 +132,12 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the south side of your TestArea.");
+					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the south side of your TestArea.");
+						}
+					}
 				}
 			} else if (args[1].equalsIgnoreCase("-global") || args[1].equalsIgnoreCase("confirm")) {
 				p.performCommand("stoplag confirm");
@@ -150,6 +188,12 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been deactivated on your side of your TestArea.");
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been deactivated on your side of your TestArea.");
+					}
+				}
 			}
 		} else if (arg.equalsIgnoreCase("-other")) {
 			ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
@@ -162,6 +206,12 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been deactivated on the other side of your TestArea.");
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been deactivated on the other side of your TestArea.");
+					}
+				}
 			}
 		} else if (arg.equalsIgnoreCase("-north") || arg.equalsIgnoreCase("-n")) {
 			ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
@@ -174,6 +224,12 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been deactivated on the north side of your TestArea.");
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been deactivated on the north side of your TestArea.");
+					}
+				}
 			}
 		} else if (arg.equalsIgnoreCase("-south") || arg.equalsIgnoreCase("-s")) {
 			ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
@@ -186,6 +242,12 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Stoplag has been deactivated on the south side of your TestArea.");
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been deactivated on the south side of your TestArea.");
+					}
+				}
 			}
 		}
 	}
