@@ -8,6 +8,7 @@ import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -80,8 +81,41 @@ public class ReplaceArea {
 
 						if (source != null) {
 							final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
-							sourceBlocks.add(Objects.notNull(BlockTypes.get(source)).getDefaultState().toBaseBlock());
-							editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination))).getDefaultState().toBaseBlock());
+							try {
+								sourceBlocks.add(Objects.notNull(BlockTypes.get(source)).getDefaultState().toBaseBlock());
+							} catch (ObjectNullException e) {
+								p.sendMessage(GlobalMessageUtils.messageHead
+											  + ChatColor.RED
+											  + "There has been an error, replacing '"
+											  + ChatColor.DARK_RED
+											  + source
+											  + ChatColor.RED
+											  + " on "
+											  + area
+											  + " side due to '"
+											  + ChatColor.DARK_RED
+											  + source
+											  + ChatColor.RED
+											  + "' not being a valid block.");
+							}
+
+							try {
+								editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination))).getDefaultState().toBaseBlock());
+							} catch (ObjectNullException e) {
+								p.sendMessage(GlobalMessageUtils.messageHead
+											  + ChatColor.RED
+											  + "There has been an error, replacing to '"
+											  + ChatColor.DARK_RED
+											  + destination
+											  + ChatColor.RED
+											  + " on "
+											  + area
+											  + " side due to '"
+											  + ChatColor.DARK_RED
+											  + destination
+											  + ChatColor.RED
+											  + "' not being a valid block.");
+							}
 						} else {
 							if (toTNT) {
 								final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
@@ -102,7 +136,11 @@ public class ReplaceArea {
 									  + ChatColor.RED
 									  + " on "
 									  + area
-									  + " side has been replaced.");
+									  + " side has been replaced to '"
+									  + ChatColor.DARK_RED
+									  + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+									  + ChatColor.RED
+									  + "'.");
 					}
 				} catch (WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead

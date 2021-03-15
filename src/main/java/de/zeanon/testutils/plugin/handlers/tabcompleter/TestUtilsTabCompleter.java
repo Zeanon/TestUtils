@@ -30,7 +30,12 @@ public class TestUtilsTabCompleter implements TabCompleter {
 			if (command.getName().equalsIgnoreCase("tnt")) {
 				return this.getCompletions(args[0], "allow", "deny", "-other", "-n", "-north", "-s", "-south");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
-				final @NotNull List<String> completions = this.getCompletions(args[0], "-here", "-n", "-north", "-s", "-south");
+				final @NotNull List<String> completions = this.getCompletions(args[0],
+																			  "-here",
+																			  "-n",
+																			  "-north",
+																			  "-s",
+																			  "-south");
 				completions.addAll(this.getBlocks(args[0], (Player) sender));
 				return completions;
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
