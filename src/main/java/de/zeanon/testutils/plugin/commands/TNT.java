@@ -26,9 +26,6 @@ public class TNT {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {
 						tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-						p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-									  ? TNT.getNowActivated(tempRegion)
-									  : TNT.getNowDeactivated(tempRegion));
 						for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 								tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
@@ -44,7 +41,6 @@ public class TNT {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-							p.sendMessage(TNT.getNowActivated(tempRegion));
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -57,7 +53,6 @@ public class TNT {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-							p.sendMessage(TNT.getNowDeactivated(tempRegion));
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -70,9 +65,6 @@ public class TNT {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-										  ? TNT.getNowActivated(tempRegion)
-										  : TNT.getNowDeactivated(tempRegion));
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
@@ -87,9 +79,6 @@ public class TNT {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-										  ? TNT.getNowActivated(tempRegion)
-										  : TNT.getNowDeactivated(tempRegion));
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
@@ -104,9 +93,6 @@ public class TNT {
 							GlobalMessageUtils.sendNotApplicableRegion(p);
 						} else {
 							tempRegion.setFlag(Flags.TNT, tempRegion.getFlag(Flags.TNT) == StateFlag.State.DENY ? StateFlag.State.ALLOW : StateFlag.State.DENY);
-							p.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-										  ? TNT.getNowActivated(tempRegion)
-										  : TNT.getNowDeactivated(tempRegion));
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
@@ -124,7 +110,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -137,7 +122,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -152,7 +136,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -165,7 +148,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -180,7 +162,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -193,7 +174,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -208,7 +188,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -221,7 +200,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -236,7 +214,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -249,7 +226,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
@@ -264,7 +240,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
-								p.sendMessage(TNT.getNowActivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
@@ -277,7 +252,6 @@ public class TNT {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
-								p.sendMessage(TNT.getNowDeactivated(tempRegion));
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
