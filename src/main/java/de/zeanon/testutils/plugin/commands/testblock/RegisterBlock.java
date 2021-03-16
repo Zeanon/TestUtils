@@ -79,7 +79,7 @@ public class RegisterBlock {
 					copyPoint = region.getMinimumPoint();
 				}
 
-				try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, 1000000)) {
+				try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
 					final @NotNull ForwardExtentCopy copy = new ForwardExtentCopy(
 							editSession, region, clipboard, copyPoint
 					);
