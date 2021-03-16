@@ -29,8 +29,8 @@ public class TNT {
 						for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 								tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-													   ? TNT.getNowActivated(tempRegion)
-													   : TNT.getNowDeactivated(tempRegion));
+													   ? TNT.getNowActivated(tempRegion, "your")
+													   : TNT.getNowDeactivated(tempRegion, "your"));
 							}
 						}
 					}
@@ -43,7 +43,7 @@ public class TNT {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-									tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+									tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "your"));
 								}
 							}
 						}
@@ -55,7 +55,7 @@ public class TNT {
 							tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-									tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+									tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "your"));
 								}
 							}
 						}
@@ -68,8 +68,8 @@ public class TNT {
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-														   ? TNT.getNowActivated(tempRegion)
-														   : TNT.getNowDeactivated(tempRegion));
+														   ? TNT.getNowActivated(tempRegion, "other")
+														   : TNT.getNowDeactivated(tempRegion, "other"));
 								}
 							}
 						}
@@ -82,8 +82,8 @@ public class TNT {
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-														   ? TNT.getNowActivated(tempRegion)
-														   : TNT.getNowDeactivated(tempRegion));
+														   ? TNT.getNowActivated(tempRegion, "north")
+														   : TNT.getNowDeactivated(tempRegion, "north"));
 								}
 							}
 						}
@@ -96,8 +96,8 @@ public class TNT {
 							for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
 									tempPlayer.sendMessage(tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
-														   ? TNT.getNowActivated(tempRegion)
-														   : TNT.getNowDeactivated(tempRegion));
+														   ? TNT.getNowActivated(tempRegion, "south")
+														   : TNT.getNowDeactivated(tempRegion, "south"));
 								}
 							}
 						}
@@ -112,7 +112,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "other"));
 									}
 								}
 							}
@@ -124,7 +124,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "other"));
 									}
 								}
 							}
@@ -138,7 +138,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "north"));
 									}
 								}
 							}
@@ -150,7 +150,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "north"));
 									}
 								}
 							}
@@ -164,7 +164,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "south"));
 									}
 								}
 							}
@@ -176,7 +176,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "south"));
 									}
 								}
 							}
@@ -190,7 +190,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "other"));
 									}
 								}
 							}
@@ -202,7 +202,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "other"));
 									}
 								}
 							}
@@ -216,7 +216,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "north"));
 									}
 								}
 							}
@@ -228,7 +228,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "north"));
 									}
 								}
 							}
@@ -242,7 +242,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowActivated(tempRegion, "south"));
 									}
 								}
 							}
@@ -254,7 +254,7 @@ public class TNT {
 								tempRegion.setFlag(Flags.TNT, StateFlag.State.DENY);
 								for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 									if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion));
+										tempPlayer.sendMessage(TNT.getNowDeactivated(tempRegion, "south"));
 									}
 								}
 							}
@@ -267,13 +267,13 @@ public class TNT {
 		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 
-	private @NotNull String getNowActivated(final @NotNull ProtectedRegion tempRegion) {
+	private @NotNull String getNowActivated(final @NotNull ProtectedRegion tempRegion, final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
-			   + ChatColor.RED + "TNT is now " + ChatColor.GREEN + "activated" + ChatColor.RED + " in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
+			   + org.bukkit.ChatColor.RED + "TNT has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the " + area + " side of your TestArea.";
 	}
 
-	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion) {
+	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion, final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
-			   + ChatColor.RED + "TNT is now deactivated in '" + ChatColor.DARK_RED + tempRegion.getId().substring(9) + ChatColor.RED + "'.";
+			   + org.bukkit.ChatColor.RED + "TNT has been deactivated on the " + area + " side of your TestArea.";
 	}
 }

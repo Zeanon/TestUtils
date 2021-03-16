@@ -103,12 +103,12 @@ public class RegisterBlock {
 					}
 
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "You registered a new testblock with the name: "
-								  + ChatColor.DARK_RED + (name == null ? "default" : name));
+								  + ChatColor.RED + "You registered a new testblock with the name '"
+								  + ChatColor.DARK_RED + (name == null ? "default" : name) + ChatColor.RED + "'.");
 				} catch (WorldEditException | IOException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, registering a new testblock with the name: "
-								  + ChatColor.DARK_RED + (name == null ? "default" : name));
+								  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
+								  + ChatColor.DARK_RED + (name == null ? "default" : name) + ChatColor.RED + "'.");
 					e.printStackTrace();
 				}
 			}
