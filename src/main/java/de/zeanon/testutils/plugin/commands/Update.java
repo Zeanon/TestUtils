@@ -47,7 +47,7 @@ public class Update {
 				}
 			} else {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
-							  + ChatColor.RED + "You don't have a  pending update request.");
+							  + ChatColor.RED + "You don't have a pending update request.");
 			}
 		} else {
 			p.sendMessage(ChatColor.RED + "Too many arguments.");

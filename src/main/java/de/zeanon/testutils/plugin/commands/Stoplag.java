@@ -38,7 +38,8 @@ public class Stoplag {
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
 						 || oppositeRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
-						tempPlayer.sendMessage(Stoplag.getNowActivated(tempRegion, "your"));
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
 					}
 				}
 			}
@@ -57,7 +58,8 @@ public class Stoplag {
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
 							 || oppositeRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
-							tempPlayer.sendMessage(Stoplag.getNowDeactivated(tempRegion, "your"));
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED + "Stoplag has been deactivated in your TestArea.");
 						}
 					}
 				}
@@ -72,7 +74,7 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated(tempRegion, "your"));
+							tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
 						}
 					}
 				}
@@ -87,7 +89,7 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated(tempRegion, "other"));
+							tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
 						}
 					}
 				}
@@ -102,7 +104,7 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated(tempRegion, "north"));
+							tempPlayer.sendMessage(Stoplag.getNowActivated("north"));
 						}
 					}
 				}
@@ -117,7 +119,7 @@ public class Stoplag {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated(tempRegion, "south"));
+							tempPlayer.sendMessage(Stoplag.getNowActivated("south"));
 						}
 					}
 				}
@@ -173,7 +175,7 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated(tempRegion, "your"));
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
 					}
 				}
 			}
@@ -188,7 +190,7 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated(tempRegion, "other"));
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
 					}
 				}
 			}
@@ -203,7 +205,7 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated(tempRegion, "north"));
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("north"));
 					}
 				}
 			}
@@ -218,19 +220,19 @@ public class Stoplag {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated(tempRegion, "south"));
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("south"));
 					}
 				}
 			}
 		}
 	}
 
-	private @NotNull String getNowActivated(final @NotNull ProtectedRegion tempRegion, final @NotNull String area) {
+	private @NotNull String getNowActivated(final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
 			   + org.bukkit.ChatColor.RED + "Stoplag has been " + net.md_5.bungee.api.ChatColor.GREEN + "activated" + net.md_5.bungee.api.ChatColor.RED + " on the " + area + " side of your TestArea.";
 	}
 
-	private @NotNull String getNowDeactivated(final @NotNull ProtectedRegion tempRegion, final @NotNull String area) {
+	private @NotNull String getNowDeactivated(final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
 			   + org.bukkit.ChatColor.RED + "Stoplag has been deactivated on the " + area + " side of your TestArea.";
 	}
