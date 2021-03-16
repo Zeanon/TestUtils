@@ -32,7 +32,7 @@ public class SessionFactory {
 		} else {
 			SessionFactory.undoSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
 		}
-		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), 2000000);
+		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
 		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(tempSession);
 		return tempSession;
 	}
