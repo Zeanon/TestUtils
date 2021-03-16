@@ -79,19 +79,19 @@ public class RegisterBlock {
 					copyPoint = region.getMinimumPoint();
 				}
 
-				try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
-					ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-							editSession, region, region.getMinimumPoint(), clipboard, copyPoint
+				try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, 1000000)) {
+					final @NotNull ForwardExtentCopy copy = new ForwardExtentCopy(
+							editSession, region, clipboard, copyPoint
 					);
 
-					forwardExtentCopy.setCopyingEntities(false);
-					forwardExtentCopy.setCopyingBiomes(false);
+					copy.setCopyingEntities(false);
+					copy.setCopyingBiomes(false);
 
 					if (tempRegion.getId().endsWith("_south")) {
-						forwardExtentCopy.setTransform(new AffineTransform().rotateY(180));
+						copy.setTransform(new AffineTransform().rotateY(180));
 					}
 
-					Operations.complete(forwardExtentCopy);
+					Operations.complete(copy);
 
 					File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + name + ".schem")
 												 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/default.schem");
