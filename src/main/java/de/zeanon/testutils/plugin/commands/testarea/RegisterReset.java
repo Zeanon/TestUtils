@@ -69,7 +69,7 @@ public class RegisterReset {
 
 		final @NotNull BlockVector3 copyPoint = region.getMinimumPoint();
 
-		try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, 1000000)) {
+		try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
 			final @NotNull ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
 					editSession, region, clipboard, copyPoint
 			);
