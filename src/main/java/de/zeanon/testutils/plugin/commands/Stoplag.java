@@ -93,10 +93,14 @@ public class Stoplag {
 				} else {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+						if (tempPlayer == p) {
+							tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
+						} else {
+							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
+							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+							}
 						}
 					}
 				}
@@ -111,10 +115,14 @@ public class Stoplag {
 				} else {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+						if (tempPlayer == p) {
+							tempPlayer.sendMessage(Stoplag.getNowActivated("the north"));
+						} else {
+							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
+							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+							}
 						}
 					}
 				}
@@ -129,10 +137,14 @@ public class Stoplag {
 				} else {
 					Stoplag.stoplagRegions.add(tempRegion.getId());
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-							tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+						if (tempPlayer == p) {
+							tempPlayer.sendMessage(Stoplag.getNowActivated("the south"));
+						} else {
+							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
+							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+								tempPlayer.sendMessage(Stoplag.getNowActivated("other"));
+							}
 						}
 					}
 				}
@@ -206,10 +218,14 @@ public class Stoplag {
 			} else {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-					} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+					if (tempPlayer == p) {
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the other"));
+					} else {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
+						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+						}
 					}
 				}
 			}
@@ -224,10 +240,14 @@ public class Stoplag {
 			} else {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-					} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+					if (tempPlayer == p) {
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the north"));
+					} else {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
+						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+						}
 					}
 				}
 			}
@@ -242,10 +262,14 @@ public class Stoplag {
 			} else {
 				Stoplag.stoplagRegions.remove(tempRegion.getId());
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-					} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-						tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+					if (tempPlayer == p) {
+						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the south"));
+					} else {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
+						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(Stoplag.getNowDeactivated("other"));
+						}
 					}
 				}
 			}

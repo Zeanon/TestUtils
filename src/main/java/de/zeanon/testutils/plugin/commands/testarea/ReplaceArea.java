@@ -29,33 +29,33 @@ public class ReplaceArea {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p, final boolean toTNT) {
 		if (args.length == 1) {
-			ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), TestAreaUtils.getOppositeRegion(p), "your", "the other", toTNT, null, null);
+			ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), TestAreaUtils.getOppositeRegion(p), "your", toTNT, null, null);
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-other")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "the other", "your", toTNT, null, null);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "your", toTNT, null, null);
 			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", "the north", toTNT, null, null);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", toTNT, null, null);
 			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", "the south", toTNT, null, null);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", toTNT, null, null);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
 			}
 		} else if (args.length == 3) {
-			ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), TestAreaUtils.getOppositeRegion(p), "your", "the other", toTNT, args[1], args[2]);
+			ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p), TestAreaUtils.getOppositeRegion(p), "your", toTNT, args[1], args[2]);
 		} else if (args.length == 4) {
 			if (args[3].equalsIgnoreCase("-other")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "the other", "your", toTNT, args[1], args[2]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "your", toTNT, args[1], args[2]);
 			} else if (args[3].equalsIgnoreCase("-n") || args[3].equalsIgnoreCase("-north")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", "the north", toTNT, args[1], args[2]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", toTNT, args[1], args[2]);
 			} else if (args[3].equalsIgnoreCase("-s") || args[3].equalsIgnoreCase("-south")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", "the south", toTNT, args[1], args[2]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", toTNT, args[1], args[2]);
 			} else if (args[1].equalsIgnoreCase("-other")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "the other", "your", toTNT, args[2], args[3]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getOppositeRegion(p), TestAreaUtils.getRegion(p), "your", toTNT, args[2], args[3]);
 			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", "the north", toTNT, args[2], args[3]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getNorthRegion(p), TestAreaUtils.getSouthRegion(p), "the north", toTNT, args[2], args[3]);
 			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
-				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", "the south", toTNT, args[2], args[3]);
+				ReplaceArea.replaceArea(p, TestAreaUtils.getSouthRegion(p), TestAreaUtils.getNorthRegion(p), "the south", toTNT, args[2], args[3]);
 			}
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead
@@ -67,7 +67,6 @@ public class ReplaceArea {
 							 final @Nullable ProtectedRegion tempRegion,
 							 final @Nullable ProtectedRegion otherRegion,
 							 final @NotNull String area,
-							 final @NotNull String otherArea,
 							 final boolean toTNT,
 							 final @Nullable String source,
 							 final @Nullable String destination) {
@@ -131,7 +130,7 @@ public class ReplaceArea {
 						}
 
 						for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							if (tempPlayer == p) {
 								tempPlayer.sendMessage(GlobalMessageUtils.messageHead
 													   + ChatColor.RED
 													   + "The "
@@ -145,20 +144,36 @@ public class ReplaceArea {
 													   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
 													   + ChatColor.RED
 													   + "'.");
-							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-								tempPlayer.sendMessage(GlobalMessageUtils.messageHead
-													   + ChatColor.RED
-													   + "The "
-													   + ChatColor.DARK_RED
-													   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
-													   + ChatColor.RED
-													   + " on "
-													   + otherArea
-													   + " side has been replaced to '"
-													   + ChatColor.DARK_RED
-													   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
-													   + ChatColor.RED
-													   + "'.");
+							} else {
+								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+									tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+														   + ChatColor.RED
+														   + "The "
+														   + ChatColor.DARK_RED
+														   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
+														   + ChatColor.RED
+														   + " on "
+														   + "your"
+														   + " side has been replaced to '"
+														   + ChatColor.DARK_RED
+														   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+														   + ChatColor.RED
+														   + "'.");
+								} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+									tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+														   + ChatColor.RED
+														   + "The "
+														   + ChatColor.DARK_RED
+														   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
+														   + ChatColor.RED
+														   + " on "
+														   + "the other"
+														   + " side has been replaced to '"
+														   + ChatColor.DARK_RED
+														   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+														   + ChatColor.RED
+														   + "'.");
+								}
 							}
 						}
 					}
