@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.handlers;
 
+import de.zeanon.testutils.plugin.commands.Backup;
 import de.zeanon.testutils.plugin.commands.TNT;
 import de.zeanon.testutils.plugin.commands.TestUtils;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
@@ -23,6 +24,8 @@ public class CommandHandler implements CommandExecutor {
 			TestBlock.execute(args, (Player) sender);
 		} else if (command.getName().equalsIgnoreCase("tnt")) {
 			TNT.execute(args, (Player) sender);
+		} else if (command.getName().equalsIgnoreCase("backup")) {
+			Backup.execute(args, (Player) sender);
 		}
 		return true;
 	}

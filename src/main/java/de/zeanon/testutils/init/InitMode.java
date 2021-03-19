@@ -1,14 +1,11 @@
 package de.zeanon.testutils.init;
 
-import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
-import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.handlers.CommandHandler;
@@ -20,15 +17,15 @@ import de.zeanon.testutils.plugin.handlers.tabcompleter.TestUtilsTabCompleter;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplagTabListener;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
 import de.zeanon.testutils.plugin.update.Update;
-import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.BackUp;
+import de.zeanon.testutils.plugin.utils.BackUpScheduler;
+import de.zeanon.testutils.plugin.utils.BackUpSequence;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
-import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -39,9 +36,13 @@ import org.jetbrains.annotations.Nullable;
 public class InitMode {
 
 	@Getter
+	private final @NotNull SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy 'at' HH-mm-ss");
+	@Getter
 	private ThunderConfig config;
 	@Getter
 	private RegionContainer regionContainer;
+	@Getter
+	private BackUp manualBackUp;
 
 	public void initPlugin() {
 		try {
@@ -86,6 +87,8 @@ public class InitMode {
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(testUtilsTabCompleter);
+			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setExecutor(commandHandler);
+			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setTabCompleter(testUtilsTabCompleter);
 
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			if (Bukkit.getVersion().contains("git-Paper")) {
@@ -95,11 +98,18 @@ public class InitMode {
 			}
 
 			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
-			InitMode.cleanUpResets();
 
 			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
 				ScoreBoard.initialize(p);
 			}
+
+			InitMode.manualBackUp = new BackUp(BackUpSequence.MANUAL);
+
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
+
+			BackUpScheduler.backup();
+
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 		} else {
 			InitMode.enableSleepMode();
 		}
@@ -134,23 +144,6 @@ public class InitMode {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Updating Configs...");
 			Update.checkConfigUpdate();
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
-		}
-	}
-
-	private void cleanUpResets() {
-		try {
-			@NotNull RegionManager tempManager;
-			for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
-				tempManager = Objects.notNull(InitMode.getRegionContainer().get(new BukkitWorld(Bukkit.getWorld(worldFolder.getName()))));
-				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
-					if (!tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") || !tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
-						FileUtils.deleteDirectory(regionFolder);
-						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
-					}
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

@@ -101,12 +101,12 @@ public class ResetArea {
 								} else {
 									p.sendMessage(GlobalMessageUtils.messageHead
 												  + ChatColor.RED + "There is no reset for '"
-												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 								}
 							} catch (Exception e) {
 								p.sendMessage(GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "There has been an error, pasting the reset for '"
-											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' on your side.");
+											  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 								e.printStackTrace();
 							}
 						}

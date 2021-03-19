@@ -1,10 +1,9 @@
 package de.zeanon.testutils.plugin.utils;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.update.Update;
+import java.util.Arrays;
 import lombok.experimental.UtilityClass;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +19,10 @@ public class ConfigUtils {
 	 *
 	 * @return value.
 	 */
-	public int getInt(final @NotNull String key) {
-		try {
-			return Objects.notNull(InitMode.getConfig()).getIntUseArray(key);
-		} catch (ObjectNullException e) {
+	public int getInt(final @NotNull String... key) {
+		if (InitMode.getConfig().hasKeyUseArray(key)) {
+			return InitMode.getConfig().getIntUseArray(key);
+		} else {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -41,10 +40,10 @@ public class ConfigUtils {
 	 *
 	 * @return value.
 	 */
-	public boolean getBoolean(final @NotNull String key) {
-		try {
-			return Objects.notNull(InitMode.getConfig()).getBooleanUseArray(key);
-		} catch (ObjectNullException e) {
+	public boolean getBoolean(final @NotNull String... key) {
+		if (InitMode.getConfig().hasKeyUseArray(key)) {
+			return InitMode.getConfig().getBooleanUseArray(key);
+		} else {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -62,16 +61,22 @@ public class ConfigUtils {
 	 *
 	 * @return the default value.
 	 */
-	private @NotNull Object getDefaultValue(final @NotNull String key) {
-		switch (key) {
-			case "Automatic Reload":
-				return true;
-			case "Max History":
-				return 10;
-			case "Plugin Version":
-				return TestUtils.getInstance().getDescription().getVersion();
-			default:
-				return new Object();
+	private @NotNull Object getDefaultValue(final @NotNull String... key) {
+		if (Arrays.equals(new String[]{"Automatic Reload"}, key)) {
+			return true;
+		} else if (Arrays.equals(new String[]{"Max History"}, key)) {
+			return 10;
+		} else if (Arrays.equals(new String[]{"Plugin Version"}, key)) {
+			return TestUtils.getInstance().getDescription().getVersion();
+		} else if (Arrays.equals(new String[]{"Backups", "manual"}, key)) {
+			return 10;
+		} else if (Arrays.equals(new String[]{"Backups", "startup"}, key)) {
+			return 10;
+		} else if (Arrays.equals(new String[]{"Backups", "hourly"}, key)) {
+			return 24;
+		} else if (Arrays.equals(new String[]{"Backups", "daily"}, key)) {
+			return 7;
 		}
+		return new Object();
 	}
 }

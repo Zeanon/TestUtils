@@ -28,6 +28,21 @@ public class TestAreaUtils {
 		return null;
 	}
 
+	public @Nullable ProtectedRegion getRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
+		switch (pasteSide) {
+			case NORTH:
+				return TestAreaUtils.getNorthRegion(p);
+			case SOUTH:
+				return TestAreaUtils.getSouthRegion(p);
+			case HERE:
+				return TestAreaUtils.getRegion(p);
+			case OTHER:
+				return TestAreaUtils.getOppositeRegion(p);
+			default:
+				return null;
+		}
+	}
+
 	public @Nullable ProtectedRegion getOppositeRegion(final @NotNull Player p) {
 		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
 																		   .get(new BukkitWorld(p.getWorld())));
@@ -39,6 +54,21 @@ public class TestAreaUtils {
 			}
 		}
 		return null;
+	}
+
+	public @Nullable ProtectedRegion getOppositeRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
+		switch (pasteSide) {
+			case NORTH:
+				return TestAreaUtils.getSouthRegion(p);
+			case SOUTH:
+				return TestAreaUtils.getNorthRegion(p);
+			case HERE:
+				return TestAreaUtils.getOppositeRegion(p);
+			case OTHER:
+				return TestAreaUtils.getRegion(p);
+			default:
+				return null;
+		}
 	}
 
 	public @Nullable ProtectedRegion getNorthRegion(final @NotNull Player p) {

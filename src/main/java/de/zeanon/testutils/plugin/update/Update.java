@@ -47,10 +47,15 @@ public class Update {
 
 	public void checkConfigUpdate() {
 		try {
+			System.out.println(InitMode.getConfig().fileData());
 			if (!Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
 						.equals(TestUtils.getInstance().getDescription().getVersion())
 				|| !InitMode.getConfig().hasKeyUseArray("Max History")
-				|| !InitMode.getConfig().hasKeyUseArray("Automatic Reload")) {
+				|| !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "daily")) {
 
 				Update.updateConfig();
 			}
@@ -67,12 +72,32 @@ public class Update {
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 
+			final int maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
+								  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
+								  : 10;
+
+			final int maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
+								   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
+								   : 10;
+
+			final int maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
+								  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
+								  : 24;
+
+			final int maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
+								 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
+								 : 7;
+
 			InitMode.getConfig().setDataFromResource("resources/config.tf");
 
 			//noinspection unchecked
 			InitMode.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
 												new Pair<>(new String[]{"Max History"}, maxHistory),
-												new Pair<>(new String[]{"Automatic Reload"}, autoReload));
+												new Pair<>(new String[]{"Automatic Reload"}, autoReload),
+												new Pair<>(new String[]{"Backups", "manual"}, maxManual),
+												new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
+												new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
+												new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
 		} catch (RuntimeIOException e) {

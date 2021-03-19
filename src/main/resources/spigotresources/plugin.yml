@@ -17,3 +17,6 @@ commands:
 
   tnt:
     description: Toggle TNT
+
+  backup:
+    description: Creates a backup of a given TestArea

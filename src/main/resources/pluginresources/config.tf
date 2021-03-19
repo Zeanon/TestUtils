@@ -25,3 +25,17 @@ Max History = 10
 # If you have PlugMan installed, it will only reload itself, not the whole server.
 # PlugMan: https://dev.bukkit.org/projects/plugman
 Automatic Reload = true
+
+Backups {
+    # Maximum amount of manual backups per player per region
+    manual = 10
+
+    # Maximum amount of backups per region created on startup
+    startup = 10
+
+    # Maximum amount of backups per region created on an hourly basis
+    hourly = 24
+
+    # Maximum amount of backups per region created on a daily basis
+    daily = 7
+}
