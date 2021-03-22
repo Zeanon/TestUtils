@@ -1,10 +1,10 @@
-package de.zeanon.testutils.plugin.utils;
+package de.zeanon.testutils.plugin.utils.enums;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 
-public enum BackUpSequence {
+public enum BackUpMode {
 
 	STARTUP("automatic/startup"),
 	HOURLY("automatic/hourly"),
@@ -14,28 +14,33 @@ public enum BackUpSequence {
 
 	private final @NotNull String path;
 
-	BackUpSequence(final @NotNull String path) {
+	BackUpMode(final @NotNull String path) {
 		this.path = path;
 	}
 
-	public static BackUpSequence parse(final @NotNull String cycle) {
+	public static BackUpMode parse(final @NotNull String cycle) {
 		switch (cycle) {
 			case "-manual":
-				return BackUpSequence.MANUAL;
+				return BackUpMode.MANUAL;
 			case "-startup":
-				return BackUpSequence.STARTUP;
+				return BackUpMode.STARTUP;
 			case "-hourly":
-				return BackUpSequence.HOURLY;
+				return BackUpMode.HOURLY;
 			case "-daily":
-				return BackUpSequence.DAILY;
+				return BackUpMode.DAILY;
 			default:
-				return BackUpSequence.NONE;
+				return BackUpMode.NONE;
 		}
+	}
+
+	@Contract(pure = true)
+	public @NotNull String getPath() {
+		return this.path;
 	}
 
 	@Contract(pure = true)
 	@Override
 	public @NotNull String toString() {
-		return this.path;
+		return this.name().toLowerCase();
 	}
 }

@@ -19,8 +19,8 @@ import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStopla
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.BackUp;
 import de.zeanon.testutils.plugin.utils.BackUpScheduler;
-import de.zeanon.testutils.plugin.utils.BackUpSequence;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
+import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.text.SimpleDateFormat;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class InitMode {
 
 	@Getter
-	private final @NotNull SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy 'at' HH-mm-ss");
+	private final @NotNull SimpleDateFormat formatter = new SimpleDateFormat("HH-mm-ss'#'dd-MM-yyyy");
 	@Getter
 	private ThunderConfig config;
 	@Getter
@@ -103,7 +103,7 @@ public class InitMode {
 				ScoreBoard.initialize(p);
 			}
 
-			InitMode.manualBackUp = new BackUp(BackUpSequence.MANUAL);
+			InitMode.manualBackUp = new BackUp(BackUpMode.MANUAL);
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
 

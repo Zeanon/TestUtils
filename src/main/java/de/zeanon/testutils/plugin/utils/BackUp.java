@@ -22,6 +22,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
+import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 public class BackUp implements Runnable {
 
-	private final @NotNull BackUpSequence sequence;
+	private final @NotNull BackUpMode sequence;
 
 	@Override
 	public void run() {
@@ -53,8 +54,8 @@ public class BackUp implements Runnable {
 					final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + worldFolder.getName() + "/" + regionFolder.getName());
 
 					if (tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") && tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
-						if (this.sequence == BackUpSequence.DAILY) {
-							final @NotNull File dailyBackup = new File(backupFolder, this.sequence.toString());
+						if (this.sequence == BackUpMode.DAILY) {
+							final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath());
 							if (dailyBackup.exists()) {
 								@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
 								while (files.size() > ConfigUtils.getInt("Backups", "daily") - 1) {
@@ -66,8 +67,8 @@ public class BackUp implements Runnable {
 									}
 								}
 							}
-						} else if (this.sequence == BackUpSequence.HOURLY) {
-							final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.toString());
+						} else if (this.sequence == BackUpMode.HOURLY) {
+							final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath());
 							if (hourlyBackup.exists()) {
 								@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
 								while (files.size() > ConfigUtils.getInt("Backups", "hourly") - 1) {
@@ -79,8 +80,8 @@ public class BackUp implements Runnable {
 									}
 								}
 							}
-						} else if (this.sequence == BackUpSequence.STARTUP) {
-							final @NotNull File startupBackup = new File(backupFolder, this.sequence.toString());
+						} else if (this.sequence == BackUpMode.STARTUP) {
+							final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath());
 							if (startupBackup.exists()) {
 								@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
 								while (files.size() > ConfigUtils.getInt("Backups", "startup") - 1) {
@@ -94,8 +95,8 @@ public class BackUp implements Runnable {
 							}
 						}
 
-						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.toString(), name);
-						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.toString(), name);
+						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(), name);
+						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(), name);
 					} else {
 						FileUtils.deleteDirectory(regionFolder);
 						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));

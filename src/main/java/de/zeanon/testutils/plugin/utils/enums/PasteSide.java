@@ -1,11 +1,10 @@
-package de.zeanon.testutils.plugin.utils;
+package de.zeanon.testutils.plugin.utils.enums;
 
 import org.jetbrains.annotations.NotNull;
 
 
 public enum PasteSide {
 
-	ALL("all"),
 	NORTH("the north"),
 	SOUTH("the south"),
 	HERE("your"),
