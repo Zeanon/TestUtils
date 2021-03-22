@@ -47,7 +47,6 @@ public class Update {
 
 	public void checkConfigUpdate() {
 		try {
-			System.out.println(InitMode.getConfig().fileData());
 			if (!Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
 						.equals(TestUtils.getInstance().getDescription().getVersion())
 				|| !InitMode.getConfig().hasKeyUseArray("Max History")

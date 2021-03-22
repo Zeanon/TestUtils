@@ -117,14 +117,14 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					|| args[1].equalsIgnoreCase("-south")) {
 					return this.getCompletions(args[3], BlockTypes.getBlocks());
 				} else {
-					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
+					return this.getCompletions(args[3], "-other", "-north", "-n", "-south", "-s");
 				}
 			}
 		}
 		return null;
 	}
 
-	private @NotNull List<String> getCompletions(final @NotNull String arg, final @NotNull String... completions) {
+	public @NotNull List<String> getCompletions(final @NotNull String arg, final @NotNull String... completions) {
 		return Arrays.stream(completions)
 					 .filter(completion -> completion.startsWith(arg.toLowerCase()))
 					 .collect(Collectors.toList());
