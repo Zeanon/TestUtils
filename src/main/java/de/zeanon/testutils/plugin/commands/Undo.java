@@ -6,7 +6,6 @@ import de.zeanon.testutils.plugin.utils.SessionFactory;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,21 +14,16 @@ import org.jetbrains.annotations.Nullable;
 public class Undo {
 
 	public void undo(final @NotNull Player p) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try (final @Nullable EditSession tempSession = SessionFactory.getUndoSession(p)) {
-					if (tempSession == null) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Nothing left to undo.");
-					} else {
-						tempSession.undo(tempSession);
-						SessionFactory.registerRedoSession(p, tempSession);
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "You undid your last action.");
-					}
-				}
+		try (final @Nullable EditSession tempSession = SessionFactory.getUndoSession(p)) {
+			if (tempSession == null) {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Nothing left to undo.");
+			} else {
+				tempSession.undo(tempSession);
+				SessionFactory.registerRedoSession(p, tempSession);
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "You undid your last action.");
 			}
-		}.runTask(de.zeanon.testutils.TestUtils.getInstance());
+		}
 	}
 }

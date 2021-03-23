@@ -12,6 +12,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -35,7 +36,12 @@ class DefaultUpdate {
 
 			if (autoReload) {
 				System.out.println("Server is reloading.");
-				Bukkit.getServer().reload();
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						Bukkit.getServer().reload();
+					}
+				}.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			System.out.println(instance.getName() + " could not be updated.");
@@ -63,7 +69,12 @@ class DefaultUpdate {
 			if (autoReload) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 							  ChatColor.RED + "Server is reloading...");
-				Bukkit.getServer().reload();
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						Bukkit.getServer().reload();
+					}
+				}.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +

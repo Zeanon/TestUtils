@@ -19,7 +19,7 @@ public class BackUpScheduler {
 
 	public void backup() {
 		//Backup once the Plugin starts
-		final @NotNull BackUp onStart = new BackUp(BackUpMode.STARTUP);
+		final @NotNull BackupCreator onStart = new BackupCreator(BackUpMode.STARTUP);
 		onStart.run();
 
 
@@ -29,7 +29,7 @@ public class BackUpScheduler {
 																.withSecond(0)
 																.plusHours(1);
 
-		final @NotNull BackUp hourlyBackup = new BackUp(BackUpMode.HOURLY);
+		final @NotNull BackupCreator hourlyBackup = new BackupCreator(BackUpMode.HOURLY);
 
 		BackUpScheduler.hourly.scheduleAtFixedRate(hourlyBackup, ZonedDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
 
@@ -41,7 +41,7 @@ public class BackUpScheduler {
 															   .withSecond(0)
 															   .plusDays(1);
 
-		final @NotNull BackUp dailyBackup = new BackUp(BackUpMode.DAILY);
+		final @NotNull BackupCreator dailyBackup = new BackupCreator(BackUpMode.DAILY);
 
 		BackUpScheduler.daily.scheduleAtFixedRate(dailyBackup, ZonedDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 	}

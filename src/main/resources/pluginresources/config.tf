@@ -28,14 +28,37 @@ Automatic Reload = true
 
 Backups {
     # Maximum amount of manual backups per player per region
-    manual = 10
+    manual {
+        # enable manual backups.
+        enable = true
+
+        # how many manual backups should be kept at max?
+        amount = 10
+    }
 
     # Maximum amount of backups per region created on startup
-    startup = 10
+    startup {
+        # enable backups when the plugin is getting enabled.
+        enable = true
+
+        # how many startup backups should be kept at max?
+        amount = 10
+    }
 
     # Maximum amount of backups per region created on an hourly basis
-    hourly = 24
+    hourly {
+        # enable hourly backups.
+        enable = true
 
-    # Maximum amount of backups per region created on a daily basis
-    daily = 7
+        # how many hourly backups should be kept at max?
+        amount = 24
+    }
+
+    daily {
+        # enable daily backups at 00:00.
+        enable = true
+
+        # how many daily backups should be kept at max?
+        amount = 7
+    }
 }

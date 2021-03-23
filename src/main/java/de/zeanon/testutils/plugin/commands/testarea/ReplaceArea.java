@@ -10,7 +10,6 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -19,7 +18,6 @@ import java.util.Set;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,126 +68,121 @@ public class ReplaceArea {
 							 final boolean toTNT,
 							 final @Nullable String source,
 							 final @Nullable String destination) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-					if (tempRegion == null || otherRegion == null) {
-						GlobalMessageUtils.sendNotApplicableRegion(p);
+		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+			if (tempRegion == null || otherRegion == null) {
+				GlobalMessageUtils.sendNotApplicableRegion(p);
+			} else {
+				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+
+				if (source != null) {
+					final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
+					try {
+						sourceBlocks.add(Objects.notNull(BlockTypes.get(source)).getDefaultState().toBaseBlock());
+					} catch (ObjectNullException e) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED
+									  + "There has been an error, replacing '"
+									  + ChatColor.DARK_RED
+									  + source
+									  + ChatColor.RED
+									  + " on "
+									  + area
+									  + " side due to '"
+									  + ChatColor.DARK_RED
+									  + source
+									  + ChatColor.RED
+									  + "' not being a valid block.");
+					}
+
+					try {
+						editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination))).getDefaultState().toBaseBlock());
+					} catch (ObjectNullException e) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED
+									  + "There has been an error, replacing to '"
+									  + ChatColor.DARK_RED
+									  + destination
+									  + ChatColor.RED
+									  + " on "
+									  + area
+									  + " side due to '"
+									  + ChatColor.DARK_RED
+									  + destination
+									  + ChatColor.RED
+									  + "' not being a valid block.");
+					}
+				} else {
+					if (toTNT) {
+						final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
+						obsidian.add(Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
+						editSession.replaceBlocks(region, obsidian, Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
 					} else {
-						final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-						final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+						final @NotNull Set<BaseBlock> tnt = new HashSet<>();
+						tnt.add(Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
+						editSession.replaceBlocks(region, tnt, Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
+					}
+				}
 
-						if (source != null) {
-							final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
-							try {
-								sourceBlocks.add(Objects.notNull(BlockTypes.get(source)).getDefaultState().toBaseBlock());
-							} catch (ObjectNullException e) {
-								p.sendMessage(GlobalMessageUtils.messageHead
-											  + ChatColor.RED
-											  + "There has been an error, replacing '"
-											  + ChatColor.DARK_RED
-											  + source
-											  + ChatColor.RED
-											  + " on "
-											  + area
-											  + " side due to '"
-											  + ChatColor.DARK_RED
-											  + source
-											  + ChatColor.RED
-											  + "' not being a valid block.");
-							}
-
-							try {
-								editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination))).getDefaultState().toBaseBlock());
-							} catch (ObjectNullException e) {
-								p.sendMessage(GlobalMessageUtils.messageHead
-											  + ChatColor.RED
-											  + "There has been an error, replacing to '"
-											  + ChatColor.DARK_RED
-											  + destination
-											  + ChatColor.RED
-											  + " on "
-											  + area
-											  + " side due to '"
-											  + ChatColor.DARK_RED
-											  + destination
-											  + ChatColor.RED
-											  + "' not being a valid block.");
-							}
-						} else {
-							if (toTNT) {
-								final @NotNull Set<BaseBlock> obsidian = new HashSet<>();
-								obsidian.add(Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
-								editSession.replaceBlocks(region, obsidian, Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
-							} else {
-								final @NotNull Set<BaseBlock> tnt = new HashSet<>();
-								tnt.add(Objects.notNull(BlockTypes.TNT).getDefaultState().toBaseBlock());
-								editSession.replaceBlocks(region, tnt, Objects.notNull(BlockTypes.OBSIDIAN).getDefaultState().toBaseBlock());
-							}
-						}
-
-						for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-							if (tempPlayer == p) {
-								tempPlayer.sendMessage(GlobalMessageUtils.messageHead
-													   + ChatColor.RED
-													   + "The "
-													   + ChatColor.DARK_RED
-													   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
-													   + ChatColor.RED
-													   + " on "
-													   + area
-													   + " side has been replaced to '"
-													   + ChatColor.DARK_RED
-													   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
-													   + ChatColor.RED
-													   + "'.");
-							} else {
-								if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-									tempPlayer.sendMessage(GlobalMessageUtils.messageHead
-														   + ChatColor.RED
-														   + "The "
-														   + ChatColor.DARK_RED
-														   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
-														   + ChatColor.RED
-														   + " on "
-														   + "your"
-														   + " side has been replaced to '"
-														   + ChatColor.DARK_RED
-														   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
-														   + ChatColor.RED
-														   + "'.");
-								} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
-									tempPlayer.sendMessage(GlobalMessageUtils.messageHead
-														   + ChatColor.RED
-														   + "The "
-														   + ChatColor.DARK_RED
-														   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
-														   + ChatColor.RED
-														   + " on "
-														   + "the other"
-														   + " side has been replaced to '"
-														   + ChatColor.DARK_RED
-														   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
-														   + ChatColor.RED
-														   + "'.");
-								}
-							}
+				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+					if (tempPlayer == p) {
+						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+											   + ChatColor.RED
+											   + "The "
+											   + ChatColor.DARK_RED
+											   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
+											   + ChatColor.RED
+											   + " on "
+											   + area
+											   + " side has been replaced to '"
+											   + ChatColor.DARK_RED
+											   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+											   + ChatColor.RED
+											   + "'.");
+					} else {
+						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED
+												   + "The "
+												   + ChatColor.DARK_RED
+												   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
+												   + ChatColor.RED
+												   + " on "
+												   + "your"
+												   + " side has been replaced to '"
+												   + ChatColor.DARK_RED
+												   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+												   + ChatColor.RED
+												   + "'.");
+						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+												   + ChatColor.RED
+												   + "The "
+												   + ChatColor.DARK_RED
+												   + (source == null ? (toTNT ? "Obsidian" : "TNT") : source)
+												   + ChatColor.RED
+												   + " on "
+												   + "the other"
+												   + " side has been replaced to '"
+												   + ChatColor.DARK_RED
+												   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
+												   + ChatColor.RED
+												   + "'.");
 						}
 					}
-				} catch (WorldEditException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED
-								  + "There has been an error, replacing the "
-								  + ChatColor.DARK_RED
-								  + (toTNT ? "Obsidian" : "TNT")
-								  + ChatColor.RED
-								  + " on "
-								  + area
-								  + " side.");
-					e.printStackTrace();
 				}
 			}
-		}.runTask(TestUtils.getInstance());
+		} catch (WorldEditException e) {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED
+						  + "There has been an error, replacing the "
+						  + ChatColor.DARK_RED
+						  + (toTNT ? "Obsidian" : "TNT")
+						  + ChatColor.RED
+						  + " on "
+						  + area
+						  + " side.");
+			e.printStackTrace();
+		}
 	}
 }

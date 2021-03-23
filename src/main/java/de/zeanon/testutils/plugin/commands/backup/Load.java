@@ -17,7 +17,6 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,33 +59,28 @@ public class Load {
 						}
 					}
 
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-								if (modifiers.getPasteSide() != PasteSide.NONE) {
-									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
+					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+						if (modifiers.getPasteSide() != PasteSide.NONE) {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
 
-									InitMode.getManualBackUp().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							InitMode.getManualBackupCreator().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
-									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
-								} else {
-									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
+						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
 
-									InitMode.getManualBackUp().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
-									InitMode.getManualBackUp().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							InitMode.getManualBackupCreator().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							InitMode.getManualBackupCreator().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
-									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
-								}
-							} catch (WorldEditException | IOException e) {
-								e.printStackTrace();
-							}
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
 						}
-					}.runTask(TestUtils.getInstance());
+					} catch (WorldEditException | IOException e) {
+						e.printStackTrace();
+					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead //TODO Better messages
 								  + ChatColor.RED + "There is no backup for '"

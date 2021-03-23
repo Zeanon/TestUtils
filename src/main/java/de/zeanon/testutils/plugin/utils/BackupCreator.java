@@ -32,12 +32,11 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
 @AllArgsConstructor
-public class BackUp implements Runnable {
+public class BackupCreator implements Runnable {
 
 	private final @NotNull BackUpMode sequence;
 
@@ -114,36 +113,31 @@ public class BackUp implements Runnable {
 	}
 
 	public void backupSide(final @NotNull World tempWorld, final @NotNull ProtectedRegion tempRegion, final @NotNull String folder, final @NotNull String date) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
-				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-				final @NotNull BlockVector3 copyPoint = region.getMinimumPoint();
+		final @NotNull BlockVector3 copyPoint = region.getMinimumPoint();
 
-				try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
-					final @NotNull ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-							editSession, region, clipboard, copyPoint
-					);
+		try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
+			final @NotNull ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+					editSession, region, clipboard, copyPoint
+			);
 
-					forwardExtentCopy.setCopyingEntities(false);
-					forwardExtentCopy.setCopyingBiomes(false);
+			forwardExtentCopy.setCopyingEntities(false);
+			forwardExtentCopy.setCopyingBiomes(false);
 
-					Operations.complete(forwardExtentCopy);
+			Operations.complete(forwardExtentCopy);
 
-					final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + folder + "/" + date + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + folder + "/" + date + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
 
-					BaseFileUtils.createFile(tempFile);
+			BaseFileUtils.createFile(tempFile);
 
-					try (final @NotNull ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
-						writer.write(clipboard);
-					}
-				} catch (IOException | WorldEditException exception) {
-					exception.printStackTrace();
-				}
+			try (final @NotNull ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
+				writer.write(clipboard);
 			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		} catch (IOException | WorldEditException exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	public void pasteSide(final @NotNull ProtectedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR

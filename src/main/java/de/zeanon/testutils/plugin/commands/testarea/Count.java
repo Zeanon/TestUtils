@@ -9,7 +9,6 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -18,7 +17,6 @@ import java.util.Set;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,51 +57,46 @@ public class Count {
 	}
 
 	private void count(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area, final @NotNull String block) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-					if (tempRegion == null) {
-						GlobalMessageUtils.sendNotApplicableRegion(p);
-					} else {
-						final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-						final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+			if (tempRegion == null) {
+				GlobalMessageUtils.sendNotApplicableRegion(p);
+			} else {
+				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 
-						final @NotNull Set<BaseBlock> blocks = new HashSet<>();
-						blocks.add(Objects.notNull(BlockTypes.get(block)).getDefaultState().toBaseBlock());
-						final @NotNull int amount = editSession.countBlocks(region, blocks);
+				final @NotNull Set<BaseBlock> blocks = new HashSet<>();
+				blocks.add(Objects.notNull(BlockTypes.get(block)).getDefaultState().toBaseBlock());
+				final @NotNull int amount = editSession.countBlocks(region, blocks);
 
 
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED
-									  + "The amount of '"
-									  + ChatColor.DARK_RED
-									  + block
-									  + ChatColor.RED
-									  + "' is "
-									  + ChatColor.DARK_RED
-									  + amount
-									  + ChatColor.RED
-									  + " on "
-									  + area
-									  + " side.");
-					}
-				} catch (ObjectNullException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED
-								  + "There has been an error, counting the amount of '"
-								  + ChatColor.DARK_RED
-								  + block
-								  + ChatColor.RED
-								  + " on "
-								  + area
-								  + " side due to '"
-								  + ChatColor.DARK_RED
-								  + block
-								  + ChatColor.RED
-								  + "' not being a valid block.");
-				}
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED
+							  + "The amount of '"
+							  + ChatColor.DARK_RED
+							  + block
+							  + ChatColor.RED
+							  + "' is "
+							  + ChatColor.DARK_RED
+							  + amount
+							  + ChatColor.RED
+							  + " on "
+							  + area
+							  + " side.");
 			}
-		}.runTask(TestUtils.getInstance());
+		} catch (ObjectNullException e) {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED
+						  + "There has been an error, counting the amount of '"
+						  + ChatColor.DARK_RED
+						  + block
+						  + ChatColor.RED
+						  + " on "
+						  + area
+						  + " side due to '"
+						  + ChatColor.DARK_RED
+						  + block
+						  + ChatColor.RED
+						  + "' not being a valid block.");
+		}
 	}
 }

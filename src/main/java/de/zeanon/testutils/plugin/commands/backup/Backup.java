@@ -2,7 +2,6 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
@@ -18,7 +17,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,22 +25,17 @@ import org.jetbrains.annotations.Nullable;
 public class Backup {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (args.length > 0) {
-					if (args[0].equalsIgnoreCase("save")) {
-						Save.executeSave(args, p);
-					} else if (args[0].equalsIgnoreCase("load")) {
-						Load.executeLoad(Backup.modifiers(args, "load"), p);
-					} else if (args[0].equalsIgnoreCase("list")) {
-						de.zeanon.testutils.plugin.commands.backup.List.executeList(Backup.modifiers(args, "list"), p);
-					} else if (args[0].equalsIgnoreCase("search")) {
-						Search.executeSearch(Backup.modifiers(args, "search"), p);
-					}
-				}
+		if (args.length > 0) {
+			if (args[0].equalsIgnoreCase("save")) {
+				Save.executeSave(args, p);
+			} else if (args[0].equalsIgnoreCase("load")) {
+				Load.executeLoad(Backup.modifiers(args, "load"), p);
+			} else if (args[0].equalsIgnoreCase("list")) {
+				de.zeanon.testutils.plugin.commands.backup.List.executeList(Backup.modifiers(args, "list"), p);
+			} else if (args[0].equalsIgnoreCase("search")) {
+				Search.executeSearch(Backup.modifiers(args, "search"), p);
 			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		}
 	}
 
 	public @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackUpMode backUpMode) throws IOException {
@@ -100,17 +93,17 @@ public class Backup {
 		commandPart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 												 new ComponentBuilder(hoverMessage).create()));
 		northSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											   new ComponentBuilder(ChatColor.RED + "Paste it on the north side").create()));
+											   new ComponentBuilder(ChatColor.RED + "Paste it on the north side.").create()));
 		southSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											   new ComponentBuilder(ChatColor.RED + "Paste it on the south side").create()));
+											   new ComponentBuilder(ChatColor.RED + "Paste it on the south side.").create()));
 		yourSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											  new ComponentBuilder(ChatColor.RED + "Paste it on your side").create()));
+											  new ComponentBuilder(ChatColor.RED + "Paste it on your side.").create()));
 		otherSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											   new ComponentBuilder(ChatColor.RED + "Paste it on the other side").create()));
+											   new ComponentBuilder(ChatColor.RED + "Paste it on the other side.").create()));
 
 
 		localMessage.addExtra(commandPart);
-		localMessage.addExtra(" ");
+		localMessage.addExtra("  ");
 		localMessage.addExtra(northSide);
 		localMessage.addExtra(separator);
 		localMessage.addExtra(southSide);

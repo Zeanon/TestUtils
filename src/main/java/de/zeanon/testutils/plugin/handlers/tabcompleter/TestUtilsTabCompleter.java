@@ -56,8 +56,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 										   "registerarea",
 										   "deletearea",
 										   "update");
-			} else if (command.getName().equalsIgnoreCase("stoplag")) {
-				this.getCompletions(args[0], "-c", "-here", "-other", "-global");
+			} else if (command.getName().equalsIgnoreCase("backup")) {
+				return this.getCompletions(args[0], "load", "save", "list", "search");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -103,6 +103,8 @@ public class TestUtilsTabCompleter implements TabCompleter {
 				} else {
 					return this.getCompletions(args[1], "-here", "-n", "-north", "-s", "-south");
 				}
+			} else if (command.getName().equalsIgnoreCase("backup") && !args[0].equalsIgnoreCase("save")) {
+				return this.getCompletions(args[1], "-manual", "-startup", "-hourly", "-daily", "-other", "-north", "-n", "-south", "-s", "-here");
 			}
 		} else if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("replacearea")) { //NOSONAR

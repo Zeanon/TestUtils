@@ -40,12 +40,26 @@ public class Save {
 					name = args[1];
 				}
 
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Registering Backup for '"
+							  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
+							  + ChatColor.RED + "'...");
+
+				InitMode.getManualBackupCreator().backupSide(new BukkitWorld(p.getWorld()), tempRegion, "manual/" + p.getUniqueId(), name);
+				InitMode.getManualBackupCreator().backupSide(new BukkitWorld(p.getWorld()), otherRegion, "manual/" + p.getUniqueId(), name);
+
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "You registered a new backup for '"
+							  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
+							  + ChatColor.RED + "' named '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
+
+
 				final @NotNull File manualBackup = new File(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + p.getWorld().getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)), "manual/" + p.getUniqueId());
 				if (manualBackup.exists()) {
 					try {
 						@NotNull List<File> files;
 						files = BaseFileUtils.listFolders(manualBackup);
-						while (files.size() > ConfigUtils.getInt("Backups", "manual") - 1) {
+						while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
 							final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 							if (toBeDeleted.isPresent()) {
 								p.sendMessage(GlobalMessageUtils.messageHead
@@ -59,19 +73,6 @@ public class Save {
 						exception.printStackTrace();
 					}
 				}
-
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "Registering Backup for '"
-							  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
-							  + ChatColor.RED + "'...");
-
-				InitMode.getManualBackUp().backupSide(new BukkitWorld(p.getWorld()), tempRegion, "manual/" + p.getUniqueId(), name);
-				InitMode.getManualBackUp().backupSide(new BukkitWorld(p.getWorld()), otherRegion, "manual/" + p.getUniqueId(), name);
-
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "You registered a new backup for '"
-							  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
-							  + ChatColor.RED + "' named '" + name + "'.");
 			}
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead

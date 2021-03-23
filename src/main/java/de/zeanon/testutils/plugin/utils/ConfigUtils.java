@@ -68,13 +68,21 @@ public class ConfigUtils {
 			return 10;
 		} else if (Arrays.equals(new String[]{"Plugin Version"}, key)) {
 			return TestUtils.getInstance().getDescription().getVersion();
-		} else if (Arrays.equals(new String[]{"Backups", "manual"}, key)) {
+		} else if (Arrays.equals(new String[]{"Backups", "manual", "enable"}, key)) {
+			return true;
+		} else if (Arrays.equals(new String[]{"Backups", "manual", "amount"}, key)) {
 			return 10;
-		} else if (Arrays.equals(new String[]{"Backups", "startup"}, key)) {
+		} else if (Arrays.equals(new String[]{"Backups", "startup", "enable"}, key)) {
+			return true;
+		} else if (Arrays.equals(new String[]{"Backups", "startup", "amount"}, key)) {
 			return 10;
-		} else if (Arrays.equals(new String[]{"Backups", "hourly"}, key)) {
+		} else if (Arrays.equals(new String[]{"Backups", "hourly", "enable"}, key)) {
+			return true;
+		} else if (Arrays.equals(new String[]{"Backups", "hourly", "amount"}, key)) {
 			return 24;
-		} else if (Arrays.equals(new String[]{"Backups", "daily"}, key)) {
+		} else if (Arrays.equals(new String[]{"Backups", "daily", "enable"}, key)) {
+			return true;
+		} else if (Arrays.equals(new String[]{"Backups", "daily", "amount"}, key)) {
 			return 7;
 		}
 		return new Object();
