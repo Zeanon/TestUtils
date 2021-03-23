@@ -51,14 +51,10 @@ public class Update {
 						.equals(TestUtils.getInstance().getDescription().getVersion())
 				|| !InitMode.getConfig().hasKeyUseArray("Max History")
 				|| !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual", "enable")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual", "amount")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup", "enable")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup", "amount")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "hourly", "enable")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "hourly", "amount")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "daily", "enable")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "daily", "amount")) {
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
+				|| !InitMode.getConfig().hasKeyUseArray("Backups", "daily")) {
 
 				Update.updateConfig();
 			}
@@ -75,32 +71,20 @@ public class Update {
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 
-			final boolean enableManual = !InitMode.getConfig().hasKeyUseArray("Backups", "manual", "enable")
-										 || InitMode.getConfig().getBooleanUseArray("Backups", "manual", "enable");
-
-			final int maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual", "amount")
-								  ? InitMode.getConfig().getIntUseArray("Backups", "manual", "amount")
+			final int maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
+								  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
 								  : 10;
 
-			final boolean enableStartup = !InitMode.getConfig().hasKeyUseArray("Backups", "startup", "enable")
-										  || InitMode.getConfig().getBooleanUseArray("Backups", "startup", "enable");
-
-			final int maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup", "amount")
-								   ? InitMode.getConfig().getIntUseArray("Backups", "startup", "amount")
+			final int maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
+								   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
 								   : 10;
 
-			final boolean enableHourly = !InitMode.getConfig().hasKeyUseArray("Backups", "hourly", "enable")
-										 || InitMode.getConfig().getBooleanUseArray("Backups", "hourly", "enable");
-
-			final int maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly", "amount")
-								  ? InitMode.getConfig().getIntUseArray("Backups", "hourly", "amount")
+			final int maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
+								  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
 								  : 24;
 
-			final boolean enableDaily = !InitMode.getConfig().hasKeyUseArray("Backups", "daily", "enable")
-										|| InitMode.getConfig().getBooleanUseArray("Backups", "daily", "enable");
-
-			final int maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily", "amount")
-								 ? InitMode.getConfig().getIntUseArray("Backups", "daily", "amount")
+			final int maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
+								 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
 								 : 7;
 
 			InitMode.getConfig().setDataFromResource("resources/config.tf");
@@ -109,14 +93,10 @@ public class Update {
 			InitMode.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
 												new Pair<>(new String[]{"Max History"}, maxHistory),
 												new Pair<>(new String[]{"Automatic Reload"}, autoReload),
-												new Pair<>(new String[]{"Backups", "manual", "enable"}, enableManual),
-												new Pair<>(new String[]{"Backups", "manual", "amount"}, maxManual),
-												new Pair<>(new String[]{"Backups", "startup", "enable"}, enableStartup),
-												new Pair<>(new String[]{"Backups", "startup", "amount"}, maxStartup),
-												new Pair<>(new String[]{"Backups", "hourly", "enable"}, enableHourly),
-												new Pair<>(new String[]{"Backups", "hourly", "amount"}, maxHourly),
-												new Pair<>(new String[]{"Backups", "daily", "enable"}, enableDaily),
-												new Pair<>(new String[]{"Backups", "daily", "amount"}, maxDaily));
+												new Pair<>(new String[]{"Backups", "manual"}, maxManual),
+												new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
+												new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
+												new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
 		} catch (RuntimeIOException e) {

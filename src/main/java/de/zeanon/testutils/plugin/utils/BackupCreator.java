@@ -42,73 +42,82 @@ public class BackupCreator implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			final @NotNull String name = InitMode.getFormatter().format(System.currentTimeMillis());
-			@NotNull RegionManager tempManager;
-			@NotNull World tempWorld;
-			for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
-				tempWorld = new BukkitWorld(Bukkit.getWorld(worldFolder.getName()));
-				tempManager = Objects.notNull(InitMode.getRegionContainer().get(tempWorld));
-				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
-					final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + worldFolder.getName() + "/" + regionFolder.getName());
+		if (ConfigUtils.getInt("Backups", this.sequence.toString()) > 0) {
+			try {
+				final @NotNull String name = InitMode.getFormatter().format(System.currentTimeMillis());
+				@NotNull RegionManager tempManager;
+				@NotNull World tempWorld;
+				for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
+					tempWorld = new BukkitWorld(Bukkit.getWorld(worldFolder.getName()));
+					tempManager = Objects.notNull(InitMode.getRegionContainer().get(tempWorld));
+					for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
+						final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + worldFolder.getName() + "/" + regionFolder.getName());
 
-					if (tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") && tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
-						if (this.sequence == BackUpMode.DAILY) {
-							final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath());
-							if (dailyBackup.exists()) {
-								@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
-								while (files.size() > ConfigUtils.getInt("Backups", "daily") - 1) {
-									final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-									if (toBeDeleted.isPresent()) {
-										FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-										InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-										files = BaseFileUtils.listFolders(dailyBackup);
+						if (tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") && tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
+							if (this.sequence == BackUpMode.DAILY) {
+								final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath());
+								if (dailyBackup.exists()) {
+									@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
+									while (files.size() > ConfigUtils.getInt("Backups", "daily") - 1) {
+										final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+										if (toBeDeleted.isPresent()) {
+											FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+											InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+											files = BaseFileUtils.listFolders(dailyBackup);
+										}
+									}
+								}
+							} else if (this.sequence == BackUpMode.HOURLY) {
+								final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath());
+								if (hourlyBackup.exists()) {
+									@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
+									while (files.size() > ConfigUtils.getInt("Backups", "hourly") - 1) {
+										final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+										if (toBeDeleted.isPresent()) {
+											FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+											InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+											files = BaseFileUtils.listFolders(hourlyBackup);
+										}
+									}
+								}
+							} else if (this.sequence == BackUpMode.STARTUP) {
+								final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath());
+								if (startupBackup.exists()) {
+									@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
+									while (files.size() > ConfigUtils.getInt("Backups", "startup") - 1) {
+										final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+										if (toBeDeleted.isPresent()) {
+											FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+											InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+											files = BaseFileUtils.listFolders(startupBackup);
+										}
 									}
 								}
 							}
-						} else if (this.sequence == BackUpMode.HOURLY) {
-							final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath());
-							if (hourlyBackup.exists()) {
-								@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
-								while (files.size() > ConfigUtils.getInt("Backups", "hourly") - 1) {
-									final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-									if (toBeDeleted.isPresent()) {
-										FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-										InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-										files = BaseFileUtils.listFolders(hourlyBackup);
-									}
-								}
-							}
-						} else if (this.sequence == BackUpMode.STARTUP) {
-							final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath());
-							if (startupBackup.exists()) {
-								@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
-								while (files.size() > ConfigUtils.getInt("Backups", "startup") - 1) {
-									final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-									if (toBeDeleted.isPresent()) {
-										FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-										InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-										files = BaseFileUtils.listFolders(startupBackup);
-									}
-								}
-							}
-						}
 
-						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(), name);
-						this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(), name);
-					} else {
-						FileUtils.deleteDirectory(regionFolder);
-						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(), name);
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(), name);
 
-						if (backupFolder.exists()) {
-							FileUtils.deleteDirectory(backupFolder);
-							InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								Thread.currentThread().interrupt();
+							}
+						} else {
+							FileUtils.deleteDirectory(regionFolder);
+							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+
+							if (backupFolder.exists()) {
+								FileUtils.deleteDirectory(backupFolder);
+								InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+							}
 						}
 					}
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
