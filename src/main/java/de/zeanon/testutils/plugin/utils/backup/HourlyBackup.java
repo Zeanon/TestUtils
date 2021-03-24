@@ -22,18 +22,22 @@ public class HourlyBackup extends Backup {
 	}
 
 	@Override
-	protected void cleanup(final @NotNull File backupFolder) throws IOException {
-		final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath(null));
-		if (hourlyBackup.exists()) {
-			@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
-			while (files.size() > ConfigUtils.getInt("Backups", "hourly")) {
-				final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-				if (toBeDeleted.isPresent()) {
-					FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-					InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-					files = BaseFileUtils.listFolders(hourlyBackup);
+	protected void cleanup(final @NotNull File backupFolder) {
+		try {
+			final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath(null));
+			if (hourlyBackup.exists()) {
+				@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
+				while (files.size() > ConfigUtils.getInt("Backups", "hourly")) {
+					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+					if (toBeDeleted.isPresent()) {
+						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+						files = BaseFileUtils.listFolders(hourlyBackup);
+					}
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

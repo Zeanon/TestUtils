@@ -19,6 +19,7 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,25 +57,30 @@ public class Save {
 								  + ChatColor.RED + "' named '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
 
 
-					final @NotNull File manualBackup = new File(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + p.getWorld().getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)), "manual/" + p.getUniqueId());
-					if (manualBackup.exists()) {
-						try {
-							@NotNull List<File> files;
-							files = BaseFileUtils.listFolders(manualBackup);
-							while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
-								final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-								if (toBeDeleted.isPresent()) {
-									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups, deleting '" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' due to it being the oldest."); //NOSONAR
-									FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-									InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							final @NotNull File manualBackup = new File(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + p.getWorld().getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)), "manual/" + p.getUniqueId());
+							if (manualBackup.exists()) {
+								try {
+									@NotNull List<File> files;
+									files = BaseFileUtils.listFolders(manualBackup);
+									while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
+										final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+										if (toBeDeleted.isPresent()) {
+											p.sendMessage(GlobalMessageUtils.messageHead
+														  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups, deleting '" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' due to it being the oldest."); //NOSONAR
+											FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+											InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+										}
+										files = BaseFileUtils.listFolders(manualBackup);
+									}
+								} catch (IOException e) {
+									e.printStackTrace();
 								}
-								files = BaseFileUtils.listFolders(manualBackup);
 							}
-						} catch (IOException exception) {
-							exception.printStackTrace();
 						}
-					}
+					}.runTaskAsynchronously(TestUtils.getInstance());
 				}
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead

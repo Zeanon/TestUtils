@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -57,7 +58,12 @@ public abstract class Backup implements Runnable {
 							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(null), name);
 							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(null), name);
 
-							this.cleanup(backupFolder);
+							new BukkitRunnable() {
+								@Override
+								public void run() {
+									Backup.this.cleanup(backupFolder);
+								}
+							}.runTaskAsynchronously(TestUtils.getInstance());
 						} else {
 							FileUtils.deleteDirectory(regionFolder);
 							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
@@ -121,5 +127,5 @@ public abstract class Backup implements Runnable {
 		}
 	}
 
-	protected abstract void cleanup(final @NotNull File backupFolder) throws IOException;
+	protected abstract void cleanup(final @NotNull File backupFolder);
 }

@@ -22,18 +22,22 @@ public class StartupBackup extends Backup {
 	}
 
 	@Override
-	protected void cleanup(final @NotNull File backupFolder) throws IOException {
-		final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath(null));
-		if (startupBackup.exists()) {
-			@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
-			while (files.size() > ConfigUtils.getInt("Backups", "startup")) {
-				final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-				if (toBeDeleted.isPresent()) {
-					FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-					InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-					files = BaseFileUtils.listFolders(startupBackup);
+	protected void cleanup(final @NotNull File backupFolder) {
+		try {
+			final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath(null));
+			if (startupBackup.exists()) {
+				@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
+				while (files.size() > ConfigUtils.getInt("Backups", "startup")) {
+					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+					if (toBeDeleted.isPresent()) {
+						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+						files = BaseFileUtils.listFolders(startupBackup);
+					}
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -23,18 +23,22 @@ public class DailyBackup extends Backup {
 	}
 
 	@Override
-	protected void cleanup(final @NotNull File backupFolder) throws IOException {
-		final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
-		if (dailyBackup.exists()) {
-			@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
-			while (files.size() > ConfigUtils.getInt("Backups", "daily")) {
-				final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-				if (toBeDeleted.isPresent()) {
-					FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-					InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
-					files = BaseFileUtils.listFolders(dailyBackup);
+	protected void cleanup(final @NotNull File backupFolder) {
+		try {
+			final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
+			if (dailyBackup.exists()) {
+				@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
+				while (files.size() > ConfigUtils.getInt("Backups", "daily")) {
+					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+					if (toBeDeleted.isPresent()) {
+						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+						files = BaseFileUtils.listFolders(dailyBackup);
+					}
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
