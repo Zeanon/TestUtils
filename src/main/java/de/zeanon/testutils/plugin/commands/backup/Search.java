@@ -1,7 +1,9 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -10,9 +12,6 @@ import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -41,83 +40,68 @@ public class Search {
 						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + world.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6));
 						if (!regionFolder.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no " + modifiers.getBackUpMode() + " backup for '"
+										  + ChatColor.RED + "There are no " + modifiers.getBackUpMode() + " backups for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 						} else {
 							if (modifiers.getFileName() == null) {
 								p.sendMessage(GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "Missing sequence to search for.");
 							} else {
-
-								final @NotNull Map<String, List<File>> files = new HashMap<>();
+								final @NotNull java.util.List<Pair<File, String>> files = new GapList<>();
 								if (modifiers.getBackUpMode() == BackUpMode.NONE) {
 									final @NotNull File manualBackups = new File(regionFolder, "manual/" + p.getUniqueId());
 									if (manualBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(manualBackups, modifiers.getFileName())
-																						   .stream()
-																						   .sorted(Comparator.comparingLong(File::lastModified))
-																						   .collect(Collectors.toList());
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(manualBackups, modifiers.getFileName());
 										if (!tempFiles.isEmpty()) {
-											files.put("manual", tempFiles);
+											files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "manual")).collect(Collectors.toList()));
 										}
 									}
 
 									final @NotNull File hourlyBackups = new File(regionFolder, "automatic/hourly");
 									if (hourlyBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, modifiers.getFileName())
-																						   .stream()
-																						   .sorted(Comparator.comparingLong(File::lastModified))
-																						   .collect(Collectors.toList());
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, modifiers.getFileName());
 										if (!tempFiles.isEmpty()) {
-											files.put("hourly", tempFiles);
+											files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "hourly")).collect(Collectors.toList()));
 										}
 									}
 
 									final @NotNull File dailyBackups = new File(regionFolder, "automatic/daily");
 									if (dailyBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, modifiers.getFileName())
-																						   .stream()
-																						   .sorted(Comparator.comparingLong(File::lastModified))
-																						   .collect(Collectors.toList());
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, modifiers.getFileName());
 										if (!tempFiles.isEmpty()) {
-											files.put("daily", tempFiles);
+											files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "daily")).collect(Collectors.toList()));
 										}
 									}
 
 									final @NotNull File startupBackups = new File(regionFolder, "automatic/startup");
 									if (startupBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, modifiers.getFileName())
-																						   .stream()
-																						   .sorted(Comparator.comparingLong(File::lastModified))
-																						   .collect(Collectors.toList());
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, modifiers.getFileName());
 										if (!tempFiles.isEmpty()) {
-											files.put("startup", tempFiles);
+											files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "startup")).collect(Collectors.toList()));
 										}
 									}
 								} else {
-									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString())), modifiers.getFileName())
-																					   .stream()
-																					   .sorted(Comparator.comparingLong(File::lastModified))
-																					   .collect(Collectors.toList());
-									if (!tempFiles.isEmpty()) {
-										files.put(modifiers.getBackUpMode().toString(), tempFiles);
+									final @NotNull File backupFolder = new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString()));
+									if (backupFolder.exists()) {
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(backupFolder, modifiers.getFileName());
+										if (!tempFiles.isEmpty()) {
+											files.addAll(tempFiles.stream().map(f -> new Pair<>(f, modifiers.getBackUpMode().toString())).collect(Collectors.toList()));
+										}
 									}
 								}
 
 								if (files.isEmpty()) {
 									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "There is no " + (modifiers.getBackUpMode() == BackUpMode.NONE ? "" : modifiers.getBackUpMode() + " ") + "backup for '"
+												  + ChatColor.RED + "There is no " + (modifiers.getBackUpMode() == BackUpMode.NONE ? "" : modifiers.getBackUpMode() + " ")
+												  + "backup matching '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "' for '"
 												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 								} else {
-									for (final @NotNull Map.Entry<String, java.util.List<File>> entry : files.entrySet()) {
-										p.sendMessage("");
-										p.sendMessage(ChatColor.AQUA + "=== " + entry.getKey() + " ===");
-
-										for (final @NotNull File file : entry.getValue()) {
-											Backup.sendLoadBackupMessage(file.getName(),
-																		 entry.getKey(),
-																		 p);
-										}
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
+									for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
+										Backup.sendLoadBackupMessage(file.getKey().getName(),
+																	 file.getValue(),
+																	 p);
 									}
 								}
 							}
