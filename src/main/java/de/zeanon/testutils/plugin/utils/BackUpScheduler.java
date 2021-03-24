@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -24,18 +24,18 @@ public class BackUpScheduler {
 
 
 		//Initialize hourly backups
-		final @NotNull ZonedDateTime hourlyStart = ZonedDateTime.now()
+		final @NotNull LocalDateTime hourlyStart = LocalDateTime.now()
 																.withMinute(0)
 																.withSecond(0)
 																.plusHours(1);
 
 		final @NotNull BackupCreator hourlyBackup = new BackupCreator(BackUpMode.HOURLY);
 
-		BackUpScheduler.hourly.scheduleAtFixedRate(hourlyBackup, ZonedDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.hourly.scheduleAtFixedRate(hourlyBackup, LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Initialize daily backups
-		final @NotNull ZonedDateTime dailyStart = ZonedDateTime.now()
+		final @NotNull LocalDateTime dailyStart = LocalDateTime.now()
 															   .withHour(0)
 															   .withMinute(0)
 															   .withSecond(0)
@@ -43,13 +43,13 @@ public class BackUpScheduler {
 
 		final @NotNull BackupCreator dailyBackup = new BackupCreator(BackUpMode.DAILY);
 
-		BackUpScheduler.daily.scheduleAtFixedRate(dailyBackup, ZonedDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.daily.scheduleAtFixedRate(dailyBackup, LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 	}
 
 	public void terminate() {
 		try {
 			BackUpScheduler.hourly.shutdown();
-			BackUpScheduler.hourly.awaitTermination(10, TimeUnit.SECONDS);
+			BackUpScheduler.hourly.awaitTermination(100, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			Thread.currentThread().interrupt();
@@ -57,7 +57,7 @@ public class BackUpScheduler {
 
 		try {
 			BackUpScheduler.daily.shutdown();
-			BackUpScheduler.daily.awaitTermination(10, TimeUnit.SECONDS);
+			BackUpScheduler.daily.awaitTermination(100, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			Thread.currentThread().interrupt();

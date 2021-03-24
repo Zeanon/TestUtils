@@ -23,7 +23,7 @@ import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class InitMode {
 
 	@Getter
-	private final @NotNull SimpleDateFormat formatter = new SimpleDateFormat("HH-mm-ss'#'dd-MM-yyyy");
+	private final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy'_at_'HH-mm-ss");
 	@Getter
 	private ThunderConfig config;
 	@Getter

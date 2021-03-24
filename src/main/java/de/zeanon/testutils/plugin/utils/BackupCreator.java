@@ -26,7 +26,7 @@ import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class BackupCreator implements Runnable {
 	public void run() {
 		if (ConfigUtils.getInt("Backups", this.sequence.toString()) > 0) {
 			try {
-				final @NotNull String name = InitMode.getFormatter().format(ZonedDateTime.now());
+				final @NotNull String name = LocalDateTime.now().format(InitMode.getFormatter());
 				@NotNull RegionManager tempManager;
 				@NotNull World tempWorld;
 				for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
