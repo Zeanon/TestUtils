@@ -35,11 +35,8 @@ public class BackUpScheduler {
 
 
 		//Initialize daily backups
-		final @NotNull LocalDateTime dailyStart = LocalDateTime.now()
-															   .withHour(0)
-															   .withMinute(0)
-															   .withSecond(0)
-															   .plusDays(1);
+		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(0)
+															 .plusDays(1);
 
 		final @NotNull BackupCreator dailyBackup = new BackupCreator(BackUpMode.DAILY);
 
