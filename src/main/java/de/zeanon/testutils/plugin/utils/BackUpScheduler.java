@@ -1,6 +1,9 @@
 package de.zeanon.testutils.plugin.utils;
 
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
+import de.zeanon.testutils.plugin.utils.backup.DailyBackup;
+import de.zeanon.testutils.plugin.utils.backup.HourlyBackup;
+import de.zeanon.testutils.plugin.utils.backup.StartupBackup;
+import de.zeanon.testutils.plugin.utils.interfaces.Backup;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Executors;
@@ -19,28 +22,28 @@ public class BackUpScheduler {
 
 	public void backup() {
 		//Backup once the Plugin starts
-		final @NotNull BackupCreator onStart = new BackupCreator(BackUpMode.STARTUP);
+		final @NotNull Backup onStart = new StartupBackup();
 		onStart.run();
 
 
 		//Initialize hourly backups
 		final @NotNull LocalDateTime hourlyStart = LocalDateTime.now()
 																.withMinute(0)
-																.withSecond(0)
+																.withSecond(1)
 																.plusHours(1);
 
-		final @NotNull BackupCreator hourlyBackup = new BackupCreator(BackUpMode.HOURLY);
+		final @NotNull Backup hourlyBackup = new HourlyBackup();
 
-		BackUpScheduler.hourly.scheduleAtFixedRate(hourlyBackup, LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.schedule(BackUpScheduler.hourly, hourlyBackup, LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Initialize daily backups
 		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(0)
 															 .plusDays(1);
 
-		final @NotNull BackupCreator dailyBackup = new BackupCreator(BackUpMode.DAILY);
+		final @NotNull Backup dailyBackup = new DailyBackup();
 
-		BackUpScheduler.daily.scheduleAtFixedRate(dailyBackup, LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.schedule(BackUpScheduler.daily, dailyBackup, LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 	}
 
 	public void terminate() {
@@ -59,5 +62,9 @@ public class BackUpScheduler {
 			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	private void schedule(final @NotNull ScheduledExecutorService executorService, final @NotNull Backup backup, final long initialDelay, final long period, final @NotNull TimeUnit unit) {
+		executorService.scheduleAtFixedRate(backup, initialDelay, period, unit);
 	}
 }

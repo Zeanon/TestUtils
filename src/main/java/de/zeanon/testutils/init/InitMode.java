@@ -18,9 +18,9 @@ import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplag
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.BackUpScheduler;
-import de.zeanon.testutils.plugin.utils.BackupCreator;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
+import de.zeanon.testutils.plugin.utils.backup.ManualBackup;
+import de.zeanon.testutils.plugin.utils.interfaces.Backup;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +42,7 @@ public class InitMode {
 	@Getter
 	private RegionContainer regionContainer;
 	@Getter
-	private BackupCreator manualBackupCreator;
+	private Backup manualBackupCreator;
 
 	public void initPlugin() {
 		try {
@@ -99,7 +99,7 @@ public class InitMode {
 				TestUtils.getPluginManager().registerEvents(new SpigotStoplagTabListener(), TestUtils.getInstance());
 			}
 
-			InitMode.manualBackupCreator = new BackupCreator(BackUpMode.MANUAL);
+			InitMode.manualBackupCreator = new ManualBackup();
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
 			BackUpScheduler.backup();
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
