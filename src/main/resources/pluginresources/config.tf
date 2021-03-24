@@ -27,15 +27,15 @@ Max History = 10
 Automatic Reload = true
 
 Backups {
-    # Maximum amount of manual backups per player per region.
+    # Maximum amount of manual backups per player per region(0 means, no backups will be created).
     manual = 10
 
-    # Maximum amount of backups per region created on startup.
+    # Maximum amount of backups per region created on startup(0 means, no backups will be created).
     startup = 10
 
-    # Maximum amount of backups per region created on an hourly basis.
+    # Maximum amount of backups per region created on an hourly basis(0 means, no backups will be created).
     hourly = 24
 
-    # Maximum amount of backups per region created on a daily basis.
+    # Maximum amount of backups per region created on a daily basis(0 means, no backups will be created).
     daily = 7
 }

@@ -55,7 +55,7 @@ public class BackupCreator implements Runnable {
 
 						if (tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") && tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
 							if (this.sequence == BackUpMode.DAILY) {
-								final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath());
+								final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
 								if (dailyBackup.exists()) {
 									@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
 									while (files.size() > ConfigUtils.getInt("Backups", "daily") - 1) {
@@ -68,7 +68,7 @@ public class BackupCreator implements Runnable {
 									}
 								}
 							} else if (this.sequence == BackUpMode.HOURLY) {
-								final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath());
+								final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath(null));
 								if (hourlyBackup.exists()) {
 									@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
 									while (files.size() > ConfigUtils.getInt("Backups", "hourly") - 1) {
@@ -81,7 +81,7 @@ public class BackupCreator implements Runnable {
 									}
 								}
 							} else if (this.sequence == BackUpMode.STARTUP) {
-								final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath());
+								final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath(null));
 								if (startupBackup.exists()) {
 									@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
 									while (files.size() > ConfigUtils.getInt("Backups", "startup") - 1) {
@@ -95,8 +95,8 @@ public class BackupCreator implements Runnable {
 								}
 							}
 
-							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(), name);
-							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(), name);
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(null), name);
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(null), name);
 
 							try {
 								Thread.sleep(1000);
@@ -106,7 +106,7 @@ public class BackupCreator implements Runnable {
 							}
 						} else {
 							FileUtils.deleteDirectory(regionFolder);
-							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
 
 							if (backupFolder.exists()) {
 								FileUtils.deleteDirectory(backupFolder);

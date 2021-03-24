@@ -22,6 +22,13 @@ class PlugManEnabledUpdate {
 	void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
 		System.out.println(instance.getName() + " is updating...");
 		try {
+			final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+				@Override
+				public void run() {
+					PluginUtil.reload(instance);
+				}
+			};
+
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
 															  .getLocation()
@@ -35,12 +42,7 @@ class PlugManEnabledUpdate {
 
 			if (autoReload) {
 				System.out.println(instance.getName() + " is reloading.");
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						PluginUtil.reload(instance);
-					}
-				}.runTask(instance);
+				reloadRunnable.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			System.out.println(instance.getName() + " could not be updated.");
@@ -51,6 +53,13 @@ class PlugManEnabledUpdate {
 	void updatePlugin(final @NotNull Player p, final boolean autoReload, final @NotNull JavaPlugin instance) {
 		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 					  ChatColor.RED + "Updating plugin...");
+
+		final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+			@Override
+			public void run() {
+				PluginUtil.reload(instance);
+			}
+		};
 		try {
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
@@ -66,12 +75,7 @@ class PlugManEnabledUpdate {
 			if (autoReload) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 							  ChatColor.RED + "Reloading plugin...");
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						PluginUtil.reload(instance);
-					}
-				}.runTask(instance);
+				reloadRunnable.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +

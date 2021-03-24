@@ -57,41 +57,38 @@ public class Backup {
 		}
 	}
 
-	public void sendLoadBackupMessage(final @NotNull String message,
-									  final @NotNull String commandMessage,
-									  final @NotNull String hoverMessage,
-									  final @Nullable String command,
+	public void sendLoadBackupMessage(final @NotNull String fileName,
+									  final @NotNull String backupMode,
 									  final @NotNull Player target) {
+		final @NotNull String command = "/backup load " + fileName + " -" + backupMode;
 		final @NotNull TextComponent localMessage = new TextComponent(
-				TextComponent.fromLegacyText(message));
-		final @NotNull TextComponent commandPart = new TextComponent(
-				TextComponent.fromLegacyText(commandMessage));
+				TextComponent.fromLegacyText(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + backupMode + ChatColor.DARK_GRAY + "] "));
+		final @NotNull TextComponent message = new TextComponent(
+				TextComponent.fromLegacyText(ChatColor.RED + fileName));
 		final @NotNull TextComponent separator = new TextComponent(
 				TextComponent.fromLegacyText(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " "));
 		final @NotNull TextComponent northSide = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.DARK_GREEN + "N"));
+				TextComponent.fromLegacyText(ChatColor.DARK_RED + "N"));
 		final @NotNull TextComponent southSide = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.DARK_GREEN + "S"));
+				TextComponent.fromLegacyText(ChatColor.DARK_RED + "S"));
 		final @NotNull TextComponent yourSide = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.DARK_GREEN + "H"));
+				TextComponent.fromLegacyText(ChatColor.DARK_RED + "H"));
 		final @NotNull TextComponent otherSide = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.DARK_GREEN + "O"));
+				TextComponent.fromLegacyText(ChatColor.DARK_RED + "O"));
 
 
-		if (command != null && !command.isEmpty()) {
-			commandPart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-													 command));
-			northSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-												   command + " -n"));
-			southSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-												   command + " -s"));
-			yourSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-												  command + " -here"));
-			otherSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-												   command + " -other"));
-		}
-		commandPart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-												 new ComponentBuilder(hoverMessage).create()));
+		message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+											 command));
+		northSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+											   command + " -n"));
+		southSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+											   command + " -s"));
+		yourSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+											  command + " -here"));
+		otherSide.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+											   command + " -other"));
+		message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+											 new ComponentBuilder(ChatColor.RED + "Paste the backup '" + ChatColor.DARK_RED + fileName + ChatColor.RED + "' for this TestArea.").create()));
 		northSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 											   new ComponentBuilder(ChatColor.RED + "Paste it on the north side.").create()));
 		southSide.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -102,7 +99,7 @@ public class Backup {
 											   new ComponentBuilder(ChatColor.RED + "Paste it on the other side.").create()));
 
 
-		localMessage.addExtra(commandPart);
+		localMessage.addExtra(message);
 		localMessage.addExtra("  ");
 		localMessage.addExtra(northSide);
 		localMessage.addExtra(separator);
@@ -113,6 +110,37 @@ public class Backup {
 		localMessage.addExtra(otherSide);
 
 		target.spigot().sendMessage(localMessage);
+	}
+
+	public @Nullable File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
+		switch (backUpMode) {
+			case NONE:
+				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "manual/" + p.getUniqueId()), name)) {
+					if (temp.getName().equals(name)) {
+						return temp;
+					}
+				}
+				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/hourly"), name)) {
+					if (temp.getName().equals(name)) {
+						return temp;
+					}
+				}
+				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/daily"), name)) {
+					if (temp.getName().equals(name)) {
+						return temp;
+					}
+				}
+				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/startup"), name)) {
+					if (temp.getName().equals(name)) {
+						return temp;
+					}
+				}
+				return null;
+			case MANUAL:
+				return new File(regionFolder, backUpMode.getPath(p.getUniqueId().toString()) + "/" + name);
+			default:
+				return new File(regionFolder, backUpMode.getPath(null) + "/" + name);
+		}
 	}
 
 	private Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {

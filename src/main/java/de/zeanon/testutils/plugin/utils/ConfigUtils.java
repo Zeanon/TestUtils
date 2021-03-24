@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
+import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.update.Update;
@@ -20,9 +21,13 @@ public class ConfigUtils {
 	 * @return value.
 	 */
 	public int getInt(final @NotNull String... key) {
-		if (InitMode.getConfig().hasKeyUseArray(key)) {
-			return InitMode.getConfig().getIntUseArray(key);
-		} else {
+		try {
+			if (InitMode.getConfig().hasKeyUseArray(key)) {
+				return InitMode.getConfig().getIntUseArray(key);
+			} else {
+				throw new ObjectNullException();
+			}
+		} catch (Exception e) {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -41,9 +46,13 @@ public class ConfigUtils {
 	 * @return value.
 	 */
 	public boolean getBoolean(final @NotNull String... key) {
-		if (InitMode.getConfig().hasKeyUseArray(key)) {
-			return InitMode.getConfig().getBooleanUseArray(key);
-		} else {
+		try {
+			if (InitMode.getConfig().hasKeyUseArray(key)) {
+				return InitMode.getConfig().getBooleanUseArray(key);
+			} else {
+				throw new ObjectNullException();
+			}
+		} catch (Exception e) {
 			new BukkitRunnable() {
 				@Override
 				public void run() {

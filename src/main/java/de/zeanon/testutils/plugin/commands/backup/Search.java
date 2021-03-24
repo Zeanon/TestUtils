@@ -90,15 +90,8 @@ public class Search {
 											files.put("startup", tempFiles);
 										}
 									}
-								} else if (modifiers.getBackUpMode() == BackUpMode.MANUAL) {
-									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath() + "/" + p.getUniqueId()), modifiers.getFileName()).stream()
-																					   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
-																					   .collect(Collectors.toList());
-									if (!tempFiles.isEmpty()) {
-										files.put(modifiers.getBackUpMode().toString(), tempFiles);
-									}
 								} else {
-									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath()), modifiers.getFileName()).stream()
+									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString())), modifiers.getFileName()).stream()
 																					   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
 																					   .collect(Collectors.toList());
 									if (!tempFiles.isEmpty()) {
@@ -116,9 +109,8 @@ public class Search {
 										p.sendMessage(ChatColor.AQUA + "=== " + entry.getKey() + " ===");
 
 										for (final @NotNull File file : entry.getValue()) {
-											Backup.sendLoadBackupMessage("", ChatColor.GOLD + file.getName(),
-																		 ChatColor.RED + "Paste the backup '" + ChatColor.DARK_RED + file.getName() + ChatColor.RED + "' for this TestArea.",
-																		 "/backup load " + file.getName() + " -" + entry.getKey(),
+											Backup.sendLoadBackupMessage(file.getName(),
+																		 entry.getKey(),
 																		 p);
 										}
 									}

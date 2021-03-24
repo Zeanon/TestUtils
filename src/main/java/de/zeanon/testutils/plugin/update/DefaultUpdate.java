@@ -22,6 +22,13 @@ class DefaultUpdate {
 	void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
 		System.out.println(instance.getName() + " is updating...");
 		try {
+			final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+				@Override
+				public void run() {
+					Bukkit.getServer().reload();
+				}
+			};
+
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
 															  .getLocation()
@@ -36,12 +43,7 @@ class DefaultUpdate {
 
 			if (autoReload) {
 				System.out.println("Server is reloading.");
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						Bukkit.getServer().reload();
-					}
-				}.runTask(instance);
+				reloadRunnable.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			System.out.println(instance.getName() + " could not be updated.");
@@ -53,6 +55,13 @@ class DefaultUpdate {
 		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 					  ChatColor.RED + "Updating plugin...");
 		try {
+			final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+				@Override
+				public void run() {
+					Bukkit.getServer().reload();
+				}
+			};
+
 			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 															  .getCodeSource()
 															  .getLocation()
@@ -69,12 +78,7 @@ class DefaultUpdate {
 			if (autoReload) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 							  ChatColor.RED + "Server is reloading...");
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						Bukkit.getServer().reload();
-					}
-				}.runTask(instance);
+				reloadRunnable.runTask(instance);
 			}
 		} catch (@NotNull IOException | URISyntaxException e) {
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +

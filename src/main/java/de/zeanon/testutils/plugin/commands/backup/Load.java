@@ -35,7 +35,7 @@ public class Load {
 			try {
 				final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + world.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6));
 				if (regionFolder.exists()) {
-					final @NotNull File backupFile;
+					final @Nullable File backupFile;
 
 					if (modifiers.getFileName() == null) {
 						final @NotNull Optional<File> possibleFirst = Backup.getLatest(regionFolder, p.getUniqueId().toString(), modifiers.getBackUpMode());
@@ -49,9 +49,8 @@ public class Load {
 							return;
 						}
 					} else {
-						backupFile = modifiers.getBackUpMode() == BackUpMode.NONE || modifiers.getBackUpMode() == BackUpMode.MANUAL ? new File(regionFolder, "manual/" + p.getUniqueId().toString() + "/" + modifiers.getFileName())
-																																	: new File(modifiers.getBackUpMode().getPath() + "/" + modifiers.getFileName());
-						if (!backupFile.exists()) {
+						backupFile = Backup.getFile(regionFolder, modifiers.getFileName(), modifiers.getBackUpMode(), p);
+						if (backupFile == null || !backupFile.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There is no backup named '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "' for '"
 										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
@@ -82,7 +81,7 @@ public class Load {
 						e.printStackTrace();
 					}
 				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead //TODO Better messages
+					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There is no backup for '"
 								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 				}

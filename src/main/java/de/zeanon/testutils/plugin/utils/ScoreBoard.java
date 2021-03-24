@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class ScoreBoard {
 
-	private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
+	private final ScoreboardManager scoreboardManager = Objects.notNull(Bukkit.getScoreboardManager());
 
 	private final List<String> scoreBoards = new GapList<>();
 
@@ -36,7 +36,7 @@ public class ScoreBoard {
 			if (tempRegion != null && otherRegion != null) {
 				ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 			} else {
-				p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
+				p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
 			}
 
 			new BukkitRunnable() {
@@ -45,24 +45,26 @@ public class ScoreBoard {
 					if (Bukkit.getOnlinePlayers().contains(p)) {
 						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 						final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+						final @NotNull Scoreboard scoreboard = p.getScoreboard();
 						if (tempRegion != null && otherRegion != null) {
-							ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion);
-						} else {
-							p.setScoreboard(Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard());
+							ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion, scoreboard);
+						} else if (scoreboard.getObjective("testareainfo") != null) {
+							p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
 						}
 					} else {
+						p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
 						ScoreBoard.scoreBoards.remove(p.getUniqueId().toString());
 						this.cancel();
 					}
 				}
-			}.runTaskTimer(TestUtils.getInstance(), 0, 10);
+			}.runTaskTimer(TestUtils.getInstance(), 0, 5);
 		}
 	}
 
 	private void setScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion) {
-		final @NotNull Scoreboard scoreboard = Objects.notNull(ScoreBoard.scoreboardManager).getNewScoreboard();
+		final @NotNull Scoreboard scoreboard = ScoreBoard.scoreboardManager.getNewScoreboard();
 
-		final @NotNull Objective infoBoard = scoreboard.registerNewObjective("infoBoard",
+		final @NotNull Objective infoBoard = scoreboard.registerNewObjective("testareainfo",
 																			 "dummy",
 																			 ChatColor.DARK_GRAY
 																			 + ""
@@ -211,10 +213,8 @@ public class ScoreBoard {
 	}
 
 
-	private void updateScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion) {
-		final @NotNull Scoreboard scoreboard = p.getScoreboard();
-
-		if (scoreboard.getObjective("infoBoard") != null) {
+	private void updateScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion, final @NotNull Scoreboard scoreboard) {
+		if (scoreboard.getObjective("testareainfo") != null) {
 			final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
 			final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
 			final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();

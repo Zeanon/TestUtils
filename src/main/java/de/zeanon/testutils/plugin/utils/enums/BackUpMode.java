@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.utils.enums;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public enum BackUpMode {
@@ -34,8 +35,8 @@ public enum BackUpMode {
 	}
 
 	@Contract(pure = true)
-	public @NotNull String getPath() {
-		return this.path;
+	public @NotNull String getPath(final @Nullable String uuid) {
+		return this == BackUpMode.MANUAL ? this.path + "/" + uuid : this.path;
 	}
 
 	@Contract(pure = true)

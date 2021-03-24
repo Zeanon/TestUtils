@@ -103,8 +103,12 @@ public class TestUtilsTabCompleter implements TabCompleter {
 				} else {
 					return this.getCompletions(args[1], "-here", "-n", "-north", "-s", "-south");
 				}
-			} else if (command.getName().equalsIgnoreCase("backup") && !args[0].equalsIgnoreCase("save")) {
-				return this.getCompletions(args[1], "-manual", "-startup", "-hourly", "-daily", "-other", "-north", "-n", "-south", "-s", "-here");
+			} else if (command.getName().equalsIgnoreCase("backup")) {
+				if (args[0].equalsIgnoreCase("load")) {
+					return this.getCompletions(args[1], "-manual", "-startup", "-hourly", "-daily", "-other", "-north", "-n", "-south", "-s", "-here");
+				} else if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("search")) {
+					return this.getCompletions(args[1], "-manual", "-startup", "-hourly", "-daily");
+				}
 			}
 		} else if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("replacearea")) { //NOSONAR

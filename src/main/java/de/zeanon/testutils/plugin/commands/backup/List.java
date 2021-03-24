@@ -89,18 +89,8 @@ public class List {
 											files.put("startup", tempFiles);
 										}
 									}
-								} else if (modifiers.getBackUpMode() == BackUpMode.MANUAL) {
-									final @NotNull File backupFolder = new File(regionFolder, modifiers.getBackUpMode().getPath() + "/" + p.getUniqueId());
-									if (backupFolder.exists()) {
-										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(backupFolder).stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
-																									 .collect(Collectors.toList());
-										if (!tempFiles.isEmpty()) {
-											files.put(modifiers.getBackUpMode().toString(), tempFiles);
-										}
-									}
 								} else {
-									final @NotNull File backupFolder = new File(regionFolder, modifiers.getBackUpMode().getPath());
+									final @NotNull File backupFolder = new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString()));
 									if (backupFolder.exists()) {
 										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(backupFolder).stream()
 																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
@@ -116,14 +106,12 @@ public class List {
 												  + ChatColor.RED + "There is no " + (modifiers.getBackUpMode() == BackUpMode.NONE ? "" : modifiers.getBackUpMode() + " ") + "backup for '"
 												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
 								} else {
+									p.sendMessage(GlobalMessageUtils.messageHead
+												  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
 									for (final @NotNull Map.Entry<String, java.util.List<File>> entry : files.entrySet()) {
-										p.sendMessage("");
-										p.sendMessage(ChatColor.AQUA + "=== " + entry.getKey() + " ===");
-
 										for (final @NotNull File file : entry.getValue()) {
-											Backup.sendLoadBackupMessage("", ChatColor.GOLD + file.getName(),
-																		 ChatColor.RED + "Paste the backup '" + ChatColor.DARK_RED + file.getName() + ChatColor.RED + "' for this TestArea.",
-																		 "/backup load " + file.getName() + " -" + entry.getKey(),
+											Backup.sendLoadBackupMessage(file.getName(),
+																		 entry.getKey(),
 																		 p);
 										}
 									}

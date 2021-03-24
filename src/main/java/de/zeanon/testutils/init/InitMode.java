@@ -78,8 +78,10 @@ public class InitMode {
 			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
 
-			CommandHandler commandHandler = new CommandHandler();
-			TestUtilsTabCompleter testUtilsTabCompleter = new TestUtilsTabCompleter();
+			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+
+			final @NotNull CommandHandler commandHandler = new CommandHandler();
+			final @NotNull TestUtilsTabCompleter testUtilsTabCompleter = new TestUtilsTabCompleter();
 
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(testUtilsTabCompleter);
@@ -97,19 +99,14 @@ public class InitMode {
 				TestUtils.getPluginManager().registerEvents(new SpigotStoplagTabListener(), TestUtils.getInstance());
 			}
 
-			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+			InitMode.manualBackupCreator = new BackupCreator(BackUpMode.MANUAL);
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
+			BackUpScheduler.backup();
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 
 			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
 				ScoreBoard.initialize(p);
 			}
-
-			InitMode.manualBackupCreator = new BackupCreator(BackUpMode.MANUAL);
-
-			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
-
-			BackUpScheduler.backup();
-
-			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 		} else {
 			InitMode.enableSleepMode();
 		}
