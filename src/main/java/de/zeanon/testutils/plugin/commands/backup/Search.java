@@ -9,6 +9,7 @@ import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class Search {
 									if (manualBackups.exists()) {
 										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(manualBackups, modifiers.getFileName())
 																						   .stream()
-																						   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+																						   .sorted(Comparator.comparingLong(File::lastModified))
 																						   .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("manual", tempFiles);
@@ -63,8 +64,9 @@ public class Search {
 
 									final @NotNull File hourlyBackups = new File(regionFolder, "automatic/hourly");
 									if (hourlyBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, modifiers.getFileName()).stream()
-																						   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, modifiers.getFileName())
+																						   .stream()
+																						   .sorted(Comparator.comparingLong(File::lastModified))
 																						   .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("hourly", tempFiles);
@@ -73,8 +75,9 @@ public class Search {
 
 									final @NotNull File dailyBackups = new File(regionFolder, "automatic/daily");
 									if (dailyBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, modifiers.getFileName()).stream()
-																						   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, modifiers.getFileName())
+																						   .stream()
+																						   .sorted(Comparator.comparingLong(File::lastModified))
 																						   .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("daily", tempFiles);
@@ -83,16 +86,18 @@ public class Search {
 
 									final @NotNull File startupBackups = new File(regionFolder, "automatic/startup");
 									if (startupBackups.exists()) {
-										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, modifiers.getFileName()).stream()
-																						   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, modifiers.getFileName())
+																						   .stream()
+																						   .sorted(Comparator.comparingLong(File::lastModified))
 																						   .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("startup", tempFiles);
 										}
 									}
 								} else {
-									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString())), modifiers.getFileName()).stream()
-																					   .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+									final @NotNull List<File> tempFiles = BaseFileUtils.searchFolders(new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString())), modifiers.getFileName())
+																					   .stream()
+																					   .sorted(Comparator.comparingLong(File::lastModified))
 																					   .collect(Collectors.toList());
 									if (!tempFiles.isEmpty()) {
 										files.put(modifiers.getBackUpMode().toString(), tempFiles);

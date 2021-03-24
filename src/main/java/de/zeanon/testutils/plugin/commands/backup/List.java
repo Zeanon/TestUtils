@@ -9,6 +9,7 @@ import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class List {
 									if (manualBackups.exists()) {
 										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(manualBackups)
 																									 .stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+																									 .sorted(Comparator.comparingLong(File::lastModified))
 																									 .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("manual", tempFiles);
@@ -62,8 +63,9 @@ public class List {
 
 									final @NotNull File hourlyBackups = new File(regionFolder, "automatic/hourly");
 									if (hourlyBackups.exists()) {
-										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(hourlyBackups).stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(hourlyBackups)
+																									 .stream()
+																									 .sorted(Comparator.comparingLong(File::lastModified))
 																									 .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("hourly", tempFiles);
@@ -72,8 +74,9 @@ public class List {
 
 									final @NotNull File dailyBackups = new File(regionFolder, "automatic/daily");
 									if (dailyBackups.exists()) {
-										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(dailyBackups).stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(dailyBackups)
+																									 .stream()
+																									 .sorted(Comparator.comparingLong(File::lastModified))
 																									 .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("daily", tempFiles);
@@ -82,8 +85,9 @@ public class List {
 
 									final @NotNull File startupBackups = new File(regionFolder, "automatic/startup");
 									if (startupBackups.exists()) {
-										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(startupBackups).stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(startupBackups)
+																									 .stream()
+																									 .sorted(Comparator.comparingLong(File::lastModified))
 																									 .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put("startup", tempFiles);
@@ -92,8 +96,9 @@ public class List {
 								} else {
 									final @NotNull File backupFolder = new File(regionFolder, modifiers.getBackUpMode().getPath(p.getUniqueId().toString()));
 									if (backupFolder.exists()) {
-										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(backupFolder).stream()
-																									 .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
+										final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(backupFolder)
+																									 .stream()
+																									 .sorted(Comparator.comparingLong(File::lastModified))
 																									 .collect(Collectors.toList());
 										if (!tempFiles.isEmpty()) {
 											files.put(modifiers.getBackUpMode().toString(), tempFiles);

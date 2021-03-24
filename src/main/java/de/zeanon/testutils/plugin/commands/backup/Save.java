@@ -11,6 +11,7 @@ import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class Save {
 				} else {
 					final @NotNull String name;
 					if (args.length == 1) {
-						name = InitMode.getFormatter().format(System.currentTimeMillis());
+						name = InitMode.getFormatter().format(ZonedDateTime.now());
 					} else {
 						name = args[1];
 					}
