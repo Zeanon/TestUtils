@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class InitMode {
 
 	@Getter
-	private final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy'_at_'HH-mm-ss");
+	private final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
 	@Getter
 	private ThunderConfig config;
 	@Getter
