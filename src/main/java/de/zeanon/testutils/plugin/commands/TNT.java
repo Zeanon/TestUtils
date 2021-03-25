@@ -386,11 +386,11 @@ public class TNT {
 
 	private @NotNull String getNowActivated(final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
-			   + org.bukkit.ChatColor.RED + "TNT has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on the " + area + " side of your TestArea.";
+			   + org.bukkit.ChatColor.RED + "TNT has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on " + area + " side of your TestArea.";
 	}
 
 	private @NotNull String getNowDeactivated(final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
-			   + org.bukkit.ChatColor.RED + "TNT has been deactivated on the " + area + " side of your TestArea.";
+			   + org.bukkit.ChatColor.RED + "TNT has been deactivated on " + area + " side of your TestArea.";
 	}
 }

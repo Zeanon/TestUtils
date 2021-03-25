@@ -40,6 +40,10 @@ public class Save {
 					final @NotNull String name;
 					if (args.length == 1) {
 						name = LocalDateTime.now().format(InitMode.getFormatter());
+					} else if (args[1].contains("./")) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
+						return;
 					} else {
 						name = args[1];
 					}
