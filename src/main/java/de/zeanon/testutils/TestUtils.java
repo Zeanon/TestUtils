@@ -1,7 +1,7 @@
 package de.zeanon.testutils;
 
 import de.zeanon.testutils.init.InitMode;
-import de.zeanon.testutils.plugin.utils.BackUpScheduler;
+import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

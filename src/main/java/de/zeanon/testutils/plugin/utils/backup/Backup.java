@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.interfaces;
+package de.zeanon.testutils.plugin.utils.backup;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;

@@ -1,14 +1,13 @@
-package de.zeanon.testutils.plugin.utils;
+package de.zeanon.testutils.plugin.utils.backup;
 
-import de.zeanon.testutils.plugin.utils.backup.DailyBackup;
-import de.zeanon.testutils.plugin.utils.backup.HourlyBackup;
-import de.zeanon.testutils.plugin.utils.backup.StartupBackup;
-import de.zeanon.testutils.plugin.utils.interfaces.Backup;
+import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,14 +17,11 @@ public class BackUpScheduler {
 
 	private final @NotNull ScheduledExecutorService daily = Executors.newSingleThreadScheduledExecutor();
 	private final @NotNull ScheduledExecutorService hourly = Executors.newSingleThreadScheduledExecutor();
+	@Getter
+	private final @NotNull Backup manualBackup = new ManualBackup();
 
 
 	public void backup() {
-		//Backup once the Plugin starts
-		final @NotNull Backup onStart = new StartupBackup();
-		onStart.run();
-
-
 		//Initialize hourly backups
 		final @NotNull LocalDateTime hourlyStart = LocalDateTime.now()
 																.withMinute(0)
@@ -44,6 +40,15 @@ public class BackUpScheduler {
 		final @NotNull Backup dailyBackup = new DailyBackup();
 
 		BackUpScheduler.schedule(BackUpScheduler.daily, dailyBackup, LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+
+
+		//Backup once the Plugin starts
+		if (ConfigUtils.getInt("Backups", "startup") > 0) {
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
+			final @NotNull Backup onStart = new StartupBackup();
+			onStart.run();
+			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
+		}
 	}
 
 	public void terminate() {

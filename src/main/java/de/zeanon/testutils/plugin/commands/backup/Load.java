@@ -4,10 +4,10 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Load {
 
-	public void executeLoad(final @NotNull Backup.ModifierBlock modifiers, final @NotNull Player p) {
+	public void execute(final @NotNull Backup.ModifierBlock modifiers, final @NotNull Player p) {
 		final @Nullable World world = p.getWorld();
 		final @Nullable ProtectedRegion tempRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, modifiers.getPasteSide());
 		final @Nullable ProtectedRegion otherRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, modifiers.getPasteSide());
@@ -63,7 +63,7 @@ public class Load {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
 
-							InitMode.getManualBackupCreator().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackUpScheduler.getManualBackup().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
@@ -71,8 +71,8 @@ public class Load {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
 
-							InitMode.getManualBackupCreator().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
-							InitMode.getManualBackupCreator().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackUpScheduler.getManualBackup().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackUpScheduler.getManualBackup().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");

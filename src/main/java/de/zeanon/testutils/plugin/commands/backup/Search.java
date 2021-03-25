@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Search {
 
-	public void executeSearch(final @NotNull Backup.ModifierBlock modifiers, final @NotNull Player p) {
+	public void execute(final @NotNull Backup.ModifierBlock modifiers, final @NotNull Player p) {
 		final @Nullable World world = p.getWorld();
 		final @Nullable ProtectedRegion tempRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, modifiers.getPasteSide());
 		final @Nullable ProtectedRegion otherRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, modifiers.getPasteSide());

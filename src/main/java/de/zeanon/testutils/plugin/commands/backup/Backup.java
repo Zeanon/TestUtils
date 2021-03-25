@@ -27,13 +27,13 @@ public class Backup {
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase("save")) {
-				Save.executeSave(args, p);
+				Save.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("load")) {
-				Load.executeLoad(Backup.modifiers(args, "load"), p);
+				Load.execute(Backup.modifiers(args, "load"), p);
 			} else if (args[0].equalsIgnoreCase("list")) {
-				de.zeanon.testutils.plugin.commands.backup.List.executeList(Backup.modifiers(args, "list"), p);
+				de.zeanon.testutils.plugin.commands.backup.List.execute(Backup.modifiers(args, "list"), p);
 			} else if (args[0].equalsIgnoreCase("search")) {
-				Search.executeSearch(Backup.modifiers(args, "search"), p);
+				Search.execute(Backup.modifiers(args, "search"), p);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.utils.backup;
 
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
-import de.zeanon.testutils.plugin.utils.interfaces.Backup;
 import java.io.File;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;

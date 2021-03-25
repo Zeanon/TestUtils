@@ -6,7 +6,6 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
-import de.zeanon.testutils.plugin.utils.interfaces.Backup;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;

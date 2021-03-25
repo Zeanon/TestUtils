@@ -9,6 +9,7 @@ import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Save {
 
-	public void executeSave(@NotNull String @NotNull [] args, @NotNull Player p) {
+	public void execute(@NotNull String @NotNull [] args, @NotNull Player p) {
 		if (ConfigUtils.getInt("Backups", "manual") > 0) {
 			if (args.length < 3) {
 				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
@@ -48,8 +49,8 @@ public class Save {
 								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
 								  + ChatColor.RED + "'...");
 
-					InitMode.getManualBackupCreator().backupSide(new BukkitWorld(p.getWorld()), tempRegion, "manual/" + p.getUniqueId(), name);
-					InitMode.getManualBackupCreator().backupSide(new BukkitWorld(p.getWorld()), otherRegion, "manual/" + p.getUniqueId(), name);
+					BackUpScheduler.getManualBackup().backupSide(new BukkitWorld(p.getWorld()), tempRegion, "manual/" + p.getUniqueId(), name);
+					BackUpScheduler.getManualBackup().backupSide(new BukkitWorld(p.getWorld()), otherRegion, "manual/" + p.getUniqueId(), name);
 
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "You registered a new backup for '"
