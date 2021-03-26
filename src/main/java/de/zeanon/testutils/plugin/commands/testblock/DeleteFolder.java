@@ -18,13 +18,13 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class DeleteFolder {
 
-	public void execute(final @NotNull String @NotNull [] args, final @NotNull Player p) {
+	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length <= 3) {
-			if (args.length < 1) {
+			if (args.length < 2) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Missing argument for "
 							  + ChatColor.YELLOW + "<"
-							  + ChatColor.GREEN + "filename"
+							  + ChatColor.DARK_RED + "filename"
 							  + ChatColor.YELLOW + ">");
 				DeleteFolder.usage(p);
 			} else if (args[1].contains("./")) {
@@ -32,9 +32,9 @@ public class DeleteFolder {
 							  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
 				DeleteFolder.usage(p);
 			} else if (args.length == 3
-					   && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
-					   && !args[2].equalsIgnoreCase("confirm")
-					   && !args[2].equalsIgnoreCase("deny")) {
+					   && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId(), args[1])
+					   && !args[2].equalsIgnoreCase("-confirm")
+					   && !args[2].equalsIgnoreCase("-deny")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
 				DeleteFolder.usage(p);
@@ -52,7 +52,7 @@ public class DeleteFolder {
 		return ChatColor.GRAY + "/testutils"
 			   + ChatColor.AQUA + " deletefolder "
 			   + ChatColor.YELLOW + "<"
-			   + ChatColor.GREEN + "foldername"
+			   + ChatColor.DARK_RED + "foldername"
 			   + ChatColor.YELLOW + ">";
 	}
 
@@ -60,37 +60,37 @@ public class DeleteFolder {
 		return ChatColor.RED + "e.g. "
 			   + ChatColor.GRAY + "/testutils"
 			   + ChatColor.AQUA + " deletefolder "
-			   + ChatColor.GREEN + "example";
+			   + ChatColor.DARK_RED + "example";
 	}
 
 	public @NotNull String usageCommand() {
 		return "/testutils deletefolder ";
 	}
 
-	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
+	private void executeInternally(final @NotNull Player p, final @NotNull String[] args) {
 		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[0]);
 
 		if (args.length == 3) {
 			if (file.exists() && file.isDirectory()) {
 				if (Objects.notNull(file.listFiles()).length > 0) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.GREEN + args[1]
+								  + ChatColor.DARK_RED + args[1]
 								  + ChatColor.RED + " still contains files.");
 				}
 				GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
 													  + ChatColor.RED + "Do you really want to delete "
-													  + ChatColor.GREEN + args[1]
+													  + ChatColor.DARK_RED + args[1]
 													  + ChatColor.RED + "?",
 													  "/tu " + args[1] + " confirm",
 													  "/tu " + args[1] + " deny", p);
-				CommandRequestUtils.addDeleteFolderRequest(p.getUniqueId().toString(), args[1]);
+				CommandRequestUtils.addDeleteFolderRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.GREEN + args[1] + ChatColor.RED + " does not exist.");
+							  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " does not exist.");
 			}
-		} else if (args.length == 4 && CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])) {
-			if (args[2].equalsIgnoreCase("confirm")) {
-				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId().toString());
+		} else if (args.length == 4 && CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId(), args[1])) {
+			if (args[2].equalsIgnoreCase("-confirm")) {
+				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());
 				if (file.exists() && file.isDirectory()) {
 					try {
 						FileUtils.deleteDirectory(file);
@@ -99,25 +99,25 @@ public class DeleteFolder {
 															: null;
 
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.GREEN + args[1] +
+									  + ChatColor.DARK_RED + args[1] +
 									  ChatColor.RED + " was deleted successfully.");
 						if (parentName != null) {
 							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "Folder " + ChatColor.GREEN + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
+										  + ChatColor.RED + "Folder " + ChatColor.DARK_RED + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 						}
 					} catch (IOException e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.GREEN + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
+									  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " could not be deleted, for further information please see [console].");
 						e.printStackTrace();
 					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.GREEN + args[1] + ChatColor.RED + " does not exist.");
+								  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " does not exist.");
 				}
-			} else if (args[2].equalsIgnoreCase("deny")) {
-				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId().toString());
+			} else if (args[2].equalsIgnoreCase("-deny")) {
+				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.GREEN + args[1] + ChatColor.RED + " was not deleted.");
+							  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " was not deleted.");
 			}
 		}
 	}

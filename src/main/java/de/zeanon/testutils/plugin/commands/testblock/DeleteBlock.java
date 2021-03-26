@@ -20,20 +20,20 @@ public class DeleteBlock {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length <= 3) {
-			if (args.length < 1) {
+			if (args.length < 2) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Missing argument for "
 							  + ChatColor.YELLOW + "<"
-							  + ChatColor.GOLD + "filename"
+							  + ChatColor.DARK_RED + "filename"
 							  + ChatColor.YELLOW + ">");
 				DeleteBlock.usage(p);
 			} else if (args[1].contains("./")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
 				DeleteBlock.usage(p);
-			} else if (args.length == 3 && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId().toString(), args[1])
-					   && !args[2].equalsIgnoreCase("confirm")
-					   && !args[2].equalsIgnoreCase("deny")) {
+			} else if (args.length == 3 && !CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId(), args[1])
+					   && !args[2].equalsIgnoreCase("-confirm")
+					   && !args[2].equalsIgnoreCase("-deny")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
 				DeleteBlock.usage(p);
@@ -51,7 +51,7 @@ public class DeleteBlock {
 		return ChatColor.GRAY + "/testutils"
 			   + ChatColor.AQUA + " deleteblock "
 			   + ChatColor.YELLOW + "<"
-			   + ChatColor.GOLD + "filename"
+			   + ChatColor.DARK_RED + "filename"
 			   + ChatColor.YELLOW + ">";
 	}
 
@@ -59,31 +59,31 @@ public class DeleteBlock {
 		return ChatColor.RED + "e.g. "
 			   + ChatColor.GRAY + "/testutils"
 			   + ChatColor.AQUA + " deleteblock "
-			   + ChatColor.GOLD + "example";
+			   + ChatColor.DARK_RED + "example";
 	}
 
 	public @NotNull String usageCommand() {
 		return "/testutils deleteblock ";
 	}
 
-	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
+	private void executeInternally(final @NotNull Player p, final @NotNull String[] args) {
 		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
 		if (args.length == 2) {
 			if (file.exists()) {
 				GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
 													  ChatColor.RED + "Do you really want to delete "
-													  + ChatColor.GOLD + args[1]
+													  + ChatColor.DARK_RED + args[1]
 													  + ChatColor.RED + "?",
 													  "/tu deleteblock " + args[1] + " confirm",
 													  "/tu deleteblock " + args[1] + " deny", p);
-				CommandRequestUtils.addDeleteRequest(p.getUniqueId().toString(), args[1]);
+				CommandRequestUtils.addDeleteBlockRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
+							  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " does not exist.");
 			}
-		} else if (args.length == 3 && CommandRequestUtils.checkDeleteRequest(p.getUniqueId().toString(), args[1])) {
-			if (args[2].equalsIgnoreCase("confirm")) {
-				CommandRequestUtils.removeDeleteRequest(p.getUniqueId().toString());
+		} else if (args.length == 3 && CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), args[1])) {
+			if (args[2].equalsIgnoreCase("-confirm")) {
+				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
 				if (file.exists()) {
 					try {
 						Files.delete(file.toPath());
@@ -107,12 +107,12 @@ public class DeleteBlock {
 					}
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
+								  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " does not exist.");
 				}
-			} else if (args[2].equalsIgnoreCase("deny")) {
-				CommandRequestUtils.removeDeleteRequest(p.getUniqueId().toString());
+			} else if (args[2].equalsIgnoreCase("-deny")) {
+				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.GOLD + args[1] + ChatColor.RED + " was not deleted.");
+							  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " was not deleted.");
 			}
 		}
 	}

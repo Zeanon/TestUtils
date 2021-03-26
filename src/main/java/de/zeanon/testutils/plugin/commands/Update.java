@@ -24,13 +24,13 @@ public class Update {
 					, "/tu update confirm"
 					, "/tu update deny"
 					, p);
-			GlobalRequestUtils.addUpdateRequest(p.getUniqueId().toString());
+			GlobalRequestUtils.addUpdateRequest(p.getUniqueId());
 		} else if (args.length == 2
-				   && (args[1].equalsIgnoreCase("confirm")
-					   || args[1].equalsIgnoreCase("deny"))) {
-			if (GlobalRequestUtils.checkUpdateRequest(p.getUniqueId().toString())) {
-				GlobalRequestUtils.removeUpdateRequest(p.getUniqueId().toString());
-				if (args[1].equalsIgnoreCase("confirm")) {
+				   && (args[1].equalsIgnoreCase("-confirm")
+					   || args[1].equalsIgnoreCase("-deny"))) {
+			if (GlobalRequestUtils.checkUpdateRequest(p.getUniqueId())) {
+				GlobalRequestUtils.removeUpdateRequest(p.getUniqueId());
+				if (args[1].equalsIgnoreCase("-confirm")) {
 					if (Bukkit.getVersion().contains("git-Paper")) {
 						de.zeanon.testutils.plugin.update.Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
 					} else {

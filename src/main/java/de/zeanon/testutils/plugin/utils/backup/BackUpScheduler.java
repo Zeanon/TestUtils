@@ -15,8 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @UtilityClass
 public class BackUpScheduler {
 
-	private final @NotNull ScheduledExecutorService daily = Executors.newSingleThreadScheduledExecutor();
-	private final @NotNull ScheduledExecutorService hourly = Executors.newSingleThreadScheduledExecutor();
+	private final @NotNull ScheduledExecutorService internalScheduler = Executors.newSingleThreadScheduledExecutor();
 	@Getter
 	private final @NotNull Backup manualBackup = new ManualBackup();
 
@@ -28,48 +27,42 @@ public class BackUpScheduler {
 																.withSecond(1)
 																.plusHours(1);
 
-		final @NotNull Backup hourlyBackup = new HourlyBackup();
 
-		BackUpScheduler.schedule(BackUpScheduler.hourly, hourlyBackup, LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.scheduleAtFixedRate(BackUpScheduler.internalScheduler, new HourlyBackup(), LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Initialize daily backups
 		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(0)
 															 .plusDays(1);
 
-		final @NotNull Backup dailyBackup = new DailyBackup();
-
-		BackUpScheduler.schedule(BackUpScheduler.daily, dailyBackup, LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackUpScheduler.scheduleAtFixedRate(BackUpScheduler.internalScheduler, new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Backup once the Plugin starts
 		if (ConfigUtils.getInt("Backups", "startup") > 0) {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
-			final @NotNull Backup onStart = new StartupBackup();
-			onStart.run();
+			BackUpScheduler.schedule(BackUpScheduler.internalScheduler, new StartupBackup(), 30, TimeUnit.SECONDS);
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 		}
 	}
 
 	public void terminate() {
 		try {
-			BackUpScheduler.hourly.shutdown();
-			BackUpScheduler.hourly.awaitTermination(100, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			Thread.currentThread().interrupt();
-		}
-
-		try {
-			BackUpScheduler.daily.shutdown();
-			BackUpScheduler.daily.awaitTermination(100, TimeUnit.SECONDS);
+			BackUpScheduler.internalScheduler.shutdown();
+			BackUpScheduler.internalScheduler.awaitTermination(30, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
 	}
 
-	private void schedule(final @NotNull ScheduledExecutorService executorService, final @NotNull Backup backup, final long initialDelay, final long period, final @NotNull TimeUnit unit) {
+	@SuppressWarnings("SameParameterValue")
+	private void scheduleAtFixedRate(final @NotNull ScheduledExecutorService executorService, final @NotNull Backup backup, final long initialDelay, final long period, final @NotNull TimeUnit unit) {
 		executorService.scheduleAtFixedRate(backup, initialDelay, period, unit);
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	private void schedule(final @NotNull ScheduledExecutorService executorService, final @NotNull Backup backup, final long initialDelay, final @NotNull TimeUnit unit) {
+		executorService.schedule(backup, initialDelay, unit);
 	}
 }

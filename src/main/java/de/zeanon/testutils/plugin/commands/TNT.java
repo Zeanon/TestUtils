@@ -52,7 +52,7 @@ public class TNT {
 						}
 					}
 				}
-			} else if (args[0].equalsIgnoreCase("deny")) {
+			} else if (args[0].equalsIgnoreCase("-deny")) {
 				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
 				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
@@ -159,7 +159,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[1].equalsIgnoreCase("deny")) {
+				} else if (args[1].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getRegion(p);
 
@@ -197,7 +197,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[1].equalsIgnoreCase("deny")) {
+				} else if (args[1].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
@@ -239,7 +239,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[1].equalsIgnoreCase("deny")) {
+				} else if (args[1].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
 
@@ -277,7 +277,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[0].equalsIgnoreCase("deny")) {
+				} else if (args[0].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getRegion(p);
 
@@ -315,7 +315,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[0].equalsIgnoreCase("deny")) {
+				} else if (args[0].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
@@ -357,7 +357,7 @@ public class TNT {
 							}
 						}
 					}
-				} else if (args[0].equalsIgnoreCase("deny")) {
+				} else if (args[0].equalsIgnoreCase("-deny")) {
 					final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
 					final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
 

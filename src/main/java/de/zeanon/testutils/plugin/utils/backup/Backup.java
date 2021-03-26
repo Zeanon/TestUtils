@@ -55,8 +55,9 @@ public abstract class Backup implements Runnable {
 						final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + worldFolder.getName() + "/" + regionFolder.getName());
 
 						if (tempManager.hasRegion("testarea_" + regionFolder.getName() + "_north") && tempManager.hasRegion("testarea_" + regionFolder.getName() + "_south")) {
-							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), this.sequence.getPath(null), name);
-							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), this.sequence.getPath(null), name);
+							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), folder);
+							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), folder);
 
 							new BukkitRunnable() {
 								@Override
@@ -81,7 +82,7 @@ public abstract class Backup implements Runnable {
 		}
 	}
 
-	public void backupSide(final @NotNull World tempWorld, final @NotNull ProtectedRegion tempRegion, final @NotNull String folder, final @NotNull String date) {
+	public void backupSide(final @NotNull World tempWorld, final @NotNull ProtectedRegion tempRegion, final @NotNull File folder) {
 		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
@@ -97,7 +98,7 @@ public abstract class Backup implements Runnable {
 
 			Operations.complete(forwardExtentCopy);
 
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + folder + "/" + date + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
+			final @NotNull File tempFile = new File(folder, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
 
 			BaseFileUtils.createFile(tempFile);
 

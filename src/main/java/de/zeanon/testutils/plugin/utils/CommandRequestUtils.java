@@ -1,129 +1,109 @@
 package de.zeanon.testutils.plugin.utils;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
 public class CommandRequestUtils {
 
-	private final @NotNull Map<String, String> deleteRequests = new ConcurrentHashMap<>();
+	private final @NotNull Map<String, String> deleteBlockRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> deleteFolderRequests = new ConcurrentHashMap<>();
+	private final @NotNull Map<String, Pair<String, String>> deleteBackupRequests = new ConcurrentHashMap<>();
+	private final @NotNull Map<String, Pair<String, String>> overwriteBackupRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameFolderRequests = new ConcurrentHashMap<>();
-	private final @NotNull Map<String, String> overwriteRequests = new ConcurrentHashMap<>();
-	private final @NotNull Map<String, String> downloadRequests = new ConcurrentHashMap<>();
-	private final @NotNull Map<String, String> copyRequest = new ConcurrentHashMap<>();
-	private final @NotNull Map<String, String> copyFolderRequest = new ConcurrentHashMap<>();
 
 
-	public void addCopyRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.copyRequest.put(uuid, name);
+	public void addDeleteBlockRequest(final @NotNull UUID uuid, final String name) {
+		CommandRequestUtils.deleteBlockRequests.put(uuid.toString(), name);
 	}
 
-	public void removeCopyRequest(final @NotNull String uuid) {
-		CommandRequestUtils.copyRequest.remove(uuid);
+	public void removeDeleteBlockRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.deleteBlockRequests.remove(uuid.toString());
 	}
 
-	public boolean checkCopyRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.copyRequest.containsKey(uuid)
-			   && CommandRequestUtils.copyRequest.get(uuid).equalsIgnoreCase(name);
-	}
-
-	public void addCopyFolderRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.copyFolderRequest.put(uuid, name);
-	}
-
-	public void removeCopyFolderRequest(final @NotNull String uuid) {
-		CommandRequestUtils.copyFolderRequest.remove(uuid);
-	}
-
-	public boolean checkCopyFolderRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.copyFolderRequest.containsKey(uuid)
-			   && CommandRequestUtils.copyFolderRequest.get(uuid).equalsIgnoreCase(name);
-	}
-
-	public void addDeleteRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.deleteRequests.put(uuid, name);
-	}
-
-	public void removeDeleteRequest(final @NotNull String uuid) {
-		CommandRequestUtils.deleteRequests.remove(uuid);
-	}
-
-	public boolean checkDeleteRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.deleteRequests.containsKey(uuid)
-			   && CommandRequestUtils.deleteRequests.get(uuid).equalsIgnoreCase(name);
+	public boolean checkDeleteBlockRequest(final @NotNull UUID uuid, final String name) {
+		return CommandRequestUtils.deleteBlockRequests.containsKey(uuid.toString())
+			   && CommandRequestUtils.deleteBlockRequests.get(uuid.toString()).equalsIgnoreCase(name);
 	}
 
 
-	public void addDeleteFolderRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.deleteFolderRequests.put(uuid, name);
+	public void addDeleteBackupRequest(final @NotNull UUID uuid, final @NotNull String name, final @NotNull String region) {
+		CommandRequestUtils.deleteBackupRequests.put(uuid.toString(), new Pair<>(name, region));
 	}
 
-	public void removeDeleteFolderRequest(final @NotNull String uuid) {
-		CommandRequestUtils.deleteFolderRequests.remove(uuid);
+	public void removeDeleteBackupRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.deleteBackupRequests.remove(uuid.toString());
 	}
 
-	public boolean checkDeleteFolderRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.deleteFolderRequests.containsKey(uuid)
-			   && CommandRequestUtils.deleteFolderRequests.get(uuid).equalsIgnoreCase(name);
-	}
-
-
-	public void addRenameRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.renameRequests.put(uuid, name);
-	}
-
-	public void removeRenameRequest(final @NotNull String uuid) {
-		CommandRequestUtils.renameRequests.remove(uuid);
-	}
-
-	public boolean checkRenameRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.renameRequests.containsKey(uuid)
-			   && CommandRequestUtils.renameRequests.get(uuid).equalsIgnoreCase(name);
+	public @Nullable String checkDeleteBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
+		return (CommandRequestUtils.deleteBackupRequests.containsKey(uuid.toString())
+				&& CommandRequestUtils.deleteBackupRequests.get(uuid.toString()).getKey().equalsIgnoreCase(name))
+			   ? CommandRequestUtils.deleteBackupRequests.get(uuid.toString()).getValue()
+			   : null;
 	}
 
 
-	public void addRenameFolderRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.renameFolderRequests.put(uuid, name);
+	public void addOverwriteBackupRequest(final @NotNull UUID uuid, final @NotNull String name, final @NotNull String region) {
+		CommandRequestUtils.overwriteBackupRequests.put(uuid.toString(), new Pair<>(name, region));
 	}
 
-	public void removeRenameFolderRequest(final @NotNull String uuid) {
-		CommandRequestUtils.renameFolderRequests.remove(uuid);
+	public void removeOverwriteBackupRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.overwriteBackupRequests.remove(uuid.toString());
 	}
 
-	public boolean checkRenameFolderRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.renameFolderRequests.containsKey(uuid)
-			   && CommandRequestUtils.renameFolderRequests.get(uuid).equalsIgnoreCase(name);
+	public @Nullable String checkOverwriteBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
+		return (CommandRequestUtils.overwriteBackupRequests.containsKey(uuid.toString())
+				&& CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getKey().equalsIgnoreCase(name))
+			   ? CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getValue()
+			   : null;
 	}
 
 
-	public void addOverwriteRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.overwriteRequests.put(uuid, name);
+	public void addDeleteFolderRequest(final @NotNull UUID uuid, final String name) {
+		CommandRequestUtils.deleteFolderRequests.put(uuid.toString(), name);
 	}
 
-	public void removeOverWriteRequest(final @NotNull String uuid) {
-		CommandRequestUtils.overwriteRequests.remove(uuid);
+	public void removeDeleteFolderRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.deleteFolderRequests.remove(uuid.toString());
 	}
 
-	public boolean checkOverWriteRequest(final @NotNull String uuid, final String name) {
-		return CommandRequestUtils.overwriteRequests.containsKey(uuid)
-			   && CommandRequestUtils.overwriteRequests.get(uuid).equalsIgnoreCase(name);
+	public boolean checkDeleteFolderRequest(final @NotNull UUID uuid, final String name) {
+		return CommandRequestUtils.deleteFolderRequests.containsKey(uuid.toString())
+			   && CommandRequestUtils.deleteFolderRequests.get(uuid.toString()).equalsIgnoreCase(name);
 	}
 
-	public void addDownloadRequest(final @NotNull String uuid, final String name) {
-		CommandRequestUtils.downloadRequests.put(uuid, name);
+
+	public void addRenameRequest(final @NotNull UUID uuid, final String name) {
+		CommandRequestUtils.renameRequests.put(uuid.toString(), name);
 	}
 
-	public void removeDownloadRequest(final @NotNull String uuid) {
-		CommandRequestUtils.downloadRequests.remove(uuid);
+	public void removeRenameRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.renameRequests.remove(uuid.toString());
 	}
 
-	public boolean checkDownloadRequest(final @NotNull String uuid, final @NotNull String name) {
-		return CommandRequestUtils.downloadRequests.containsKey(uuid)
-			   && CommandRequestUtils.downloadRequests.get(uuid).equalsIgnoreCase(name);
+	public boolean checkRenameRequest(final @NotNull UUID uuid, final String name) {
+		return CommandRequestUtils.renameRequests.containsKey(uuid.toString())
+			   && CommandRequestUtils.renameRequests.get(uuid.toString()).equalsIgnoreCase(name);
+	}
+
+
+	public void addRenameFolderRequest(final @NotNull UUID uuid, final String name) {
+		CommandRequestUtils.renameFolderRequests.put(uuid.toString(), name);
+	}
+
+	public void removeRenameFolderRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.renameFolderRequests.remove(uuid.toString());
+	}
+
+	public boolean checkRenameFolderRequest(final @NotNull UUID uuid, final String name) {
+		return CommandRequestUtils.renameFolderRequests.containsKey(uuid.toString())
+			   && CommandRequestUtils.renameFolderRequests.get(uuid.toString()).equalsIgnoreCase(name);
 	}
 }

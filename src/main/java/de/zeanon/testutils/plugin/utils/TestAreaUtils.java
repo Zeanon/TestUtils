@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.utils;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
@@ -104,5 +105,15 @@ public class TestAreaUtils {
 			}
 		}
 		return null;
+	}
+
+	public @Nullable ProtectedRegion getSouthRegion(final @NotNull World world, final @NotNull String name) {
+		return Objects.notNull(InitMode.getRegionContainer()
+									   .get(world)).getRegion("testarea_" + name + "_south");
+	}
+
+	public @Nullable ProtectedRegion getNorthRegion(final @NotNull World world, final @NotNull String name) {
+		return Objects.notNull(InitMode.getRegionContainer()
+									   .get(world)).getRegion("testarea_" + name + "_north");
 	}
 }

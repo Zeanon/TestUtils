@@ -25,10 +25,10 @@ import org.jetbrains.annotations.NotNull;
 public class TestUtilsTabCompleter implements TabCompleter {
 
 	@Override
-	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String @NotNull [] args) {
+	public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final @NotNull String[] args) {
 		if (args.length == 1) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
-				return this.getCompletions(args[0], "allow", "deny", "-other", "-n", "-north", "-s", "-south");
+				return this.getCompletions(args[0], "allow", "-deny", "-other", "-n", "-north", "-s", "-south");
 			} else if (command.getName().equalsIgnoreCase("testblock")) {
 				final @NotNull List<String> completions = this.getCompletions(args[0],
 																			  "-here",
@@ -50,14 +50,17 @@ public class TestUtilsTabCompleter implements TabCompleter {
 										   "registerreset",
 										   "registerblock",
 										   "deleteblock",
+										   "delblock",
 										   "deletefolder",
+										   "delfolder",
 										   "renameblock",
 										   "renamefolder",
 										   "registerarea",
 										   "deletearea",
+										   "delarea",
 										   "update");
 			} else if (command.getName().equalsIgnoreCase("backup")) {
-				return this.getCompletions(args[0], "load", "save", "list", "search");
+				return this.getCompletions(args[0], "load", "save", "list", "search", "delete", "del");
 			}
 		} else if (args.length == 2) {
 			if (command.getName().equalsIgnoreCase("tnt")) {
@@ -66,16 +69,18 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					|| args[0].equalsIgnoreCase("-n")
 					|| args[0].equalsIgnoreCase("-south")
 					|| args[0].equalsIgnoreCase("-s")) {
-					return this.getCompletions(args[1], "allow", "deny");
-				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("deny")) {
+					return this.getCompletions(args[1], "allow", "-deny");
+				} else if (args[0].equalsIgnoreCase("allow") || args[0].equalsIgnoreCase("-deny")) {
 					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
 				}
 			} else if (command.getName().equalsIgnoreCase("testutils")) {
 				if (args[0].equalsIgnoreCase("update")
-					&& GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId().toString())) {
-					return this.getCompletions(args[1], "confirm", "deny");
+					&& GlobalRequestUtils.checkUpdateRequest(((Player) sender).getUniqueId())) {
+					return this.getCompletions(args[1], "-confirm", "-deny");
 				} else if (args[0].equalsIgnoreCase("deleteblock")
+						   || args[0].equalsIgnoreCase("delblock")
 						   || args[0].equalsIgnoreCase("deletefolder")
+						   || args[0].equalsIgnoreCase("delfolder")
 						   || args[0].equalsIgnoreCase("renameblock")
 						   || args[0].equalsIgnoreCase("renamefolder")
 						   || args[0].equalsIgnoreCase("registerblock")) {
@@ -90,7 +95,7 @@ public class TestUtilsTabCompleter implements TabCompleter {
 					return completions;
 				} else if (args[0].equalsIgnoreCase("replacetnt")) {
 					return this.getCompletions(args[1], "-other", "-north", "-n", "-south", "-s");
-				} else if (args[0].equalsIgnoreCase("deletearea")) {
+				} else if (args[0].equalsIgnoreCase("deletearea") || args[0].equalsIgnoreCase("delarea")) {
 					return this.getRegions(args[1], new BukkitWorld(((Player) sender).getWorld()));
 				}
 			} else if (command.getName().equalsIgnoreCase("testblock")) {

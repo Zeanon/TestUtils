@@ -31,9 +31,9 @@ public class TestUtils {
 				ReplaceArea.execute(args, p, true);
 			} else if (args[0].equalsIgnoreCase("replacetnt")) {
 				ReplaceArea.execute(args, p, false);
-			} else if (args[0].equalsIgnoreCase("deleteblock")) {
+			} else if (args[0].equalsIgnoreCase("deleteblock") || args[0].equalsIgnoreCase("delblock")) {
 				DeleteBlock.execute(args, p);
-			} else if (args[0].equalsIgnoreCase("deletefolder")) {
+			} else if (args[0].equalsIgnoreCase("deletefolder") || args[0].equalsIgnoreCase("delfolder")) {
 				DeleteFolder.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("renameblock")) {
 				RenameBlock.execute(args, p);
@@ -41,7 +41,7 @@ public class TestUtils {
 				RenameFolder.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("registerarea")) {
 				RegisterArea.execute(args, p);
-			} else if (args[0].equalsIgnoreCase("deletearea")) {
+			} else if (args[0].equalsIgnoreCase("deletearea") || args[0].equalsIgnoreCase("delarea")) {
 				DeleteArea.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("update")) {
 				Update.execute(args, p);

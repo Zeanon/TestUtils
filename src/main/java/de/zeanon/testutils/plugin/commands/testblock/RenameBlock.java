@@ -33,9 +33,9 @@ public class RenameBlock {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "File '" + name + "' resolution error: Path is not allowed.");
 				RenameBlock.usage(p);
-			} else if (args.length == 4 && !CommandRequestUtils.checkRenameRequest(p.getUniqueId().toString(), args[1])
-					   && !args[2].equalsIgnoreCase("confirm")
-					   && !args[2].equalsIgnoreCase("deny")) {
+			} else if (args.length == 4 && !CommandRequestUtils.checkRenameRequest(p.getUniqueId(), args[1])
+					   && !args[2].equalsIgnoreCase("-confirm")
+					   && !args[2].equalsIgnoreCase("-deny")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Too many arguments.");
 				RenameBlock.usage(p);
@@ -70,7 +70,7 @@ public class RenameBlock {
 		return "/testutils renameblock ";
 	}
 
-	private void executeInternally(final @NotNull Player p, final @NotNull String @NotNull [] args) {
+	private void executeInternally(final @NotNull Player p, final @NotNull String[] args) {
 		final @NotNull File oldFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[1] + ".schem");
 		final @NotNull File newFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + args[2] + ".schem");
 
@@ -85,22 +85,22 @@ public class RenameBlock {
 													  + ChatColor.RED + "Do you really want to rename " + ChatColor.GOLD + args[1] + ChatColor.RED + "?",
 													  "/tu renameblock " + args[1] + " " + args[2] + " confirm",
 													  "/tu renameblock " + args[1] + " " + args[2] + " deny", p);
-				CommandRequestUtils.addRenameRequest(p.getUniqueId().toString(), args[1]);
+				CommandRequestUtils.addRenameRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
 			}
-		} else if (args.length == 4 && CommandRequestUtils.checkRenameRequest(p.getUniqueId().toString(), args[1])) {
-			if (args[3].equalsIgnoreCase("confirm")) {
-				CommandRequestUtils.removeRenameRequest(p.getUniqueId().toString());
+		} else if (args.length == 4 && CommandRequestUtils.checkRenameRequest(p.getUniqueId(), args[1])) {
+			if (args[3].equalsIgnoreCase("-confirm")) {
+				CommandRequestUtils.removeRenameRequest(p.getUniqueId());
 				if (oldFile.exists()) {
 					RenameBlock.moveFile(p, args[1], oldFile, newFile);
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.GOLD + args[1] + ChatColor.RED + " does not exist.");
 				}
-			} else if (args[3].equalsIgnoreCase("deny")) {
-				CommandRequestUtils.removeRenameRequest(p.getUniqueId().toString());
+			} else if (args[3].equalsIgnoreCase("-deny")) {
+				CommandRequestUtils.removeRenameRequest(p.getUniqueId());
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.GOLD + args[1] + ChatColor.RED + " was not renamed.");
 			}

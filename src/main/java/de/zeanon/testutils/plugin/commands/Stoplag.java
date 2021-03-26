@@ -148,7 +148,7 @@ public class Stoplag {
 						}
 					}
 				}
-			} else if (args[1].equalsIgnoreCase("-global") || args[1].equalsIgnoreCase("confirm")) {
+			} else if (args[1].equalsIgnoreCase("-global") || args[1].equalsIgnoreCase("-confirm")) {
 				p.performCommand("stoplag confirm");
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead

@@ -40,6 +40,7 @@ public class InitMode {
 	@Getter
 	private RegionContainer regionContainer;
 
+
 	public void initPlugin() {
 		try {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Loading Config...");

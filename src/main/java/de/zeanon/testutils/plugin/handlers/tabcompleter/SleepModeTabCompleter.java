@@ -22,10 +22,10 @@ public class SleepModeTabCompleter implements TabCompleter {
 				}
 			} else if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("update")) {
-					if ("confirm".startsWith(args[1].toLowerCase())) {
-						return Collections.singletonList("confirm");
-					} else if ("deny".startsWith(args[1].toLowerCase())) {
-						return Collections.singletonList("deny");
+					if ("-confirm".startsWith(args[1].toLowerCase())) {
+						return Collections.singletonList("-confirm");
+					} else if ("-deny".startsWith(args[1].toLowerCase())) {
+						return Collections.singletonList("-deny");
 					} else {
 						return null;
 					}
