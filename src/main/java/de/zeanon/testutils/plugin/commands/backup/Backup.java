@@ -34,11 +34,14 @@ public class Backup {
 				de.zeanon.testutils.plugin.commands.backup.List.execute(Backup.modifiers(args, "list"), p);
 			} else if (args[0].equalsIgnoreCase("search")) {
 				Search.execute(Backup.modifiers(args, "search"), p);
+			} else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del")) {
+				Delete.execute(args, p);
 			}
 		}
 	}
 
-	public @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackUpMode backUpMode) throws IOException {
+	public @NotNull
+	Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackUpMode backUpMode) throws IOException {
 		if (backUpMode == BackUpMode.NONE) {
 			return Backup.getLatest(regionFolder, uuid);
 		} else {
@@ -112,7 +115,8 @@ public class Backup {
 		target.spigot().sendMessage(localMessage);
 	}
 
-	public @Nullable File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
+	public @Nullable
+	File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
 		switch (backUpMode) {
 			case NONE:
 				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "manual/" + p.getUniqueId()), name)) {
@@ -181,7 +185,8 @@ public class Backup {
 		return possibleFirst;
 	}
 
-	private @NotNull Backup.ModifierBlock modifiers(final @NotNull String[] args, final @NotNull String command) {
+	private @NotNull
+	Backup.ModifierBlock modifiers(final @NotNull String[] args, final @NotNull String command) {
 		final @NotNull Backup.ModifierBlock result = new ModifierBlock(PasteSide.NONE, BackUpMode.NONE, null);
 		for (final @NotNull String arg : args) {
 			if (PasteSide.parse(arg) != PasteSide.NONE) {
@@ -200,13 +205,16 @@ public class Backup {
 
 		@Getter
 		@Setter
-		private @NotNull PasteSide pasteSide;
+		private @NotNull
+		PasteSide pasteSide;
 		@Getter
 		@Setter
-		private @NotNull BackUpMode backUpMode;
+		private @NotNull
+		BackUpMode backUpMode;
 		@Getter
 		@Setter
-		private @Nullable String fileName;
+		private @Nullable
+		String fileName;
 
 		private ModifierBlock(final @NotNull PasteSide pasteSide, final @NotNull BackUpMode backUpMode, final @Nullable String fileName) {
 			this.pasteSide = pasteSide;
