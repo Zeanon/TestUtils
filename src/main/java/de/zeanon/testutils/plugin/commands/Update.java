@@ -4,9 +4,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -31,16 +29,7 @@ public class Update {
 			if (GlobalRequestUtils.checkUpdateRequest(p.getUniqueId())) {
 				GlobalRequestUtils.removeUpdateRequest(p.getUniqueId());
 				if (args[1].equalsIgnoreCase("-confirm")) {
-					if (Bukkit.getVersion().contains("git-Paper")) {
-						de.zeanon.testutils.plugin.update.Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
-					} else {
-						new BukkitRunnable() {
-							@Override
-							public void run() {
-								de.zeanon.testutils.plugin.update.Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
-							}
-						}.runTask(de.zeanon.testutils.TestUtils.getInstance());
-					}
+					de.zeanon.testutils.plugin.update.Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
 				} else {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
 								  + ChatColor.RED + "Plugin will not be updated.");

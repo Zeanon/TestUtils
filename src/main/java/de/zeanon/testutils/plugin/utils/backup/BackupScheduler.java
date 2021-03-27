@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 
 @UtilityClass
-public class BackUpScheduler {
+public class BackupScheduler {
 
 	private final @NotNull ScheduledExecutorService internalScheduler = Executors.newSingleThreadScheduledExecutor();
 	@Getter
-	private final @NotNull Backup manualBackup = new ManualBackup();
+	private final @NotNull Backup MANUAL_BACKUP = new ManualBackup();
 
 
 	public void backup() {
@@ -28,28 +28,28 @@ public class BackUpScheduler {
 																.plusHours(1);
 
 
-		BackUpScheduler.scheduleAtFixedRate(BackUpScheduler.internalScheduler, new HourlyBackup(), LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
+		BackupScheduler.scheduleAtFixedRate(BackupScheduler.internalScheduler, new HourlyBackup(), LocalDateTime.now().until(hourlyStart, ChronoUnit.SECONDS), TimeUnit.HOURS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Initialize daily backups
 		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(0)
 															 .plusDays(1);
 
-		BackUpScheduler.scheduleAtFixedRate(BackUpScheduler.internalScheduler, new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackupScheduler.scheduleAtFixedRate(BackupScheduler.internalScheduler, new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
 
 		//Backup once the Plugin starts
 		if (ConfigUtils.getInt("Backups", "startup") > 0) {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
-			BackUpScheduler.schedule(BackUpScheduler.internalScheduler, new StartupBackup(), 30, TimeUnit.SECONDS);
+			BackupScheduler.schedule(BackupScheduler.internalScheduler, new StartupBackup(), 10, TimeUnit.SECONDS);
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 		}
 	}
 
 	public void terminate() {
 		try {
-			BackUpScheduler.internalScheduler.shutdown();
-			BackUpScheduler.internalScheduler.awaitTermination(30, TimeUnit.SECONDS);
+			BackupScheduler.internalScheduler.shutdown();
+			BackupScheduler.internalScheduler.awaitTermination(10, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			Thread.currentThread().interrupt();

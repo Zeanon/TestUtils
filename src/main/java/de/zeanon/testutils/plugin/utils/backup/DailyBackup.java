@@ -24,7 +24,7 @@ public class DailyBackup extends Backup {
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
 		try {
-			final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
+			final @NotNull File dailyBackup = new File(backupFolder, DailyBackup.this.sequence.getPath(null));
 			if (dailyBackup.exists()) {
 				@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
 				while (files.size() > ConfigUtils.getInt("Backups", "daily")) {
@@ -39,5 +39,15 @@ public class DailyBackup extends Backup {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void systemOutStart() {
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Daily-Backup...");
+	}
+
+	@Override
+	protected void systemOutDone() {
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Daily-Backup.");
 	}
 }

@@ -18,7 +18,6 @@ import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplag
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
-import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.time.format.DateTimeFormatter;
@@ -100,7 +99,7 @@ public class InitMode {
 				ScoreBoard.initialize(p);
 			}
 
-			BackUpScheduler.backup();
+			//BackUpScheduler.backup();
 		} else {
 			InitMode.enableSleepMode();
 		}

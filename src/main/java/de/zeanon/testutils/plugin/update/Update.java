@@ -8,6 +8,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,6 +37,7 @@ public class Update {
 	}
 
 	public void updatePlugin(final @NotNull Player p, final @NotNull JavaPlugin instance) {
+		BackupScheduler.terminate();
 		if (TestUtils.getPluginManager().getPlugin("PlugMan") != null
 			&& TestUtils.getPluginManager()
 						.isPluginEnabled(TestUtils.getPluginManager().getPlugin("PlugMan"))) {

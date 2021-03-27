@@ -151,7 +151,7 @@ public class ScoreBoard {
 							  + " here: "
 							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
 								 ? ChatColor.GREEN + "allow"
-								 : ChatColor.RED + "-deny"));
+								 : ChatColor.RED + "deny"));
 		infoBoard.getScore(ChatColor.BOLD + "" + ChatColor.BOLD).setScore(5);
 
 		final @NotNull Team tntInfoOther = scoreboard.registerNewTeam("tntinfoother");
@@ -164,7 +164,7 @@ public class ScoreBoard {
 							   + " other: "
 							   + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
 								  ? ChatColor.GREEN + "allow"
-								  : ChatColor.RED + "-deny"));
+								  : ChatColor.RED + "deny"));
 		infoBoard.getScore(ChatColor.DARK_AQUA + "" + ChatColor.DARK_AQUA).setScore(4);
 
 		final @NotNull Score stoplag = infoBoard.getScore(ChatColor.DARK_GRAY
@@ -252,7 +252,7 @@ public class ScoreBoard {
 							  + " here: "
 							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
 								 ? ChatColor.GREEN + "allow"
-								 : ChatColor.RED + "-deny"));
+								 : ChatColor.RED + "deny"));
 
 			Objects.notNull(scoreboard.getTeam("tntinfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -263,7 +263,7 @@ public class ScoreBoard {
 							  + " other: "
 							  + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
 								 ? ChatColor.GREEN + "allow"
-								 : ChatColor.RED + "-deny"));
+								 : ChatColor.RED + "deny"));
 
 			Objects.notNull(scoreboard.getTeam("stoplaginfohere"))
 				   .setPrefix(ChatColor.DARK_GRAY

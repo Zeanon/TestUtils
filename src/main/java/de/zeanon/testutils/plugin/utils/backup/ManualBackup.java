@@ -22,4 +22,14 @@ public class ManualBackup extends Backup {
 	protected void cleanup(final @NotNull File backupFolder) {
 		//NOTHING
 	}
+
+	@Override
+	protected void systemOutStart() {
+		//DO NOTHING
+	}
+
+	@Override
+	protected void systemOutDone() {
+		//DO NOTHING
+	}
 }

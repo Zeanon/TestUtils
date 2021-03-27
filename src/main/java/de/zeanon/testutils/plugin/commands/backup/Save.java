@@ -7,7 +7,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
-import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
+import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -103,9 +103,9 @@ public class Save {
 					  + ChatColor.RED + "Registering Backup for '"
 					  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
 					  + ChatColor.RED + "'...");
-		BackUpScheduler.getManualBackup().backupSide(tempWorld, tempRegion, folder);
+		BackupScheduler.getMANUAL_BACKUP().backupSide(tempWorld, tempRegion, folder);
 
-		BackUpScheduler.getManualBackup().backupSide(tempWorld, otherRegion, folder);
+		BackupScheduler.getMANUAL_BACKUP().backupSide(tempWorld, otherRegion, folder);
 
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "You registered a new backup for '"

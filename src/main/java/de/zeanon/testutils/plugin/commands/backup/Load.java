@@ -7,7 +7,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.backup.BackUpScheduler;
+import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
 import java.io.File;
@@ -63,7 +63,7 @@ public class Load {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
 
-							BackUpScheduler.getManualBackup().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for " + modifiers.getPasteSide().toString() + " side.");
@@ -71,8 +71,8 @@ public class Load {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "Loading the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");
 
-							BackUpScheduler.getManualBackup().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
-							BackUpScheduler.getManualBackup().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
+							BackupScheduler.getMANUAL_BACKUP().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem"));
 
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "You pasted the " + (modifiers.getFileName() == null ? "latest " + (modifiers.getBackUpMode() != BackUpMode.NONE ? modifiers.getBackUpMode() : "") + " backup" : "backup '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "'") + " for your Testarea.");

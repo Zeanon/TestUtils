@@ -23,7 +23,7 @@ public class HourlyBackup extends Backup {
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
 		try {
-			final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath(null));
+			final @NotNull File hourlyBackup = new File(backupFolder, HourlyBackup.this.sequence.getPath(null));
 			if (hourlyBackup.exists()) {
 				@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
 				while (files.size() > ConfigUtils.getInt("Backups", "hourly")) {
@@ -38,5 +38,15 @@ public class HourlyBackup extends Backup {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void systemOutStart() {
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Hourly-Backup...");
+	}
+
+	@Override
+	protected void systemOutDone() {
+		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Hourly-Backup.");
 	}
 }

@@ -37,13 +37,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 @AllArgsConstructor
-public abstract class Backup implements Runnable {
+public abstract class Backup extends BukkitRunnable {
 
 	protected final @NotNull BackUpMode sequence;
 
 	@Override
 	public void run() {
 		if (ConfigUtils.getInt("Backups", this.sequence.toString()) > 0) {
+			this.systemOutStart();
 			try {
 				final @NotNull String name = LocalDateTime.now().format(InitMode.getFormatter());
 				@NotNull RegionManager tempManager;
@@ -59,12 +60,7 @@ public abstract class Backup implements Runnable {
 							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_north")), folder);
 							this.backupSide(tempWorld, Objects.notNull(tempManager.getRegion("testarea_" + regionFolder.getName() + "_south")), folder);
 
-							new BukkitRunnable() {
-								@Override
-								public void run() {
-									Backup.this.cleanup(backupFolder);
-								}
-							}.runTaskAsynchronously(TestUtils.getInstance());
+							Backup.this.cleanup(backupFolder);
 						} else {
 							FileUtils.deleteDirectory(regionFolder);
 							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
@@ -76,6 +72,7 @@ public abstract class Backup implements Runnable {
 						}
 					}
 				}
+				this.systemOutDone();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -129,4 +126,8 @@ public abstract class Backup implements Runnable {
 	}
 
 	protected abstract void cleanup(final @NotNull File backupFolder);
+
+	protected abstract void systemOutStart();
+
+	protected abstract void systemOutDone();
 }

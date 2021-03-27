@@ -5,6 +5,7 @@ author: Zeanon
 website: ${project.url}
 main: de.zeanon.testutils.TestUtils
 api-version: 1.15
+load: POSTWORLD
 softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
 commands:
   testutils:
