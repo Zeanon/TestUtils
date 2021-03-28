@@ -3,15 +3,16 @@ package de.zeanon.testutils.plugin.commands.testarea;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -44,13 +45,13 @@ public class InvertArea {
 		}
 	}
 
-	private void invertArea(final @NotNull Player p, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
+	private void invertArea(final @NotNull Player p, final @Nullable Region tempRegion, final @NotNull String area) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
 
 				final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
 				airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());

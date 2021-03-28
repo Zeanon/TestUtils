@@ -13,11 +13,11 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class RegisterBlock {
 						  + ChatColor.DARK_RED + name + ChatColor.RED
 						  + "' being a sub-command of /testblock.");
 		} else {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -68,12 +68,12 @@ public class RegisterBlock {
 							  + ChatColor.DARK_RED + (name == null ? "default" : name)
 							  + ChatColor.RED + "'...");
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
 				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
 				final @NotNull BlockVector3 copyPoint;
 
-				if (tempRegion.getId().endsWith("_south")) {
+				if (tempRegion.getName().endsWith("_south")) {
 					copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
 				} else {
 					copyPoint = region.getMinimumPoint();
@@ -87,7 +87,7 @@ public class RegisterBlock {
 					copy.setCopyingEntities(false);
 					copy.setCopyingBiomes(false);
 
-					if (tempRegion.getId().endsWith("_south")) {
+					if (tempRegion.getName().endsWith("_south")) {
 						copy.setTransform(new AffineTransform().rotateY(180));
 					}
 

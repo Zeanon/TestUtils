@@ -1,18 +1,10 @@
 package de.zeanon.testutils.plugin.commands;
 
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import java.util.HashSet;
-import java.util.Set;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,24 +13,21 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Stoplag {
 
-	private final @NotNull Set<String> stoplagRegions = new HashSet<>();
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 1) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 			} else {
-				if (!Stoplag.stoplagRegions.contains(tempRegion.getId())) {
-					Stoplag.stoplagRegions.add(tempRegion.getId());
-					Stoplag.stoplagRegions.add(otherRegion.getId());
-				}
+				tempRegion.setStoplag(true);
+				otherRegion.setStoplag(true);
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
-						 || otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
+					if ((tempRegion.inRegion(tempPlayer.getLocation())
+						 || otherRegion.inRegion(tempPlayer.getLocation()))) {
 						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
 											   + ChatColor.RED + "Stoplag has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " in your TestArea.");
 					}
@@ -46,103 +35,103 @@ public class Stoplag {
 			}
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-c")) {
-				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To deactivate stoplag globally, type '/stoplag global'.");
 				} else {
-					Stoplag.stoplagRegions.remove(tempRegion.getId());
-					Stoplag.stoplagRegions.remove(otherRegion.getId());
+					tempRegion.setStoplag(false);
+					otherRegion.setStoplag(false);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-						if ((tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())
-							 || otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ()))) {
+						if ((tempRegion.inRegion(tempPlayer.getLocation())
+							 || otherRegion.inRegion(tempPlayer.getLocation()))) {
 							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
 												   + ChatColor.RED + "Stoplag has been deactivated in your TestArea.");
 						}
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-here")) {
-				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
-					Stoplag.stoplagRegions.add(tempRegion.getId());
+					tempRegion.setStoplag(true);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						if (tempRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 						}
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-other")) {
-				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
-				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getRegion(p);
+				final @Nullable Region tempRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
-					Stoplag.stoplagRegions.add(tempRegion.getId());
+					tempRegion.setStoplag(true);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempPlayer == p) {
 							tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 						} else {
-							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							if (tempRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 							}
 						}
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
-				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
-				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
-					Stoplag.stoplagRegions.add(tempRegion.getId());
+					tempRegion.setStoplag(true);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempPlayer == p) {
 							tempPlayer.sendMessage(Stoplag.getNowActivated("the north"));
 						} else {
-							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							if (tempRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 							}
 						}
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
-				final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
-				final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable Region tempRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getNorthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag global'.");
 				} else {
-					Stoplag.stoplagRegions.add(tempRegion.getId());
+					tempRegion.setStoplag(true);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempPlayer == p) {
 							tempPlayer.sendMessage(Stoplag.getNowActivated("the south"));
 						} else {
-							if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							if (tempRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("your"));
-							} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+							} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 								tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 							}
 						}
@@ -169,101 +158,84 @@ public class Stoplag {
 		}
 	}
 
-	public boolean inStoplagRegion(final @NotNull Location location) {
-		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
-																		   .get(new BukkitWorld(location.getWorld())));
-		for (final @NotNull ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(location.getX(),
-																									location.getY(),
-																									location.getZ()))) {
-			if (Stoplag.stoplagRegions.contains(temp.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isStopLagRegion(final @NotNull ProtectedRegion region) {
-		return Stoplag.stoplagRegions.contains(region.getId());
-	}
-
 	private void deactivate(final @NotNull String arg, final @NotNull Player p) {
 		if (arg.equalsIgnoreCase("-global")) {
 			p.performCommand("stoplag -c");
 		} else if (arg.equalsIgnoreCase("-here")) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "To deactivate stoplag globally, type '/stoplag global -c'.");
 			} else {
-				Stoplag.stoplagRegions.remove(tempRegion.getId());
+				tempRegion.setStoplag(false);
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+					if (tempRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-					} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+					} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(Stoplag.getNowActivated("the other"));
 					}
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-other")) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "To deactivate stoplag globally, type '/stoplag global -c'.");
 			} else {
-				Stoplag.stoplagRegions.remove(tempRegion.getId());
+				tempRegion.setStoplag(false);
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+					if (tempRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-					} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+					} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the other"));
 					}
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-north") || arg.equalsIgnoreCase("-n")) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "To deactivate stoplag globally, type '/stoplag global -c'.");
 			} else {
-				Stoplag.stoplagRegions.remove(tempRegion.getId());
+				tempRegion.setStoplag(false);
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempPlayer == p) {
 						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the north"));
 					} else {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						if (tempRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowDeactivated("the other"));
 						}
 					}
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-south") || arg.equalsIgnoreCase("-s")) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getNorthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "To deactivate stoplag globally, type '/stoplag global -c'.");
 			} else {
-				Stoplag.stoplagRegions.remove(tempRegion.getId());
+				tempRegion.setStoplag(false);
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempPlayer == p) {
 						tempPlayer.sendMessage(Stoplag.getNowDeactivated("the south"));
 					} else {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						if (tempRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowDeactivated("your"));
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(Stoplag.getNowDeactivated("the other"));
 						}
 					}

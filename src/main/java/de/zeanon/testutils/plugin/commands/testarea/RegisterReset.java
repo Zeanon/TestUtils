@@ -12,11 +12,11 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,8 +32,8 @@ public class RegisterReset {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 1) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable ProtectedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -41,18 +41,18 @@ public class RegisterReset {
 				try {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "Registering reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6)
+								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 								  + ChatColor.RED + "'...");
 					RegisterReset.registerSide(p, tempRegion);
 					RegisterReset.registerSide(p, oppositeRegion);
 
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "You registered a new reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 				} catch (WorldEditException | IOException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error, registering a new reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					e.printStackTrace();
 				}
 			}
@@ -62,9 +62,9 @@ public class RegisterReset {
 		}
 	}
 
-	private void registerSide(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion) throws WorldEditException, IOException {
+	private void registerSide(final @NotNull Player p, final @NotNull Region tempRegion) throws WorldEditException, IOException {
 		final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
 		final @NotNull BlockVector3 copyPoint = region.getMinimumPoint();
@@ -79,7 +79,7 @@ public class RegisterReset {
 
 			Operations.complete(forwardExtentCopy);
 
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempWorld.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/" + tempRegion.getId().substring(tempRegion.getId().length() - 5) + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempWorld.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
 
 			BaseFileUtils.createFile(tempFile);
 

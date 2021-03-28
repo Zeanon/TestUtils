@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
@@ -9,6 +8,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -27,8 +27,8 @@ public class Search {
 
 	public void execute(final @NotNull Backup.ModifierBlock modifiers, final @NotNull Player p) {
 		final @Nullable World world = p.getWorld();
-		final @Nullable ProtectedRegion tempRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, modifiers.getPasteSide());
-		final @Nullable ProtectedRegion otherRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, modifiers.getPasteSide());
+		final @Nullable Region tempRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, modifiers.getPasteSide());
+		final @Nullable Region otherRegion = modifiers.getPasteSide() == PasteSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, modifiers.getPasteSide());
 
 		new BukkitRunnable() {
 			@Override
@@ -37,11 +37,11 @@ public class Search {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
 					try {
-						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + world.getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6));
+						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 						if (!regionFolder.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There are no " + modifiers.getBackUpMode() + " backups for '"
-										  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 						} else {
 							if (modifiers.getFileName() == null) {
 								p.sendMessage(GlobalMessageUtils.messageHead
@@ -94,10 +94,10 @@ public class Search {
 									p.sendMessage(GlobalMessageUtils.messageHead
 												  + ChatColor.RED + "There is no " + (modifiers.getBackUpMode() == BackUpMode.NONE ? "" : modifiers.getBackUpMode() + " ")
 												  + "backup matching '" + ChatColor.DARK_RED + modifiers.getFileName() + ChatColor.RED + "' for '"
-												  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+												  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 								} else {
 									p.sendMessage(GlobalMessageUtils.messageHead
-												  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
+												  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
 									for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
 										Backup.sendLoadBackupMessage(file.getKey().getName(),
 																	 file.getValue(),
@@ -109,7 +109,7 @@ public class Search {
 					} catch (IOException e) {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "There has been an error, searching the backups for '"
-									  + ChatColor.DARK_RED + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + ChatColor.RED + "'.");
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 						e.printStackTrace();
 					}
 				}

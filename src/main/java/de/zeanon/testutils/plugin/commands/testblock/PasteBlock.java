@@ -10,10 +10,10 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.IOException;
 import java.io.InputStream;
 import lombok.experimental.UtilityClass;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class PasteBlock {
 
-	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable ProtectedRegion tempRegion, final @NotNull String area) {
+	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable Region tempRegion, final @NotNull String area) {
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
@@ -40,11 +40,11 @@ public class PasteBlock {
 
 						final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-						if (tempRegion.getId().endsWith("_south")) {
+						if (tempRegion.getName().endsWith("_south")) {
 							pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
 							clipboardHolder.setTransform(new AffineTransform().rotateY(180));
 						} else {
-							pastePoint = tempRegion.getMinimumPoint();
+							pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ());
 						}
 
 						Operation operation = clipboardHolder

@@ -2,7 +2,6 @@ package de.zeanon.testutils.plugin.commands.testarea;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -10,8 +9,12 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +25,7 @@ public class RegisterArea {
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length < 3) {
 			final @NotNull String name = args.length > 1 ? args[1] : p.getName();
-			RegisterArea.generate(new BukkitWorld(p.getWorld()),
+			RegisterArea.generate(p.getWorld(),
 								  p.getLocation().getBlockX(),
 								  p.getLocation().getBlockY(),
 								  p.getLocation().getBlockZ(),
@@ -37,20 +40,30 @@ public class RegisterArea {
 	}
 
 	private void generate(final @NotNull World world, final double x, final double y, final double z, final @NotNull String name) {
-		ProtectedRegion regionSouth = new ProtectedCuboidRegion("testarea_" + name + "_south",
-																BlockVector3.at(x - 58, y, z + 1),
-																BlockVector3.at(x + 58, y + 65, z + 97));
+		Region regionSouth = new Region(name + "_south",
+										new Location(world, x - 58, y, z + 1),
+										new Location(world, x + 58, y + 65, z + 97));
 
-		ProtectedRegion regionNorth = new ProtectedCuboidRegion("testarea_" + name + "_north",
-																BlockVector3.at(x - 58, y, z),
-																BlockVector3.at(x + 58, y + 65, z - 96));
 
-		Objects.notNull(InitMode.getRegionContainer().get(world)).addRegion(regionSouth);
-		Objects.notNull(InitMode.getRegionContainer().get(world)).addRegion(regionNorth);
+		Region regionNorth = new Region(name + "_north",
+										new Location(world, x - 58, y, z),
+										new Location(world, x + 58, y + 65, z - 96));
 
-		regionSouth.setFlag(Flags.ITEM_DROP, StateFlag.State.DENY);
-		regionNorth.setFlag(Flags.ITEM_DROP, StateFlag.State.DENY);
-		regionSouth.setFlag(Flags.TNT, StateFlag.State.DENY);
-		regionNorth.setFlag(Flags.TNT, StateFlag.State.DENY);
+
+		RegionManager.addRegion(regionSouth);
+		RegionManager.addRegion(regionNorth);
+
+		regionSouth.setItemDrops(false);
+		regionNorth.setItemDrops(false);
+		regionSouth.setTnt(false);
+		regionNorth.setTnt(false);
+
+		ProtectedRegion wgregion = new ProtectedCuboidRegion("testarea_" + name + "_outside",
+															 BlockVector3.at(x - 58, y, z - 96),
+															 BlockVector3.at(x + 58, y + 65, z + 97));
+
+		Objects.notNull(InitMode.getRegionContainer().get(new BukkitWorld(world))).addRegion(wgregion);
+
+		wgregion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 	}
 }

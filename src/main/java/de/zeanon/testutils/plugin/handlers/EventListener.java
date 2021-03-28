@@ -5,8 +5,10 @@ import de.zeanon.testutils.plugin.commands.Stoplag;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
+import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.block.Block;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,8 +16,10 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -59,81 +63,250 @@ public class EventListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockFromTo(final @NotNull BlockFromToEvent event) {
-		if (Stoplag.inStoplagRegion(event.getBlock().getLocation()) || Stoplag.inStoplagRegion(event.getToBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockIgnite(final @NotNull BlockIgniteEvent event) {
-		if (event.getIgnitingBlock() != null && Stoplag.inStoplagRegion(event.getIgnitingBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag() || !tempRegion.fire()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(final @NotNull BlockBurnEvent event) {
-		if (event.getIgnitingBlock() != null && Stoplag.inStoplagRegion(event.getIgnitingBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag() || !tempRegion.fire()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPhysics(final @NotNull BlockPhysicsEvent event) {
-		if (Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onLeavesDecay(final @NotNull LeavesDecayEvent event) {
-		if (Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockForm(final @NotNull BlockFormEvent event) {
-		if (Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockSpread(final @NotNull BlockSpreadEvent event) {
-		if (Stoplag.inStoplagRegion(event.getSource().getLocation()) || Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockExplode(final @NotNull BlockExplodeEvent event) {
-		boolean remove = false;
-		for (final @NotNull Block block : event.blockList()) {
-			if (Stoplag.inStoplagRegion(block.getLocation())) {
-				remove = true;
-				break;
+		for (final @NotNull Region region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (region.stoplag() && !region.tnt()) {
+				event.blockList().clear();
+				event.setCancelled(true);
+				return;
+			}
+
+			if (region.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+
+			if (!region.tnt()) {
+				event.blockList().clear();
+				return;
 			}
 		}
 
-		if (remove || Stoplag.inStoplagRegion(event.getBlock().getLocation())) {
-			event.setCancelled(true);
+		event.blockList().removeIf(block -> {
+			boolean remove = false;
+			for (final @NotNull Region region : RegionManager.getApplicableRegions(block.getLocation())) {
+				region.setHasChanged(true);
+
+				if (!region.tnt()) {
+					remove = true;
+					break;
+				}
+			}
+			return remove;
+		});
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(final @NotNull EntityExplodeEvent event) {
-		if (Stoplag.inStoplagRegion(event.getLocation())) {
-			event.getEntity().remove();
-			event.setCancelled(true);
+		for (final @NotNull Region region : RegionManager.getApplicableRegions(event.getLocation())) {
+			if (region.stoplag() && !region.tnt()) {
+				event.blockList().clear();
+				event.setCancelled(true);
+				return;
+			}
+
+			if (region.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+
+			if (!region.tnt()) {
+				event.blockList().clear();
+				return;
+			}
+		}
+
+		event.blockList().removeIf(block -> {
+			boolean remove = false;
+			for (final @NotNull Region region : RegionManager.getApplicableRegions(block.getLocation())) {
+				region.setHasChanged(true);
+
+				if (!region.tnt()) {
+					remove = true;
+					break;
+				}
+			}
+			return remove;
+		});
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onExplosionPrime(final @NotNull ExplosionPrimeEvent event) {
-		if (Stoplag.inStoplagRegion(event.getEntity().getLocation())) {
-			event.getEntity().remove();
-			event.setCancelled(true);
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getEntity().getLocation())) {
+			if (tempRegion.stoplag()) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getEntity().getLocation())) {
+			tempRegion.setHasChanged(true);
 		}
 	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockPlace(final @NotNull BlockMultiPlaceEvent event) {
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag() && event.getBlock().getType() == Material.TNT) {
+				event.setCancelled(true);
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						event.getBlock().setType(Material.TNT, false);
+					}
+				}.runTaskLater(TestUtils.getInstance(), 1);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockPlace(final @NotNull BlockPlaceEvent event) {
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (tempRegion.stoplag() && event.getBlock().getType() == Material.TNT) {
+				event.setCancelled(true);
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						event.getBlock().setType(Material.TNT, false);
+					}
+				}.runTaskLater(TestUtils.getInstance(), 1);
+				return;
+			}
+		}
+
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockBreak(final @NotNull BlockBreakEvent event) {
+		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			tempRegion.setHasChanged(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onInteract(final @NotNull PlayerInteractEvent event) {
+		if (event.getClickedBlock() != null) {
+			for (final @NotNull Region tempRegion : RegionManager.getRegions()) {
+				if (!tempRegion.tnt() && event.getClickedBlock().getType() == Material.TNT && event.getItem() != null && event.getItem().getType() == Material.FLINT_AND_STEEL) {
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
+	}
+
+	//TODO Drops verhindern
 }

@@ -32,7 +32,7 @@ public class BackupScheduler {
 
 
 		//Initialize daily backups
-		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(0)
+		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(5)
 															 .plusDays(1);
 
 		BackupScheduler.scheduleAtFixedRate(BackupScheduler.internalScheduler, new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
@@ -41,7 +41,7 @@ public class BackupScheduler {
 		//Backup once the Plugin starts
 		if (ConfigUtils.getInt("Backups", "startup") > 0) {
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
-			BackupScheduler.schedule(BackupScheduler.internalScheduler, new StartupBackup(), 10, TimeUnit.SECONDS);
+			BackupScheduler.schedule(BackupScheduler.internalScheduler, new StartupBackup(), 5, TimeUnit.SECONDS);
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
 		}
 	}

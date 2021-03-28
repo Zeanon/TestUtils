@@ -3,16 +3,17 @@ package de.zeanon.testutils.plugin.commands.testarea;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -62,8 +63,8 @@ public class ReplaceArea {
 	}
 
 	private void replaceArea(final @NotNull Player p,
-							 final @Nullable ProtectedRegion tempRegion,
-							 final @Nullable ProtectedRegion otherRegion,
+							 final @Nullable Region tempRegion,
+							 final @Nullable Region otherRegion,
 							 final @NotNull String area,
 							 final boolean toTNT,
 							 final @Nullable String source,
@@ -73,7 +74,7 @@ public class ReplaceArea {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint(), tempRegion.getMaximumPoint());
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
 
 				if (source != null) {
 					final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
@@ -140,7 +141,7 @@ public class ReplaceArea {
 											   + ChatColor.RED
 											   + "'.");
 					} else {
-						if (tempRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						if (tempRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
 												   + ChatColor.RED
 												   + "The "
@@ -154,7 +155,7 @@ public class ReplaceArea {
 												   + (destination == null ? (toTNT ? "TNT" : "Obsidian") : destination)
 												   + ChatColor.RED
 												   + "'.");
-						} else if (otherRegion.contains(tempPlayer.getLocation().getBlockX(), tempPlayer.getLocation().getBlockY(), tempPlayer.getLocation().getBlockZ())) {
+						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
 												   + ChatColor.RED
 												   + "The "

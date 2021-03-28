@@ -1,0 +1,18 @@
+{
+  "world": "world",
+  "highest": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "lowest": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "tnt": true,
+  "stoplag": false,
+  "fire": true,
+  "changed": true,
+  "itemdrops": true
+}

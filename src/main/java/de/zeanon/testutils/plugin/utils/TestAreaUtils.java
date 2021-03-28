@@ -1,13 +1,10 @@
 package de.zeanon.testutils.plugin.utils;
 
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.world.World;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.enums.PasteSide;
+import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import java.util.List;
+import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -17,20 +14,16 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class TestAreaUtils {
 
-	public @Nullable ProtectedRegion getRegion(final @NotNull Player p) {
-		for (final @NotNull ProtectedRegion temp : Objects.notNull(InitMode.getRegionContainer()
-																		   .get(new BukkitWorld(p.getWorld())))
-														  .getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
-																								p.getLocation().getY(),
-																								p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_") && (temp.getId().endsWith("_north") || temp.getId().endsWith("_south"))) {
-				return temp;
-			}
+	public @Nullable Region getRegion(final @NotNull Player p) {
+		List<Region> regions = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation());
+		if (regions.isEmpty()) {
+			return null;
+		} else {
+			return regions.get(0);
 		}
-		return null;
 	}
 
-	public @Nullable ProtectedRegion getRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
+	public @Nullable Region getRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
 		switch (pasteSide) {
 			case NORTH:
 				return TestAreaUtils.getNorthRegion(p);
@@ -45,20 +38,12 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable ProtectedRegion getOppositeRegion(final @NotNull Player p) {
-		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
-																		   .get(new BukkitWorld(p.getWorld())));
-		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
-																					 p.getLocation().getY(),
-																					 p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_") && (temp.getId().endsWith("_north") || temp.getId().endsWith("_south"))) {
-				return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + (temp.getId().substring(temp.getId().length() - 5).equalsIgnoreCase("north") ? "south" : "north"));
-			}
-		}
-		return null;
+	public @Nullable Region getOppositeRegion(final @NotNull Player p) {
+		final Optional<Region> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		return temp.map(region -> de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
 	}
 
-	public @Nullable ProtectedRegion getOppositeRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
+	public @Nullable Region getOppositeRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
 		switch (pasteSide) {
 			case NORTH:
 				return TestAreaUtils.getSouthRegion(p);
@@ -73,47 +58,37 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable ProtectedRegion getNorthRegion(final @NotNull Player p) {
-		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
-																		   .get(new BukkitWorld(p.getWorld())));
-		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
-																					 p.getLocation().getY(),
-																					 p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_")) {
-				if (temp.getId().endsWith("_north")) {
-					return temp;
-				} else if (temp.getId().endsWith("_south")) {
-					return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + "north");
-				}
+	public @Nullable Region getNorthRegion(final @NotNull Player p) {
+		final Optional<Region> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		if (temp.isPresent()) {
+			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("north")) {
+				return temp.get();
+			} else {
+				return de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "south");
 			}
+		} else {
+			return null;
 		}
-		return null;
 	}
 
-	public @Nullable ProtectedRegion getSouthRegion(final @NotNull Player p) {
-		final @NotNull RegionManager tempManager = Objects.notNull(InitMode.getRegionContainer()
-																		   .get(new BukkitWorld(p.getWorld())));
-		for (ProtectedRegion temp : tempManager.getApplicableRegions(BlockVector3.at(p.getLocation().getX(),
-																					 p.getLocation().getY(),
-																					 p.getLocation().getZ()))) {
-			if (temp.getId().startsWith("testarea_")) {
-				if (temp.getId().endsWith("_south")) {
-					return temp;
-				} else if (temp.getId().endsWith("_north")) {
-					return tempManager.getRegion(temp.getId().substring(0, temp.getId().length() - 5) + "south");
-				}
+	public @Nullable Region getSouthRegion(final @NotNull Player p) {
+		final Optional<Region> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		if (temp.isPresent()) {
+			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("south")) {
+				return temp.get();
+			} else {
+				return de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "north");
 			}
+		} else {
+			return null;
 		}
-		return null;
 	}
 
-	public @Nullable ProtectedRegion getSouthRegion(final @NotNull World world, final @NotNull String name) {
-		return Objects.notNull(InitMode.getRegionContainer()
-									   .get(world)).getRegion("testarea_" + name + "_south");
+	public @Nullable Region getNorthRegion(final @NotNull org.bukkit.World world, final @NotNull String name) {
+		return RegionManager.getRegion(name + "_north", world);
 	}
 
-	public @Nullable ProtectedRegion getNorthRegion(final @NotNull World world, final @NotNull String name) {
-		return Objects.notNull(InitMode.getRegionContainer()
-									   .get(world)).getRegion("testarea_" + name + "_north");
+	public @Nullable Region getSouthRegion(final @NotNull org.bukkit.World world, final @NotNull String name) {
+		return RegionManager.getRegion(name + "_south", world);
 	}
 }

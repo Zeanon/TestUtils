@@ -1,10 +1,10 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -68,11 +68,11 @@ public class Delete {
 
 	private void executeInternally(final @NotNull Player p, final @NotNull String[] args) {
 		if (args.length == 2) {
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "BackUps/" + p.getWorld().getName() + "/" + tempRegion.getId().substring(9, tempRegion.getId().length() - 6) + "/manual/" + p.getUniqueId() + "/" + args[1]);
+				final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "BackUps/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + args[1]);
 				if (file.exists()) {
 					GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
 														  ChatColor.RED + "Do you really want to delete "
@@ -80,7 +80,7 @@ public class Delete {
 														  + ChatColor.RED + "?",
 														  "/backup delete " + args[1] + " -confirm",
 														  "/backup delete " + args[1] + " -deny", p);
-					CommandRequestUtils.addDeleteBackupRequest(p.getUniqueId(), args[1], tempRegion.getId().substring(9, tempRegion.getId().length() - 6));
+					CommandRequestUtils.addDeleteBackupRequest(p.getUniqueId(), args[1], tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " does not exist.");

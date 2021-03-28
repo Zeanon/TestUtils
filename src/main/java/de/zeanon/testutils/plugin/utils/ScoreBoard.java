@@ -1,13 +1,10 @@
 package de.zeanon.testutils.plugin.utils;
 
 
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.commands.Stoplag;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -31,8 +28,8 @@ public class ScoreBoard {
 		if (!ScoreBoard.scoreBoards.contains(p.getUniqueId().toString())) {
 			ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
 
-			final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion != null && otherRegion != null) {
 				ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 			} else {
@@ -43,8 +40,8 @@ public class ScoreBoard {
 				@Override
 				public void run() {
 					if (Bukkit.getOnlinePlayers().contains(p)) {
-						final @Nullable ProtectedRegion tempRegion = TestAreaUtils.getRegion(p);
-						final @Nullable ProtectedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+						final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+						final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
 						final @NotNull Scoreboard scoreboard = p.getScoreboard();
 						if (tempRegion != null && otherRegion != null) {
 							ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion, scoreboard);
@@ -61,7 +58,7 @@ public class ScoreBoard {
 		}
 	}
 
-	private void setScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion) {
+	private void setScoreBoard(final @NotNull Player p, final @NotNull Region tempRegion, final @NotNull Region otherRegion) {
 		final @NotNull Scoreboard scoreboard = ScoreBoard.scoreboardManager.getNewScoreboard();
 
 		final @NotNull Objective infoBoard = scoreboard.registerNewObjective("testareainfo",
@@ -81,8 +78,8 @@ public class ScoreBoard {
 
 		infoBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
-		final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
+		final @NotNull String areaname = tempRegion.getName().substring(0, tempRegion.getName().length() - 6);
+		final boolean stoplagOther = otherRegion.stoplag();
 		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
 		for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 17))); i++) {
 			headerAndFooterLine.append("=");
@@ -130,7 +127,7 @@ public class ScoreBoard {
 						   + ChatColor.BOLD
 						   + ">> "
 						   + ChatColor.RED
-						   + tempRegion.getId().substring(tempRegion.getId().length() - 5));
+						   + tempRegion.getName().substring(tempRegion.getName().length() - 5));
 		infoBoard.getScore(ChatColor.BLUE + "" + ChatColor.BLUE).setScore(7);
 
 		final @NotNull Score tnt = infoBoard.getScore(ChatColor.DARK_GRAY
@@ -149,7 +146,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+							  + (tempRegion.tnt()
 								 ? ChatColor.GREEN + "allow"
 								 : ChatColor.RED + "deny"));
 		infoBoard.getScore(ChatColor.BOLD + "" + ChatColor.BOLD).setScore(5);
@@ -162,7 +159,7 @@ public class ScoreBoard {
 							   + ">>"
 							   + ChatColor.DARK_RED
 							   + " other: "
-							   + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+							   + (otherRegion.tnt()
 								  ? ChatColor.GREEN + "allow"
 								  : ChatColor.RED + "deny"));
 		infoBoard.getScore(ChatColor.DARK_AQUA + "" + ChatColor.DARK_AQUA).setScore(4);
@@ -183,7 +180,7 @@ public class ScoreBoard {
 								  + ">>"
 								  + ChatColor.DARK_RED
 								  + " here: "
-								  + (Stoplag.isStopLagRegion(tempRegion)
+								  + (tempRegion.stoplag()
 									 ? ChatColor.GREEN + "active"
 									 : ChatColor.RED + "inactive"));
 		infoBoard.getScore(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE).setScore(2);
@@ -213,10 +210,10 @@ public class ScoreBoard {
 	}
 
 
-	private void updateScoreBoard(final @NotNull Player p, final @NotNull ProtectedRegion tempRegion, final @NotNull ProtectedRegion otherRegion, final @NotNull Scoreboard scoreboard) {
+	private void updateScoreBoard(final @NotNull Player p, final @NotNull Region tempRegion, final @NotNull Region otherRegion, final @NotNull Scoreboard scoreboard) {
 		if (scoreboard.getObjective("testareainfo") != null) {
-			final @NotNull String areaname = tempRegion.getId().substring(9, tempRegion.getId().length() - 6);
-			final boolean stoplagOther = Stoplag.isStopLagRegion(otherRegion);
+			final @NotNull String areaname = tempRegion.getName().substring(0, tempRegion.getName().length() - 6);
+			final boolean stoplagOther = otherRegion.stoplag();
 			final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
 			for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 15 : 17))); i++) {
 				headerAndFooterLine.append("=");
@@ -241,7 +238,7 @@ public class ScoreBoard {
 							  + ChatColor.BOLD
 							  + ">> "
 							  + ChatColor.RED
-							  + tempRegion.getId().substring(tempRegion.getId().length() - 5));
+							  + tempRegion.getName().substring(tempRegion.getName().length() - 5));
 
 			Objects.notNull(scoreboard.getTeam("tntinfohere"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -250,7 +247,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + (tempRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+							  + (tempRegion.tnt()
 								 ? ChatColor.GREEN + "allow"
 								 : ChatColor.RED + "deny"));
 
@@ -261,7 +258,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " other: "
-							  + (otherRegion.getFlag(Flags.TNT) == StateFlag.State.ALLOW
+							  + (otherRegion.tnt()
 								 ? ChatColor.GREEN + "allow"
 								 : ChatColor.RED + "deny"));
 
@@ -272,7 +269,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + (Stoplag.isStopLagRegion(tempRegion)
+							  + (tempRegion.stoplag()
 								 ? ChatColor.GREEN + "active"
 								 : ChatColor.RED + "inactive"));
 

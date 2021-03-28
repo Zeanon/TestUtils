@@ -8,13 +8,15 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.region.Region;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
@@ -43,25 +45,22 @@ public class DeleteArea {
 
 	private boolean remove(final @NotNull World world, final @NotNull String name) {
 		RegionManager regionManager = Objects.notNull(InitMode.getRegionContainer().get(world));
-		if (regionManager.getRegion("testarea_" + name + "_north") != null
-			&& regionManager.getRegion("testarea_" + name + "_south") != null) {
-			regionManager.removeRegion("testarea_" + name + "_north", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
-			regionManager.removeRegion("testarea_" + name + "_south", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
+		final @Nullable Region southRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_south");
+		final @Nullable Region northRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_north");
+		if (southRegion != null && northRegion != null && regionManager.getRegion("testarea_" + name + "_outside") != null) {
+			de.zeanon.testutils.plugin.utils.region.RegionManager.removeRegion(southRegion);
+			de.zeanon.testutils.plugin.utils.region.RegionManager.removeRegion(northRegion);
+			regionManager.removeRegion("testarea_" + name + "_outside", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
 
 			try {
-				Files.deleteIfExists(Paths.get(TestUtils
-													   .getInstance()
-													   .getDataFolder()
-													   .getAbsolutePath() + "/TestAreas/testarea_" + name + "_north.schem"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				Files.deleteIfExists(Paths.get(TestUtils
-													   .getInstance()
-													   .getDataFolder()
-													   .getAbsolutePath() + "/TestAreas/testarea_" + name + "_south.schem"));
+				final @NotNull File resetFolder = new File(TestUtils.getInstance().getDataFolder(), "/TestAreas/" + world.getName() + "/" + name.substring(0, name.length() - 6));
+				if (resetFolder.exists() && resetFolder.isDirectory()) {
+					FileUtils.deleteDirectory(resetFolder);
+				}
+				final @NotNull File backUpFolder = new File(TestUtils.getInstance().getDataFolder(), "/BackUps/" + world.getName() + "/" + name.substring(0, name.length() - 6));
+				if (backUpFolder.exists() && backUpFolder.isDirectory()) {
+					FileUtils.deleteDirectory(backUpFolder);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

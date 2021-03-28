@@ -18,8 +18,11 @@ import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplag
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
+import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
+import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -99,7 +102,16 @@ public class InitMode {
 				ScoreBoard.initialize(p);
 			}
 
-			//BackupScheduler.backup();
+			try {
+				System.out.println("[" + TestUtils.getInstance().getName() + "] >> Initializing Regions...");
+				RegionManager.initialize();
+				System.out.println("[" + TestUtils.getInstance().getName() + "] >> Initialized Regions.");
+			} catch (IOException e) {
+				System.out.println("[" + TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
+				TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
+			}
+
+			BackupScheduler.backup();
 		} else {
 			InitMode.enableSleepMode();
 		}
