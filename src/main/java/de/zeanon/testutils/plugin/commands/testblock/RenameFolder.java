@@ -154,8 +154,8 @@ public class RenameFolder {
 				}
 				GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
 													  + ChatColor.RED + "Do you really want to rename " + ChatColor.GREEN + args[1] + ChatColor.RED + "?",
-													  "/tu " + args[1] + " " + args[2] + " confirm",
-													  "/tu " + args[1] + " " + args[2] + " deny", p);
+													  "/tu " + args[1] + " " + args[2] + " -confirm",
+													  "/tu " + args[1] + " " + args[2] + " -deny", p);
 				CommandRequestUtils.addRenameFolderRequest(p.getUniqueId(), args[1]);
 			} else if (args.length == 5 && CommandRequestUtils.checkRenameFolderRequest(p.getUniqueId(), args[1])) {
 				if (args[3].equalsIgnoreCase("-confirm")) {

@@ -83,8 +83,8 @@ public class RenameBlock {
 
 				GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
 													  + ChatColor.RED + "Do you really want to rename " + ChatColor.GOLD + args[1] + ChatColor.RED + "?",
-													  "/tu renameblock " + args[1] + " " + args[2] + " confirm",
-													  "/tu renameblock " + args[1] + " " + args[2] + " deny", p);
+													  "/tu renameblock " + args[1] + " " + args[2] + " -confirm",
+													  "/tu renameblock " + args[1] + " " + args[2] + " -deny", p);
 				CommandRequestUtils.addRenameRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead

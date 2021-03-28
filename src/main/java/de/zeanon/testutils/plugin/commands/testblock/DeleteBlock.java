@@ -74,8 +74,8 @@ public class DeleteBlock {
 													  ChatColor.RED + "Do you really want to delete "
 													  + ChatColor.DARK_RED + args[1]
 													  + ChatColor.RED + "?",
-													  "/tu deleteblock " + args[1] + " confirm",
-													  "/tu deleteblock " + args[1] + " deny", p);
+													  "/tu deleteblock " + args[1] + " -confirm",
+													  "/tu deleteblock " + args[1] + " -deny", p);
 				CommandRequestUtils.addDeleteBlockRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead

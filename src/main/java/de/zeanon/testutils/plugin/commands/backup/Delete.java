@@ -78,8 +78,8 @@ public class Delete {
 														  ChatColor.RED + "Do you really want to delete "
 														  + ChatColor.DARK_RED + args[1]
 														  + ChatColor.RED + "?",
-														  "/backup delete " + args[1] + " confirm",
-														  "/backup delete " + args[1] + " deny", p);
+														  "/backup delete " + args[1] + " -confirm",
+														  "/backup delete " + args[1] + " -deny", p);
 					CommandRequestUtils.addDeleteBackupRequest(p.getUniqueId(), args[1], tempRegion.getId().substring(9, tempRegion.getId().length() - 6));
 				} else {
 					p.sendMessage(GlobalMessageUtils.messageHead

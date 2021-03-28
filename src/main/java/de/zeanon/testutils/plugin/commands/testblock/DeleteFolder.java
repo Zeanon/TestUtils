@@ -81,8 +81,8 @@ public class DeleteFolder {
 													  + ChatColor.RED + "Do you really want to delete "
 													  + ChatColor.DARK_RED + args[1]
 													  + ChatColor.RED + "?",
-													  "/tu " + args[1] + " confirm",
-													  "/tu " + args[1] + " deny", p);
+													  "/tu " + args[1] + " -confirm",
+													  "/tu " + args[1] + " -deny", p);
 				CommandRequestUtils.addDeleteFolderRequest(p.getUniqueId(), args[1]);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead

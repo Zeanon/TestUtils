@@ -115,28 +115,42 @@ public class Backup {
 		target.spigot().sendMessage(localMessage);
 	}
 
-	public @Nullable
-	File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
+	public @Nullable File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
 		switch (backUpMode) {
 			case NONE:
-				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "manual/" + p.getUniqueId()), name)) {
-					if (temp.getName().equals(name)) {
-						return temp;
+				final @NotNull File manualBackup = new File(regionFolder, "manual/" + p.getUniqueId());
+				if (manualBackup.exists()) {
+					for (final @NotNull File temp : BaseFileUtils.searchFolders(manualBackup, name)) {
+						if (temp.getName().equals(name)) {
+							return temp;
+						}
 					}
 				}
-				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/hourly"), name)) {
-					if (temp.getName().equals(name)) {
-						return temp;
+
+				final @NotNull File hourlyBackup = new File(regionFolder, "automatic/hourly");
+				if (hourlyBackup.exists()) {
+					for (final @NotNull File temp : BaseFileUtils.searchFolders(hourlyBackup, name)) {
+						if (temp.getName().equals(name)) {
+							return temp;
+						}
 					}
 				}
-				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/daily"), name)) {
-					if (temp.getName().equals(name)) {
-						return temp;
+
+				final @NotNull File dailyBackup = new File(regionFolder, "automatic/daily");
+				if (dailyBackup.exists()) {
+					for (final @NotNull File temp : BaseFileUtils.searchFolders(dailyBackup, name)) {
+						if (temp.getName().equals(name)) {
+							return temp;
+						}
 					}
 				}
-				for (final @NotNull File temp : BaseFileUtils.searchFolders(new File(regionFolder, "automatic/startup"), name)) {
-					if (temp.getName().equals(name)) {
-						return temp;
+
+				final @NotNull File startupBackup = new File(regionFolder, "automatic/startup");
+				if (startupBackup.exists()) {
+					for (final @NotNull File temp : BaseFileUtils.searchFolders(startupBackup, name)) {
+						if (temp.getName().equals(name)) {
+							return temp;
+						}
 					}
 				}
 				return null;

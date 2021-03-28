@@ -99,7 +99,7 @@ public class InitMode {
 				ScoreBoard.initialize(p);
 			}
 
-			//BackUpScheduler.backup();
+			//BackupScheduler.backup();
 		} else {
 			InitMode.enableSleepMode();
 		}

@@ -8,6 +8,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
+import de.zeanon.testutils.plugin.utils.backup.StartupBackup;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -27,7 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public class Save {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (ConfigUtils.getInt("Backups", "manual") > 0) {
+		new StartupBackup().run();
+		/*if (ConfigUtils.getInt("Backups", "manual") > 0) {
 			if (args.length > 1 && args[1].contains("./")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
@@ -43,7 +45,7 @@ public class Save {
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Manual backups are disabled.");
-		}
+		}*/
 	}
 
 	private void executeInternally(final @NotNull String[] args, final @NotNull Player p) {
@@ -68,8 +70,8 @@ public class Save {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
 					GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
-														  "/backup save " + name + " confirm",
-														  "/backup save " + name + " deny", p);
+														  "/backup save " + name + " -confirm",
+														  "/backup save " + name + " -deny", p);
 				} else {
 					Save.save(tempWorld, tempRegion, otherRegion, name, folder, p);
 				}
