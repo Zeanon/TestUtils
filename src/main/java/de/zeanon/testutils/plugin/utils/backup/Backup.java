@@ -84,7 +84,7 @@ public abstract class Backup extends BukkitRunnable {
 
 	public void backupSide(final @NotNull World tempWorld, final @NotNull Region tempRegion, final @NotNull File folder) {
 		final @NotNull BukkitWorld bukkitWorld = new BukkitWorld(tempWorld);
-		final @NotNull CuboidRegion region = new CuboidRegion(bukkitWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
+		final @NotNull CuboidRegion region = new CuboidRegion(bukkitWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
 		final @NotNull BlockVector3 copyPoint = region.getMinimumPoint();
@@ -115,7 +115,7 @@ public abstract class Backup extends BukkitRunnable {
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 
-			final @NotNull BlockVector3 pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ());
+			final @NotNull BlockVector3 pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
 
 			final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 

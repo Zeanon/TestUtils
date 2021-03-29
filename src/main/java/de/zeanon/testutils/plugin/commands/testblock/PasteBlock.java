@@ -41,10 +41,10 @@ public class PasteBlock {
 						final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
 						if (tempRegion.getName().endsWith("_south")) {
-							pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ());
+							pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getX(), tempRegion.getMinimumPoint().getY(), tempRegion.getMaximumPoint().getZ());
 							clipboardHolder.setTransform(new AffineTransform().rotateY(180));
 						} else {
-							pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ());
+							pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
 						}
 
 						Operation operation = clipboardHolder

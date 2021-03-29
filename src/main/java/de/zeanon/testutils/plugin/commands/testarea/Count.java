@@ -2,7 +2,6 @@ package de.zeanon.testutils.plugin.commands.testarea;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.block.BaseBlock;
@@ -63,7 +62,7 @@ public class Count {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 
 				final @NotNull Set<BaseBlock> blocks = new HashSet<>();
 				blocks.add(Objects.notNull(BlockTypes.get(block)).getDefaultState().toBaseBlock());

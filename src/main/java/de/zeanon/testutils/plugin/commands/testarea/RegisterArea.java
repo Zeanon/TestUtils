@@ -13,7 +13,6 @@ import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -39,15 +38,17 @@ public class RegisterArea {
 		}
 	}
 
-	private void generate(final @NotNull World world, final double x, final double y, final double z, final @NotNull String name) {
+	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {
 		Region regionSouth = new Region(name + "_south",
-										new Location(world, x - 58, y, z + 1),
-										new Location(world, x + 58, y + 65, z + 97));
+										new Region.Point(x - 58, y, z + 1),
+										new Region.Point(x + 58, y + 65, z + 97),
+										world);
 
 
 		Region regionNorth = new Region(name + "_north",
-										new Location(world, x - 58, y, z),
-										new Location(world, x + 58, y + 65, z - 96));
+										new Region.Point(x - 58, y, z),
+										new Region.Point(x + 58, y + 65, z - 96),
+										world);
 
 
 		RegionManager.addRegion(regionSouth);

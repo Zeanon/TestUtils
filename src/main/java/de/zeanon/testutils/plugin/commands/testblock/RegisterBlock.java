@@ -68,7 +68,7 @@ public class RegisterBlock {
 							  + ChatColor.DARK_RED + (name == null ? "default" : name)
 							  + ChatColor.RED + "'...");
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ()), BlockVector3.at(tempRegion.getMaximumPoint().getBlockX(), tempRegion.getMaximumPoint().getBlockY(), tempRegion.getMaximumPoint().getBlockZ()));
+				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 				final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
 				final @NotNull BlockVector3 copyPoint;

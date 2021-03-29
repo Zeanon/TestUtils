@@ -213,7 +213,7 @@ public class ResetArea {
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 
-			final @NotNull BlockVector3 pastePoint = BlockVector3.at(tempRegion.getMinimumPoint().getBlockX(), tempRegion.getMinimumPoint().getBlockY(), tempRegion.getMinimumPoint().getBlockZ());
+			final @NotNull BlockVector3 pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
 
 			final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
