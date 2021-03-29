@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.utils.region;
 
+import com.sk89q.worldedit.math.BlockVector3;
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
@@ -7,8 +8,8 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import java.io.File;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.Accessors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,27 +18,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class Region {
 
-	@Getter
-	private final @NotNull Location maximumPoint;
-	@Getter
-	private final @NotNull Location minimumPoint;
+	private final @NotNull BlockVector3 maximumPoint;
+	private final @NotNull BlockVector3 minimumPoint;
+	private final @NotNull World world;
 	private final @NotNull JsonFile jsonFile;
-	@Getter
 	private final @NotNull String name;
-	@Getter
-	@Accessors(fluent = true)
-	private boolean tnt;
-	@Getter
-	@Accessors(fluent = true)
 	private boolean stoplag;
-	@Getter
-	@Accessors(fluent = true)
 	private boolean fire;
-	@Getter
-	@Accessors(fluent = true)
 	private boolean hasChanged;
-	@Getter
-	@Accessors(fluent = true)
 	private boolean itemDrops;
 
 	public Region(final @NotNull String name) {
@@ -45,9 +33,9 @@ public class Region {
 									   .concurrentData(true)
 									   .create();
 		this.name = name;
-		final @NotNull World world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getString("world"))));
-		this.maximumPoint = this.getLocation(world, "highest");
-		this.minimumPoint = this.getLocation(world, "lowest");
+		this.world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getString("world"))));
+		this.maximumPoint = this.getLocation(this.world, "highest");
+		this.minimumPoint = this.getLocation(this.world, "lowest");
 
 		this.tnt = this.jsonFile.getBoolean("tnt");
 		this.stoplag = this.jsonFile.getBoolean("stoplag");
@@ -101,8 +89,7 @@ public class Region {
 	}
 
 	public void setTnt(final boolean tnt) {
-		this.tnt = tnt;
-		this.jsonFile.set("tnt", this.tnt);
+		this.jsonFile.setUseArray(new String[]{"tnt"}, tnt);
 	}
 
 	public void setStoplag(final boolean stoplag) {
@@ -129,12 +116,44 @@ public class Region {
 		this.jsonFile.set("changed", this.hasChanged);
 	}
 
+	public @NotNull BlockVector3 getMaximumPoint() {
+		return this.maximumPoint;
+	}
+
+	public @NotNull BlockVector3 getMinimumPoint() {
+		return this.minimumPoint;
+	}
+
+	public @NotNull String getName() {
+		return this.name;
+	}
+
+	public boolean tnt() {
+		return this.jsonFile.getBooleanUseArray("tnt");
+	}
+
+	public boolean stoplag() {
+		return this.stoplag;
+	}
+
+	public boolean fire() {
+		return this.fire;
+	}
+
+	public boolean hasChanged() {
+		return this.hasChanged;
+	}
+
+	public boolean itemDrops() {
+		return this.itemDrops;
+	}
+
 	protected void deleteRegion() {
 		this.jsonFile.deleteFile();
 	}
 
-	private Location getLocation(final @NotNull World world, final @NotNull String path) {
-		return new Location(world, this.jsonFile.getInt(path + ".x"), this.jsonFile.getInt(path + ".y"), this.jsonFile.getInt(path + ".z"));
+	private Location getPosition(final @NotNull String path) {
+		return new Location(this.world, this.jsonFile.getInt(path + ".x"), this.jsonFile.getInt(path + ".y"), this.jsonFile.getInt(path + ".z"));
 	}
 
 	private void setLocation(final @NotNull Location location, final @NotNull String path) {
@@ -168,5 +187,14 @@ public class Region {
 									   Math.min(secondPoint.getBlockX(), firstPoint.getBlockX()),
 									   Math.min(secondPoint.getBlockY(), firstPoint.getBlockY()),
 									   Math.min(secondPoint.getBlockZ(), firstPoint.getBlockZ())));
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public static class Point {
+
+		final int x;
+		final int y;
+		final int z;
 	}
 }
