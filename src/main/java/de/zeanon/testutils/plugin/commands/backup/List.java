@@ -37,7 +37,7 @@ public class List {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
 					try {
-						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
+						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 						if (!regionFolder.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There are no " + (modifiers.getBackUpMode() == BackUpMode.NONE ? "" : modifiers.getBackUpMode() + " ") + "backups for '"

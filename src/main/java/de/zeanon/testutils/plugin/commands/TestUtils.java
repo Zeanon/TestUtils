@@ -2,6 +2,8 @@ package de.zeanon.testutils.plugin.commands;
 
 import de.zeanon.testutils.plugin.commands.testarea.*;
 import de.zeanon.testutils.plugin.commands.testblock.*;
+import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -45,6 +47,10 @@ public class TestUtils {
 				DeleteArea.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("update")) {
 				Update.execute(args, p);
+			} else if (args[0].equalsIgnoreCase("convert")) {
+				for (Region region : RegionManager.getRegions()) {
+					region.setFire(false);
+				}
 			} else {
 				p.sendMessage(ChatColor.DARK_AQUA + "Invalid sub-command '" + ChatColor.GOLD + args[0] + "'.");
 			}

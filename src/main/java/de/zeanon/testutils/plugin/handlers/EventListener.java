@@ -7,8 +7,10 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -161,77 +163,98 @@ public class EventListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockExplode(final @NotNull BlockExplodeEvent event) {
-		for (final @NotNull Region region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
-			if (region.stoplag() && !region.tnt()) {
-				event.blockList().clear();
-				event.setCancelled(true);
-				return;
-			}
+		final @NotNull List<Region> applicableRegions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
+		if (applicableRegions.isEmpty()) {
+			event.blockList().clear();
+		} else {
+			for (final @NotNull Region region : applicableRegions) {
+				if (region.stoplag() && !region.tnt()) {
+					event.blockList().clear();
+					event.setCancelled(true);
+					return;
+				}
 
-			if (region.stoplag()) {
-				event.setCancelled(true);
-				return;
-			}
-
-			if (!region.tnt()) {
-				event.blockList().clear();
-				return;
-			}
-		}
-
-		event.blockList().removeIf(block -> {
-			boolean remove = false;
-			for (final @NotNull Region region : RegionManager.getApplicableRegions(block.getLocation())) {
-				region.setHasChanged(true);
+				if (region.stoplag()) {
+					event.setCancelled(true);
+					return;
+				}
 
 				if (!region.tnt()) {
-					remove = true;
-					break;
+					event.blockList().clear();
+					return;
 				}
 			}
-			return remove;
-		});
 
-		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
-			tempRegion.setHasChanged(true);
+			event.blockList().removeIf(block -> {
+				final @NotNull List<Region> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
+				if (internalApplicableRegions.isEmpty()) {
+					return true;
+				} else {
+					boolean remove = false;
+					for (final @NotNull Region region : internalApplicableRegions) {
+						region.setHasChanged(true);
+
+						if (!region.tnt()) {
+							remove = true;
+							break;
+						}
+					}
+					return remove;
+				}
+			});
+
+			for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+				tempRegion.setHasChanged(true);
+			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(final @NotNull EntityExplodeEvent event) {
-		for (final @NotNull Region region : RegionManager.getApplicableRegions(event.getLocation())) {
-			if (region.stoplag() && !region.tnt()) {
-				event.blockList().clear();
-				event.setCancelled(true);
-				return;
-			}
+		final @NotNull List<Region> applicableRegions = RegionManager.getApplicableRegions(event.getLocation());
+		if (applicableRegions.isEmpty()) {
+			System.out.println("HIIIIII");
+			event.blockList().clear();
+		} else {
+			for (final @NotNull Region region : applicableRegions) {
+				if (region.stoplag() && !region.tnt()) {
+					event.blockList().clear();
+					event.setCancelled(true);
+					return;
+				}
 
-			if (region.stoplag()) {
-				event.setCancelled(true);
-				return;
-			}
-
-			if (!region.tnt()) {
-				event.blockList().clear();
-				return;
-			}
-		}
-
-		event.blockList().removeIf(block -> {
-			boolean remove = false;
-			for (final @NotNull Region region : RegionManager.getApplicableRegions(block.getLocation())) {
-				region.setHasChanged(true);
+				if (region.stoplag()) {
+					event.setCancelled(true);
+					return;
+				}
 
 				if (!region.tnt()) {
-					remove = true;
-					break;
+					event.blockList().clear();
+					return;
 				}
 			}
-			return remove;
-		});
 
-		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getLocation())) {
-			tempRegion.setHasChanged(true);
+			event.blockList().removeIf(block -> {
+				final @NotNull List<Region> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
+				if (internalApplicableRegions.isEmpty()) {
+					return true;
+				} else {
+					boolean remove = false;
+					for (final @NotNull Region region : internalApplicableRegions) {
+						region.setHasChanged(true);
+
+						if (!region.tnt()) {
+							remove = true;
+							break;
+						}
+					}
+					return remove;
+				}
+			});
+
+			for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getLocation())) {
+				tempRegion.setHasChanged(true);
+			}
 		}
 	}
 
@@ -260,12 +283,17 @@ public class EventListener implements Listener {
 						event.getBlock().setType(Material.TNT, false);
 					}
 				}.runTaskLater(TestUtils.getInstance(), 1);
-				return;
 			}
 		}
 
 		for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
 			tempRegion.setHasChanged(true);
+		}
+
+		for (final @NotNull BlockState tempState : event.getReplacedBlockStates()) {
+			for (final @NotNull Region tempRegion : RegionManager.getApplicableRegions(tempState.getLocation())) {
+				tempRegion.setHasChanged(true);
+			}
 		}
 	}
 
@@ -280,7 +308,6 @@ public class EventListener implements Listener {
 						event.getBlock().setType(Material.TNT, false);
 					}
 				}.runTaskLater(TestUtils.getInstance(), 1);
-				return;
 			}
 		}
 

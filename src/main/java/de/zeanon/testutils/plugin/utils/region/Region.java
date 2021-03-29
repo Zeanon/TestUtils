@@ -129,6 +129,10 @@ public class Region {
 		this.jsonFile.set("changed", this.hasChanged);
 	}
 
+	protected void deleteRegion() {
+		this.jsonFile.deleteFile();
+	}
+
 	private Location getLocation(final @NotNull World world, final @NotNull String path) {
 		return new Location(world, this.jsonFile.getInt(path + ".x"), this.jsonFile.getInt(path + ".y"), this.jsonFile.getInt(path + ".z"));
 	}

@@ -72,7 +72,7 @@ public class Delete {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "BackUps/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + args[1]);
+				final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + args[1]);
 				if (file.exists()) {
 					GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
 														  ChatColor.RED + "Do you really want to delete "
@@ -91,7 +91,7 @@ public class Delete {
 			if (args.length == 3 && region != null) {
 				if (args[2].equalsIgnoreCase("-confirm")) {
 					CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
-					final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "BackUps/" + p.getWorld().getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + args[1]);
+					final @NotNull File file = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + p.getWorld().getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + args[1]);
 					if (file.exists()) {
 						try {
 							FileUtils.deleteDirectory(file);

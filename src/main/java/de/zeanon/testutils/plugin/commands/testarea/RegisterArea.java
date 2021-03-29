@@ -55,6 +55,8 @@ public class RegisterArea {
 
 		regionSouth.setItemDrops(false);
 		regionNorth.setItemDrops(false);
+		regionSouth.setFire(false);
+		regionNorth.setFire(false);
 		regionSouth.setTnt(false);
 		regionNorth.setTnt(false);
 

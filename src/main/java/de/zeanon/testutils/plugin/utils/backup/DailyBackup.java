@@ -32,7 +32,7 @@ public class DailyBackup extends Backup {
 					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 					if (toBeDeleted.isPresent()) {
 						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
 						files = BaseFileUtils.listFolders(dailyBackup);
 					}
 				}

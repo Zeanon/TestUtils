@@ -57,7 +57,7 @@ public class DeleteArea {
 				if (resetFolder.exists() && resetFolder.isDirectory()) {
 					FileUtils.deleteDirectory(resetFolder);
 				}
-				final @NotNull File backUpFolder = new File(TestUtils.getInstance().getDataFolder(), "/BackUps/" + world.getName() + "/" + name.substring(0, name.length() - 6));
+				final @NotNull File backUpFolder = new File(TestUtils.getInstance().getDataFolder(), "/Backups/" + world.getName() + "/" + name.substring(0, name.length() - 6));
 				if (backUpFolder.exists() && backUpFolder.isDirectory()) {
 					FileUtils.deleteDirectory(backUpFolder);
 				}

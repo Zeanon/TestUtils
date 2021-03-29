@@ -1,7 +1,6 @@
 package de.zeanon.testutils;
 
 import de.zeanon.testutils.init.InitMode;
-import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +29,6 @@ public final class TestUtils extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		BackupScheduler.terminate();
 		System.out.println("[" + this.getName() + "] >> unloaded.");
 	}
 }

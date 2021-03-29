@@ -52,12 +52,12 @@ public abstract class Backup extends BukkitRunnable {
 				for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
 					tempWorld = Objects.notNull(Bukkit.getWorld(worldFolder.getName()));
 					for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
-						final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + worldFolder.getName() + "/" + regionFolder.getName());
+						final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + worldFolder.getName() + "/" + regionFolder.getName());
 
 						final @Nullable Region southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
 						final @Nullable Region northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
 						if (southRegion != null && northRegion != null && this.doBackup(southRegion, northRegion)) {
-							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
+							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
 							this.backupSide(tempWorld, Objects.notNull(de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion("testarea_" + regionFolder.getName() + "_south")), folder);
 							southRegion.setHasChanged(false);
 							this.backupSide(tempWorld, Objects.notNull(de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion("testarea_" + regionFolder.getName() + "_north")), folder);
@@ -70,7 +70,7 @@ public abstract class Backup extends BukkitRunnable {
 
 							if (backupFolder.exists()) {
 								FileUtils.deleteDirectory(backupFolder);
-								InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+								InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
 							}
 						}
 					}

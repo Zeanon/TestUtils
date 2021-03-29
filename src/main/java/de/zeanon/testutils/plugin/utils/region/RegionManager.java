@@ -59,6 +59,7 @@ public class RegionManager {
 	}
 
 	public void removeRegion(final @NotNull Region region) {
+		region.deleteRegion();
 		RegionManager.regions.remove(region);
 	}
 }

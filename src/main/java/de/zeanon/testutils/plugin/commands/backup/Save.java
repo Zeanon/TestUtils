@@ -59,7 +59,7 @@ public class Save {
 					name = args[1];
 				}
 
-				final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
+				final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
 				if (folder.exists()) {
 					CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 					p.sendMessage(GlobalMessageUtils.messageHead
@@ -78,7 +78,7 @@ public class Save {
 					CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
 
 					final @NotNull org.bukkit.World tempWorld = p.getWorld();
-					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + args[1]);
+					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + args[1]);
 					final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
 					final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
 					if (tempRegion == null || otherRegion == null) {
@@ -113,7 +113,7 @@ public class Save {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				final @NotNull File manualBackup = new File(TestUtils.getInstance().getDataFolder(), "BackUps/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId());
+				final @NotNull File manualBackup = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId());
 				if (manualBackup.exists()) {
 					try {
 						@NotNull List<File> files;
@@ -124,7 +124,7 @@ public class Save {
 								p.sendMessage(GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups, deleting '" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' due to it being the oldest."); //NOSONAR
 								FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-								InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/BackUps"));
+								InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
 							}
 							files = BaseFileUtils.listFolders(manualBackup);
 						}
