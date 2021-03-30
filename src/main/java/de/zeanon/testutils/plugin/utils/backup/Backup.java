@@ -21,7 +21,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
+import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import java.io.File;
@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public abstract class Backup extends BukkitRunnable {
 
-	protected final @NotNull BackUpMode sequence;
+	protected final @NotNull BackupMode sequence;
 
 	@Override
 	public void run() {
@@ -56,14 +56,16 @@ public abstract class Backup extends BukkitRunnable {
 
 						final @Nullable Region southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
 						final @Nullable Region northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
-						if (southRegion != null && northRegion != null && this.doBackup(southRegion, northRegion)) {
-							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
-							this.backupSide(tempWorld, Objects.notNull(de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion("testarea_" + regionFolder.getName() + "_south")), folder);
-							southRegion.setHasChanged(false);
-							this.backupSide(tempWorld, Objects.notNull(de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion("testarea_" + regionFolder.getName() + "_north")), folder);
-							northRegion.setHasChanged(false);
+						if (southRegion != null && northRegion != null) {
+							if (this.doBackup(southRegion, northRegion)) {
+								final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
+								this.backupSide(tempWorld, southRegion, folder);
+								southRegion.setHasChanged(false);
+								this.backupSide(tempWorld, northRegion, folder);
+								northRegion.setHasChanged(false);
 
-							Backup.this.cleanup(backupFolder);
+								Backup.this.cleanup(backupFolder);
+							}
 						} else {
 							FileUtils.deleteDirectory(regionFolder);
 							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));

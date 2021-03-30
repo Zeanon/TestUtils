@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
-import de.zeanon.testutils.plugin.utils.enums.PasteSide;
+import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import java.util.List;
@@ -23,8 +23,8 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable Region getRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
-		switch (pasteSide) {
+	public @Nullable Region getRegion(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		switch (regionSide) {
 			case NORTH:
 				return TestAreaUtils.getNorthRegion(p);
 			case SOUTH:
@@ -43,8 +43,8 @@ public class TestAreaUtils {
 		return temp.map(region -> de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
 	}
 
-	public @Nullable Region getOppositeRegion(final @NotNull Player p, final @NotNull PasteSide pasteSide) {
-		switch (pasteSide) {
+	public @Nullable Region getOppositeRegion(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		switch (regionSide) {
 			case NORTH:
 				return TestAreaUtils.getSouthRegion(p);
 			case SOUTH:

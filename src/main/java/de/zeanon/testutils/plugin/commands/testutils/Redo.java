@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands;
+package de.zeanon.testutils.plugin.commands.testutils;
 
 import com.sk89q.worldedit.EditSession;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -11,18 +11,18 @@ import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
-public class Undo {
+public class Redo {
 
-	public void undo(final @NotNull Player p) {
-		try (final @Nullable EditSession tempSession = SessionFactory.getUndoSession(p)) {
+	public void redo(final @NotNull Player p) {
+		try (final @Nullable EditSession tempSession = SessionFactory.getRedoSession(p)) {
 			if (tempSession == null) {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "Nothing left to undo.");
+							  + ChatColor.RED + "Nothing left to redo.");
 			} else {
-				tempSession.undo(tempSession);
-				SessionFactory.registerRedoSession(p, tempSession);
+				tempSession.redo(tempSession);
+				SessionFactory.registerUndoSession(p, tempSession);
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "You undid your last action.");
+							  + ChatColor.RED + "You redid your last action.");
 			}
 		}
 	}

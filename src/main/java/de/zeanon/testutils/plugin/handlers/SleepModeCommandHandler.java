@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.handlers;
 
-import de.zeanon.testutils.plugin.commands.Update;
+import de.zeanon.testutils.plugin.commands.testutils.Update;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

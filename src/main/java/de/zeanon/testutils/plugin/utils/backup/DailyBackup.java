@@ -5,7 +5,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
+import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class DailyBackup extends Backup {
 
 	public DailyBackup() {
-		super(BackUpMode.DAILY);
+		super(BackupMode.DAILY);
 	}
 
 	@Override

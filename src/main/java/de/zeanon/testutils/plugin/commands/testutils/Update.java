@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands;
+package de.zeanon.testutils.plugin.commands.testutils;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;

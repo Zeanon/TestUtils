@@ -2,15 +2,14 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
-import de.zeanon.testutils.plugin.utils.enums.PasteSide;
+import de.zeanon.testutils.commandframework.SWCommand;
+import de.zeanon.testutils.plugin.utils.enums.BackupFile;
+import de.zeanon.testutils.plugin.utils.enums.BackupMode;
+import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
+import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -21,28 +20,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-@UtilityClass
-public class Backup {
+public class Backup extends SWCommand {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length > 0) {
-			if (args[0].equalsIgnoreCase("save")) {
-				Save.execute(args, p);
-			} else if (args[0].equalsIgnoreCase("load")) {
-				Load.execute(Backup.modifiers(args, "load"), p);
-			} else if (args[0].equalsIgnoreCase("list")) {
-				de.zeanon.testutils.plugin.commands.backup.List.execute(Backup.modifiers(args, "list"), p);
-			} else if (args[0].equalsIgnoreCase("search")) {
-				Search.execute(Backup.modifiers(args, "search"), p);
-			} else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del")) {
-				Delete.execute(args, p);
-			}
-		}
+	public Backup() {
+		super("backup");
 	}
 
-	public @NotNull
-	Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackUpMode backUpMode) throws IOException {
-		if (backUpMode == BackUpMode.NONE) {
+	public static @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackupMode backUpMode) throws IOException {
+		if (backUpMode == BackupMode.NONE) {
 			return Backup.getLatest(regionFolder, uuid);
 		} else {
 			switch (backUpMode) {
@@ -60,9 +45,9 @@ public class Backup {
 		}
 	}
 
-	public void sendLoadBackupMessage(final @NotNull String fileName,
-									  final @NotNull String backupMode,
-									  final @NotNull Player target) {
+	public static void sendLoadBackupMessage(final @NotNull String fileName,
+											 final @NotNull String backupMode,
+											 final @NotNull Player target) {
 		final @NotNull String command = "/backup load " + fileName + " -" + backupMode;
 		final @NotNull TextComponent localMessage = new TextComponent(
 				TextComponent.fromLegacyText(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + backupMode + ChatColor.DARK_GRAY + "] "));
@@ -115,7 +100,7 @@ public class Backup {
 		target.spigot().sendMessage(localMessage);
 	}
 
-	public @Nullable File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackUpMode backUpMode, final @NotNull Player p) throws IOException {
+	public static @Nullable File getFile(final @NotNull File regionFolder, final @NotNull String name, final @NotNull BackupMode backUpMode, final @NotNull Player p) throws IOException {
 		switch (backUpMode) {
 			case NONE:
 				final @NotNull File manualBackup = new File(regionFolder, "manual/" + p.getUniqueId());
@@ -161,8 +146,251 @@ public class Backup {
 		}
 	}
 
-	private Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {
-		final @NotNull List<File> backups = new GapList<>();
+	@Register({"load"})
+	public void noArgsLoad(final @NotNull Player p) {
+		Load.execute(RegionSide.NONE, null, BackupMode.NONE, p);
+	}
+
+	@Register({"load"})
+	public void oneArgLoad(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, null, BackupMode.NONE, p);
+	}
+
+	@Register({"load"})
+	public void oneArgLoad(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		Load.execute(RegionSide.NONE, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"load"})
+	public void oneArgLoad(final @NotNull Player p, final @NotNull BackupMode backupMode) {
+		Load.execute(RegionSide.NONE, null, backupMode, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		Load.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
+		Load.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
+		Load.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		Load.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"load"})
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"load"})
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"load"})
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"load"})
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"save"})
+	public void noArgsSave(final @NotNull Player p) {
+		Save.execute(null, null, p);
+	}
+
+	@Register({"save"})
+	public void oneArgSave(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		Save.execute(backupFile, null, p);
+	}
+
+	@Register({"save"})
+	public void twoArgsSave(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Save.execute(backupFile, commandConfirmation.confirm(), p);
+	}
+
+
+	@Register({"del"})
+	public void noArgsDel(final @NotNull Player p) {
+		Delete.execute(null, null, p);
+	}
+
+	@Register({"del"})
+	public void oneArgDel(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		Delete.execute(backupFile, null, p);
+	}
+
+	@Register({"del"})
+	public void twoArgsDel(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Delete.execute(backupFile, commandConfirmation.confirm(), p);
+	}
+
+
+	@Register({"delete"})
+	public void noArgsDelete(final @NotNull Player p) {
+		Delete.execute(null, null, p);
+	}
+
+	@Register({"delete"})
+	public void oneArgDelete(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		Delete.execute(backupFile, null, p);
+	}
+
+	@Register({"delete"})
+	public void twoArgsDelete(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Delete.execute(backupFile, commandConfirmation.confirm(), p);
+	}
+
+	@Register({"list"})
+	public void noArgsList(final @NotNull Player p) {
+		List.execute(RegionSide.NONE, null, BackupMode.NONE, p);
+	}
+
+	@Register({"list"})
+	public void oneArgList(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		List.execute(regionSide, null, BackupMode.NONE, p);
+	}
+
+	@Register({"list"})
+	public void oneArgList(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		List.execute(RegionSide.NONE, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"list"})
+	public void oneArgList(final @NotNull Player p, final @NotNull BackupMode backupMode) {
+		List.execute(RegionSide.NONE, null, backupMode, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		List.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
+		List.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
+		List.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		List.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		List.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"list"})
+	public void twoArgsList(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide) {
+		List.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"list"})
+	public void threeArgsList(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		List.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"list"})
+	public void threeArgsList(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		List.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"list"})
+	public void threeArgsList(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		List.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"search"})
+	public void noArgsSearch(final @NotNull Player p) {
+		Search.execute(RegionSide.NONE, null, BackupMode.NONE, p);
+	}
+
+	@Register({"search"})
+	public void oneArgSearch(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		Search.execute(regionSide, null, BackupMode.NONE, p);
+	}
+
+	@Register({"search"})
+	public void oneArgSearch(final @NotNull Player p, final @NotNull BackupFile backupFile) {
+		Search.execute(RegionSide.NONE, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"search"})
+	public void oneArgSearch(final @NotNull Player p, final @NotNull BackupMode backupMode) {
+		Search.execute(RegionSide.NONE, null, backupMode, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		Search.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
+		Search.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
+		Search.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		Search.execute(regionSide, null, backupMode, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		Search.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"search"})
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide) {
+		Search.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	}
+
+	@Register({"search"})
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
+		Search.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"search"})
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		Search.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+	@Register({"search"})
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
+		Search.execute(regionSide, backupFile.getName(), backupMode, p);
+	}
+
+
+	private static Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {
+		final @NotNull java.util.List<File> backups = new GapList<>();
 
 		Backup.getLatestManual(regionFolder, uuid).ifPresent(backups::add);
 
@@ -175,65 +403,19 @@ public class Backup {
 		return backups.stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
-	private Optional<File> getLatestManual(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {
-		@NotNull Optional<File> possibleFirst = BaseFileUtils.listFolders(new File(regionFolder, "manual/" + uuid)).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-		return possibleFirst;
+	private static Optional<File> getLatestManual(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {
+		return BaseFileUtils.listFolders(new File(regionFolder, "manual/" + uuid)).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
-	private Optional<File> getLatestStartup(final @NotNull File regionFolder) throws IOException {
-		@NotNull Optional<File> possibleFirst = BaseFileUtils.listFolders(new File(regionFolder, "automatic/startup")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-		return possibleFirst;
+	private static Optional<File> getLatestStartup(final @NotNull File regionFolder) throws IOException {
+		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/startup")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
-	private Optional<File> getLatestHourly(final @NotNull File regionFolder) throws IOException {
-		@NotNull Optional<File> possibleFirst = BaseFileUtils.listFolders(new File(regionFolder, "automatic/hourly")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-		return possibleFirst;
+	private static Optional<File> getLatestHourly(final @NotNull File regionFolder) throws IOException {
+		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/hourly")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
-	private Optional<File> getLatestDaily(final @NotNull File regionFolder) throws IOException {
-		@NotNull Optional<File> possibleFirst = BaseFileUtils.listFolders(new File(regionFolder, "automatic/daily")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-		return possibleFirst;
-	}
-
-	private @NotNull
-	Backup.ModifierBlock modifiers(final @NotNull String[] args, final @NotNull String command) {
-		final @NotNull Backup.ModifierBlock result = new ModifierBlock(PasteSide.NONE, BackUpMode.NONE, null);
-		for (final @NotNull String arg : args) {
-			if (PasteSide.parse(arg) != PasteSide.NONE) {
-				result.setPasteSide(PasteSide.parse(arg));
-			} else if (BackUpMode.parse(arg) != BackUpMode.NONE) {
-				result.setBackUpMode(BackUpMode.parse(arg));
-			} else if (!arg.equalsIgnoreCase(command)) {
-				result.setFileName(arg);
-			}
-		}
-
-		return result;
-	}
-
-	public static class ModifierBlock {
-
-		@Getter
-		@Setter
-		private @NotNull
-		PasteSide pasteSide;
-		@Getter
-		@Setter
-		private @NotNull
-		BackUpMode backUpMode;
-		@Getter
-		@Setter
-		private @Nullable
-		String fileName;
-
-		private ModifierBlock(final @NotNull PasteSide pasteSide, final @NotNull BackUpMode backUpMode, final @Nullable String fileName) {
-			this.pasteSide = pasteSide;
-			this.backUpMode = backUpMode;
-			this.fileName = fileName;
-		}
+	private static Optional<File> getLatestDaily(final @NotNull File regionFolder) throws IOException {
+		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/daily")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 }

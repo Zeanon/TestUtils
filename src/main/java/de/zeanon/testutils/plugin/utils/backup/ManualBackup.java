@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.utils.backup;
 
-import de.zeanon.testutils.plugin.utils.enums.BackUpMode;
+import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import lombok.SneakyThrows;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class ManualBackup extends Backup {
 
 	public ManualBackup() {
-		super(BackUpMode.MANUAL);
+		super(BackupMode.MANUAL);
 	}
 
 	@SneakyThrows

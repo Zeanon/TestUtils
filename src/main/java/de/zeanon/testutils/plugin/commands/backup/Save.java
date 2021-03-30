@@ -5,6 +5,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
+import de.zeanon.testutils.plugin.utils.enums.BackupFile;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import java.io.File;
 import java.io.IOException;
@@ -24,74 +25,64 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Save {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
+	public void execute(final @Nullable BackupFile backupFile, final @Nullable Boolean confirm, final @NotNull Player p) {
 		if (ConfigUtils.getInt("Backups", "manual") > 0) {
-			if (args.length > 1 && args[1].contains("./")) {
+			if (backupFile != null && backupFile.getName().contains("./")) {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + args[1] + "' resolution error: Path is not allowed.");
-			} else if (args.length > 3 || (args.length > 2
-										   && CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), args[1]) == null
-										   && !args[2].equalsIgnoreCase("-confirm")
-										   && !args[2].equalsIgnoreCase("-deny"))) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "Too many arguments.");
+							  + ChatColor.RED + "File '" + backupFile.getName() + "' resolution error: Path is not allowed.");
+			} else if (confirm == null) {
+				final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
+
+				if (tempRegion == null || otherRegion == null) {
+					GlobalMessageUtils.sendNotApplicableRegion(p);
+				} else {
+					final @NotNull String name = backupFile == null
+												 ? LocalDateTime.now().format(InitMode.getFormatter())
+												 : backupFile.getName();
+
+					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
+					if (folder.exists()) {
+						CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
+						GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
+															  "/backup save " + name + " -confirm",
+															  "/backup save " + name + " -deny", p);
+					} else {
+						Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
+					}
+				}
 			} else {
-				Save.executeInternally(args, p);
+				if (backupFile == null) {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "You need to specify the file you want to overwrite.");
+				} else {
+					if (confirm) { //NOSONAR
+						final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), backupFile.getName());
+						if (region != null) {
+							CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
+
+							final @NotNull org.bukkit.World tempWorld = p.getWorld();
+							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + backupFile.getName());
+							final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
+							final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
+							if (tempRegion == null || otherRegion == null) {
+								GlobalMessageUtils.sendNotApplicableRegion(p);
+							} else {
+								Save.save(tempWorld, tempRegion, otherRegion, backupFile.getName(), folder, p);
+							}
+						}
+					} else {
+						CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.DARK_RED + backupFile.getName() + ChatColor.RED + " was not overwritten.");
+					}
+				}
 			}
 		} else {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Manual backups are disabled.");
-		}
-	}
-
-	private void executeInternally(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length < 3) {
-			final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
-
-			if (tempRegion == null || otherRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				final @NotNull String name;
-				if (args.length == 1) {
-					name = LocalDateTime.now().format(InitMode.getFormatter());
-				} else {
-					name = args[1];
-				}
-
-				final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
-				if (folder.exists()) {
-					CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
-					GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
-														  "/backup save " + name + " -confirm",
-														  "/backup save " + name + " -deny", p);
-				} else {
-					Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
-				}
-			}
-		} else {
-			final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), args[1]);
-			if (region != null) {
-				if (args[2].equalsIgnoreCase("-confirm")) {
-					CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
-
-					final @NotNull org.bukkit.World tempWorld = p.getWorld();
-					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + args[1]);
-					final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
-					final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
-					if (tempRegion == null || otherRegion == null) {
-						GlobalMessageUtils.sendNotApplicableRegion(p);
-					} else {
-						Save.save(tempWorld, tempRegion, otherRegion, args[1], folder, p);
-					}
-				} else if (args[2].equalsIgnoreCase("-deny")) {
-					CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.DARK_RED + args[1] + ChatColor.RED + " was not overwritten.");
-				}
-			}
 		}
 	}
 

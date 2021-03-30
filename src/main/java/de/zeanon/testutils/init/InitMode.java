@@ -8,14 +8,14 @@ import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.handlers.CommandHandler;
-import de.zeanon.testutils.plugin.handlers.EventListener;
-import de.zeanon.testutils.plugin.handlers.SleepModeCommandHandler;
-import de.zeanon.testutils.plugin.handlers.WakeupListener;
+import de.zeanon.testutils.plugin.commands.backup.Backup;
+import de.zeanon.testutils.plugin.commands.tnt.TNT;
+import de.zeanon.testutils.plugin.handlers.*;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.SleepModeTabCompleter;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.TestUtilsTabCompleter;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.PaperStoplagTabListener;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.tablistener.SpigotStoplagTabListener;
+import de.zeanon.testutils.plugin.mapper.Mapper;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
@@ -86,12 +86,14 @@ public class InitMode {
 			Objects.notNull(TestUtils.getInstance().getCommand("testutils")).setTabCompleter(testUtilsTabCompleter);
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("testblock")).setTabCompleter(testUtilsTabCompleter);
-			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("tnt")).setTabCompleter(testUtilsTabCompleter);
+			Mapper.initialize();
+			new TNT(); //NOSONAR
+			new Backup(); //NOSONAR
 			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setExecutor(commandHandler);
 			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setTabCompleter(testUtilsTabCompleter);
 
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
+			TestUtils.getPluginManager().registerEvents(new RegionListener(), TestUtils.getInstance());
 			if (Bukkit.getVersion().contains("git-Paper")) {
 				TestUtils.getPluginManager().registerEvents(new PaperStoplagTabListener(), TestUtils.getInstance());
 			} else {

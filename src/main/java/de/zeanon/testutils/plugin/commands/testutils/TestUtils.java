@@ -1,7 +1,7 @@
-package de.zeanon.testutils.plugin.commands;
+package de.zeanon.testutils.plugin.commands.testutils;
 
-import de.zeanon.testutils.plugin.commands.testarea.*;
 import de.zeanon.testutils.plugin.commands.testblock.*;
+import de.zeanon.testutils.plugin.commands.testutils.testarea.*;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;

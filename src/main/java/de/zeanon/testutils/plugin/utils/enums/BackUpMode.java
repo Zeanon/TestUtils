@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-public enum BackUpMode {
+public enum BackupMode {
 
 	STARTUP("automatic/startup"),
 	HOURLY("automatic/hourly"),
@@ -15,28 +15,28 @@ public enum BackUpMode {
 
 	private final @NotNull String path;
 
-	BackUpMode(final @NotNull String path) {
+	BackupMode(final @NotNull String path) {
 		this.path = path;
 	}
 
-	public static BackUpMode parse(final @NotNull String cycle) {
+	public static BackupMode parse(final @NotNull String cycle) {
 		switch (cycle) {
 			case "-manual":
-				return BackUpMode.MANUAL;
+				return BackupMode.MANUAL;
 			case "-startup":
-				return BackUpMode.STARTUP;
+				return BackupMode.STARTUP;
 			case "-hourly":
-				return BackUpMode.HOURLY;
+				return BackupMode.HOURLY;
 			case "-daily":
-				return BackUpMode.DAILY;
+				return BackupMode.DAILY;
 			default:
-				return BackUpMode.NONE;
+				return BackupMode.NONE;
 		}
 	}
 
 	@Contract(pure = true)
 	public @NotNull String getPath(final @Nullable String uuid) {
-		return this == BackUpMode.MANUAL ? this.path + "/" + uuid : this.path;
+		return this == BackupMode.MANUAL ? this.path + "/" + uuid : this.path;
 	}
 
 	@Contract(pure = true)

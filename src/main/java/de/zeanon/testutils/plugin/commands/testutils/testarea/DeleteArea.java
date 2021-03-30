@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.testarea;
+package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.world.World;
