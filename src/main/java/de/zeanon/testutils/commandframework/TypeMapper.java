@@ -25,7 +25,7 @@ import org.bukkit.command.CommandSender;
 
 public interface TypeMapper<T> {
 
-	T map(String s);
+	T map(String[] previousArguments, String s);
 
 	List<String> tabCompletes(CommandSender commandSender, String[] previousArguments, String s);
 }

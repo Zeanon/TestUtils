@@ -9,7 +9,7 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -26,8 +26,8 @@ public class Load {
 
 	public void execute(final @NotNull RegionSide regionSide, final @Nullable String fileName, final @NotNull BackupMode backupMode, final @NotNull Player p) {
 		final @Nullable World world = p.getWorld();
-		final @Nullable Region tempRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, regionSide);
-		final @Nullable Region otherRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, regionSide);
+		final @Nullable DefinedRegion tempRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, regionSide);
+		final @Nullable DefinedRegion otherRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, regionSide);
 
 		if (tempRegion == null || otherRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);

@@ -6,7 +6,7 @@ website: ${project.url}
 main: de.zeanon.testutils.TestUtils
 api-version: 1.15
 load: POSTWORLD
-softdepend: [ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]
+softdepend: [ WorldEdit, FastAsyncWorldEdit, PlugMan ]
 commands:
   testutils:
     description: The basic command for TestUtils
@@ -15,6 +15,3 @@ commands:
   testblock:
     description: Paste a TestBlock
     aliases: [ tb ]
-
-  backup:
-    description: Creates a backup of a given TestArea

@@ -17,7 +17,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class RegisterBlock {
 						  + ChatColor.DARK_RED + name + ChatColor.RED
 						  + "' being a sub-command of /testblock.");
 		} else {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

@@ -2,13 +2,9 @@ package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.world.World;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.managers.RemovalStrategy;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -44,13 +40,11 @@ public class DeleteArea {
 	}
 
 	private boolean remove(final @NotNull World world, final @NotNull String name) {
-		RegionManager regionManager = Objects.notNull(InitMode.getRegionContainer().get(world));
-		final @Nullable Region southRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_south");
-		final @Nullable Region northRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_north");
-		if (southRegion != null && northRegion != null && regionManager.getRegion("testarea_" + name + "_outside") != null) {
+		final @Nullable DefinedRegion southRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_south");
+		final @Nullable DefinedRegion northRegion = de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(name + "_north");
+		if (southRegion != null && northRegion != null) {
 			de.zeanon.testutils.plugin.utils.region.RegionManager.removeRegion(southRegion);
 			de.zeanon.testutils.plugin.utils.region.RegionManager.removeRegion(northRegion);
-			regionManager.removeRegion("testarea_" + name + "_outside", RemovalStrategy.UNSET_PARENT_IN_CHILDREN);
 
 			try {
 				final @NotNull File resetFolder = new File(TestUtils.getInstance().getDataFolder(), "/TestAreas/" + world.getName() + "/" + name.substring(0, name.length() - 6));

@@ -6,13 +6,12 @@ import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackupFile;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
@@ -25,14 +24,16 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Save {
 
+	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
+
 	public void execute(final @Nullable BackupFile backupFile, final @Nullable Boolean confirm, final @NotNull Player p) {
 		if (ConfigUtils.getInt("Backups", "manual") > 0) {
-			if (backupFile != null && backupFile.getName().contains("./")) {
+			if (backupFile != null && (backupFile.getName().contains("./") || Save.forbiddenFileName(backupFile.getName()))) {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "File '" + backupFile.getName() + "' resolution error: Path is not allowed.");
 			} else if (confirm == null) {
-				final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -58,25 +59,24 @@ public class Save {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "You need to specify the file you want to overwrite.");
 				} else {
-					if (confirm) { //NOSONAR
-						final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), backupFile.getName());
-						if (region != null) {
-							CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
+					final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), backupFile.getName());
+					CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
+					if (region != null) {
+						if (confirm) { //NOSONAR
 
 							final @NotNull org.bukkit.World tempWorld = p.getWorld();
 							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + backupFile.getName());
-							final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
-							final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
+							final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
+							final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
 							if (tempRegion == null || otherRegion == null) {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
 								Save.save(tempWorld, tempRegion, otherRegion, backupFile.getName(), folder, p);
 							}
+						} else {
+							p.sendMessage(GlobalMessageUtils.messageHead
+										  + ChatColor.DARK_RED + backupFile.getName() + ChatColor.RED + " was not overwritten.");
 						}
-					} else {
-						CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.DARK_RED + backupFile.getName() + ChatColor.RED + " was not overwritten.");
 					}
 				}
 			}
@@ -86,7 +86,11 @@ public class Save {
 		}
 	}
 
-	private void save(final @NotNull org.bukkit.World tempWorld, final @NotNull Region tempRegion, final @NotNull Region otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
+	public boolean forbiddenFileName(final @NotNull String name) {
+		return Save.forbiddenNames.contains(name.toLowerCase());
+	}
+
+	private void save(final @NotNull org.bukkit.World tempWorld, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "Registering Backup for '"
 					  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)

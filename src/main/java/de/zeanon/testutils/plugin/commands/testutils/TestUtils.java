@@ -2,7 +2,7 @@ package de.zeanon.testutils.plugin.commands.testutils;
 
 import de.zeanon.testutils.plugin.commands.testblock.*;
 import de.zeanon.testutils.plugin.commands.testutils.testarea.*;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -48,7 +48,7 @@ public class TestUtils {
 			} else if (args[0].equalsIgnoreCase("update")) {
 				Update.execute(args, p);
 			} else if (args[0].equalsIgnoreCase("convert")) {
-				for (Region region : RegionManager.getRegions()) {
+				for (DefinedRegion region : RegionManager.getRegions()) {
 					region.setFire(false);
 				}
 			} else {

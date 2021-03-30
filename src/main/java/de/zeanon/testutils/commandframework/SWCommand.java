@@ -19,7 +19,6 @@
 
 package de.zeanon.testutils.commandframework;
 
-
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -71,7 +70,7 @@ public abstract class SWCommand {
 				}
 				strings = new ArrayList<>(strings);
 				for (int i = strings.size() - 1; i >= 0; i--) {
-					if (!strings.get(i).startsWith(args[args.length - 1])) {
+					if (!strings.get(i).toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
 						strings.remove(i);
 					}
 				}
@@ -88,16 +87,22 @@ public abstract class SWCommand {
 					SWCommandUtils.addMapper(anno.value(), typeMapper);
 				}
 			});
-			this.addMapper(ClassMapper.class, method, i -> i != 0, false, TypeMapper.class, (anno, typeMapper) -> {
-				SWCommandUtils.addMapper(anno.value().getTypeName(), typeMapper);
+			this.addMapper(ClassMapper.class, method, i -> i == 0, false, TypeMapper.class, (anno, typeMapper) -> {
+				if (anno.local()) {
+					this.localTypeMapper.put(anno.value().getTypeName(), typeMapper);
+				} else {
+					SWCommandUtils.addMapper(anno.value().getTypeName(), typeMapper);
+				}
 			});
-			this.add(Register.class, method, i -> i == 2, true, null, (anno, parameters) -> {
+			this.add(Register.class, method, i -> i > 0, true, null, (anno, parameters) -> {
 				if (!anno.help()) {
 					return;
 				}
+				if (parameters.length != 2) {
+					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking parameters or has too many");
+				}
 				if (!parameters[parameters.length - 1].isVarArgs()) {
 					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters as last Argument");
-					return;
 				}
 				if (parameters[parameters.length - 1].getType().getComponentType() != String.class) {
 					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters of type '" + String.class.getTypeName() + "' as last Argument");
@@ -130,10 +135,19 @@ public abstract class SWCommand {
 						return;
 					}
 				}
-				this.commandSet.add(new SubCommand(this, method, anno.value()));
+				this.commandSet.add(new SubCommand(this, method, anno.value(), this.localTypeMapper));
 			});
 
-			this.commandSet.sort(Comparator.comparingInt(o -> -o.subCommand.length));
+			this.commandSet.sort((o1, o2) -> {
+				int compare = Integer.compare(-o1.subCommand.length, -o2.subCommand.length);
+				if (compare != 0) {
+					return compare;
+				} else {
+					int i1 = o1.varArgType != null ? Integer.MAX_VALUE : o1.arguments.length;
+					int i2 = o2.varArgType != null ? Integer.MAX_VALUE : o2.arguments.length;
+					return Integer.compare(i1, i2);
+				}
+			});
 			this.commandHelpSet.sort(Comparator.comparingInt(o -> -o.subCommand.length));
 		}
 	}
@@ -207,5 +221,7 @@ public abstract class SWCommand {
 	protected @interface ClassMapper {
 
 		Class<?> value();
+
+		boolean local() default false;
 	}
 }

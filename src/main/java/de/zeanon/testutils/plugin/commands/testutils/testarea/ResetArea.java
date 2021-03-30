@@ -14,7 +14,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -31,8 +31,8 @@ public class ResetArea {
 
 		if (args.length == 1) {
 			final @NotNull String worldName = p.getWorld().getName();
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -73,7 +73,7 @@ public class ResetArea {
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-here")) {
 				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
@@ -105,7 +105,7 @@ public class ResetArea {
 				}
 			} else if (args[1].equalsIgnoreCase("-other")) {
 				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable Region tempRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
@@ -137,7 +137,7 @@ public class ResetArea {
 				}
 			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
 				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
@@ -169,7 +169,7 @@ public class ResetArea {
 				}
 			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
 				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable Region tempRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
 				if (tempRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
@@ -209,7 +209,7 @@ public class ResetArea {
 		}
 	}
 
-	private void pasteSide(final @NotNull Region tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
+	private void pasteSide(final @NotNull DefinedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 

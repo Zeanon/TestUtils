@@ -6,7 +6,7 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.GlobalToggle;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.StoplagToggle;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -71,8 +71,8 @@ public class StoplagNew extends SWCommand {
 
 	private void execute(final @NotNull Player p, final @NotNull RegionSide regionSide, final boolean activate, final boolean global) {
 		if (regionSide == RegionSide.NONE) {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
@@ -89,8 +89,8 @@ public class StoplagNew extends SWCommand {
 				}
 			}
 		} else {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p, regionSide);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead

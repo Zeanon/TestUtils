@@ -2,7 +2,7 @@ package de.zeanon.testutils.plugin.commands.stoplag;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,8 +16,8 @@ public class Stoplag {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 1) {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 				p.sendMessage(GlobalMessageUtils.messageHead
@@ -35,8 +35,8 @@ public class Stoplag {
 			}
 		} else if (args.length == 2) {
 			if (args[1].equalsIgnoreCase("-c")) {
-				final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -54,8 +54,8 @@ public class Stoplag {
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-here")) {
-				final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -72,8 +72,8 @@ public class Stoplag {
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-other")) {
-				final @Nullable Region tempRegion = TestAreaUtils.getOppositeRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -94,8 +94,8 @@ public class Stoplag {
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
-				final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -116,8 +116,8 @@ public class Stoplag {
 					}
 				}
 			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
-				final @Nullable Region tempRegion = TestAreaUtils.getSouthRegion(p);
-				final @Nullable Region otherRegion = TestAreaUtils.getNorthRegion(p);
+				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -162,8 +162,8 @@ public class Stoplag {
 		if (arg.equalsIgnoreCase("-global")) {
 			p.performCommand("stoplag -c");
 		} else if (arg.equalsIgnoreCase("-here")) {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -180,8 +180,8 @@ public class Stoplag {
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-other")) {
-			final @Nullable Region tempRegion = TestAreaUtils.getOppositeRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -198,8 +198,8 @@ public class Stoplag {
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-north") || arg.equalsIgnoreCase("-n")) {
-			final @Nullable Region tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -220,8 +220,8 @@ public class Stoplag {
 				}
 			}
 		} else if (arg.equalsIgnoreCase("-south") || arg.equalsIgnoreCase("-s")) {
-			final @Nullable Region tempRegion = TestAreaUtils.getSouthRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getNorthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

@@ -30,10 +30,10 @@ import org.bukkit.command.CommandSender;
 class SubCommand {
 
 	String[] subCommand;
+	TypeMapper<?>[] arguments;
+	Class<?> varArgType = null;
 	private SWCommand swCommand;
 	private Method method;
-	private TypeMapper<?>[] arguments;
-	private boolean varArgs = false;
 	private Function<CommandSender, ?> commandSenderFunction;
 
 	public SubCommand(SWCommand swCommand, Method method, String[] subCommand) {
@@ -53,8 +53,8 @@ class SubCommand {
 			Parameter parameter = parameters[i];
 			Class<?> clazz = parameter.getType();
 			if (parameter.isVarArgs()) {
-				this.varArgs = true;
 				clazz = clazz.getComponentType();
+				this.varArgType = clazz;
 			}
 
 			SWCommand.Mapper mapper = parameter.getAnnotation(SWCommand.Mapper.class);
@@ -81,25 +81,27 @@ class SubCommand {
 	}
 
 	boolean invoke(CommandSender commandSender, String[] args) {
-		if (args.length < this.arguments.length - 1) {
+		if (args.length < this.arguments.length + this.subCommand.length - (this.varArgType != null ? 1 : 0)) {
 			return false;
 		}
-		if (!this.varArgs && args.length > this.arguments.length) {
+		if (this.varArgType == null && args.length > this.arguments.length + this.subCommand.length) {
 			return false;
 		}
 		try {
-			Object[] objects = SWCommandUtils.generateArgumentArray(this.arguments, args, this.varArgs, this.subCommand);
+			Object[] objects = SWCommandUtils.generateArgumentArray(this.arguments, args, this.varArgType, this.subCommand);
 			objects[0] = this.commandSenderFunction.apply(commandSender);
 			this.method.setAccessible(true);
 			this.method.invoke(this.swCommand, objects);
 		} catch (IllegalAccessException | RuntimeException | InvocationTargetException e) {
 			throw new SecurityException(e.getMessage(), e);
+		} catch (CommandParseException e) {
+			return false;
 		}
 		return true;
 	}
 
 	List<String> tabComplete(CommandSender commandSender, String[] args) {
-		if (!this.varArgs && args.length < this.arguments.length - 1) {
+		if (this.varArgType == null && args.length < this.arguments.length + this.subCommand.length - 1) {
 			return null;
 		}
 		List<String> argsList = new LinkedList<>(Arrays.asList(args));
@@ -108,7 +110,7 @@ class SubCommand {
 			if (argsList.isEmpty()) {
 				return Collections.singletonList(value);
 			}
-			if (!value.equals(s)) {
+			if (!value.equalsIgnoreCase(s)) {
 				return null;
 			}
 		}
@@ -118,21 +120,21 @@ class SubCommand {
 				return argument.tabCompletes(commandSender, Arrays.copyOf(args, args.length - 1), s);
 			}
 			try {
-				if (argument.map(s) == null) {
+				if (argument.map(Arrays.copyOf(args, argsList.size()), s) == null) {
 					return null;
 				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
-		if (this.varArgs && !argsList.isEmpty()) {
+		if (this.varArgType != null && !argsList.isEmpty()) {
 			while (!argsList.isEmpty()) {
 				String s = argsList.remove(0);
 				if (argsList.isEmpty()) {
 					return this.arguments[this.arguments.length - 1].tabCompletes(commandSender, Arrays.copyOf(args, args.length - 1), s);
 				}
 				try {
-					if (this.arguments[this.arguments.length - 1].map(s) == null) {
+					if (this.arguments[this.arguments.length - 1].map(Arrays.copyOf(args, argsList.size()), s) == null) {
 						return null;
 					}
 				} catch (Exception e) {

@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.utils.backup;
 
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class ManualBackup extends Backup {
 	}
 
 	@Override
-	protected boolean doBackup(final @NotNull Region southRegion, final @NotNull Region northRegion) {
+	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
 		return false;
 	}
 }

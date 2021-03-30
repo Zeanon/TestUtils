@@ -11,7 +11,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -56,7 +56,7 @@ public class Count {
 		}
 	}
 
-	private void count(final @NotNull Player p, final @Nullable Region tempRegion, final @NotNull String area, final @NotNull String block) {
+	private void count(final @NotNull Player p, final @Nullable DefinedRegion tempRegion, final @NotNull String area, final @NotNull String block) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

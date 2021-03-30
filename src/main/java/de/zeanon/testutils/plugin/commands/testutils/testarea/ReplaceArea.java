@@ -12,7 +12,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -62,8 +62,8 @@ public class ReplaceArea {
 	}
 
 	private void replaceArea(final @NotNull Player p,
-							 final @Nullable Region tempRegion,
-							 final @Nullable Region otherRegion,
+							 final @Nullable DefinedRegion tempRegion,
+							 final @Nullable DefinedRegion otherRegion,
 							 final @NotNull String area,
 							 final boolean toTNT,
 							 final @Nullable String source,

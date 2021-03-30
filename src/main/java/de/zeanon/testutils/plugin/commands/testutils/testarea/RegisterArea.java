@@ -1,15 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -39,16 +31,16 @@ public class RegisterArea {
 	}
 
 	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {
-		Region regionSouth = new Region(name + "_south",
-										new Region.Point(x - 58, y, z + 1),
-										new Region.Point(x + 58, y + 65, z + 97),
-										world);
+		DefinedRegion regionSouth = new DefinedRegion(name + "_south",
+													  new DefinedRegion.Point(x - 58, y, z + 1),
+													  new DefinedRegion.Point(x + 58, y + 65, z + 97),
+													  world);
 
 
-		Region regionNorth = new Region(name + "_north",
-										new Region.Point(x - 58, y, z),
-										new Region.Point(x + 58, y + 65, z - 96),
-										world);
+		DefinedRegion regionNorth = new DefinedRegion(name + "_north",
+													  new DefinedRegion.Point(x - 58, y, z),
+													  new DefinedRegion.Point(x + 58, y + 65, z - 96),
+													  world);
 
 
 		RegionManager.addRegion(regionSouth);
@@ -60,13 +52,5 @@ public class RegisterArea {
 		regionNorth.setFire(false);
 		regionSouth.setTnt(false);
 		regionNorth.setTnt(false);
-
-		ProtectedRegion wgregion = new ProtectedCuboidRegion("testarea_" + name + "_outside",
-															 BlockVector3.at(x - 58, y, z - 96),
-															 BlockVector3.at(x + 58, y + 65, z + 97));
-
-		Objects.notNull(InitMode.getRegionContainer().get(new BukkitWorld(world))).addRegion(wgregion);
-
-		wgregion.setFlag(Flags.TNT, StateFlag.State.ALLOW);
 	}
 }

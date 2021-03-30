@@ -16,7 +16,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,8 +32,8 @@ public class RegisterReset {
 
 	public void execute(final @NotNull String[] args, final @NotNull Player p) {
 		if (args.length == 1) {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -62,7 +62,7 @@ public class RegisterReset {
 		}
 	}
 
-	private void registerSide(final @NotNull Player p, final @NotNull Region tempRegion) throws WorldEditException, IOException {
+	private void registerSide(final @NotNull Player p, final @NotNull DefinedRegion tempRegion) throws WorldEditException, IOException {
 		final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);

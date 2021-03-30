@@ -20,6 +20,7 @@
 package de.zeanon.testutils.commandframework;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -31,6 +32,7 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 
 
@@ -87,7 +89,7 @@ public class SWCommandUtils {
 			throw new SecurityException("Oh shit. Commands cannot be registered.", exception);
 		}
 		try {
-			final Field knownCommandsField = SWCommandUtils.commandMap.getClass().getDeclaredField("knownCommands");
+			final Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
 			knownCommandsField.setAccessible(true);
 			knownCommandMap = (Map<String, Command>) knownCommandsField.get(SWCommandUtils.commandMap);
 		} catch (NoSuchFieldException | IllegalAccessException exception) {
@@ -95,6 +97,7 @@ public class SWCommandUtils {
 			throw new SecurityException("Oh shit. Commands cannot be registered.", exception);
 		}
 	}
+
 	private SWCommandUtils() {
 		throw new IllegalStateException("Utility Class");
 	}
@@ -117,7 +120,7 @@ public class SWCommandUtils {
 	public static <T> TypeMapper<T> createMapper(Function<String, T> mapper, BiFunction<CommandSender, String, List<String>> tabCompleter) {
 		return new TypeMapper<T>() {
 			@Override
-			public T map(String s) {
+			public T map(String[] previous, String s) {
 				return mapper.apply(s);
 			}
 
@@ -128,29 +131,41 @@ public class SWCommandUtils {
 		};
 	}
 
-	static Object[] generateArgumentArray(TypeMapper<?>[] parameters, String[] args, boolean varArgs, String[] subCommand) {
+	static Object[] generateArgumentArray(TypeMapper<?>[] parameters, String[] args, Class<?> varArgType, String[] subCommand) throws CommandParseException {
 		Object[] arguments = new Object[parameters.length + 1];
 		int index = 0;
 		while (index < subCommand.length) {
-			if (!args[index].equals(subCommand[index])) {
-				throw new SecurityException();
+			if (!args[index].equalsIgnoreCase(subCommand[index])) {
+				throw new CommandParseException();
 			}
 			index++;
 		}
 
-		for (int i = 0; i < parameters.length - (varArgs ? 1 : 0); i++) {
-			arguments[i + 1] = parameters[i].map(args[index++]);
-			if (arguments[i + 1] == null) {
-				throw new SecurityException();
-			}
-		}
-
-		if (varArgs) {
-			Object[] varArgument = new Object[args.length - parameters.length + 2];
+		if (varArgType != null && index > args.length - 1) {
+			Object varArgument = Array.newInstance(varArgType, 0);
 			arguments[arguments.length - 1] = varArgument;
+		} else {
+			for (int i = 0; i < parameters.length - (varArgType != null ? 1 : 0); i++) {
+				arguments[i + 1] = parameters[i].map(Arrays.copyOf(args, index), args[index]);
+				index++;
+				if (arguments[i + 1] == null) {
+					throw new CommandParseException();
+				}
+			}
 
-			for (int i = 0; i < varArgument.length; i++) {
-				varArgument[i] = parameters[parameters.length - 1].map(args[index++]);
+			if (varArgType != null) {
+				int length = args.length - parameters.length - subCommand.length + 1;
+				Object varArgument = Array.newInstance(varArgType, length);
+				arguments[arguments.length - 1] = varArgument;
+
+				for (int i = 0; i < length; i++) {
+					Object value = parameters[parameters.length - 1].map(Arrays.copyOf(args, index), args[index]);
+					if (value == null) {
+						throw new CommandParseException();
+					}
+					Array.set(varArgument, i, value);
+					index++;
+				}
 			}
 		}
 		return arguments;

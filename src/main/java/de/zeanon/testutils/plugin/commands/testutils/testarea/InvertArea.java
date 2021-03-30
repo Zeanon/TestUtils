@@ -11,7 +11,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -44,7 +44,7 @@ public class InvertArea {
 		}
 	}
 
-	private void invertArea(final @NotNull Player p, final @Nullable Region tempRegion, final @NotNull String area) {
+	private void invertArea(final @NotNull Player p, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

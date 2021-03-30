@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.handlers;
 
-import de.zeanon.testutils.plugin.commands.backup.Backup;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtils;
 import org.bukkit.command.Command;
@@ -22,7 +21,7 @@ public class CommandHandler implements CommandExecutor {
 		} else if (command.getName().equalsIgnoreCase("testblock")) {
 			TestBlock.execute(args, (Player) sender);
 		} else if (command.getName().equalsIgnoreCase("backup")) {
-			Backup.execute(args, (Player) sender);
+			//Backup.execute(args, (Player) sender);
 		}
 		return true;
 	}

@@ -1,7 +1,5 @@
 package de.zeanon.testutils.init;
 
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
@@ -9,6 +7,7 @@ import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.backup.Backup;
+import de.zeanon.testutils.plugin.commands.region.Region;
 import de.zeanon.testutils.plugin.commands.tnt.TNT;
 import de.zeanon.testutils.plugin.handlers.*;
 import de.zeanon.testutils.plugin.handlers.tabcompleter.SleepModeTabCompleter;
@@ -39,8 +38,6 @@ public class InitMode {
 	private final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
 	@Getter
 	private ThunderConfig config;
-	@Getter
-	private RegionContainer regionContainer;
 
 
 	public void initPlugin() {
@@ -73,11 +70,8 @@ public class InitMode {
 		if (((TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") != null
 			  && TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
 			 || (TestUtils.getPluginManager().getPlugin("WorldEdit") != null
-				 && TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))
-			&& TestUtils.getPluginManager().getPlugin("WorldGuard") != null
-			&& TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
+				 && TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))) {
 
-			InitMode.regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
 			final @NotNull CommandHandler commandHandler = new CommandHandler();
 			final @NotNull TestUtilsTabCompleter testUtilsTabCompleter = new TestUtilsTabCompleter();
@@ -89,8 +83,7 @@ public class InitMode {
 			Mapper.initialize();
 			new TNT(); //NOSONAR
 			new Backup(); //NOSONAR
-			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setExecutor(commandHandler);
-			Objects.notNull(TestUtils.getInstance().getCommand("backup")).setTabCompleter(testUtilsTabCompleter);
+			new Region();
 
 			TestUtils.getPluginManager().registerEvents(new EventListener(), TestUtils.getInstance());
 			TestUtils.getPluginManager().registerEvents(new RegionListener(), TestUtils.getInstance());

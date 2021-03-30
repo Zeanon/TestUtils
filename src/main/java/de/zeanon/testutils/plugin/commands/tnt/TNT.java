@@ -5,7 +5,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.TNTMode;
-import de.zeanon.testutils.plugin.utils.region.Region;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +21,17 @@ public class TNT extends SWCommand {
 	@Register
 	public void noArgs(final @NotNull Player p) {
 		this.execute(p, RegionSide.NONE, null);
+	}
+
+	@Register(help = true)
+	public void noArgsHelp(final @NotNull Player p, final @NotNull String... args) {
+		if (args.length == 0) {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Missing argument.");
+		} else {
+			p.sendMessage(GlobalMessageUtils.messageHead
+						  + ChatColor.RED + "Unknown argument '" + ChatColor.DARK_RED + args[args.length - 1] + ChatColor.RED + "'.");
+		}
 	}
 
 	@Register
@@ -55,8 +66,8 @@ public class TNT extends SWCommand {
 
 	private void execute(final @NotNull Player p, final @NotNull RegionSide regionSide, final Boolean activate) {
 		if (regionSide == RegionSide.NONE) {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -83,8 +94,8 @@ public class TNT extends SWCommand {
 				}
 			}
 		} else {
-			final @Nullable Region tempRegion = TestAreaUtils.getRegion(p, regionSide);
-			final @Nullable Region otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

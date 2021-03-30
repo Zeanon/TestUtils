@@ -307,14 +307,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- WorldGuard API -->
-        <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.3</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- PlugMan -->
         <dependency>
             <groupId>com.rylinaux</groupId>
