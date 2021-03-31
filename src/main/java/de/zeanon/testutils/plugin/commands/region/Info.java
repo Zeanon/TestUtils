@@ -25,7 +25,19 @@ public class Info {
 			} else if (regions.size() == 1) {
 				Info.sendRegionInfo(regions.get(0), p);
 			} else {
-				Info.sendMultipleRegions(regions, p);
+				de.zeanon.testutils.plugin.commands.region.Region.sendMultipleRegions(regions, p);
+			}
+		} else {
+			if (RegionManager.isGlobalRegion(regionName.getName())) {
+				Info.sendRegionInfo(RegionManager.getGlobalRegion(p.getWorld()), p);
+			} else {
+				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
+				if (region != null) {
+					Info.sendRegionInfo(region, p);
+				} else {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "The given region does not exist.");
+				}
 			}
 		}
 	}
@@ -39,27 +51,27 @@ public class Info {
 					  + ChatColor.DARK_RED + region.getWorld().getName());
 
 		p.sendMessage(GlobalMessageUtils.messageHead
-					  + ChatColor.RED + "Flags: "
+					  + ChatColor.RED + "Type: "
+					  + ChatColor.DARK_RED + region.getType());
+
+		p.sendMessage(GlobalMessageUtils.messageHead
+					  + ChatColor.RED + "Flags:"
+					  + ChatColor.BLACK + " | "
 					  + ChatColor.DARK_RED + "TNT"
-					  + ChatColor.RED + " : "
+					  + ChatColor.DARK_GRAY + " : "
 					  + (region.tnt() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
 					  + ChatColor.BLACK + " | "
 					  + ChatColor.DARK_RED + "Stoplag"
-					  + ChatColor.RED + " : "
+					  + ChatColor.DARK_GRAY + " : "
 					  + (region.stoplag() ? ChatColor.GREEN + "active" : ChatColor.RED + "inactive")
 					  + ChatColor.BLACK + " | "
 					  + ChatColor.DARK_RED + "Fire"
-					  + ChatColor.RED + " : "
+					  + ChatColor.DARK_GRAY + " : "
 					  + (region.fire() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
 					  + ChatColor.BLACK + " | "
 					  + ChatColor.DARK_RED + "Itemdrops"
-					  + ChatColor.RED + " : "
-					  + (region.itemDrops() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny"));
-	}
-
-	private void sendMultipleRegions(final @NotNull List<DefinedRegion> regions, final @NotNull Player p) {
-		p.sendMessage(GlobalMessageUtils.messageHead
-					  + ChatColor.RED + "You are standing in multiple regions: "
-					  + ChatColor.DARK_RED + regions.toString());
+					  + ChatColor.DARK_GRAY + " : "
+					  + (region.itemDrops() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
+					  + ChatColor.BLACK + " | ");
 	}
 }

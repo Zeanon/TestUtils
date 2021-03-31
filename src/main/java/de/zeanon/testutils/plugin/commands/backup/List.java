@@ -7,7 +7,6 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +24,10 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class List {
 
-	public void execute(final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode, final @NotNull Player p) {
+	public void execute(final @Nullable BackupMode backupMode, final @NotNull Player p) {
 		final @Nullable World world = p.getWorld();
-		final @Nullable DefinedRegion tempRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getRegion(p) : TestAreaUtils.getRegion(p, regionSide);
-		final @Nullable DefinedRegion otherRegion = regionSide == RegionSide.NONE ? TestAreaUtils.getOppositeRegion(p) : TestAreaUtils.getOppositeRegion(p, regionSide);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 		new BukkitRunnable() {
 			@Override
@@ -40,11 +39,11 @@ public class List {
 						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 						if (!regionFolder.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There are no " + (backupMode == BackupMode.NONE ? "" : backupMode + " ") + "backups for '"
+										  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 						} else {
 							final @NotNull java.util.List<Pair<File, String>> files = new GapList<>();
-							if (backupMode == BackupMode.NONE) {
+							if (backupMode == null) {
 								final @NotNull File manualBackups = new File(regionFolder, "manual/" + p.getUniqueId());
 								if (manualBackups.exists()) {
 									final @NotNull java.util.List<File> tempFiles = BaseFileUtils.listFolders(manualBackups);
@@ -88,7 +87,7 @@ public class List {
 
 							if (files.isEmpty()) {
 								p.sendMessage(GlobalMessageUtils.messageHead
-											  + ChatColor.RED + "There are no " + (backupMode == BackupMode.NONE ? "" : backupMode + " ") + "backups for '"
+											  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 											  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 							} else {
 								p.sendMessage(GlobalMessageUtils.messageHead

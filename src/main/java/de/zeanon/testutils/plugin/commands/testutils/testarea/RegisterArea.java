@@ -1,6 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
@@ -8,26 +9,22 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
 public class RegisterArea {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length < 3) {
-			final @NotNull String name = args.length > 1 ? args[1] : p.getName();
-			RegisterArea.generate(p.getWorld(),
-								  p.getLocation().getBlockX(),
-								  p.getLocation().getBlockY(),
-								  p.getLocation().getBlockZ(),
-								  name);
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "You created a testarea with the name '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
-			RegisterReset.execute(new String[]{"registerreset"}, p);
-		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Too many arguments.");
-		}
+	public void execute(final @Nullable AreaName name, final @NotNull Player p) {
+		final @NotNull String regionName = name == null ? p.getName() : name.getName();
+		RegisterArea.generate(p.getWorld(),
+							  p.getLocation().getBlockX(),
+							  p.getLocation().getBlockY(),
+							  p.getLocation().getBlockZ(),
+							  regionName);
+		p.sendMessage(GlobalMessageUtils.messageHead
+					  + ChatColor.RED + "You created a testarea with the name '" + ChatColor.DARK_RED + regionName + ChatColor.RED + "'.");
+		RegisterReset.execute(p);
 	}
 
 	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {

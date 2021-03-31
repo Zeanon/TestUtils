@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.utils.region;
 
-import com.sk89q.worldedit.math.BlockVector3;
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
@@ -8,8 +7,6 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import java.io.File;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -22,21 +19,19 @@ public class DefinedRegion implements Region {
 
 	public DefinedRegion(final @NotNull String name) {
 		this.jsonFile = JsonFileManager.jsonFile(TestUtils.getInstance().getDataFolder(), "Regions/" + name)
-									   .concurrentData(true)
 									   .create();
 	}
 
 	public DefinedRegion(final @NotNull File file) {
 		this.jsonFile = JsonFileManager.jsonFile(file)
-									   .concurrentData(true)
 									   .create();
 	}
 
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {
 		this.jsonFile = JsonFileManager.jsonFile(TestUtils.getInstance().getDataFolder(), "Regions/" + name)
 									   .fromResource("resources/region.json")
-									   .concurrentData(true)
 									   .create();
+
 		final @NotNull Pair<Point, Point> points = this.getPoints(firstPoint, secondPoint);
 
 		this.setPoint(points.getKey(), "highest");
@@ -47,7 +42,7 @@ public class DefinedRegion implements Region {
 	public boolean inRegion(final @NotNull Location location) {
 		final @NotNull Point minimumPoint = this.getMinimumPoint();
 		final @NotNull Point maximumPoint = this.getMaximumPoint();
-		return Objects.notNull(this.getWorld()).equals(location.getWorld())
+		return this.getWorld().equals(location.getWorld())
 			   && maximumPoint.getX() >= location.getBlockX()
 			   && minimumPoint.getX() <= location.getBlockX()
 			   && maximumPoint.getY() >= location.getBlockY()
@@ -63,26 +58,36 @@ public class DefinedRegion implements Region {
 
 	@Override
 	public void setStoplag(final boolean stoplag) {
-		this.jsonFile.set("stoplag", stoplag);
+		this.jsonFile.setUseArray(new String[]{"stoplag"}, stoplag);
 	}
 
 	@Override
 	public void setFire(final boolean fire) {
-		this.jsonFile.set("fire", fire);
+		this.jsonFile.setUseArray(new String[]{"fire"}, fire);
 	}
 
 	@Override
 	public void setItemDrops(final boolean itemDrops) {
-		this.jsonFile.set("itemdrops", itemDrops);
-	}
-
-	public void setHasChanged(final boolean hasChanged) {
-		this.jsonFile.set("changed", hasChanged);
+		this.jsonFile.setUseArray(new String[]{"itemdrops"}, itemDrops);
 	}
 
 	@Override
-	public World getWorld() {
-		return Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world")));
+	public void setLeavesDecay(final boolean leavesDecay) {
+		this.jsonFile.setUseArray(new String[]{"leavesdecay"}, leavesDecay);
+	}
+
+	public void setHasChanged(final boolean hasChanged) {
+		this.jsonFile.setUseArray(new String[]{"changed"}, hasChanged);
+	}
+
+	@Override
+	public @NotNull World getWorld() {
+		return Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
+	}
+
+	@Override
+	public @NotNull String getType() {
+		return "defined";
 	}
 
 	public @NotNull Point getMinimumPoint() {
@@ -122,6 +127,11 @@ public class DefinedRegion implements Region {
 		return this.jsonFile.getBooleanUseArray("itemdrops");
 	}
 
+	@Override
+	public boolean leavesDecay() {
+		return this.jsonFile.getBooleanUseArray("leavesdecay");
+	}
+
 	protected void deleteRegion() {
 		this.jsonFile.clearData();
 		this.jsonFile.deleteFile();
@@ -149,18 +159,5 @@ public class DefinedRegion implements Region {
 								  Math.min(firstPoint.getX(), secondPoint.getX()),
 								  Math.min(firstPoint.getY(), secondPoint.getY()),
 								  Math.min(firstPoint.getZ(), secondPoint.getZ())));
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class Point {
-
-		final int x;
-		final int y;
-		final int z;
-
-		public @NotNull BlockVector3 toBlockVector3() {
-			return BlockVector3.at(this.x, this.y, this.z);
-		}
 	}
 }

@@ -4,14 +4,17 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
+import de.zeanon.testutils.plugin.utils.backup.Backup;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
-import de.zeanon.testutils.plugin.utils.enums.BackupFile;
+import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
+import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
-import java.util.*;
+import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
@@ -24,25 +27,23 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Save {
 
-	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
-
-	public void execute(final @Nullable BackupFile backupFile, final @Nullable Boolean confirm, final @NotNull Player p) {
+	public void execute(final @Nullable MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
 		if (ConfigUtils.getInt("Backups", "manual") > 0) {
-			if (backupFile != null && (backupFile.getName().contains("./") || Save.forbiddenFileName(backupFile.getName()))) {
+			if (mappedFile != null && (mappedFile.getName().contains("./") || InitMode.forbiddenFileName(mappedFile.getName()))) {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + backupFile.getName() + "' resolution error: Path is not allowed.");
-			} else if (confirm == null) {
+							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
+			} else if (confirmation == null) {
 				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
 				final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 				if (tempRegion == null || otherRegion == null) {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
-					final @NotNull String name = backupFile == null
-												 ? LocalDateTime.now().format(InitMode.getFormatter())
-												 : backupFile.getName();
+					final @NotNull String name = mappedFile == null
+												 ? LocalDateTime.now().format(Backup.getFormatter())
+												 : mappedFile.getName();
 
-					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
+					final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + name);
 					if (folder.exists()) {
 						CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
 						p.sendMessage(GlobalMessageUtils.messageHead
@@ -55,27 +56,27 @@ public class Save {
 					}
 				}
 			} else {
-				if (backupFile == null) {
+				if (mappedFile == null) {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "You need to specify the file you want to overwrite.");
 				} else {
-					final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), backupFile.getName());
+					final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), mappedFile.getName());
 					CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
 					if (region != null) {
-						if (confirm) { //NOSONAR
+						if (confirmation.confirm()) { //NOSONAR
 
 							final @NotNull org.bukkit.World tempWorld = p.getWorld();
-							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + backupFile.getName());
-							final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(tempWorld, region);
-							final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(tempWorld, region);
+							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + region + "/manual/" + p.getUniqueId() + "/" + mappedFile.getName());
+							final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
+							final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
 							if (tempRegion == null || otherRegion == null) {
 								GlobalMessageUtils.sendNotApplicableRegion(p);
 							} else {
-								Save.save(tempWorld, tempRegion, otherRegion, backupFile.getName(), folder, p);
+								Save.save(tempWorld, tempRegion, otherRegion, mappedFile.getName(), folder, p);
 							}
 						} else {
 							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.DARK_RED + backupFile.getName() + ChatColor.RED + " was not overwritten.");
+										  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not overwritten.");
 						}
 					}
 				}
@@ -84,10 +85,6 @@ public class Save {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Manual backups are disabled.");
 		}
-	}
-
-	public boolean forbiddenFileName(final @NotNull String name) {
-		return Save.forbiddenNames.contains(name.toLowerCase());
 	}
 
 	private void save(final @NotNull org.bukkit.World tempWorld, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
@@ -108,8 +105,8 @@ public class Save {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				final @NotNull File manualBackup = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId());
-				if (manualBackup.exists()) {
+				final @NotNull File manualBackup = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId());
+				if (manualBackup.exists() && manualBackup.isDirectory()) {
 					try {
 						@NotNull List<File> files;
 						files = BaseFileUtils.listFolders(manualBackup);

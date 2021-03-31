@@ -15,8 +15,10 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,31 +33,16 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegisterBlock {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length == 1) {
-			RegisterBlock.registerBlock(p, null);
-		} else if (args.length == 2) {
-			RegisterBlock.registerBlock(p, args[1]);
-		} else {
+	public void execute(final @Nullable MappedFile mappedFile, final @NotNull Player p) {
+		if (mappedFile != null && (mappedFile.getName().contains("./"))) {
 			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Too many arguments.");
-		}
-	}
-
-	private void registerBlock(final @NotNull Player p, final @Nullable String name) {
-		if (name != null && name.contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "File '" + ChatColor.DARK_RED + name + ChatColor.RED + "' resolution error: Path is not allowed.");
-		} else if (name != null && (name.equalsIgnoreCase("-here")
-									|| name.equalsIgnoreCase("-north")
-									|| name.equalsIgnoreCase("-n")
-									|| name.equalsIgnoreCase("-south")
-									|| name.equalsIgnoreCase("-s"))) {
+						  + ChatColor.RED + "File '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "' resolution error: Path is not allowed.");
+		} else if (mappedFile != null && InitMode.forbiddenFileName(mappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "'"
-						  + ChatColor.DARK_RED + name + ChatColor.RED
+						  + ChatColor.DARK_RED + mappedFile + ChatColor.RED
 						  + "' is not allowed due to '"
-						  + ChatColor.DARK_RED + name + ChatColor.RED
+						  + ChatColor.DARK_RED + mappedFile + ChatColor.RED
 						  + "' being a sub-command of /testblock.");
 		} else {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
@@ -65,7 +52,7 @@ public class RegisterBlock {
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
 							  + ChatColor.RED + "Registering new testblock as '"
-							  + ChatColor.DARK_RED + (name == null ? "default" : name)
+							  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile)
 							  + ChatColor.RED + "'...");
 				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
@@ -93,8 +80,8 @@ public class RegisterBlock {
 
 					Operations.complete(copy);
 
-					File tempFile = name != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + name + ".schem")
-												 : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/default.schem");
+					File tempFile = mappedFile != null ? new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + mappedFile + ".schem")
+													   : new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/default.schem");
 
 					BaseFileUtils.createFile(tempFile);
 
@@ -104,11 +91,11 @@ public class RegisterBlock {
 
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "You registered a new testblock with the name '"
-								  + ChatColor.DARK_RED + (name == null ? "default" : name) + ChatColor.RED + "'.");
+								  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
 				} catch (WorldEditException | IOException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
-								  + ChatColor.DARK_RED + (name == null ? "default" : name) + ChatColor.RED + "'.");
+								  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
 					e.printStackTrace();
 				}
 			}

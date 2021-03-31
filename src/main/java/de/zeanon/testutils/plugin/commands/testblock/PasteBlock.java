@@ -13,6 +13,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
+import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,13 +27,13 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class PasteBlock {
 
-	public void pasteBlock(final @NotNull Player p, final @Nullable String name, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
+	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
-			final @Nullable Pair<InputStream, String> testBlock = TestBlock.getBlock(p, name);
+			final @Nullable Pair<String, InputStream> testBlock = TestBlock.getBlock(p, mappedFile);
 			if (testBlock != null) { //NOSONAR
-				try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getKey())) {
+				try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getValue())) {
 					final @NotNull Clipboard clipboard = reader.read();
 					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 

@@ -3,5 +3,6 @@
   "tnt": false,
   "stoplag": false,
   "fire": false,
-  "itemdrops": false
+  "itemdrops": false,
+  "leavesdecay": true
 }

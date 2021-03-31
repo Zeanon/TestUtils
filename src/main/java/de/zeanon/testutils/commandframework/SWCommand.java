@@ -130,7 +130,7 @@ public abstract class SWCommand {
 					if (mapper != null) {
 						name = mapper.value();
 					}
-					if (!SWCommandUtils.MAPPER_FUNCTIONS.containsKey(name)) {
+					if (!SWCommandUtils.MAPPER_FUNCTIONS.containsKey(name) && !this.localTypeMapper.containsKey(name)) {
 						Bukkit.getLogger().log(Level.WARNING, "The parameter '" + parameter.toString() + "' is using an unsupported Mapper of type '" + name + "'");
 						return;
 					}
@@ -161,7 +161,7 @@ public abstract class SWCommand {
 	}
 
 	protected void register() {
-		SWCommandUtils.commandMap.register("steamwar", this.command);
+		SWCommandUtils.commandMap.register("testutils", this.command);
 	}
 
 	private <T extends Annotation> void add(Class<T> annotation, Method method, IntPredicate parameterTester, boolean firstParameter, Class<?> returnType, BiConsumer<T, Parameter[]> consumer) {

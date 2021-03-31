@@ -80,15 +80,15 @@ public class CommandRequestUtils {
 	}
 
 
-	public void addRenameRequest(final @NotNull UUID uuid, final String name) {
+	public void addRenameBlockRequest(final @NotNull UUID uuid, final String name) {
 		CommandRequestUtils.renameRequests.put(uuid.toString(), name);
 	}
 
-	public void removeRenameRequest(final @NotNull UUID uuid) {
+	public void removeRenameBlockRequest(final @NotNull UUID uuid) {
 		CommandRequestUtils.renameRequests.remove(uuid.toString());
 	}
 
-	public boolean checkRenameRequest(final @NotNull UUID uuid, final String name) {
+	public boolean checkRenameBlockRequest(final @NotNull UUID uuid, final String name) {
 		return CommandRequestUtils.renameRequests.containsKey(uuid.toString())
 			   && CommandRequestUtils.renameRequests.get(uuid.toString()).equalsIgnoreCase(name);
 	}

@@ -54,6 +54,7 @@ public class TNT extends SWCommand {
 		this.execute(p, regionSide, tntMode == TNTMode.ALLOW);
 	}
 
+
 	private static @NotNull String getNowActivated(final @NotNull String area) {
 		return GlobalMessageUtils.messageHead
 			   + ChatColor.RED + "TNT has been " + ChatColor.GREEN + "activated" + ChatColor.RED + " on " + area + " side of your TestArea.";

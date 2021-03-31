@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.handlers;
 
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
 import de.zeanon.testutils.plugin.update.Update;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
@@ -31,9 +30,6 @@ public class EventListener implements Listener {
 										  + ChatColor.RED + "' and ends with '"
 										  + ChatColor.DARK_RED + args[2].substring(args[2].length() - 6)
 										  + "'.");
-		} else if (args[0].equalsIgnoreCase("/stoplag")) {
-			event.setCancelled(true);
-			Stoplag.execute(args, event.getPlayer());
 		}
 	}
 

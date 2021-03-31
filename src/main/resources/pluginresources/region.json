@@ -14,5 +14,6 @@
   "stoplag": false,
   "fire": true,
   "changed": true,
-  "itemdrops": true
+  "itemdrops": true,
+  "leavesdecay": true
 }

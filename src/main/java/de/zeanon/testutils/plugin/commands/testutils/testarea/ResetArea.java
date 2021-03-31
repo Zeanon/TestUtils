@@ -14,6 +14,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
@@ -27,10 +28,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class ResetArea {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-
-		if (args.length == 1) {
-			final @NotNull String worldName = p.getWorld().getName();
+	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
+		if (regionSide == null) {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
@@ -45,11 +44,11 @@ public class ResetArea {
 					final @NotNull File tempFile = new File(TestUtils
 																	.getInstance()
 																	.getDataFolder()
-																	.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
+																	.getAbsolutePath() + "/TestAreas/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
 					final @NotNull File oppositeFile = new File(TestUtils
 																		.getInstance()
 																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + worldName + "/" + oppositeRegion.getName().substring(0, oppositeRegion.getName().length() - 6) + "/" + oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem");
+																		.getAbsolutePath() + "/TestAreas/" + oppositeRegion.getName().substring(0, oppositeRegion.getName().length() - 6) + "/" + oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem");
 					if (tempFile.exists()
 						&& oppositeFile.exists()) {
 						ResetArea.pasteSide(tempRegion, editSession, tempFile);
@@ -70,142 +69,37 @@ public class ResetArea {
 					e.printStackTrace();
 				}
 			}
-		} else if (args.length == 2) {
-			if (args[1].equalsIgnoreCase("-here")) {
-				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-				if (tempRegion == null) {
-					GlobalMessageUtils.sendNotApplicableRegion(p);
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Pasting the reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side...");
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-						final @NotNull File tempFile = new File(TestUtils
-																		.getInstance()
-																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
-						if (tempFile.exists()) {
-							ResetArea.pasteSide(tempRegion, editSession, tempFile);
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side.");
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-						}
-					} catch (Exception e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "There has been an error, pasting the reset for '"
-									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-						e.printStackTrace();
-					}
-				}
-			} else if (args[1].equalsIgnoreCase("-other")) {
-				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getOppositeRegion(p);
-				if (tempRegion == null) {
-					GlobalMessageUtils.sendNotApplicableRegion(p);
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Pasting the reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the other side...");
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-						final @NotNull File tempFile = new File(TestUtils
-																		.getInstance()
-																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
-						if (tempFile.exists()) {
-							ResetArea.pasteSide(tempRegion, editSession, tempFile);
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the other side.");
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the other side.");
-						}
-					} catch (Exception e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "There has been an error, pasting the reset for '"
-									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the other side.");
-						e.printStackTrace();
-					}
-				}
-			} else if (args[1].equalsIgnoreCase("-north") || args[1].equalsIgnoreCase("-n")) {
-				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
-				if (tempRegion == null) {
-					GlobalMessageUtils.sendNotApplicableRegion(p);
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Pasting the reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the north side...");
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-						final @NotNull File tempFile = new File(TestUtils
-																		.getInstance()
-																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
-						if (tempFile.exists()) {
-							ResetArea.pasteSide(tempRegion, editSession, tempFile);
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the north side.");
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the north side.");
-						}
-					} catch (Exception e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "There has been an error, pasting the reset for '"
-									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the north side.");
-						e.printStackTrace();
-					}
-				}
-			} else if (args[1].equalsIgnoreCase("-south") || args[1].equalsIgnoreCase("-s")) {
-				final @NotNull String worldName = p.getWorld().getName();
-				final @Nullable DefinedRegion tempRegion = TestAreaUtils.getSouthRegion(p);
-				if (tempRegion == null) {
-					GlobalMessageUtils.sendNotApplicableRegion(p);
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Pasting the reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the south side...");
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-						final @NotNull File tempFile = new File(TestUtils
-																		.getInstance()
-																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + worldName + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
-						if (tempFile.exists()) {
-							ResetArea.pasteSide(tempRegion, editSession, tempFile);
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the south side.");
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no reset for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the south side.");
-						}
-					} catch (Exception e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "There has been an error, pasting the reset for '"
-									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on the south side.");
-						e.printStackTrace();
-					}
-				}
+		} else {
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			if (tempRegion == null) {
+				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "Too many arguments.");
+							  + ChatColor.RED + "Pasting the reset for '"
+							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side...");
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+					final @NotNull File tempFile = new File(TestUtils
+																	.getInstance()
+																	.getDataFolder()
+																	.getAbsolutePath() + "/TestAreas/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
+					if (tempFile.exists()) {
+						ResetArea.pasteSide(tempRegion, editSession, tempFile);
+
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "You pasted the reset for '"
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side.");
+					} else {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "There is no reset for '"
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+					}
+				} catch (Exception e) {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.RED + "There has been an error, pasting the reset for '"
+								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+					e.printStackTrace();
+				}
 			}
-		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Too many arguments.");
 		}
 	}
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @AllArgsConstructor
-public class BackupFile {
+public class MappedFile {
 
 	final @NotNull String name;
 

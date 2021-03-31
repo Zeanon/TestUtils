@@ -2,17 +2,19 @@ package de.zeanon.testutils.plugin.commands.testutils;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
+import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
 public class Update {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length == 1) {
+	public void execute(final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
+		if (confirmation == null) {
 			if (!de.zeanon.testutils.plugin.update.Update.checkForUpdate()) {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
 							  + ChatColor.RED + "You are already running the latest Version.");
@@ -23,12 +25,10 @@ public class Update {
 					, "/tu update deny"
 					, p);
 			GlobalRequestUtils.addUpdateRequest(p.getUniqueId());
-		} else if (args.length == 2
-				   && (args[1].equalsIgnoreCase("-confirm")
-					   || args[1].equalsIgnoreCase("-deny"))) {
+		} else {
 			if (GlobalRequestUtils.checkUpdateRequest(p.getUniqueId())) {
 				GlobalRequestUtils.removeUpdateRequest(p.getUniqueId());
-				if (args[1].equalsIgnoreCase("-confirm")) {
+				if (confirmation.confirm()) {
 					de.zeanon.testutils.plugin.update.Update.updatePlugin(p, de.zeanon.testutils.TestUtils.getInstance());
 				} else {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
@@ -38,9 +38,6 @@ public class Update {
 				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
 							  + ChatColor.RED + "You don't have a pending update request.");
 			}
-		} else {
-			p.sendMessage(ChatColor.RED + "Too many arguments.");
-			Update.sendUpdateUsage(p);
 		}
 	}
 

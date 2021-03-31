@@ -11,6 +11,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,23 +25,11 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class InvertArea {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length == 1) {
+	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
+		if (regionSide == null) {
 			InvertArea.invertArea(p, TestAreaUtils.getOppositeRegion(p), "the other");
-		} else if (args.length == 2) {
-			if (args[1].equalsIgnoreCase("-here")) {
-				InvertArea.invertArea(p, TestAreaUtils.getRegion(p), "your");
-			} else if (args[1].equalsIgnoreCase("-n") || args[1].equalsIgnoreCase("-north")) {
-				InvertArea.invertArea(p, TestAreaUtils.getNorthRegion(p), "the north");
-			} else if (args[1].equalsIgnoreCase("-s") || args[1].equalsIgnoreCase("-south")) {
-				InvertArea.invertArea(p, TestAreaUtils.getSouthRegion(p), "the south");
-			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "Too many arguments.");
-			}
 		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Too many arguments.");
+			InvertArea.invertArea(p, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
 		}
 	}
 

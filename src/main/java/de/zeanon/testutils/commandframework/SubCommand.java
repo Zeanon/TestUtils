@@ -29,12 +29,12 @@ import org.bukkit.command.CommandSender;
 
 class SubCommand {
 
+	private final SWCommand swCommand;
+	private final Method method;
+	private final Function<CommandSender, ?> commandSenderFunction;
 	String[] subCommand;
 	TypeMapper<?>[] arguments;
 	Class<?> varArgType = null;
-	private SWCommand swCommand;
-	private Method method;
-	private Function<CommandSender, ?> commandSenderFunction;
 
 	public SubCommand(SWCommand swCommand, Method method, String[] subCommand) {
 		this(swCommand, method, subCommand, new HashMap<>());
@@ -101,12 +101,14 @@ class SubCommand {
 	}
 
 	List<String> tabComplete(CommandSender commandSender, String[] args) {
-		if (this.varArgType == null && args.length < this.arguments.length + this.subCommand.length - 1) {
+		if (this.varArgType == null && args.length > this.arguments.length + this.subCommand.length) {
 			return null;
 		}
+		int index = 0;
 		List<String> argsList = new LinkedList<>(Arrays.asList(args));
 		for (String value : this.subCommand) {
 			String s = argsList.remove(0);
+			index++;
 			if (argsList.isEmpty()) {
 				return Collections.singletonList(value);
 			}
@@ -120,12 +122,13 @@ class SubCommand {
 				return argument.tabCompletes(commandSender, Arrays.copyOf(args, args.length - 1), s);
 			}
 			try {
-				if (argument.map(Arrays.copyOf(args, argsList.size()), s) == null) {
+				if (argument.map(Arrays.copyOf(args, index), s) == null) {
 					return null;
 				}
 			} catch (Exception e) {
 				return null;
 			}
+			index++;
 		}
 		if (this.varArgType != null && !argsList.isEmpty()) {
 			while (!argsList.isEmpty()) {
@@ -134,12 +137,13 @@ class SubCommand {
 					return this.arguments[this.arguments.length - 1].tabCompletes(commandSender, Arrays.copyOf(args, args.length - 1), s);
 				}
 				try {
-					if (this.arguments[this.arguments.length - 1].map(Arrays.copyOf(args, argsList.size()), s) == null) {
+					if (this.arguments[this.arguments.length - 1].map(Arrays.copyOf(args, index), s) == null) {
 						return null;
 					}
 				} catch (Exception e) {
 					return null;
 				}
+				index++;
 			}
 		}
 		return null;

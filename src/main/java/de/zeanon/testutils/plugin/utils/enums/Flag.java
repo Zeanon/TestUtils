@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 public enum Flag {
 
 	TNT(de.zeanon.testutils.plugin.utils.enums.flagvalues.TNT.class),
-	DROP_ITEMS(de.zeanon.testutils.plugin.utils.enums.flagvalues.DROP_ITEMS.class),
+	ITEM_DROPS(de.zeanon.testutils.plugin.utils.enums.flagvalues.ITEM_DROPS.class),
 	FIRE(de.zeanon.testutils.plugin.utils.enums.flagvalues.FIRE.class),
-	STOPLAG(de.zeanon.testutils.plugin.utils.enums.flagvalues.STOPLAG.class);
+	LEAVES_DECAY(de.zeanon.testutils.plugin.utils.enums.flagvalues.LEAVES_DECAY.class);
 
 	private final @NotNull Class<?> value;
 

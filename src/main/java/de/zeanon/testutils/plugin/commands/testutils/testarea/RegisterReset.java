@@ -30,35 +30,30 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegisterReset {
 
-	public void execute(final @NotNull String[] args, final @NotNull Player p) {
-		if (args.length == 1) {
-			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+	public void execute(final @NotNull Player p) {
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
-			if (tempRegion == null || oppositeRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				try {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "Registering reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
-								  + ChatColor.RED + "'...");
-					RegisterReset.registerSide(p, tempRegion);
-					RegisterReset.registerSide(p, oppositeRegion);
-
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "You registered a new reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				} catch (WorldEditException | IOException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error, registering a new reset for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-					e.printStackTrace();
-				}
-			}
+		if (tempRegion == null || oppositeRegion == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Too many arguments.");
+			try {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "Registering reset for '"
+							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
+							  + ChatColor.RED + "'...");
+				RegisterReset.registerSide(p, tempRegion);
+				RegisterReset.registerSide(p, oppositeRegion);
+
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "You registered a new reset for '"
+							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+			} catch (WorldEditException | IOException e) {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "There has been an error, registering a new reset for '"
+							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -79,7 +74,7 @@ public class RegisterReset {
 
 			Operations.complete(forwardExtentCopy);
 
-			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempWorld.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
+			final @NotNull File tempFile = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
 
 			BaseFileUtils.createFile(tempFile);
 

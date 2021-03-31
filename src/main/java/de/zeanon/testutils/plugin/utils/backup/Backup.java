@@ -16,9 +16,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
@@ -28,9 +26,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +39,8 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public abstract class Backup extends BukkitRunnable {
 
+	@Getter
+	private static final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
 	protected final @NotNull BackupMode sequence;
 
 	@Override
@@ -47,33 +48,31 @@ public abstract class Backup extends BukkitRunnable {
 		if (ConfigUtils.getInt("Backups", this.sequence.toString()) > 0) {
 			this.systemOutStart();
 			try {
-				final @NotNull String name = LocalDateTime.now().format(InitMode.getFormatter());
+				final @NotNull String name = LocalDateTime.now().format(Backup.getFormatter());
 				@NotNull org.bukkit.World tempWorld;
-				for (final @NotNull File worldFolder : BaseFileUtils.listFolders(new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"))) {
-					tempWorld = Objects.notNull(Bukkit.getWorld(worldFolder.getName()));
-					for (final @NotNull File regionFolder : BaseFileUtils.listFolders(worldFolder)) {
-						final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + worldFolder.getName() + "/" + regionFolder.getName());
+				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(TestUtils.getInstance().getDataFolder().toPath().resolve("TestAreas").toRealPath().toFile())) {
+					final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + regionFolder.getName());
 
-						final @Nullable DefinedRegion southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
-						final @Nullable DefinedRegion northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
-						if (southRegion != null && northRegion != null) {
-							if (this.doBackup(southRegion, northRegion)) {
-								final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + tempWorld.getName() + "/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
-								this.backupSide(tempWorld, southRegion, folder);
-								southRegion.setHasChanged(false);
-								this.backupSide(tempWorld, northRegion, folder);
-								northRegion.setHasChanged(false);
+					final @Nullable DefinedRegion southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
+					final @Nullable DefinedRegion northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
+					if (southRegion != null && northRegion != null) {
+						if (this.doBackup(southRegion, northRegion)) {
+							tempWorld = southRegion.getWorld();
+							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
+							this.backupSide(tempWorld, southRegion, folder);
+							southRegion.setHasChanged(false);
+							this.backupSide(tempWorld, northRegion, folder);
+							northRegion.setHasChanged(false);
 
-								Backup.this.cleanup(backupFolder);
-							}
-						} else {
-							FileUtils.deleteDirectory(regionFolder);
-							InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
+							Backup.this.cleanup(backupFolder);
+						}
+					} else {
+						FileUtils.deleteDirectory(regionFolder);
+						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
 
-							if (backupFolder.exists()) {
-								FileUtils.deleteDirectory(backupFolder);
-								InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
-							}
+						if (backupFolder.exists()) {
+							FileUtils.deleteDirectory(backupFolder);
+							InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
 						}
 					}
 				}

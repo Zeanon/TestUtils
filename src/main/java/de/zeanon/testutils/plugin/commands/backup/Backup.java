@@ -2,23 +2,30 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.commandframework.TypeMapper;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
-import de.zeanon.testutils.plugin.utils.enums.BackupFile;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
+import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
+import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Optional;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.io.FilenameUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +38,8 @@ public class Backup extends SWCommand {
 		super("backup");
 	}
 
-	public static @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @NotNull BackupMode backUpMode) throws IOException {
-		if (backUpMode == BackupMode.NONE) {
+	public static @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @Nullable BackupMode backUpMode) throws IOException {
+		if (backUpMode == null) {
 			return Backup.getLatest(regionFolder, uuid);
 		} else {
 			switch (backUpMode) {
@@ -152,7 +159,7 @@ public class Backup extends SWCommand {
 	}
 
 	@Register(help = true)
-	public void backupHelp(final @NotNull Player p, final @NotNull String... args) {
+	public void help(final @NotNull Player p, final @NotNull String... args) {
 		if (args.length == 0) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.RED + "Missing argument.");
@@ -164,27 +171,27 @@ public class Backup extends SWCommand {
 
 	@Register({"load"})
 	public void noArgsLoad(final @NotNull Player p) {
-		Load.execute(RegionSide.NONE, null, BackupMode.NONE, p);
+		Load.execute(null, null, null, p);
 	}
 
 	@Register({"load"})
 	public void oneArgLoad(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		Load.execute(regionSide, null, BackupMode.NONE, p);
+		Load.execute(regionSide, null, null, p);
 	}
 
 	@Register({"load"})
-	public void oneArgLoad(final @NotNull Player p, final @NotNull BackupFile backupFile) {
-		Load.execute(RegionSide.NONE, backupFile.getName(), BackupMode.NONE, p);
+	public void oneArgLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		Load.execute(null, mappedFile, null, p);
 	}
 
 	@Register({"load"})
 	public void oneArgLoad(final @NotNull Player p, final @NotNull BackupMode backupMode) {
-		Load.execute(RegionSide.NONE, null, backupMode, p);
+		Load.execute(null, null, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
-		Load.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
+		Load.execute(regionSide, mappedFile, null, p);
 	}
 
 	@Register({"load"})
@@ -193,8 +200,8 @@ public class Backup extends SWCommand {
 	}
 
 	@Register({"load"})
-	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
-		Load.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
+		Load.execute(null, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
@@ -203,43 +210,43 @@ public class Backup extends SWCommand {
 	}
 
 	@Register({"load"})
-	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
-		Load.execute(RegionSide.NONE, backupFile.getName(), backupMode, p);
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
+		Load.execute(null, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide) {
-		Load.execute(regionSide, backupFile.getName(), BackupMode.NONE, p);
+	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, mappedFile, null, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull BackupFile backupFile) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile, final @NotNull RegionSide regionSide) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
-	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
-		Load.execute(regionSide, backupFile.getName(), backupMode, p);
+	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
+		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"save"})
@@ -248,102 +255,78 @@ public class Backup extends SWCommand {
 	}
 
 	@Register({"save"})
-	public void oneArgSave(final @NotNull Player p, final @NotNull BackupFile backupFile) {
-		Save.execute(backupFile, null, p);
+	public void oneArgSave(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		Save.execute(mappedFile, null, p);
 	}
 
 	@Register({"save"})
-	public void twoArgsSave(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
-		Save.execute(backupFile, commandConfirmation.confirm(), p);
+	public void twoArgsSave(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Save.execute(mappedFile, commandConfirmation, p);
 	}
 
 
 	@Register(value = {"del"}, help = true)
-	public void noArgDelHelp(final @NotNull Player p, final @NotNull String... args) {
+	public void delHelp(final @NotNull Player p, final @NotNull String... args) {
 		Delete.usage(p);
 	}
 
 	@Register({"del"})
-	public void noArgsDel(final @NotNull Player p) {
-		Delete.execute(null, null, p);
+	public void oneArgDel(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		Delete.execute(mappedFile, null, p);
 	}
 
 	@Register({"del"})
-	public void oneArgDel(final @NotNull Player p, final @NotNull BackupFile backupFile) {
-		Delete.execute(backupFile, null, p);
-	}
-
-	@Register({"del"})
-	public void twoArgsDel(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
-		Delete.execute(backupFile, commandConfirmation.confirm(), p);
+	public void twoArgsDel(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Delete.execute(mappedFile, commandConfirmation, p);
 	}
 
 
 	@Register(value = {"delete"}, help = true)
-	public void noArgDeleteHelp(final @NotNull Player p, final @NotNull String... args) {
+	public void deleteHelp(final @NotNull Player p, final @NotNull String... args) {
 		Delete.usage(p);
 	}
 
 	@Register({"delete"})
-	public void noArgsDelete(final @NotNull Player p) {
-		Delete.execute(null, null, p);
+	public void oneArgDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		Delete.execute(mappedFile, null, p);
 	}
 
 	@Register({"delete"})
-	public void oneArgDelete(final @NotNull Player p, final @NotNull BackupFile backupFile) {
-		Delete.execute(backupFile, null, p);
-	}
-
-	@Register({"delete"})
-	public void twoArgsDelete(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull CommandConfirmation commandConfirmation) {
-		Delete.execute(backupFile, commandConfirmation.confirm(), p);
+	public void twoArgsDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
+		Delete.execute(mappedFile, commandConfirmation, p);
 	}
 
 
 	@Register({"list"})
 	public void noArgsList(final @NotNull Player p) {
-		List.execute(RegionSide.NONE, BackupMode.NONE, p);
-	}
-
-	@Register({"list"})
-	public void oneArgList(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		List.execute(regionSide, BackupMode.NONE, p);
+		List.execute(null, p);
 	}
 
 	@Register({"list"})
 	public void oneArgList(final @NotNull Player p, final @NotNull BackupMode backupMode) {
-		List.execute(RegionSide.NONE, backupMode, p);
+		List.execute(backupMode, p);
 	}
 
-	@Register({"list"})
-	public void twoArgsList(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
-		List.execute(regionSide, backupMode, p);
-	}
-
-	@Register({"list"})
-	public void twoArgsList(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
-		List.execute(regionSide, backupMode, p);
-	}
 
 	@Register(value = {"search"}, help = true)
-	public void noArgSearchHelp(final @NotNull Player p, final @NotNull String... args) {
+	public void searchHelp(final @NotNull Player p, final @NotNull String... args) {
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "Missing sequence to search for.");
 	}
 
 	@Register({"search"})
-	public void oneArgSearch(final @NotNull Player p, final @NotNull BackupFile backupFile) {
-		Search.execute(backupFile.getName(), BackupMode.NONE, p);
+	public void oneArgSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		Search.execute(mappedFile, null, p);
 	}
 
 	@Register({"search"})
-	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull BackupFile backupFile) {
-		Search.execute(backupFile.getName(), backupMode, p);
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
+		Search.execute(mappedFile, backupMode, p);
 	}
 
 	@Register({"search"})
-	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupFile backupFile, final @NotNull BackupMode backupMode) {
-		Search.execute(backupFile.getName(), backupMode, p);
+	public void twoArgsSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
+		Search.execute(mappedFile, backupMode, p);
 	}
 
 
@@ -383,14 +366,7 @@ public class Backup extends SWCommand {
 		return new TypeMapper<CommandConfirmation>() {
 			@Override
 			public CommandConfirmation map(final @NotNull String[] previousArguments, final @NotNull String s) {
-				switch (s.toLowerCase()) {
-					case "-confirm":
-						return CommandConfirmation.CONFIRM;
-					case "-deny":
-						return CommandConfirmation.DENY;
-					default:
-						return null;
-				}
+				return CommandConfirmation.map(s);
 			}
 
 			@Override
@@ -400,12 +376,201 @@ public class Backup extends SWCommand {
 					final @NotNull Player p = (Player) commandSender;
 					if (previousArguments[0].equalsIgnoreCase("save")
 						&& previousArguments.length > 1
-						&& CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), previousArguments[1]) != null) {
+						&& CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1]) != null) {
 						return tabCompletions;
 					} else if ((previousArguments[0].equalsIgnoreCase("del") || previousArguments[0].equalsIgnoreCase("delete"))
 							   && previousArguments.length > 1
-							   && CommandRequestUtils.checkDeleteBackupRequest(p.getUniqueId(), previousArguments[1]) != null) {
+							   && CommandRequestUtils.checkDeleteBackupRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1]) != null) {
 						return tabCompletions;
+					} else {
+						return null;
+					}
+				} else {
+					return null;
+				}
+			}
+		};
+	}
+
+
+	@ClassMapper(value = MappedFile.class, local = true)
+	private @NotNull TypeMapper<MappedFile> mapFile() {
+		return new TypeMapper<MappedFile>() {
+			@Override
+			public MappedFile map(final @NotNull String[] previous, final @NotNull String s) {
+				if (InitMode.forbiddenFileName(s)) {
+					return null;
+				} else {
+					return new MappedFile(s);
+				}
+			}
+
+			@Override
+			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
+				if (commandSender instanceof Player) {
+					final @NotNull Player p = (Player) commandSender;
+					final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p);
+					if (region != null && previousArguments.length > 0) {
+						final int lastIndex = arg.lastIndexOf("/");
+						final @NotNull String path;
+						if (lastIndex < 0) {
+							path = "";
+						} else {
+							path = "/" + arg.substring(0, lastIndex);
+						}
+
+						if (previousArguments[0].equalsIgnoreCase("load")) {
+							if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-manual"))) {
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+									if (filePath.startsWith(basePath)) {
+										final @NotNull java.util.List<String> results = new LinkedList<>();
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+										return results;
+									} else {
+										return null;
+									}
+								} catch (IOException e) {
+									return null;
+								}
+							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-hourly"))) {
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly").toRealPath();
+									if (filePath.startsWith(basePath)) {
+										final @NotNull java.util.List<String> results = new LinkedList<>();
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+										return results;
+									} else {
+										return null;
+									}
+								} catch (IOException e) {
+									return null;
+								}
+							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-daily"))) {
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily").toRealPath();
+									if (filePath.startsWith(basePath)) {
+										final @NotNull java.util.List<String> results = new LinkedList<>();
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+										return results;
+									} else {
+										return null;
+									}
+								} catch (IOException e) {
+									return null;
+								}
+							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-startup"))) {
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup").toRealPath();
+									if (filePath.startsWith(basePath)) {
+										final @NotNull java.util.List<String> results = new LinkedList<>();
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+										return results;
+									} else {
+										return null;
+									}
+								} catch (IOException e) {
+									return null;
+								}
+							} else {
+								final @NotNull java.util.List<String> results = new LinkedList<>();
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+									if (filePath.startsWith(basePath)) {
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+									} else {
+										return null;
+									}
+								} catch (IOException ignored) {
+									//DO NOTHING
+								}
+
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly").toRealPath();
+									if (filePath.startsWith(basePath)) {
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+									} else {
+										return null;
+									}
+								} catch (IOException ignored) {
+									//DO NOTHING
+								}
+
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily").toRealPath();
+									if (filePath.startsWith(basePath)) {
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+									} else {
+										return null;
+									}
+								} catch (IOException ignored) {
+									//DO NOTHING
+								}
+
+								try {
+									final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + path).toRealPath();
+									final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + p.getUniqueId()).toRealPath();
+									if (filePath.startsWith(basePath)) {
+										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+											results.add(fileName);
+										}
+									} else {
+										return null;
+									}
+								} catch (IOException ignored) {
+									//DO NOTHING
+								}
+								return results;
+							}
+						} else if (previousArguments[0].equalsIgnoreCase("save")) {
+							try {
+								final @NotNull Path filePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
+								final @NotNull Path basePath = TestUtils.getInstance().getDataFolder().toPath().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+								if (filePath.startsWith(basePath)) {
+									final @NotNull java.util.List<String> results = new LinkedList<>();
+									for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
+										results.add(fileName);
+									}
+									return results;
+								} else {
+									return null;
+								}
+							} catch (IOException e) {
+								return null;
+							}
+						} else {
+							return null;
+						}
 					} else {
 						return null;
 					}
