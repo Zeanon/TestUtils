@@ -59,7 +59,7 @@ public class DefinedRegion implements Region {
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
 
-		this.hasChanged = true;
+		this.hasChanged = false;
 	}
 
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {

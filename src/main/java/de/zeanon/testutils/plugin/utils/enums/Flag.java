@@ -4,7 +4,6 @@ package de.zeanon.testutils.plugin.utils.enums;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,14 +47,5 @@ public enum Flag {
 		T getValue(final @NotNull String name);
 
 		@NotNull String getChatValue();
-	}
-
-
-	@Getter
-	@AllArgsConstructor
-	public static class FlagValue {
-
-		@SuppressWarnings("rawtypes")
-		private final @NotNull Value value;
 	}
 }

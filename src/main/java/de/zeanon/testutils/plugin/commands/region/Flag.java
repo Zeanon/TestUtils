@@ -28,22 +28,22 @@ public class Flag {
 				if (regions.isEmpty()) {
 					final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
 					globalRegion.set(flag, value);
-					Flag.sendFlagSet(globalRegion.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
+					Flag.sendFlagSet(globalRegion.getName(), flag.toString(), value.getChatValue(), p);
 				} else if (regions.size() == 1) {
 					regions.get(0).set(flag, value);
-					Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
+					Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getChatValue(), p);
 				} else {
 					de.zeanon.testutils.plugin.commands.region.Region.sendMultipleRegions(regions, p);
 				}
 			} else {
 				if (RegionManager.isGlobalRegion(regionName.getName())) {
 					RegionManager.getGlobalRegion(p.getWorld()).set(flag, value);
-					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
+					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 				} else {
 					final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
 					if (region != null) {
 						region.set(flag, value);
-						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
+						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 					} else {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "The given region does not exist.");

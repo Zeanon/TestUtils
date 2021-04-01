@@ -62,7 +62,7 @@ public class Region extends SWCommand {
 		de.zeanon.testutils.plugin.commands.region.Flag.execute(null, flag, value, p);
 	}
 
-	//@Register("flag")
+	@Register("flag")
 	public void twoArgsFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag) {
 		de.zeanon.testutils.plugin.commands.region.Flag.execute(regionName, flag, null, p);
 	}

@@ -25,8 +25,8 @@ public class Mapper {
 		SWCommandUtils.addMapper(StoplagToggle.class, Mapper.mapStoplagToggle());
 		SWCommandUtils.addMapper(BackupMode.class, Mapper.mapBackupMode());
 		SWCommandUtils.addMapper(CommandConfirmation.class, Mapper.mapCommandConfirmation());
-		SWCommandUtils.addMapper(Flag.Value.class.getTypeName(), Mapper.mapFlagValue());
 		SWCommandUtils.addMapper(RegionName.class, Mapper.mapRegionName());
+		SWCommandUtils.addMapper(Flag.Value.class.getTypeName(), Mapper.mapFlagValue());
 	}
 
 	private @NotNull TypeMapper<RegionSide> mapRegionSide() {
@@ -118,10 +118,15 @@ public class Mapper {
 		}, s -> Collections.emptyList());
 	}
 
-	private @NotNull TypeMapper<Flag.Value<?>> mapFlagValue() {
-		return new TypeMapper<Flag.Value<?>>() {
+	private @NotNull TypeMapper<RegionName> mapRegionName() {
+		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) ? null : new RegionName(s)
+				, s -> RegionManager.getRegions().stream().map(Region::getName).collect(Collectors.toList()));
+	}
+
+	private @NotNull <T extends Enum<T> & Flag.Value<T>> TypeMapper<Flag.Value<T>> mapFlagValue() {
+		return new TypeMapper<Flag.Value<T>>() {
 			@Override
-			public Flag.Value<?> map(final @NotNull String[] previousArguments, final @NotNull String s) {
+			public Flag.Value<T> map(final @NotNull String[] previousArguments, final @NotNull String s) {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					//noinspection rawtypes
@@ -129,8 +134,8 @@ public class Mapper {
 					//noinspection rawtypes
 					for (final @NotNull Enum tempEnum : values) { //NOSONAR
 						if ((tempEnum.name()).equalsIgnoreCase(s)) {
-							// noinspection rawtypes,rawtypes
-							return (new Flag.FlagValue((Flag.Value) tempEnum)).getValue();
+							// noinspection unchecked
+							return (T) tempEnum;
 						}
 					}
 				}
@@ -161,10 +166,5 @@ public class Mapper {
 				}
 			}
 		};
-	}
-
-	private @NotNull TypeMapper<RegionName> mapRegionName() {
-		return SWCommandUtils.createMapper(RegionName::new
-				, s -> RegionManager.getRegions().stream().map(Region::getName).collect(Collectors.toList()));
 	}
 }
