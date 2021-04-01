@@ -21,8 +21,8 @@ public class Update {
 			}
 			GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + de.zeanon.testutils.TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] "
 												  + ChatColor.RED + "Do you really want to update?"
-					, "/tu update confirm"
-					, "/tu update deny"
+					, "/tu update -confirm"
+					, "/tu update -deny"
 					, p);
 			GlobalRequestUtils.addUpdateRequest(p.getUniqueId());
 		} else {

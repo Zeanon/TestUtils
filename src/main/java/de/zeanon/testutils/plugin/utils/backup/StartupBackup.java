@@ -53,6 +53,6 @@ public class StartupBackup extends Backup {
 
 	@Override
 	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
-		return southRegion.hasChanged() || northRegion.hasChanged();
+		return true;
 	}
 }

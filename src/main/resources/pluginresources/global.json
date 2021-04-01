@@ -1,8 +1,10 @@
 {
   "world": "world",
-  "tnt": false,
-  "stoplag": false,
-  "fire": false,
-  "itemdrops": false,
-  "leavesdecay": true
+  "flags": {
+    "fire": "DENY",
+    "item_drops": "DENY",
+    "tnt": "DENY",
+    "leaves_decay": "DENY",
+    "stoplag": "INACTIVE"
+  }
 }

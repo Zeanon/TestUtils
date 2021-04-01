@@ -3,9 +3,11 @@ package de.zeanon.testutils.plugin.commands.stoplag;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.enums.Flag;
 import de.zeanon.testutils.plugin.utils.enums.GlobalToggle;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.StoplagToggle;
+import de.zeanon.testutils.plugin.utils.enums.flagvalues.STOPLAG;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import net.md_5.bungee.api.ChatColor;
@@ -75,7 +77,7 @@ public class Stoplag extends SWCommand {
 
 	private void execute(final @NotNull Player p, final @Nullable RegionSide regionSide, final boolean activate, final boolean global) {
 		if (global) {
-			RegionManager.getGlobalRegion(p.getWorld()).setStoplag(activate);
+			RegionManager.getGlobalRegion(p.getWorld()).set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 			for (final @NotNull Player player : Bukkit.getOnlinePlayers()) {
 				player.sendMessage(activate ? GlobalMessageUtils.messageHead
 											  + ChatColor.DARK_RED + p.getName()
@@ -92,8 +94,8 @@ public class Stoplag extends SWCommand {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag -global'.");
 				} else {
-					tempRegion.setStoplag(activate);
-					otherRegion.setStoplag(activate);
+					tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+					otherRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if ((tempRegion.inRegion(tempPlayer.getLocation())
 							 || otherRegion.inRegion(tempPlayer.getLocation()))) {
@@ -112,8 +114,8 @@ public class Stoplag extends SWCommand {
 					p.sendMessage(GlobalMessageUtils.messageHead
 								  + ChatColor.RED + "To activate stoplag globally, type '/stoplag -global'.");
 				} else {
-					tempRegion.setStoplag(activate);
-					otherRegion.setStoplag(activate);
+					tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+					otherRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 					for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 						if (tempPlayer == p) {
 							tempPlayer.sendMessage(activate

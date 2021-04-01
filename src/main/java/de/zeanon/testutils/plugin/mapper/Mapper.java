@@ -122,16 +122,15 @@ public class Mapper {
 		return new TypeMapper<Flag.Value<?>>() {
 			@Override
 			public Flag.Value<?> map(final @NotNull String[] previousArguments, final @NotNull String s) {
-				System.out.println(Arrays.toString(previousArguments) + " " + s);
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					//noinspection rawtypes
 					final @NotNull Enum[] values = (Enum[]) flag.getValue().getEnumConstants(); //NOSONAR
 					//noinspection rawtypes
 					for (final @NotNull Enum tempEnum : values) { //NOSONAR
-						if (("-" + tempEnum.name()).equalsIgnoreCase(s)) {
-							//noinspection unchecked,rawtypes,rawtypes
-							return new Flag.Value<>(tempEnum);
+						if ((tempEnum.name()).equalsIgnoreCase(s)) {
+							// noinspection rawtypes,rawtypes
+							return (new Flag.FlagValue((Flag.Value) tempEnum)).getValue();
 						}
 					}
 				}
@@ -140,12 +139,11 @@ public class Mapper {
 
 			@Override
 			public List<String> tabCompletes(CommandSender commandSender, String[] previousArguments, String s) {
-				System.out.println(":" + Arrays.toString(previousArguments) + " " + s);
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					//noinspection rawtypes
 					final @NotNull Enum[] values = (Enum[]) flag.getValue().getEnumConstants(); //NOSONAR
-					return Arrays.stream(values).map(Enum::name).map(e -> ("-" + e.toLowerCase())).collect(Collectors.toList());
+					return Arrays.stream(values).map(Enum::toString).map(String::toLowerCase).collect(Collectors.toList());
 				} else {
 					return null;
 				}

@@ -6,25 +6,60 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.utils.enums.Flag;
 import java.io.File;
+import java.util.EnumMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
 public class DefinedRegion implements Region {
 
 	private final @NotNull JsonFile jsonFile;
+	private final @NotNull String name;
+	private final @NotNull World world;
+	private final @NotNull Point highestPoint;
+	private final @NotNull Point lowestPoint;
+	@SuppressWarnings("rawtypes")
+	private final @NotNull Map<Flag, Flag.Value> flags;
+	private boolean hasChanged;
 
 	public DefinedRegion(final @NotNull String name) {
 		this.jsonFile = JsonFileManager.jsonFile(TestUtils.getInstance().getDataFolder(), "Regions/" + name)
+									   .fromResource("resources/region.json")
 									   .create();
+
+		this.name = name;
+
+		this.world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
+		this.highestPoint = this.getPoint("highest");
+		this.lowestPoint = this.getPoint("lowest");
+
+		this.flags = new EnumMap<>(Flag.class);
+		this.readFlags();
+
+		this.hasChanged = true;
 	}
 
 	public DefinedRegion(final @NotNull File file) {
 		this.jsonFile = JsonFileManager.jsonFile(file)
+									   .fromResource("resources/region.json")
 									   .create();
+
+		this.name = BaseFileUtils.removeExtension(this.jsonFile.getName());
+
+		this.world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
+		this.highestPoint = this.getPoint("highest");
+		this.lowestPoint = this.getPoint("lowest");
+
+		this.flags = new EnumMap<>(Flag.class);
+		this.readFlags();
+
+		this.hasChanged = true;
 	}
 
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {
@@ -34,55 +69,57 @@ public class DefinedRegion implements Region {
 
 		final @NotNull Pair<Point, Point> points = this.getPoints(firstPoint, secondPoint);
 
-		this.setPoint(points.getKey(), "highest");
-		this.setPoint(points.getValue(), "lowest");
+		this.name = name;
+
+		this.world = world;
 		this.jsonFile.setUseArray(new String[]{"world"}, world.getName());
+		this.highestPoint = points.getKey();
+		this.setPoint(points.getKey(), "highest");
+		this.lowestPoint = points.getValue();
+		this.setPoint(points.getValue(), "lowest");
+
+		this.flags = new EnumMap<>(Flag.class);
+		for (final @NotNull Flag flag : Flag.getFlags()) {
+			this.flags.put(flag, flag.getDefaultValue());
+		}
+
+		this.hasChanged = true;
+
+		this.saveData();
 	}
 
 	public boolean inRegion(final @NotNull Location location) {
-		final @NotNull Point minimumPoint = this.getMinimumPoint();
-		final @NotNull Point maximumPoint = this.getMaximumPoint();
 		return this.getWorld().equals(location.getWorld())
-			   && maximumPoint.getX() >= location.getBlockX()
-			   && minimumPoint.getX() <= location.getBlockX()
-			   && maximumPoint.getY() >= location.getBlockY()
-			   && minimumPoint.getY() <= location.getBlockY()
-			   && maximumPoint.getZ() >= location.getBlockZ()
-			   && minimumPoint.getZ() <= location.getBlockZ();
+			   && this.highestPoint.getX() >= location.getBlockX()
+			   && this.lowestPoint.getX() <= location.getBlockX()
+			   && this.highestPoint.getY() >= location.getBlockY()
+			   && this.lowestPoint.getY() <= location.getBlockY()
+			   && this.highestPoint.getZ() >= location.getBlockZ()
+			   && this.lowestPoint.getZ() <= location.getBlockZ();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void setTnt(final boolean tnt) {
-		this.jsonFile.setUseArray(new String[]{"tnt"}, tnt);
+	public void set(final @NotNull Flag flagType, final @NotNull Flag.Value value) {
+		this.flags.put(flagType, value);
+		this.saveData();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void setStoplag(final boolean stoplag) {
-		this.jsonFile.setUseArray(new String[]{"stoplag"}, stoplag);
+	public Flag.Value get(final @NotNull Flag flagType) {
+		return this.flags.get(flagType);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void setFire(final boolean fire) {
-		this.jsonFile.setUseArray(new String[]{"fire"}, fire);
-	}
-
-	@Override
-	public void setItemDrops(final boolean itemDrops) {
-		this.jsonFile.setUseArray(new String[]{"itemdrops"}, itemDrops);
-	}
-
-	@Override
-	public void setLeavesDecay(final boolean leavesDecay) {
-		this.jsonFile.setUseArray(new String[]{"leavesdecay"}, leavesDecay);
-	}
-
-	public void setHasChanged(final boolean hasChanged) {
-		this.jsonFile.setUseArray(new String[]{"changed"}, hasChanged);
+	public @NotNull Map<Flag, Flag.Value> getFlags() {
+		return this.flags;
 	}
 
 	@Override
 	public @NotNull World getWorld() {
-		return Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
+		return this.world;
 	}
 
 	@Override
@@ -90,46 +127,35 @@ public class DefinedRegion implements Region {
 		return "defined";
 	}
 
-	public @NotNull Point getMinimumPoint() {
-		return this.getPoint("lowest");
-	}
-
-	public @NotNull Point getMaximumPoint() {
-		return this.getPoint("highest");
-	}
-
 	@Override
 	public @NotNull String getName() {
-		return BaseFileUtils.removeExtension(this.jsonFile.getName());
-	}
-
-	@Override
-	public boolean tnt() {
-		return this.jsonFile.getBooleanUseArray("tnt");
-	}
-
-	@Override
-	public boolean stoplag() {
-		return this.jsonFile.getBooleanUseArray("stoplag");
-	}
-
-	@Override
-	public boolean fire() {
-		return this.jsonFile.getBooleanUseArray("fire");
+		return this.name;
 	}
 
 	public boolean hasChanged() {
-		return this.jsonFile.getBooleanUseArray("changed");
+		return this.hasChanged;
 	}
 
 	@Override
-	public boolean itemDrops() {
-		return this.jsonFile.getBooleanUseArray("itemdrops");
+	public void saveData() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				DefinedRegion.this.jsonFile.setUseArray(new String[]{"flags"}, DefinedRegion.this.flags);
+			}
+		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 
-	@Override
-	public boolean leavesDecay() {
-		return this.jsonFile.getBooleanUseArray("leavesdecay");
+	public void setHasChanged(final boolean hasChanged) {
+		this.hasChanged = hasChanged;
+	}
+
+	public @NotNull Point getMinimumPoint() {
+		return this.lowestPoint;
+	}
+
+	public @NotNull Point getMaximumPoint() {
+		return this.highestPoint;
 	}
 
 	protected void deleteRegion() {
@@ -138,7 +164,9 @@ public class DefinedRegion implements Region {
 	}
 
 	private Point getPoint(final @NotNull String path) {
-		return new Point(this.jsonFile.getIntUseArray(path, "x"), this.jsonFile.getIntUseArray(path, "y"), this.jsonFile.getIntUseArray(path, "z"));
+		return new Point(this.jsonFile.getIntUseArray(path, "x"),
+						 this.jsonFile.getIntUseArray(path, "y"),
+						 this.jsonFile.getIntUseArray(path, "z"));
 	}
 
 	private void setPoint(final @NotNull Point point, final @NotNull String path) {
@@ -159,5 +187,13 @@ public class DefinedRegion implements Region {
 								  Math.min(firstPoint.getX(), secondPoint.getX()),
 								  Math.min(firstPoint.getY(), secondPoint.getY()),
 								  Math.min(firstPoint.getZ(), secondPoint.getZ())));
+	}
+
+	private void readFlags() {
+		final @NotNull Map<String, Object> tempFlag = Objects.notNull(this.jsonFile.getMap("flags"));
+		for (final @NotNull Map.Entry<String, Object> flagValue : tempFlag.entrySet()) {
+			final @NotNull Flag flag = Flag.valueOf(flagValue.getKey().toUpperCase());
+			this.flags.put(flag, flag.getDefaultValue().getValue(flagValue.getValue().toString()));
+		}
 	}
 }

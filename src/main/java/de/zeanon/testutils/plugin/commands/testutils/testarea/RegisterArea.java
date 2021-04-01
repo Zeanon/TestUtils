@@ -2,6 +2,11 @@ package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
+import de.zeanon.testutils.plugin.utils.enums.Flag;
+import de.zeanon.testutils.plugin.utils.enums.flagvalues.FIRE;
+import de.zeanon.testutils.plugin.utils.enums.flagvalues.ITEM_DROPS;
+import de.zeanon.testutils.plugin.utils.enums.flagvalues.LEAVES_DECAY;
+import de.zeanon.testutils.plugin.utils.enums.flagvalues.TNT;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
@@ -43,11 +48,13 @@ public class RegisterArea {
 		RegionManager.addRegion(regionSouth);
 		RegionManager.addRegion(regionNorth);
 
-		regionSouth.setItemDrops(false);
-		regionNorth.setItemDrops(false);
-		regionSouth.setFire(false);
-		regionNorth.setFire(false);
-		regionSouth.setTnt(false);
-		regionNorth.setTnt(false);
+		regionSouth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
+		regionNorth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
+		regionSouth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
+		regionNorth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
+		regionSouth.set(Flag.FIRE, FIRE.DENY);
+		regionNorth.set(Flag.FIRE, FIRE.DENY);
+		regionSouth.set(Flag.TNT, TNT.DENY);
+		regionNorth.set(Flag.TNT, TNT.DENY);
 	}
 }

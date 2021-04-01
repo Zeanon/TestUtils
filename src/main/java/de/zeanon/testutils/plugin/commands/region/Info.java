@@ -54,24 +54,18 @@ public class Info {
 					  + ChatColor.RED + "Type: "
 					  + ChatColor.DARK_RED + region.getType());
 
+
+		final @NotNull StringBuilder flags = new StringBuilder(ChatColor.BLACK + " | ");
+		region.getFlags().forEach((flag, value) ->
+										  flags.append(ChatColor.DARK_RED)
+											   .append(flag.toString())
+											   .append(ChatColor.DARK_GRAY)
+											   .append(" : ")
+											   .append(value.getChatValue())
+											   .append(ChatColor.BLACK)
+											   .append(" | "));
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "Flags:"
-					  + ChatColor.BLACK + " | "
-					  + ChatColor.DARK_RED + "TNT"
-					  + ChatColor.DARK_GRAY + " : "
-					  + (region.tnt() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
-					  + ChatColor.BLACK + " | "
-					  + ChatColor.DARK_RED + "Stoplag"
-					  + ChatColor.DARK_GRAY + " : "
-					  + (region.stoplag() ? ChatColor.GREEN + "active" : ChatColor.RED + "inactive")
-					  + ChatColor.BLACK + " | "
-					  + ChatColor.DARK_RED + "Fire"
-					  + ChatColor.DARK_GRAY + " : "
-					  + (region.fire() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
-					  + ChatColor.BLACK + " | "
-					  + ChatColor.DARK_RED + "Itemdrops"
-					  + ChatColor.DARK_GRAY + " : "
-					  + (region.itemDrops() ? ChatColor.GREEN + "allow" : ChatColor.RED + "deny")
-					  + ChatColor.BLACK + " | ");
+					  + flags.toString());
 	}
 }

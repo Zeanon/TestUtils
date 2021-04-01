@@ -2,10 +2,7 @@ package de.zeanon.testutils.plugin.utils.region;
 
 import com.sk89q.worldedit.math.BlockVector3;
 import de.zeanon.testutils.plugin.utils.enums.Flag;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.FIRE;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.ITEM_DROPS;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.LEAVES_DECAY;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.TNT;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.World;
@@ -14,29 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Region {
 
-	void setTnt(final boolean tnt);
+	void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value);
 
-	void setStoplag(final boolean stoplag);
+	@SuppressWarnings("rawtypes")
+	Flag.Value get(final @NotNull Flag flagType);
 
-	void setFire(final boolean fire);
-
-	void setItemDrops(final boolean itemDrops);
-
-	void setLeavesDecay(final boolean leavesDecay);
-
-	default void set(final @NotNull Flag flag, final Flag.Value<?> value) throws IllegalFlagException {
-		if (flag == Flag.TNT) {
-			this.setTnt(value.getEnumValue() == TNT.ALLOW);
-		} else if (flag == Flag.FIRE) {
-			this.setFire(value.getEnumValue() == FIRE.ALLOW);
-		} else if (flag == Flag.ITEM_DROPS) {
-			this.setItemDrops(value.getEnumValue() == ITEM_DROPS.ALLOW);
-		} else if (flag == Flag.LEAVES_DECAY) {
-			this.setItemDrops(value.getEnumValue() == LEAVES_DECAY.ALLOW);
-		} else {
-			throw new IllegalFlagException();
-		}
-	}
+	@SuppressWarnings("rawtypes")
+	@NotNull Map<Flag, Flag.Value> getFlags();
 
 	@NotNull World getWorld();
 
@@ -44,16 +25,7 @@ public interface Region {
 
 	@NotNull String getType();
 
-	boolean tnt();
-
-	boolean stoplag();
-
-	boolean fire();
-
-	boolean itemDrops();
-
-	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
-	boolean leavesDecay();
+	void saveData();
 
 
 	@Getter

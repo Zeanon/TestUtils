@@ -35,6 +35,7 @@ public class BackupScheduler {
 		BackupScheduler.scheduleAtFixedRate(new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
 
+
 		//Backup once the Plugin starts
 		if (ConfigUtils.getInt("Backups", "startup") > 0) {
 			BackupScheduler.schedule(new StartupBackup(), 5, TimeUnit.SECONDS);

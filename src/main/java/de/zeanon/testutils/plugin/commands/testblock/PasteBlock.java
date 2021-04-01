@@ -56,11 +56,11 @@ public class PasteBlock {
 
 						Operations.complete(operation);
 						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' has been set on " + area + " side.");
+									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' has been set on " + area + " side.");
 					}
 				} catch (IOException | WorldEditException e) {
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getValue() + ChatColor.RED + "' on " + area + " side.");
+								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
 					e.printStackTrace();
 				}
 			}

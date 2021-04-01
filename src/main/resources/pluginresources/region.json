@@ -1,19 +1,20 @@
 {
   "world": "world",
   "highest": {
-    "x": 0,
-    "y": 0,
-    "z": 0
+    "x": 194,
+    "y": 156,
+    "z": 283
   },
   "lowest": {
-    "x": 0,
-    "y": 0,
-    "z": 0
+    "x": 78,
+    "y": 91,
+    "z": 187
   },
-  "tnt": true,
-  "stoplag": false,
-  "fire": true,
-  "changed": true,
-  "itemdrops": true,
-  "leavesdecay": true
+  "flags": {
+    "fire": "DENY",
+    "item_drops": "DENY",
+    "tnt": "DENY",
+    "leaves_decay": "DENY",
+    "stoplag": "INACTIVE"
+  }
 }

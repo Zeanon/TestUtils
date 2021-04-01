@@ -4,7 +4,6 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.GlobalRegion;
-import de.zeanon.testutils.plugin.utils.region.IllegalFlagException;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import java.util.Arrays;
 import java.util.List;
@@ -27,40 +26,24 @@ public class Flag {
 			if (regionName == null) {
 				final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation());
 				if (regions.isEmpty()) {
-					try {
-						final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
-						globalRegion.set(flag, value);
-						Flag.sendFlagSet(globalRegion.getName(), flag.toString(), value.getEnumValue().name().toLowerCase(), p);
-					} catch (IllegalFlagException e) {
-						Flag.sendFlagSetFailed(flag.toString(), p);
-					}
+					final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
+					globalRegion.set(flag, value);
+					Flag.sendFlagSet(globalRegion.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
 				} else if (regions.size() == 1) {
-					try {
-						regions.get(0).set(flag, value);
-						Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getEnumValue().name().toLowerCase(), p);
-					} catch (IllegalFlagException e) {
-						Flag.sendFlagSetFailed(flag.toString(), p);
-					}
+					regions.get(0).set(flag, value);
+					Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
 				} else {
 					de.zeanon.testutils.plugin.commands.region.Region.sendMultipleRegions(regions, p);
 				}
 			} else {
 				if (RegionManager.isGlobalRegion(regionName.getName())) {
-					try {
-						RegionManager.getGlobalRegion(p.getWorld()).set(flag, value);
-						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getEnumValue().name().toLowerCase(), p);
-					} catch (IllegalFlagException e) {
-						Flag.sendFlagSetFailed(flag.toString(), p);
-					}
+					RegionManager.getGlobalRegion(p.getWorld()).set(flag, value);
+					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
 				} else {
 					final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
 					if (region != null) {
-						try {
-							region.set(flag, value);
-							Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getEnumValue().name().toLowerCase(), p);
-						} catch (IllegalFlagException e) {
-							Flag.sendFlagSetFailed(flag.toString(), p);
-						}
+						region.set(flag, value);
+						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getValue().name().toLowerCase(), p);
 					} else {
 						p.sendMessage(GlobalMessageUtils.messageHead
 									  + ChatColor.RED + "The given region does not exist.");
@@ -81,6 +64,7 @@ public class Flag {
 					  + ChatColor.RED + "'.");
 	}
 
+	@SuppressWarnings("unused")
 	private void sendFlagSetFailed(final @NotNull String flag, final @NotNull Player p) {
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "The flag '"

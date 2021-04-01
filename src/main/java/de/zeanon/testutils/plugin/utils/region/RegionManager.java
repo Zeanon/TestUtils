@@ -25,6 +25,7 @@ public class RegionManager {
 
 	@Getter
 	private final @NotNull List<DefinedRegion> regions = new GapList<>();
+	@Getter
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
 
 	public void initialize() throws IOException {
@@ -86,5 +87,15 @@ public class RegionManager {
 
 	public boolean isGlobalRegion(final @NotNull String name) {
 		return name.startsWith("__") && name.endsWith("__");
+	}
+
+	public void saveRegions() {
+		for (final @NotNull DefinedRegion region : RegionManager.getRegions()) {
+			region.saveData();
+		}
+
+		for (final @NotNull Map.Entry<String, GlobalRegion> globalRegion : RegionManager.getGlobalRegions().entrySet()) {
+			globalRegion.getValue().saveData();
+		}
 	}
 }
