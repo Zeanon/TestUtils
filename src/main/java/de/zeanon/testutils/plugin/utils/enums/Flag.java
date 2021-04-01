@@ -25,8 +25,10 @@ public enum Flag {
 		flags = new HashSet<>(Arrays.asList(Flag.values()));
 	}
 
+
 	private final @NotNull Class<? extends Value<?>> value;
 	private final @NotNull Flag.Value<?> defaultValue;
+
 
 	<T extends Enum<T> & Value<T>> Flag(final @NotNull Class<? extends Value<T>> value, final @NotNull Flag.Value<T> defaultValue) {
 		this.value = value;
@@ -37,6 +39,7 @@ public enum Flag {
 	public String toString() {
 		return this.name().toLowerCase();
 	}
+
 
 	public interface Value<T extends Enum<T> & Value<T>> {
 
