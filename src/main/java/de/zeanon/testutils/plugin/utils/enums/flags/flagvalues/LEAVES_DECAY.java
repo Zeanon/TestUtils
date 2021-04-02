@@ -1,8 +1,7 @@
 package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
 
 import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 	private static final @NotNull Set<LEAVES_DECAY> values;
 
 	static {
-		values = new HashSet<>(Arrays.asList(LEAVES_DECAY.values()));
+		values = EnumSet.allOf(LEAVES_DECAY.class);
 	}
 
 	private final @NotNull String chatValue;

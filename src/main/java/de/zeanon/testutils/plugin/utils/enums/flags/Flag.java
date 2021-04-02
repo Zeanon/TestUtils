@@ -1,9 +1,7 @@
 package de.zeanon.testutils.plugin.utils.enums.flags;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +22,7 @@ public enum Flag {
 	private static final @NotNull Set<Flag> flags;
 
 	static {
-		flags = new HashSet<>(Arrays.asList(Flag.values()));
+		flags = EnumSet.allOf(Flag.class);
 	}
 
 
@@ -51,7 +49,7 @@ public enum Flag {
 	public interface Value<T extends Enum<T> & Value<T>> {
 
 		static @NotNull Set<Value<?>> getValues() {
-			return Collections.emptySet();
+			throw new NoValuesDefinedException("Method getValues is not implemented");
 		}
 
 		T getValue();

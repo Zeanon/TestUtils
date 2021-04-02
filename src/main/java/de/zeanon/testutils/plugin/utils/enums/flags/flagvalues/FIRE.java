@@ -1,8 +1,7 @@
 package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
 
 import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public enum FIRE implements Flag.Value<FIRE> {
 	private static final @NotNull Set<FIRE> values;
 
 	static {
-		values = new HashSet<>(Arrays.asList(FIRE.values()));
+		values = EnumSet.allOf(FIRE.class);
 	}
 
 	private final @NotNull String chatValue;

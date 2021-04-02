@@ -2,8 +2,7 @@ package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
 
 
 import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public enum STOPLAG implements Flag.Value<STOPLAG> {
 	private static final @NotNull Set<STOPLAG> values;
 
 	static {
-		values = new HashSet<>(Arrays.asList(STOPLAG.values()));
+		values = EnumSet.allOf(STOPLAG.class);
 	}
 
 	private final @NotNull String descriptor;
