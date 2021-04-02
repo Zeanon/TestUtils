@@ -21,69 +21,79 @@ class DefaultUpdate {
 
 	void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
 		System.out.println(instance.getName() + " is updating...");
-		try {
-			final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
-				@Override
-				public void run() {
-					Bukkit.getServer().reload();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+						@Override
+						public void run() {
+							Bukkit.getServer().reload();
+						}
+					};
+
+					BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
+																	  .getCodeSource()
+																	  .getLocation()
+																	  .toURI()
+																	  .getPath())
+													  .getCanonicalFile(),
+											  new BufferedInputStream(
+													  new URL(Update.DOWNLOAD_URL)
+															  .openStream()));
+
+					System.out.println(instance.getName() + " was updated successfully.");
+
+					if (autoReload) {
+						System.out.println("Server is reloading.");
+						reloadRunnable.runTask(instance);
+					}
+				} catch (@NotNull IOException | URISyntaxException e) {
+					System.out.println(instance.getName() + " could not be updated.");
+					e.printStackTrace();
 				}
-			};
-
-			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
-															  .getCodeSource()
-															  .getLocation()
-															  .toURI()
-															  .getPath())
-											  .getCanonicalFile(),
-									  new BufferedInputStream(
-											  new URL(Update.DOWNLOAD_URL)
-													  .openStream()));
-
-			System.out.println(instance.getName() + " was updated successfully.");
-
-			if (autoReload) {
-				System.out.println("Server is reloading.");
-				reloadRunnable.runTask(instance);
 			}
-		} catch (@NotNull IOException | URISyntaxException e) {
-			System.out.println(instance.getName() + " could not be updated.");
-			e.printStackTrace();
-		}
+		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 
 	void updatePlugin(final @NotNull Player p, final boolean autoReload, final @NotNull JavaPlugin instance) {
 		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 					  ChatColor.RED + "Updating plugin...");
-		try {
-			final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
-				@Override
-				public void run() {
-					Bukkit.getServer().reload();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+						@Override
+						public void run() {
+							Bukkit.getServer().reload();
+						}
+					};
+
+					BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
+																	  .getCodeSource()
+																	  .getLocation()
+																	  .toURI()
+																	  .getPath())
+													  .getCanonicalFile(),
+											  new BufferedInputStream(
+													  new URL(Update.DOWNLOAD_URL)
+															  .openStream()));
+
+					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
+								  ChatColor.RED + "Update successful.");
+
+					if (autoReload) {
+						p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
+									  ChatColor.RED + "Server is reloading...");
+						reloadRunnable.runTask(instance);
+					}
+				} catch (@NotNull IOException | URISyntaxException e) {
+					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
+								  ChatColor.RED + "Could not update.");
+					e.printStackTrace();
 				}
-			};
-
-			BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
-															  .getCodeSource()
-															  .getLocation()
-															  .toURI()
-															  .getPath())
-											  .getCanonicalFile(),
-									  new BufferedInputStream(
-											  new URL(Update.DOWNLOAD_URL)
-													  .openStream()));
-
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-						  ChatColor.RED + "Update successful.");
-
-			if (autoReload) {
-				p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-							  ChatColor.RED + "Server is reloading...");
-				reloadRunnable.runTask(instance);
 			}
-		} catch (@NotNull IOException | URISyntaxException e) {
-			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
-						  ChatColor.RED + "Could not update.");
-			e.printStackTrace();
-		}
+		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 }

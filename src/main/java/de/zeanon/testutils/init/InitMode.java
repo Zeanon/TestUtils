@@ -81,6 +81,7 @@ public class InitMode {
 
 		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
+
 			InitMode.enableSleepModeWorldGuard();
 			return;
 		}
@@ -98,23 +99,28 @@ public class InitMode {
 			ScoreBoard.initialize(p);
 		}
 
-		BackupScheduler.backup();
 
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				Mapper.initialize();
-				new TNT(); //NOSONAR
-				new Backup(); //NOSONAR
-				new Region(); //NOSONAR
-				new Stoplag(); //NOSONAR
-				new TestBlock(); //NOSONAR
-				new TestUtils(); //NOSONAR
-
-				de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
-				de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
+				//DO NOTHING
+				//This runnable is to ensure, that this method halts until everything is fully loaded so commands get registered properly
 			}
-		}.runTask(de.zeanon.testutils.TestUtils.getInstance());
+		}.runTaskLater(de.zeanon.testutils.TestUtils.getInstance(), 10);
+
+		Mapper.initialize();
+
+		new TNT(); //NOSONAR
+		new Backup(); //NOSONAR
+		new Region(); //NOSONAR
+		new Stoplag(); //NOSONAR
+		new TestBlock(); //NOSONAR
+		new TestUtils(); //NOSONAR
+
+		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
+		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
+
+		BackupScheduler.backup();
 	}
 
 	public boolean forbiddenFileName(final @NotNull String name) {
