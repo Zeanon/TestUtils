@@ -30,6 +30,7 @@ public final class TestUtils extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		InitMode.unregisterCommands();
 		System.out.println("[" + this.getName() + "] >> unloaded.");
 	}
 }

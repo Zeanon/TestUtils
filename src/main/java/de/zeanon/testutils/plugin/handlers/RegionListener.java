@@ -2,8 +2,8 @@ package de.zeanon.testutils.plugin.handlers;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.utils.enums.Flag;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.*;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
+import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.*;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.GlobalRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
@@ -12,14 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -540,6 +538,29 @@ public class RegionListener implements Listener {
 			}
 
 			RegionListener.regionHasChanged(source);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerDamage(final @NotNull EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getEntity().getWorld()));
+			final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(event.getEntity().getLocation());
+			if (regions.isEmpty() && (globalRegion.get(Flag.DAMAGE) == DAMAGE.DENY
+									  || (event.getCause() == EntityDamageEvent.DamageCause.FALL
+										  && globalRegion.get(Flag.FALL_DAMAGE) == FALL_DAMAGE.DENY))) {
+				event.setCancelled(true);
+				return;
+			}
+
+			for (final @NotNull DefinedRegion region : regions) {
+				if (region.get(Flag.DAMAGE) == DAMAGE.DENY
+					|| (event.getCause() == EntityDamageEvent.DamageCause.FALL
+						&& region.get(Flag.FALL_DAMAGE) == FALL_DAMAGE.DENY)) {
+					event.setCancelled(true);
+					return;
+				}
+			}
 		}
 	}
 

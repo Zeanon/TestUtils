@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 
 public abstract class SWCommand {
@@ -38,14 +39,15 @@ public abstract class SWCommand {
 	private final List<SubCommand> commandHelpSet = new ArrayList<>();
 	private final Map<String, TypeMapper<?>> localTypeMapper = new HashMap<>();
 
-	protected SWCommand(String command) {
-		this(command, new String[0]);
+
+	protected SWCommand(final @NotNull String command, final @NotNull String... aliases) {
+		this(command, false, aliases);
 	}
 
-	protected SWCommand(String command, String... aliases) {
+	protected SWCommand(final @NotNull String command, final boolean hotload, String... aliases) {
 		this.command = new Command(command, "", "/" + command, Arrays.asList(aliases)) {
 			@Override
-			public boolean execute(CommandSender sender, String alias, String[] args) {
+			public boolean execute(final @NotNull CommandSender sender, final @NotNull String alias, final @NotNull String[] args) { //NOSONAR
 				for (SubCommand subCommand : SWCommand.this.commandSet) {
 					if (subCommand.invoke(sender, args)) {
 						return false;
@@ -60,7 +62,7 @@ public abstract class SWCommand {
 			}
 
 			@Override
-			public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+			public @NotNull List<String> tabComplete(final @NotNull CommandSender sender, final @NotNull String alias, final @NotNull String[] args) throws IllegalArgumentException {
 				List<String> strings = new ArrayList<>();
 				for (SubCommand subCommand : SWCommand.this.commandSet) {
 					List<String> tabCompletes = subCommand.tabComplete(sender, args);
@@ -77,6 +79,9 @@ public abstract class SWCommand {
 				return strings;
 			}
 		};
+		if (hotload) {
+			this.unregister();
+		}
 		this.register();
 
 		for (Method method : this.getClass().getDeclaredMethods()) {
@@ -99,13 +104,13 @@ public abstract class SWCommand {
 					return;
 				}
 				if (parameters.length != 2) {
-					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking parameters or has too many");
+					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking parameters or has too many"); //NOSONAR
 				}
 				if (!parameters[parameters.length - 1].isVarArgs()) {
-					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters as last Argument");
+					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters as last Argument"); //NOSONAR
 				}
 				if (parameters[parameters.length - 1].getType().getComponentType() != String.class) {
-					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters of type '" + String.class.getTypeName() + "' as last Argument");
+					Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the varArgs parameters of type '" + String.class.getTypeName() + "' as last Argument"); //NOSONAR
 					return;
 				}
 				this.commandHelpSet.add(new SubCommand(this, method, anno.value()));
@@ -131,7 +136,7 @@ public abstract class SWCommand {
 						name = mapper.value();
 					}
 					if (!SWCommandUtils.MAPPER_FUNCTIONS.containsKey(name) && !this.localTypeMapper.containsKey(name)) {
-						Bukkit.getLogger().log(Level.WARNING, "The parameter '" + parameter.toString() + "' is using an unsupported Mapper of type '" + name + "'");
+						Bukkit.getLogger().log(Level.WARNING, "The parameter '" + parameter.toString() + "' is using an unsupported Mapper of type '" + name + "'"); //NOSONAR
 						return;
 					}
 				}
@@ -139,7 +144,7 @@ public abstract class SWCommand {
 			});
 
 			this.commandSet.sort((o1, o2) -> {
-				int compare = Integer.compare(-o1.subCommand.length, -o2.subCommand.length);
+				int compare = Integer.compare(-o1.subCommands.length, -o2.subCommands.length);
 				if (compare != 0) {
 					return compare;
 				} else {
@@ -148,11 +153,11 @@ public abstract class SWCommand {
 					return Integer.compare(i1, i2);
 				}
 			});
-			this.commandHelpSet.sort(Comparator.comparingInt(o -> -o.subCommand.length));
+			this.commandHelpSet.sort(Comparator.comparingInt(o -> -o.subCommands.length));
 		}
 	}
 
-	protected void unregister() {
+	public void unregister() {
 		SWCommandUtils.knownCommandMap.remove(this.command.getName());
 		for (String alias : this.command.getAliases()) {
 			SWCommandUtils.knownCommandMap.remove(alias);
@@ -160,7 +165,7 @@ public abstract class SWCommand {
 		this.command.unregister(SWCommandUtils.commandMap);
 	}
 
-	protected void register() {
+	public void register() {
 		SWCommandUtils.commandMap.register("testutils", this.command);
 	}
 
@@ -172,24 +177,25 @@ public abstract class SWCommand {
 
 		Parameter[] parameters = method.getParameters();
 		if (!parameterTester.test(parameters.length)) {
-			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking parameters or has too many");
+			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking parameters or has too many"); //NOSONAR
 			return;
 		}
 		if (firstParameter && !CommandSender.class.isAssignableFrom(parameters[0].getType())) {
-			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the first parameter of type '" + CommandSender.class.getTypeName() + "'");
+			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the first parameter of type '" + CommandSender.class.getTypeName() + "'"); //NOSONAR
 			return;
 		}
 		if (returnType != null && method.getReturnType() != returnType) {
-			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the desired return type '" + returnType.getTypeName() + "'");
+			Bukkit.getLogger().log(Level.WARNING, "The method '" + method.toString() + "' is lacking the desired return type '" + returnType.getTypeName() + "'"); //NOSONAR
 			return;
 		}
 		consumer.accept(anno, parameters);
 	}
 
-	private <T extends Annotation> void addMapper(Class<T> annotation, Method method, IntPredicate parameterTester, boolean firstParameter, Class<?> returnType, BiConsumer<T, TypeMapper<?>> consumer) {
+	@SuppressWarnings("SameParameterValue")
+	private <T extends Annotation> void addMapper(final @NotNull Class<T> annotation, final @NotNull Method method, IntPredicate parameterTester, final boolean firstParameter, final @NotNull Class<?> returnType, final @NotNull BiConsumer<T, TypeMapper<?>> consumer) {
 		this.add(annotation, method, parameterTester, firstParameter, returnType, (anno, parameters) -> {
 			try {
-				method.setAccessible(true);
+				method.setAccessible(true); //NOSONAR
 				Object object = method.invoke(this);
 				consumer.accept(anno, (TypeMapper<?>) object);
 			} catch (Exception e) {

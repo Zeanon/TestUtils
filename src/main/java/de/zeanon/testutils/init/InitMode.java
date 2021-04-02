@@ -5,6 +5,7 @@ import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.commands.backup.Backup;
 import de.zeanon.testutils.plugin.commands.region.Region;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
@@ -30,7 +31,6 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,11 +38,29 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class InitMode {
 
+
+	final @NotNull Set<SWCommand> registeredCommands = new HashSet<>();
 	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
 	@Getter
 	private ThunderConfig config;
 
 	public void initPlugin() {
+		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null
+			&& de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
+
+			InitMode.enableSleepModeWorldGuard();
+			return;
+		}
+
+		if (((de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") == null
+			  || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
+			 && (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldEdit") == null
+				 || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))) {
+			InitMode.enableSleepModeWorldEdit();
+
+			return;
+		}
+
 		try {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Loading Config...");
 			InitMode.loadConfigs();
@@ -75,48 +93,19 @@ public class InitMode {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
 		} catch (IOException e) {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
+			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
+
 			de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
-		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null
-			&& de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
-
-			InitMode.enableSleepModeWorldGuard();
-			return;
-		}
-
-		if (((de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") == null
-			  || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
-			 && (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldEdit") == null
-				 || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))) {
-			InitMode.enableSleepModeWorldEdit();
-
-			return;
-		}
 
 		for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
 			ScoreBoard.initialize(p);
 		}
 
 
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				//DO NOTHING
-				//This runnable is to ensure, that this method halts until everything is fully loaded so commands get registered properly
-			}
-		}.runTaskLater(de.zeanon.testutils.TestUtils.getInstance(), 5);
-
-
-		Mapper.initialize();
-
-		new TNT(); //NOSONAR
-		new Backup(); //NOSONAR
-		new Region(); //NOSONAR
-		new Stoplag(); //NOSONAR
-		new TestBlock(); //NOSONAR
-		new TestUtils(); //NOSONAR
+		InitMode.registerCommands();
 
 		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
 		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
@@ -126,6 +115,23 @@ public class InitMode {
 
 	public boolean forbiddenFileName(final @NotNull String name) {
 		return InitMode.forbiddenNames.contains(name.toLowerCase());
+	}
+
+	public void registerCommands() {
+		Mapper.initialize();
+
+		InitMode.registeredCommands.add(new TNT());
+		InitMode.registeredCommands.add(new Backup());
+		InitMode.registeredCommands.add(new Region());
+		InitMode.registeredCommands.add(new Stoplag());
+		InitMode.registeredCommands.add(new TestBlock());
+		InitMode.registeredCommands.add(new TestUtils());
+	}
+
+	public void unregisterCommands() {
+		for (final @NotNull SWCommand command : InitMode.registeredCommands) {
+			command.unregister();
+		}
 	}
 
 	private void loadConfigs() {

@@ -2,10 +2,11 @@ package de.zeanon.testutils.plugin.commands.region;
 
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
-import de.zeanon.testutils.plugin.utils.enums.Flag;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,15 +14,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class Region extends SWCommand {
 
+
+	private static final @NotNull String FLAGS_HELP_MESSAGE = Region.getFlagsHelpMessage();
+
+
 	public Region() {
-		super("region", "rg");
+		super("region", true, "rg");
 	}
 
 	public static void sendMultipleRegions(final @NotNull List<DefinedRegion> regions, final @NotNull Player p) {
 		p.sendMessage(GlobalMessageUtils.messageHead
 					  + ChatColor.RED + "You are standing in multiple regions, please define which one to use: "
-					  + ChatColor.DARK_RED + regions.toString());
+					  + regions.stream().map(r -> ChatColor.DARK_RED + r.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));
 	}
+
 
 	@Register(help = true)
 	public void help(final @NotNull Player p, final @NotNull String... args) {
@@ -41,15 +47,7 @@ public class Region extends SWCommand {
 
 	@Register(value = {"flag"}, help = true)
 	public void flagHelp(final @NotNull Player p, final @NotNull String... args) {
-		p.sendMessage(GlobalMessageUtils.messageHead
-					  + ChatColor.RED + "Applicable flags are: "
-					  + ChatColor.DARK_RED + "tnt"
-					  + ChatColor.RED + ", "
-					  + ChatColor.DARK_RED + "item_drops"
-					  + ChatColor.RED + ", "
-					  + ChatColor.DARK_RED + "fire"
-					  + ChatColor.RED + ", "
-					  + ChatColor.DARK_RED + "leaves_decay");
+		p.sendMessage(Region.FLAGS_HELP_MESSAGE);
 	}
 
 	@Register("flag")
@@ -75,5 +73,22 @@ public class Region extends SWCommand {
 	@Register("flag")
 	public void threeArgsFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value, final @NotNull RegionName regionName) {
 		de.zeanon.testutils.plugin.commands.region.Flag.execute(regionName, flag, value, p);
+	}
+
+
+	@Register("reload")
+	public void noArgsReload(final @NotNull Player p) {
+		Reload.execute(p);
+	}
+
+
+	private static @NotNull String getFlagsHelpMessage() {
+		return GlobalMessageUtils.messageHead
+			   + ChatColor.RED
+			   + "Applicable flags are: "
+			   + Flag.getFlags()
+					 .stream()
+					 .map(f -> ChatColor.DARK_RED + f.toString())
+					 .collect(Collectors.joining(ChatColor.RED + ", "));
 	}
 }

@@ -1,5 +1,6 @@
 package de.zeanon.testutils.commandframework;
 
+@SuppressWarnings("unused")
 public class CommandParseException extends Exception {
 
 	public CommandParseException() {

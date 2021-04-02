@@ -55,7 +55,8 @@ public class Info {
 					  + ChatColor.DARK_RED + region.getType());
 
 
-		final @NotNull StringBuilder flags = new StringBuilder(ChatColor.BLACK + " | ");
+		final @NotNull StringBuilder flags = new StringBuilder(GlobalMessageUtils.messageHead);
+		flags.append(ChatColor.RED).append("Flags:").append(ChatColor.BLACK).append(" | ");
 		region.getFlags().forEach((flag, value) ->
 										  flags.append(ChatColor.DARK_RED)
 											   .append(flag.toString())
@@ -64,8 +65,6 @@ public class Info {
 											   .append(value.getChatValue())
 											   .append(ChatColor.BLACK)
 											   .append(" | "));
-		p.sendMessage(GlobalMessageUtils.messageHead
-					  + ChatColor.RED + "Flags:"
-					  + flags.toString());
+		p.sendMessage(flags.toString());
 	}
 }

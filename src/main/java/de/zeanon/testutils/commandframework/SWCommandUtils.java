@@ -82,7 +82,7 @@ public class SWCommandUtils {
 	static {
 		try {
 			final Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-			commandMapField.setAccessible(true);
+			commandMapField.setAccessible(true); //NOSONAR
 			commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
 		} catch (NoSuchFieldException | IllegalAccessException exception) {
 			Bukkit.shutdown();
@@ -90,7 +90,8 @@ public class SWCommandUtils {
 		}
 		try {
 			final Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-			knownCommandsField.setAccessible(true);
+			knownCommandsField.setAccessible(true); //NOSONAR
+			//noinspection unchecked
 			knownCommandMap = (Map<String, Command>) knownCommandsField.get(SWCommandUtils.commandMap);
 		} catch (NoSuchFieldException | IllegalAccessException exception) {
 			Bukkit.shutdown();

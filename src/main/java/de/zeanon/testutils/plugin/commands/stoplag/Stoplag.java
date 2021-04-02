@@ -3,11 +3,11 @@ package de.zeanon.testutils.plugin.commands.stoplag;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.enums.Flag;
 import de.zeanon.testutils.plugin.utils.enums.GlobalToggle;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.StoplagToggle;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.STOPLAG;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
+import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.STOPLAG;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import net.md_5.bungee.api.ChatColor;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class Stoplag extends SWCommand {
 
 	public Stoplag() {
-		super("stoplag");
+		super("stoplag", true);
 	}
 
 	@Register

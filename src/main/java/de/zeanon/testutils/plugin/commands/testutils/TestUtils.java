@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 public class TestUtils extends SWCommand {
 
 	public TestUtils() {
-		super("testutils", "tu");
+		super("testutils", true, "tu");
 	}
 
 	public static TypeMapper<CommandConfirmation> getCommandConfirmationMapper() {

@@ -1,36 +1,87 @@
 package de.zeanon.testutils.plugin.utils.region;
 
 import com.sk89q.worldedit.math.BlockVector3;
-import de.zeanon.testutils.plugin.utils.enums.Flag;
+import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
+import java.util.EnumMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
-public interface Region {
+public abstract class Region {
 
-	void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value);
+	protected final @NotNull JsonFile jsonFile;
 
-	@SuppressWarnings("rawtypes")
-	Flag.Value get(final @NotNull Flag flagType);
+	protected final @NotNull String name;
+	protected final @NotNull World world;
+	protected final @NotNull Map<Flag, Flag.Value<?>> flags;
 
-	@SuppressWarnings("rawtypes")
-	@NotNull Map<Flag, Flag.Value> getFlags();
+	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world) {
+		this.jsonFile = jsonFile;
+		this.name = name;
+		this.world = world;
 
-	@NotNull World getWorld();
+		this.flags = new EnumMap<>(Flag.class);
+		this.readFlags();
+	}
 
-	@NotNull String getName();
+	protected Region(final @NotNull JsonFile jsonFile) {
+		this.jsonFile = jsonFile;
+		this.name = BaseFileUtils.removeExtension(this.jsonFile.getName());
+		this.world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
 
-	@NotNull String getType();
+		this.flags = new EnumMap<>(Flag.class);
+		this.readFlags();
+	}
 
-	void saveData();
+	public void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
+		this.flags.put(flagType, value);
+		this.saveData();
+	}
+
+	public Flag.Value<?> get(final @NotNull Flag flagType) {
+		return this.flags.get(flagType);
+	}
+
+	public @NotNull Map<Flag, Flag.Value<?>> getFlags() {
+		return this.flags;
+	}
+
+	public @NotNull World getWorld() {
+		return this.world;
+	}
+
+	public @NotNull String getName() {
+		return this.name;
+	}
+
+	public abstract @NotNull String getType();
+
+	public void saveData() {
+		Region.this.jsonFile.setUseArray(new String[]{"flags"}, Region.this.flags);
+	}
+
+
+	private void readFlags() {
+		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(Region.this.jsonFile.getMap("flags"));
+		for (final @NotNull Flag flag : Flag.getFlags()) {
+			final @Nullable String flagValue = tempFlagMap.get(flag.toString());
+			Region.this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getValueOf(flagValue));
+		}
+		Region.this.saveData();
+	}
 
 
 	@Getter
 	@AllArgsConstructor
-	class Point {
+	public static class Point {
 
 		final int x;
 		final int y;

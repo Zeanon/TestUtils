@@ -2,12 +2,10 @@ package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
-import de.zeanon.testutils.plugin.utils.enums.Flag;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.FIRE;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.ITEM_DROPS;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.LEAVES_DECAY;
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.TNT;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
+import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.*;
 import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
+import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -34,14 +32,14 @@ public class RegisterArea {
 
 	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {
 		DefinedRegion regionSouth = new DefinedRegion(name + "_south",
-													  new DefinedRegion.Point(x - 58, y, z + 1),
-													  new DefinedRegion.Point(x + 58, y + 65, z + 97),
+													  new Region.Point(x - 58, y, z + 1),
+													  new Region.Point(x + 58, y + 65, z + 97),
 													  world);
 
 
 		DefinedRegion regionNorth = new DefinedRegion(name + "_north",
-													  new DefinedRegion.Point(x - 58, y, z),
-													  new DefinedRegion.Point(x + 58, y + 65, z - 96),
+													  new Region.Point(x - 58, y, z),
+													  new Region.Point(x + 58, y + 65, z - 96),
 													  world);
 
 
@@ -50,6 +48,8 @@ public class RegisterArea {
 
 		regionSouth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
 		regionNorth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
+		regionSouth.set(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
+		regionNorth.set(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
 		regionSouth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
 		regionNorth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
 		regionSouth.set(Flag.FIRE, FIRE.DENY);

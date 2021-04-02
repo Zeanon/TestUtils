@@ -30,39 +30,40 @@ public class PasteBlock {
 	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
-		} else {
-			final @Nullable Pair<String, InputStream> testBlock = TestBlock.getBlock(p, mappedFile);
-			if (testBlock != null) { //NOSONAR
-				try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getValue())) {
-					final @NotNull Clipboard clipboard = reader.read();
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+			return;
+		}
 
-						final @NotNull BlockVector3 pastePoint;
+		final @Nullable Pair<String, InputStream> testBlock = TestBlock.getBlock(p, mappedFile);
+		if (testBlock != null) { //NOSONAR
+			try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getValue())) {
+				final @NotNull Clipboard clipboard = reader.read();
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 
-						final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
+					final @NotNull BlockVector3 pastePoint;
 
-						if (tempRegion.getName().endsWith("_south")) {
-							pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getX(), tempRegion.getMinimumPoint().getY(), tempRegion.getMaximumPoint().getZ());
-							clipboardHolder.setTransform(new AffineTransform().rotateY(180));
-						} else {
-							pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
-						}
+					final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-						Operation operation = clipboardHolder
-								.createPaste(editSession)
-								.to(pastePoint)
-								.ignoreAirBlocks(true)
-								.build();
-
-						Operations.complete(operation);
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' has been set on " + area + " side.");
+					if (tempRegion.getName().endsWith("_south")) {
+						pastePoint = BlockVector3.at(tempRegion.getMaximumPoint().getX(), tempRegion.getMinimumPoint().getY(), tempRegion.getMaximumPoint().getZ());
+						clipboardHolder.setTransform(new AffineTransform().rotateY(180));
+					} else {
+						pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
 					}
-				} catch (IOException | WorldEditException e) {
+
+					Operation operation = clipboardHolder
+							.createPaste(editSession)
+							.to(pastePoint)
+							.ignoreAirBlocks(true)
+							.build();
+
+					Operations.complete(operation);
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
-					e.printStackTrace();
+								  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' has been set on " + area + " side.");
 				}
+			} catch (IOException | WorldEditException e) {
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
+				e.printStackTrace();
 			}
 		}
 	}

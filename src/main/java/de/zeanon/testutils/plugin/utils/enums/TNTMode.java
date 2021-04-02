@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.utils.enums;
 
-import de.zeanon.testutils.plugin.utils.enums.flagvalues.TNT;
+import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

@@ -18,10 +18,19 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Flag {
 
-	public void execute(final @Nullable RegionName regionName, final @NotNull de.zeanon.testutils.plugin.utils.enums.Flag flag, final @Nullable de.zeanon.testutils.plugin.utils.enums.Flag.Value<?> value, final @NotNull Player p) {
+	public void execute(final @Nullable RegionName regionName, final @NotNull de.zeanon.testutils.plugin.utils.enums.flags.Flag flag, final @Nullable de.zeanon.testutils.plugin.utils.enums.flags.Flag.Value<?> value, final @NotNull Player p) {
 		if (value == null) {
+			System.out.println(flag.getDefaultValue());
 			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "Applicable values for '" + ChatColor.DARK_RED + flag.toString() + ChatColor.RED + "' are '" + ChatColor.DARK_RED + "[" + Arrays.stream(flag.getValue().getEnumConstants()).map(e -> ((Enum<?>) e).name().toLowerCase()).collect(Collectors.joining(", ")) + "]" + ChatColor.RED + "'.");
+						  + ChatColor.RED
+						  + "Applicable values for '"
+						  + ChatColor.DARK_RED
+						  + flag.toString()
+						  + ChatColor.RED
+						  + "' are: "
+						  + Arrays.stream(flag.getValueType().getEnumConstants())
+								  .map(v -> ChatColor.DARK_RED + v.getName())
+								  .collect(Collectors.joining(ChatColor.RED + ", ")));
 		} else {
 			if (regionName == null) {
 				final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation());

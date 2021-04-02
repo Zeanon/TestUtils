@@ -29,28 +29,32 @@ public class RegionManager {
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
 
 	public void initialize() throws IOException {
-		RegionManager.regions.clear();
-		RegionManager.globalRegions.clear();
 		BaseFileUtils.createFolder(TestUtils.getInstance().getDataFolder(), "Regions");
+
+		RegionManager.initializeDefinedRegions();
+		RegionManager.initializeGlobalRegions();
+	}
+
+	public void initializeDefinedRegions() throws IOException {
+		RegionManager.regions.clear();
 		for (final @NotNull File file : BaseFileUtils.listFilesOfType(new File(TestUtils.getInstance().getDataFolder(), "Regions"), "json")) {
 			if (!file.getName().startsWith("__") || !file.getName().endsWith("__")) {
 				RegionManager.regions.add(new DefinedRegion(file));
 			}
 		}
+	}
 
+	public void initializeGlobalRegions() {
+		RegionManager.globalRegions.clear();
 		for (final @NotNull World world : Bukkit.getWorlds()) {
-			RegionManager.globalRegions.put(world.getName(), new GlobalRegion(world.getName()));
+			RegionManager.globalRegions.put(world.getName(), new GlobalRegion(world));
 		}
 	}
 
 	public @NotNull GlobalRegion getGlobalRegion(final @NotNull World world) {
 		final @Nullable GlobalRegion globalRegion = RegionManager.globalRegions.get(world.getName());
 		if (globalRegion == null) {
-			try {
-				RegionManager.initialize();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			RegionManager.initializeGlobalRegions();
 			return Objects.notNull(RegionManager.globalRegions.get(world.getName()));
 		} else {
 			return globalRegion;

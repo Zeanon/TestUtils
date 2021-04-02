@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class Backup extends SWCommand {
 
 	public Backup() {
-		super("backup");
+		super("backup", true);
 	}
 
 	public static @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @Nullable BackupMode backUpMode) throws IOException {

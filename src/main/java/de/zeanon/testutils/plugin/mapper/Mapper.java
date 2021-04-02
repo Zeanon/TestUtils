@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.mapper;
 import de.zeanon.testutils.commandframework.SWCommandUtils;
 import de.zeanon.testutils.commandframework.TypeMapper;
 import de.zeanon.testutils.plugin.utils.enums.*;
+import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
 import de.zeanon.testutils.plugin.utils.region.Region;
 import de.zeanon.testutils.plugin.utils.region.RegionManager;
 import java.util.Arrays;
@@ -130,7 +131,7 @@ public class Mapper {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					//noinspection rawtypes
-					final @NotNull Enum[] values = (Enum[]) flag.getValue().getEnumConstants(); //NOSONAR
+					final @NotNull Enum[] values = (Enum[]) flag.getValueType().getEnumConstants(); //NOSONAR
 					//noinspection rawtypes
 					for (final @NotNull Enum tempEnum : values) { //NOSONAR
 						if ((tempEnum.name()).equalsIgnoreCase(s)) {
@@ -147,7 +148,7 @@ public class Mapper {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					//noinspection rawtypes
-					final @NotNull Enum[] values = (Enum[]) flag.getValue().getEnumConstants(); //NOSONAR
+					final @NotNull Enum[] values = (Enum[]) flag.getValueType().getEnumConstants(); //NOSONAR
 					return Arrays.stream(values).map(Enum::toString).map(String::toLowerCase).collect(Collectors.toList());
 				} else {
 					return null;

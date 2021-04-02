@@ -25,28 +25,30 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.function.Function;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 class SubCommand {
 
-	private final SWCommand swCommand;
-	private final Method method;
-	private final Function<CommandSender, ?> commandSenderFunction;
-	String[] subCommand;
-	TypeMapper<?>[] arguments;
-	Class<?> varArgType = null;
+	final @NotNull String[] subCommands;
+	final @NotNull TypeMapper<?>[] arguments;
+	private final @NotNull SWCommand swCommand;
+	private final @NotNull Method method;
+	private final @NotNull Function<CommandSender, ?> commandSenderFunction;
+	@Nullable Class<?> varArgType = null;
 
-	public SubCommand(SWCommand swCommand, Method method, String[] subCommand) {
-		this(swCommand, method, subCommand, new HashMap<>());
+	public SubCommand(final @NotNull SWCommand swCommand, final @NotNull Method method, final @NotNull String[] subCommands) {
+		this(swCommand, method, subCommands, new HashMap<>());
 	}
 
-	public SubCommand(SWCommand swCommand, Method method, String[] subCommand, Map<String, TypeMapper<?>> localTypeMapper) {
+	public SubCommand(final @NotNull SWCommand swCommand, final @NotNull Method method, final @NotNull String[] subCommands, Map<String, TypeMapper<?>> localTypeMapper) {
 		this.swCommand = swCommand;
 		this.method = method;
 
 		Parameter[] parameters = method.getParameters();
 		this.commandSenderFunction = sender -> parameters[0].getType().cast(sender);
-		this.subCommand = subCommand;
+		this.subCommands = subCommands;
 
 		this.arguments = new TypeMapper[parameters.length - 1];
 		for (int i = 1; i < parameters.length; i++) {
@@ -59,6 +61,7 @@ class SubCommand {
 
 			SWCommand.Mapper mapper = parameter.getAnnotation(SWCommand.Mapper.class);
 			if (clazz.isEnum() && mapper == null && !SWCommandUtils.MAPPER_FUNCTIONS.containsKey(clazz.getTypeName()) && !localTypeMapper.containsKey(clazz.getTypeName())) {
+				//noinspection unchecked
 				Class<Enum<?>> enumClass = (Class<Enum<?>>) clazz;
 				List<String> tabCompletes = new ArrayList<>();
 				for (Enum<?> enumConstant : enumClass.getEnumConstants()) {
@@ -81,16 +84,16 @@ class SubCommand {
 	}
 
 	boolean invoke(CommandSender commandSender, String[] args) {
-		if (args.length < this.arguments.length + this.subCommand.length - (this.varArgType != null ? 1 : 0)) {
+		if (args.length < this.arguments.length + this.subCommands.length - (this.varArgType != null ? 1 : 0)) {
 			return false;
 		}
-		if (this.varArgType == null && args.length > this.arguments.length + this.subCommand.length) {
+		if (this.varArgType == null && args.length > this.arguments.length + this.subCommands.length) {
 			return false;
 		}
 		try {
-			Object[] objects = SWCommandUtils.generateArgumentArray(this.arguments, args, this.varArgType, this.subCommand);
+			Object[] objects = SWCommandUtils.generateArgumentArray(this.arguments, args, this.varArgType, this.subCommands);
 			objects[0] = this.commandSenderFunction.apply(commandSender);
-			this.method.setAccessible(true);
+			this.method.setAccessible(true); //NOSONAR
 			this.method.invoke(this.swCommand, objects);
 		} catch (IllegalAccessException | RuntimeException | InvocationTargetException e) {
 			throw new SecurityException(e.getMessage(), e);
@@ -101,12 +104,12 @@ class SubCommand {
 	}
 
 	List<String> tabComplete(CommandSender commandSender, String[] args) {
-		if (this.varArgType == null && args.length > this.arguments.length + this.subCommand.length) {
+		if (this.varArgType == null && args.length > this.arguments.length + this.subCommands.length) {
 			return null;
 		}
 		int index = 0;
 		List<String> argsList = new LinkedList<>(Arrays.asList(args));
-		for (String value : this.subCommand) {
+		for (String value : this.subCommands) {
 			String s = argsList.remove(0);
 			index++;
 			if (argsList.isEmpty()) {
