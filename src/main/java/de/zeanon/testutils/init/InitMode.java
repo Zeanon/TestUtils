@@ -106,7 +106,8 @@ public class InitMode {
 				//DO NOTHING
 				//This runnable is to ensure, that this method halts until everything is fully loaded so commands get registered properly
 			}
-		}.runTaskLater(de.zeanon.testutils.TestUtils.getInstance(), 10);
+		}.runTaskLater(de.zeanon.testutils.TestUtils.getInstance(), 5);
+
 
 		Mapper.initialize();
 
