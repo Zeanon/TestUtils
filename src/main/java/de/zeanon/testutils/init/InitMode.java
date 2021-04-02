@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,42 +69,52 @@ public class InitMode {
 			return;
 		}
 
+		try {
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Regions...");
+			RegionManager.initialize();
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
+		} catch (IOException e) {
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
+			de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			return;
+		}
+
 		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null
 			&& de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldGuard")) {
 			InitMode.enableSleepModeWorldGuard();
-		} else if (((de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") != null
-					 && de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
-					|| (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldEdit") != null
-						&& de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))) {
-
-			Mapper.initialize();
-			new TNT(); //NOSONAR
-			new Backup(); //NOSONAR
-			new Region(); //NOSONAR
-			new Stoplag(); //NOSONAR
-			new TestBlock();
-			new TestUtils();
-
-			de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
-			de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
-
-			for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
-				ScoreBoard.initialize(p);
-			}
-
-			try {
-				System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Regions...");
-				RegionManager.initialize();
-				System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
-			} catch (IOException e) {
-				System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
-				de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
-			}
-
-			BackupScheduler.backup();
-		} else {
-			InitMode.enableSleepModeWorldEdit();
+			return;
 		}
+
+		if (((de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("FastAsyncWorldEdit") == null
+			  || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("FastAsyncWorldEdit"))
+			 && (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldEdit") == null
+				 || !de.zeanon.testutils.TestUtils.getPluginManager().isPluginEnabled("WorldEdit")))) {
+			InitMode.enableSleepModeWorldEdit();
+
+			return;
+		}
+
+		for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
+			ScoreBoard.initialize(p);
+		}
+
+		BackupScheduler.backup();
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				Mapper.initialize();
+				new TNT(); //NOSONAR
+				new Backup(); //NOSONAR
+				new Region(); //NOSONAR
+				new Stoplag(); //NOSONAR
+				new TestBlock(); //NOSONAR
+				new TestUtils(); //NOSONAR
+
+				de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
+				de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
+			}
+		}.runTask(de.zeanon.testutils.TestUtils.getInstance());
 	}
 
 	public boolean forbiddenFileName(final @NotNull String name) {
@@ -143,16 +154,18 @@ public class InitMode {
 	}
 
 	private void enableSleepModeWorldEdit() {
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
 		new SleepModeTestUtils();
+		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
+
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not load plugin, it needs FastAsyncWorldEdit or WorldEdit to work.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + de.zeanon.testutils.TestUtils.getInstance().getName() + " will automatically activate when one of the above gets enabled.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Rudimentary function like updating and disabling will still work.");
 	}
 
 	private void enableSleepModeWorldGuard() {
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
 		new SleepModeTestUtils();
+		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
+
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> WorldGuard detected, this plugin replaces WorldGuard, please only use one.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + de.zeanon.testutils.TestUtils.getInstance().getName() + " will automatically activate when WorldGuard gets disabled.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Rudimentary function like updating and disabling will still work.");

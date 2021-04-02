@@ -17,6 +17,7 @@ public class WakeupListener implements Listener {
 		if (event.getPlugin().getName().equalsIgnoreCase("WorldEdit")
 			|| event.getPlugin().getName().equalsIgnoreCase("FastAsyncWorldEdit")
 			|| event.getPlugin().getName().equalsIgnoreCase("WorldGuard")) {
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Reloading Testutils because important plugins it depends on have been changed...");
 			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 			TestUtils.getPluginManager().enablePlugin(TestUtils.getInstance());
 		}
@@ -27,6 +28,7 @@ public class WakeupListener implements Listener {
 		if (event.getPlugin().getName().equalsIgnoreCase("WorldEdit")
 			|| event.getPlugin().getName().equalsIgnoreCase("FastAsyncWorldEdit")
 			|| event.getPlugin().getName().equalsIgnoreCase("WorldGuard")) {
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Reloading Testutils because important plugins it depends on have been changed...");
 			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 			TestUtils.getPluginManager().enablePlugin(TestUtils.getInstance());
 		}

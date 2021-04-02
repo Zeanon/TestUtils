@@ -24,6 +24,7 @@ public final class TestUtils extends JavaPlugin {
 	public void onEnable() {
 		TestUtils.setInstance(this);
 		TestUtils.setPluginManager(Bukkit.getPluginManager());
+
 		InitMode.initPlugin();
 	}
 
