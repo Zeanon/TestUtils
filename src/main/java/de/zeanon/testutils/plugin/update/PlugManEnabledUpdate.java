@@ -63,6 +63,13 @@ class PlugManEnabledUpdate {
 			@Override
 			public void run() {
 				try {
+					final @NotNull BukkitRunnable reloadRunnable = new BukkitRunnable() {
+						@Override
+						public void run() {
+							PluginUtil.reload(instance);
+						}
+					};
+
 					BaseFileUtils.writeToFile(new File(TestUtils.class.getProtectionDomain()
 																	  .getCodeSource()
 																	  .getLocation()
@@ -77,6 +84,7 @@ class PlugManEnabledUpdate {
 					if (autoReload) {
 						p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 									  ChatColor.RED + "Reloading plugin...");
+						reloadRunnable.runTask(instance);
 					}
 				} catch (@NotNull IOException | URISyntaxException e) {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +

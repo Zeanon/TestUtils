@@ -44,7 +44,7 @@ public class Info {
 	private void sendRegionInfo(final @NotNull Region region, final @NotNull Player p) {
 		p.sendMessage("\n"
 					  + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
-					  + ChatColor.RED + "=== Infos for '" + ChatColor.DARK_RED + region.getName() + ChatColor.RED + "' === " + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD);
+					  + ChatColor.RED + "=== " + ChatColor.DARK_RED + region.getName() + ChatColor.RED + " === " + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD);
 
 		p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
 					  + ChatColor.RED + "World: "
