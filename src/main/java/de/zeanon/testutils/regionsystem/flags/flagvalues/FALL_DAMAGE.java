@@ -12,20 +12,19 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum FALL_DAMAGE implements Flag.Value<FALL_DAMAGE> {
 
-	ALLOW(ChatColor.GREEN + "allow", null),
-	DENY(ChatColor.RED + "deny", null);
+	ALLOW(ChatColor.GREEN + "allow"),
+	DENY(ChatColor.RED + "deny");
 
 
+	private static @Nullable FALL_DAMAGE[] values;
 	private final @NotNull String chatValue;
-	private @Nullable FALL_DAMAGE[] values;
-
 
 	@Override
 	public FALL_DAMAGE[] getValues() {
-		if (this.values == null) {
-			this.values = FALL_DAMAGE.values();
+		if (FALL_DAMAGE.values == null) {
+			FALL_DAMAGE.values = FALL_DAMAGE.values(); //NOSONAR
 		}
-		return this.values;
+		return FALL_DAMAGE.values;
 	}
 
 	@Override

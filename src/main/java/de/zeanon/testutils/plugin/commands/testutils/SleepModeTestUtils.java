@@ -37,6 +37,6 @@ public class SleepModeTestUtils extends SWCommand {
 
 	@ClassMapper(value = CommandConfirmation.class, local = true)
 	private @NotNull TypeMapper<CommandConfirmation> mapCommandConfirmation() {
-		return TestUtils.getCommandConfirmationMapper();
+		return TestUtilsCommand.getCommandConfirmationMapper();
 	}
 }

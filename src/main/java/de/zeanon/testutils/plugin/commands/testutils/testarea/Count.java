@@ -12,7 +12,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -27,15 +27,14 @@ import org.jetbrains.annotations.Nullable;
 public class Count {
 
 	public void execute(final @NotNull Material material, final @Nullable RegionSide regionSide, final @NotNull Player p) {
+		final @Nullable TestArea region = TestAreaUtils.getRegion(p);
 		if (regionSide == null) {
-			final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p);
 			if (region == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
 				Count.count(p, region, "your", material);
 			}
 		} else {
-			final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p);
 			if (region == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
@@ -44,7 +43,7 @@ public class Count {
 		}
 	}
 
-	private void count(final @NotNull Player p, final @NotNull DefinedRegion tempRegion, final @NotNull String area, final @NotNull Material material) {
+	private void count(final @NotNull Player p, final @NotNull TestArea tempRegion, final @NotNull String area, final @NotNull Material material) {
 		try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(tempRegion.getWorld()), -1)) {
 			final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
 			final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());

@@ -14,7 +14,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.IOException;
 import java.io.InputStream;
 import lombok.experimental.UtilityClass;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class PasteBlock {
 
-	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
+	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable TestArea tempRegion, final @NotNull String area) {
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 			return;

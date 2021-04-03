@@ -1,7 +1,6 @@
 package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
-import de.zeanon.testutils.TestUtils;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,14 +9,14 @@ import org.jetbrains.annotations.NotNull;
 public class GlobalRegion extends Region {
 
 	public GlobalRegion(final @NotNull World world) {
-		super(JsonFileManager.jsonFile(TestUtils.getInstance().getDataFolder(), "Regions/__" + world.getName() + "__")
+		super(JsonFileManager.jsonFile(RegionManager.REGIONS_FOLDER.resolve("__" + world.getName() + "__"))
 							 .fromResource("resources/global.json")
 							 .create(),
-			  "__" + world + "__", world);
+			  "__" + world.getName() + "__", world);
 	}
 
 	@Override
 	public @NotNull String getType() {
-		return "global";
+		return "GlobalRegion";
 	}
 }

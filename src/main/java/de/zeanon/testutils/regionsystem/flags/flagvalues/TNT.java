@@ -13,20 +13,19 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum TNT implements Flag.Value<TNT> {
 
-	ALLOW(ChatColor.GREEN + "allow", null),
-	DENY(ChatColor.RED + "deny", null);
+	ALLOW(ChatColor.GREEN + "allow"),
+	DENY(ChatColor.RED + "deny");
 
 
+	private static @Nullable TNT[] values;
 	private final @NotNull String chatValue;
-	private @Nullable TNT[] values;
-
 
 	@Override
 	public TNT[] getValues() {
-		if (this.values == null) {
-			this.values = TNT.values();
+		if (TNT.values == null) {
+			TNT.values = TNT.values(); //NOSONAR
 		}
-		return this.values;
+		return TNT.values;
 	}
 
 	@Override

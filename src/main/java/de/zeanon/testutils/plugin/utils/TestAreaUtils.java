@@ -1,8 +1,8 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class TestAreaUtils {
 
-	public @Nullable DefinedRegion getRegion(final @NotNull Player p) {
-		List<DefinedRegion> regions = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation());
+	public @Nullable TestArea getRegion(final @NotNull Player p) {
+		final @NotNull List<TestArea> regions = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation());
 		if (regions.isEmpty()) {
 			return null;
 		} else {
@@ -23,7 +23,7 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable DefinedRegion getRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
+	public @Nullable TestArea getRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
 		if (regionSide == null) {
 			return TestAreaUtils.getRegion(p);
 		} else {
@@ -42,12 +42,12 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+	public @Nullable TestArea getOppositeRegion(final @NotNull Player p) {
+		final @NotNull Optional<TestArea> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		return temp.map(region -> de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
 	}
 
-	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
+	public @Nullable TestArea getOppositeRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
 		if (regionSide == null) {
 			return TestAreaUtils.getOppositeRegion(p);
 		} else {
@@ -66,8 +66,8 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable DefinedRegion getNorthRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+	public @Nullable TestArea getNorthRegion(final @NotNull Player p) {
+		final @NotNull Optional<TestArea> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
 			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("north")) {
 				return temp.get();
@@ -79,8 +79,8 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable DefinedRegion getSouthRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+	public @Nullable TestArea getSouthRegion(final @NotNull Player p) {
+		final @NotNull Optional<TestArea> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
 			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("south")) {
 				return temp.get();
@@ -92,11 +92,11 @@ public class TestAreaUtils {
 		}
 	}
 
-	public @Nullable DefinedRegion getNorthRegion(final @NotNull String name) {
+	public @Nullable TestArea getNorthRegion(final @NotNull String name) {
 		return RegionManager.getRegion(name + "_north");
 	}
 
-	public @Nullable DefinedRegion getSouthRegion(final @NotNull String name) {
+	public @Nullable TestArea getSouthRegion(final @NotNull String name) {
 		return RegionManager.getRegion(name + "_south");
 	}
 }

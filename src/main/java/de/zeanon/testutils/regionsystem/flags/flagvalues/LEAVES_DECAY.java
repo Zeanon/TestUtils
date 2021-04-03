@@ -12,20 +12,19 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 
-	ALLOW(ChatColor.GREEN + "allow", null),
-	DENY(ChatColor.RED + "deny", null);
+	ALLOW(ChatColor.GREEN + "allow"),
+	DENY(ChatColor.RED + "deny");
 
 
+	private static @Nullable LEAVES_DECAY[] values;
 	private final @NotNull String chatValue;
-	private @Nullable LEAVES_DECAY[] values;
-
 
 	@Override
 	public LEAVES_DECAY[] getValues() {
-		if (this.values == null) {
-			this.values = LEAVES_DECAY.values();
+		if (LEAVES_DECAY.values == null) {
+			LEAVES_DECAY.values = LEAVES_DECAY.values(); //NOSONAR
 		}
-		return this.values;
+		return LEAVES_DECAY.values;
 	}
 
 	@Override

@@ -17,11 +17,12 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,15 +51,15 @@ public abstract class Backup extends BukkitRunnable {
 			try {
 				final @NotNull String name = LocalDateTime.now().format(Backup.getFormatter());
 				@NotNull org.bukkit.World tempWorld;
-				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(TestUtils.getInstance().getDataFolder().toPath().resolve("TestAreas").toRealPath().toFile())) {
-					final @NotNull File backupFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + regionFolder.getName());
+				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(TestUtils.getPluginFolder().resolve("TestAreas").toRealPath().toFile())) {
+					final @NotNull File backupFolder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).toFile();
 
-					final @Nullable DefinedRegion southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
-					final @Nullable DefinedRegion northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
+					final @Nullable TestArea southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
+					final @Nullable TestArea northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
 					if (southRegion != null && northRegion != null) {
 						if (this.doBackup(southRegion, northRegion)) {
 							tempWorld = southRegion.getWorld();
-							final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name);
+							final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName() + "/" + this.sequence.getPath(null) + "/" + name).toFile();
 							this.backupSide(tempWorld, southRegion, folder);
 							southRegion.setHasChanged(false);
 							this.backupSide(tempWorld, northRegion, folder);
@@ -68,11 +69,11 @@ public abstract class Backup extends BukkitRunnable {
 						}
 					} else {
 						FileUtils.deleteDirectory(regionFolder);
-						InternalFileUtils.deleteEmptyParent(regionFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestAreas"));
+						InternalFileUtils.deleteEmptyParent(regionFolder, TestUtils.getPluginFolder().resolve("TestAreas").toFile());
 
 						if (backupFolder.exists()) {
 							FileUtils.deleteDirectory(backupFolder);
-							InternalFileUtils.deleteEmptyParent(backupFolder, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
+							InternalFileUtils.deleteEmptyParent(backupFolder, BackupCommand.BACKUP_FOLDER.toFile());
 						}
 					}
 				}
@@ -83,7 +84,7 @@ public abstract class Backup extends BukkitRunnable {
 		}
 	}
 
-	public void backupSide(final @NotNull World tempWorld, final @NotNull DefinedRegion tempRegion, final @NotNull File folder) {
+	public void backupSide(final @NotNull World tempWorld, final @NotNull TestArea tempRegion, final @NotNull File folder) {
 		final @NotNull BukkitWorld bukkitWorld = new BukkitWorld(tempWorld);
 		final @NotNull CuboidRegion region = new CuboidRegion(bukkitWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
@@ -112,7 +113,7 @@ public abstract class Backup extends BukkitRunnable {
 		}
 	}
 
-	public void pasteSide(final @NotNull DefinedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
+	public void pasteSide(final @NotNull TestArea tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 
@@ -136,5 +137,5 @@ public abstract class Backup extends BukkitRunnable {
 
 	protected abstract void systemOutDone();
 
-	protected abstract boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion);
+	protected abstract boolean doBackup(final @NotNull TestArea southRegion, final @NotNull TestArea northRegion);
 }

@@ -6,6 +6,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,23 +24,24 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegionManager {
 
+	public static final @NotNull Path REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions");
 	@Getter
-	private final @NotNull List<DefinedRegion> regions = new GapList<>();
+	private final @NotNull List<TestArea> regions = new GapList<>();
 	@Getter
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
 
 	public void initialize() throws IOException {
-		BaseFileUtils.createFolder(TestUtils.getInstance().getDataFolder(), "Regions");
+		BaseFileUtils.createFolder(RegionManager.REGIONS_FOLDER.toFile());
 
-		RegionManager.initializeDefinedRegions();
+		RegionManager.initializeTestAreas();
 		RegionManager.initializeGlobalRegions();
 	}
 
-	public void initializeDefinedRegions() throws IOException {
+	public void initializeTestAreas() throws IOException {
 		RegionManager.regions.clear();
-		for (final @NotNull File file : BaseFileUtils.listFilesOfType(new File(TestUtils.getInstance().getDataFolder(), "Regions"), "json")) {
-			if (!file.getName().startsWith("__") || !file.getName().endsWith("__")) {
-				RegionManager.regions.add(new DefinedRegion(file));
+		for (final @NotNull File file : BaseFileUtils.listFilesOfType(RegionManager.REGIONS_FOLDER.toFile(), "json")) {
+			if (!file.getName().startsWith("__") && !file.getName().endsWith("__.json")) {
+				RegionManager.regions.add(new TestArea(file));
 			}
 		}
 	}
@@ -47,30 +49,30 @@ public class RegionManager {
 	public void initializeGlobalRegions() {
 		RegionManager.globalRegions.clear();
 		for (final @NotNull World world : Bukkit.getWorlds()) {
-			RegionManager.globalRegions.put(world.getName(), new GlobalRegion(world));
+			RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
 		}
 	}
 
 	public @NotNull GlobalRegion getGlobalRegion(final @NotNull World world) {
-		final @Nullable GlobalRegion globalRegion = RegionManager.globalRegions.get(world.getName());
+		final @Nullable GlobalRegion globalRegion = RegionManager.globalRegions.get("__" + world.getName() + "__");
 		if (globalRegion == null) {
 			RegionManager.initializeGlobalRegions();
-			return Objects.notNull(RegionManager.globalRegions.get(world.getName()));
+			return Objects.notNull(RegionManager.globalRegions.get("__" + world.getName() + "__"));
 		} else {
 			return globalRegion;
 		}
 	}
 
-	public @NotNull List<DefinedRegion> getApplicableRegions(final @NotNull Location location) {
+	public @NotNull List<TestArea> getApplicableRegions(final @NotNull Location location) {
 		return RegionManager.regions.stream().filter(r -> r.inRegion(location)).collect(Collectors.toList());
 	}
 
-	public @Nullable DefinedRegion getRegion(final @NotNull String name) {
-		Optional<DefinedRegion> temp = RegionManager.regions.stream().filter(r -> r.getName().equals(name)).findFirst();
+	public @Nullable TestArea getRegion(final @NotNull String name) {
+		Optional<TestArea> temp = RegionManager.regions.stream().filter(r -> r.getName().equals(name)).findFirst();
 		return temp.orElse(null);
 	}
 
-	public void addRegion(final @NotNull DefinedRegion region) {
+	public void addRegion(final @NotNull TestArea region) {
 		if (!RegionManager.regions.contains(region)) {
 			RegionManager.regions.add(region);
 		}
@@ -81,7 +83,11 @@ public class RegionManager {
 		return RegionManager.getRegion(name) != null;
 	}
 
-	public boolean removeRegion(final @NotNull DefinedRegion region) {
+	public boolean hasGlobalRegion(final @NotNull String name) {
+		return RegionManager.getGlobalRegions().containsKey(name);
+	}
+
+	public boolean removeRegion(final @NotNull TestArea region) {
 		if (RegionManager.regions.remove(region)) {
 			region.deleteRegion();
 			return true;
@@ -95,7 +101,7 @@ public class RegionManager {
 	}
 
 	public void saveRegions() {
-		for (final @NotNull DefinedRegion region : RegionManager.getRegions()) {
+		for (final @NotNull TestArea region : RegionManager.getRegions()) {
 			region.saveData();
 		}
 

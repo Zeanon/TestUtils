@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -120,8 +121,8 @@ public class Mapper {
 	}
 
 	private @NotNull TypeMapper<RegionName> mapRegionName() {
-		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) || !RegionManager.hasRegion(s) ? null : new RegionName(s)
-				, s -> RegionManager.getRegions().stream().map(Region::getName).collect(Collectors.toList()));
+		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) || (!RegionManager.hasRegion(s) && !RegionManager.hasGlobalRegion(s)) ? null : new RegionName(s)
+				, s -> Stream.concat(RegionManager.getRegions().stream().map(Region::getName), RegionManager.getGlobalRegions().values().stream().map(Region::getName)).collect(Collectors.toList()));
 	}
 
 	private @NotNull <T extends Enum<T> & Flag.Value<T>> TypeMapper<Flag.Value<T>> mapFlagValue() {

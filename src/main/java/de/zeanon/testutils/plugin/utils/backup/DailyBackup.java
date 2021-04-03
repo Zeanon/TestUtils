@@ -3,10 +3,11 @@ package de.zeanon.testutils.plugin.utils.backup;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -32,7 +33,7 @@ public class DailyBackup extends Backup {
 					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 					if (toBeDeleted.isPresent()) {
 						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups"));
+						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), BackupCommand.BACKUP_FOLDER.toFile());
 						files = BaseFileUtils.listFolders(dailyBackup);
 					}
 				}
@@ -53,7 +54,7 @@ public class DailyBackup extends Backup {
 	}
 
 	@Override
-	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
+	protected boolean doBackup(final @NotNull TestArea southRegion, final @NotNull TestArea northRegion) {
 		return true;
 	}
 }

@@ -13,21 +13,20 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum STOPLAG implements Flag.Value<STOPLAG> {
 
-	ACTIVE("activate", ChatColor.GREEN + "active", null),
-	INACTIVE("deactivate", ChatColor.RED + "inactive", null);
+	ACTIVE("activate", ChatColor.GREEN + "active"),
+	INACTIVE("deactivate", ChatColor.RED + "inactive");
 
 
+	private static @Nullable STOPLAG[] values;
 	private final @NotNull String descriptor;
 	private final @NotNull String chatValue;
-	private @Nullable STOPLAG[] values;
-
 
 	@Override
 	public STOPLAG[] getValues() {
-		if (this.values == null) {
-			this.values = STOPLAG.values();
+		if (STOPLAG.values == null) {
+			STOPLAG.values = STOPLAG.values(); //NOSONAR
 		}
-		return this.values;
+		return STOPLAG.values;
 	}
 
 	@Override

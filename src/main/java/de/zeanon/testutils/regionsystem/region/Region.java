@@ -4,7 +4,6 @@ import com.sk89q.worldedit.math.BlockVector3;
 import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import java.util.EnumMap;
 import java.util.Map;
@@ -12,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,13 +70,7 @@ public abstract class Region {
 
 
 	public void saveData() {
-		this.jsonFile.setWithoutCheckUseArray(new String[]{"flags"}, this.flags);
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				Region.this.jsonFile.save();
-			}
-		}.runTaskAsynchronously(TestUtils.getInstance());
+		this.jsonFile.save();
 	}
 
 
@@ -88,6 +80,7 @@ public abstract class Region {
 			final @Nullable String flagValue = tempFlagMap.get(flag.toString());
 			this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
 		}
+		this.jsonFile.setUseArrayWithoutCheck(new String[]{"flags"}, this.flags);
 	}
 
 

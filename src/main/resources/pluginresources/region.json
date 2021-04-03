@@ -1,15 +1,4 @@
 {
-  "world": "world",
-  "highest": {
-    "x": 194,
-    "y": 156,
-    "z": 283
-  },
-  "lowest": {
-    "x": 78,
-    "y": 91,
-    "z": 187
-  },
   "flags": {
     "fire": "DENY",
     "item_drops": "DENY",
@@ -18,5 +7,18 @@
     "fall_damage": "ALLOW",
     "damage": "ALLOW",
     "stoplag": "INACTIVE"
+  },
+  "world": "world",
+  "points": {
+    "max": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "min": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   }
 }

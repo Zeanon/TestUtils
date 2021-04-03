@@ -1,5 +1,4 @@
 {
-  "world": "world",
   "flags": {
     "fire": "DENY",
     "item_drops": "DENY",
@@ -8,5 +7,6 @@
     "fall_damage": "ALLOW",
     "damage": "ALLOW",
     "stoplag": "INACTIVE"
-  }
+  },
+  "world": "world"
 }

@@ -10,12 +10,12 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -30,8 +30,8 @@ public class ResetArea {
 
 	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
 		if (regionSide == null) {
-			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable TestArea oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -41,14 +41,8 @@ public class ResetArea {
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'...");
 
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-					final @NotNull File tempFile = new File(TestUtils
-																	.getInstance()
-																	.getDataFolder()
-																	.getAbsolutePath() + "/TestAreas/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
-					final @NotNull File oppositeFile = new File(TestUtils
-																		.getInstance()
-																		.getDataFolder()
-																		.getAbsolutePath() + "/TestAreas/" + oppositeRegion.getName().substring(0, oppositeRegion.getName().length() - 6) + "/" + oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem");
+					final @NotNull File tempFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem").toFile();
+					final @NotNull File oppositeFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem").toFile();
 					if (tempFile.exists()
 						&& oppositeFile.exists()) {
 						ResetArea.pasteSide(tempRegion, editSession, tempFile);
@@ -70,7 +64,7 @@ public class ResetArea {
 				}
 			}
 		} else {
-			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
@@ -78,10 +72,7 @@ public class ResetArea {
 							  + ChatColor.RED + "Pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side...");
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-					final @NotNull File tempFile = new File(TestUtils
-																	.getInstance()
-																	.getDataFolder()
-																	.getAbsolutePath() + "/TestAreas/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/" + tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem");
+					final @NotNull File tempFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem").toFile();
 					if (tempFile.exists()) {
 						ResetArea.pasteSide(tempRegion, editSession, tempFile);
 
@@ -103,7 +94,7 @@ public class ResetArea {
 		}
 	}
 
-	private void pasteSide(final @NotNull DefinedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
+	private void pasteSide(final @NotNull TestArea tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 

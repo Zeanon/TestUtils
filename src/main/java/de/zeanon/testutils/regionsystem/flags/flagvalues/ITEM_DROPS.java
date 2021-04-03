@@ -12,20 +12,19 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum ITEM_DROPS implements Flag.Value<ITEM_DROPS> {
 
-	ALLOW(ChatColor.GREEN + "allow", null),
-	DENY(ChatColor.RED + "deny", null);
+	ALLOW(ChatColor.GREEN + "allow"),
+	DENY(ChatColor.RED + "deny");
 
 
+	private static @Nullable ITEM_DROPS[] values;
 	private final @NotNull String chatValue;
-	private @Nullable ITEM_DROPS[] values;
-
 
 	@Override
 	public ITEM_DROPS[] getValues() {
-		if (this.values == null) {
-			this.values = ITEM_DROPS.values();
+		if (ITEM_DROPS.values == null) {
+			ITEM_DROPS.values = ITEM_DROPS.values(); //NOSONAR
 		}
-		return this.values;
+		return ITEM_DROPS.values;
 	}
 
 	@Override

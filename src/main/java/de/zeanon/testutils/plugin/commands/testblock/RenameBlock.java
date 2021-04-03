@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
@@ -11,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
@@ -24,19 +22,16 @@ import org.jetbrains.annotations.Nullable;
 public class RenameBlock {
 
 	public void execute(final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		final @NotNull Path filePath = Paths.get(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString());
+		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 		final @NotNull File oldFile = filePath.resolve(oldMappedFile.getName() + ".schem").toFile(); //NOSONAR
 		final @NotNull File newFile = filePath.resolve(newMappedFile.getName() + ".schem").toFile(); //NOSONAR
-		if (oldMappedFile.getName().contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "File '" + oldMappedFile.getName() + "' resolution error: Path is not allowed.");
-		} else if (newMappedFile.getName().contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "File '" + newMappedFile.getName() + "' resolution error: Path is not allowed.");
-		} else if (!oldFile.exists() || !oldFile.isDirectory()) {
+		if (!oldFile.exists() || !oldFile.isDirectory()) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.DARK_RED + oldMappedFile + ChatColor.RED + " does not exist.");
-		} else if (confirmation == null) {
+			return;
+		}
+
+		if (confirmation == null) {
 			CommandRequestUtils.addRenameBlockRequest(p.getUniqueId(), oldMappedFile.getName());
 			if (newFile.exists()) {
 				p.sendMessage(GlobalMessageUtils.messageHead
@@ -108,7 +103,7 @@ public class RenameBlock {
 			FileUtils.moveFile(oldFile, newFile);
 
 			final @Nullable String parentName = Objects.notNull(oldFile.getAbsoluteFile().getParentFile().listFiles()).length == 0
-												? InternalFileUtils.deleteEmptyParent(oldFile, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()))
+												? InternalFileUtils.deleteEmptyParent(oldFile, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
 												: null;
 
 			p.sendMessage(GlobalMessageUtils.messageHead

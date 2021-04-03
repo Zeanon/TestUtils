@@ -6,7 +6,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -21,29 +21,27 @@ import org.jetbrains.annotations.Nullable;
 public class Delete {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (mappedFile.getName().contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-		} else if (confirmation == null) {
-			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
+		if (confirmation == null) {
+			final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
+				return;
+			}
+
+			final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
+			if (folder.exists() && folder.isDirectory()) {
+				CommandRequestUtils.addDeleteBackupRequest(p.getUniqueId(), mappedFile.getName(), tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
+				GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+													  ChatColor.RED + "Do you really want to delete "
+													  + ChatColor.DARK_RED + mappedFile.getName()
+													  + ChatColor.RED + "?",
+													  "/backup delete " + mappedFile.getName() + " -confirm",
+													  "/backup delete " + mappedFile.getName() + " -deny", p);
 			} else {
-				final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + p.getWorld().getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + "/manual/" + p.getUniqueId() + "/" + mappedFile.getName());
-				if (folder.exists() && folder.isDirectory()) {
-					CommandRequestUtils.addDeleteBackupRequest(p.getUniqueId(), mappedFile.getName(), tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
-					GlobalMessageUtils.sendBooleanMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
-														  ChatColor.RED + "Do you really want to delete "
-														  + ChatColor.DARK_RED + mappedFile.getName()
-														  + ChatColor.RED + "?",
-														  "/backup delete " + mappedFile.getName() + " -confirm",
-														  "/backup delete " + mappedFile.getName() + " -deny", p);
-				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
-				}
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
 			}
 		} else {
 			if (confirmation.confirm()) { //NOSONAR
@@ -51,12 +49,12 @@ public class Delete {
 				if (region != null) {
 					CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
 
-					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
-					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
+					final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(region);
+					final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(region);
 					if (tempRegion == null || otherRegion == null) {
 						Delete.sendNotApplicableRegion(p);
 					} else {
-						final @NotNull File folder = new File(TestUtils.getInstance().getDataFolder(), "Backups/" + p.getWorld().getName() + "/" + region + "/manual/" + p.getUniqueId() + "/" + mappedFile.getName());
+						final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(region).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
 						if (folder.exists() && folder.isDirectory()) {
 							try {
 								FileUtils.deleteDirectory(folder);

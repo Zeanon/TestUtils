@@ -12,20 +12,19 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum FIRE implements Flag.Value<FIRE> {
 
-	ALLOW(ChatColor.GREEN + "allow", null),
-	DENY(ChatColor.RED + "deny", null);
+	ALLOW(ChatColor.GREEN + "allow"),
+	DENY(ChatColor.RED + "deny");
 
 
+	private static @Nullable FIRE[] values;
 	private final @NotNull String chatValue;
-	private @Nullable FIRE[] values;
-
 
 	@Override
 	public FIRE[] getValues() {
-		if (this.values == null) {
-			this.values = FIRE.values();
+		if (FIRE.values == null) {
+			FIRE.values = FIRE.values(); //NOSONAR
 		}
-		return this.values;
+		return FIRE.values;
 	}
 
 	@Override

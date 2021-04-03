@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
@@ -10,6 +9,7 @@ import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,14 +21,15 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteBlock {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		final @NotNull File file = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString() + "/" + mappedFile + ".schem");
-		if (mappedFile.getName().contains("./")) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-		} else if (!file.exists() || !file.isDirectory()) {
+		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
+		final @NotNull File file = filePath.resolve(mappedFile + ".schem").toFile();
+		if (!file.exists() || !file.isDirectory()) {
 			p.sendMessage(GlobalMessageUtils.messageHead
 						  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " does not exist.");
-		} else if (confirmation == null) {
+			return;
+		}
+
+		if (confirmation == null) {
 			CommandRequestUtils.addDeleteBlockRequest(p.getUniqueId(), mappedFile.getName());
 			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
 												  + ChatColor.RED + "Do you really want to delete "
@@ -36,35 +37,36 @@ public class DeleteBlock {
 												  + ChatColor.RED + "?",
 												  "/tu deleteblock " + mappedFile.getName() + " -confirm",
 												  "/tu deleteblock " + mappedFile.getName() + " -deny", p);
-		} else {
-			if (CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), mappedFile.getName())) {
-				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
-				if (confirmation.confirm()) { //NOSONAR
-					try {
-						Files.delete(file.toPath());
-						final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
-															? InternalFileUtils.deleteEmptyParent(file, new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/TestBlocks/" + p.getUniqueId().toString()))
-															: null;
+			return;
+		}
 
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was deleted successfully.");
+		if (CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), mappedFile.getName())) {
+			CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
+			if (confirmation.confirm()) { //NOSONAR
+				try {
+					Files.delete(file.toPath());
+					final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
+														? InternalFileUtils.deleteEmptyParent(file, filePath.toFile())
+														: null;
 
-						if (parentName != null) {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "Folder "
-										  + ChatColor.DARK_RED + parentName
-										  + ChatColor.RED + " was deleted successfully due to being empty.");
-						}
-					} catch (IOException e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
-									  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " could not be deleted, for further information please see [console].");
-						e.printStackTrace();
-					}
-				} else {
-					CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
 					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was not deleted.");
+								  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was deleted successfully.");
+
+					if (parentName != null) {
+						p.sendMessage(GlobalMessageUtils.messageHead
+									  + ChatColor.RED + "Folder "
+									  + ChatColor.DARK_RED + parentName
+									  + ChatColor.RED + " was deleted successfully due to being empty.");
+					}
+				} catch (IOException e) {
+					p.sendMessage(GlobalMessageUtils.messageHead
+								  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " could not be deleted, for further information please see [console].");
+					e.printStackTrace();
 				}
+			} else {
+				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
+				p.sendMessage(GlobalMessageUtils.messageHead
+							  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was not deleted.");
 			}
 		}
 	}

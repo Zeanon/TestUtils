@@ -7,14 +7,13 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +24,8 @@ import org.jetbrains.annotations.Nullable;
 public class List {
 
 	public void execute(final @Nullable BackupMode backupMode, final @NotNull Player p) {
-		final @Nullable World world = p.getWorld();
-		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 		new BukkitRunnable() {
 			@Override
@@ -36,7 +34,7 @@ public class List {
 					GlobalMessageUtils.sendNotApplicableRegion(p);
 				} else {
 					try {
-						final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
+						final @NotNull File regionFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).toFile();
 						if (!regionFolder.exists()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
@@ -90,12 +88,13 @@ public class List {
 											  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 											  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 							} else {
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage("\n"
+											  + GlobalMessageUtils.messageHead
 											  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
 								for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
-									Backup.sendLoadBackupMessage(file.getKey().getName(),
-																 file.getValue(),
-																 p);
+									BackupCommand.sendLoadBackupMessage(file.getKey().getName(),
+																		file.getValue(),
+																		p);
 								}
 							}
 						}

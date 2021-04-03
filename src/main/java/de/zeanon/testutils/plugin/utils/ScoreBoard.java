@@ -6,7 +6,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -30,8 +30,8 @@ public class ScoreBoard {
 		if (!ScoreBoard.scoreBoards.contains(p.getUniqueId().toString())) {
 			ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
 
-			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion != null && otherRegion != null) {
 				ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 			} else {
@@ -42,8 +42,8 @@ public class ScoreBoard {
 				@Override
 				public void run() {
 					if (Bukkit.getOnlinePlayers().contains(p)) {
-						final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-						final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+						final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
+						final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p);
 						final @NotNull Scoreboard scoreboard = p.getScoreboard();
 						if (tempRegion != null && otherRegion != null) {
 							ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion, scoreboard);
@@ -60,7 +60,7 @@ public class ScoreBoard {
 		}
 	}
 
-	private void setScoreBoard(final @NotNull Player p, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion) {
+	private void setScoreBoard(final @NotNull Player p, final @NotNull TestArea tempRegion, final @NotNull TestArea otherRegion) {
 		final @NotNull Scoreboard scoreboard = ScoreBoard.scoreboardManager.getNewScoreboard();
 
 		final @NotNull Objective infoBoard = scoreboard.registerNewObjective("testareainfo",
@@ -204,7 +204,7 @@ public class ScoreBoard {
 	}
 
 
-	private void updateScoreBoard(final @NotNull Player p, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion, final @NotNull Scoreboard scoreboard) {
+	private void updateScoreBoard(final @NotNull Player p, final @NotNull TestArea tempRegion, final @NotNull TestArea otherRegion, final @NotNull Scoreboard scoreboard) {
 		if (scoreboard.getObjective("testareainfo") != null) {
 			final @NotNull String areaname = tempRegion.getName().substring(0, tempRegion.getName().length() - 6);
 			final boolean stoplagOther = otherRegion.get(Flag.STOPLAG) == STOPLAG.ACTIVE;

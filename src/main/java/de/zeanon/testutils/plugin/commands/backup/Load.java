@@ -2,7 +2,6 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -10,13 +9,12 @@ import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,20 +24,19 @@ import org.jetbrains.annotations.Nullable;
 public class Load {
 
 	public void execute(final @Nullable RegionSide regionSide, final @Nullable MappedFile mappedFile, final @Nullable BackupMode backupMode, final @NotNull Player p) {
-		final @Nullable World world = p.getWorld();
-		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
-		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
+		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
+		final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 
 		if (tempRegion == null || otherRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 		} else {
 			try {
-				final @NotNull File regionFolder = new File(TestUtils.getInstance().getDataFolder().getAbsolutePath() + "/Backups/" + world.getName() + "/" + tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
-				if (regionFolder.exists()) {
+				final @NotNull File regionFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).toFile();
+				if (regionFolder.exists() && regionFolder.isDirectory()) {
 					final @Nullable File backupFile;
 
 					if (mappedFile == null) {
-						final @NotNull Optional<File> possibleFirst = Backup.getLatest(regionFolder, p.getUniqueId().toString(), backupMode == null ? BackupMode.NONE : backupMode);
+						final @NotNull Optional<File> possibleFirst = BackupCommand.getLatest(regionFolder, p.getUniqueId().toString(), backupMode == null ? BackupMode.NONE : backupMode);
 
 						if (possibleFirst.isPresent()) {
 							backupFile = possibleFirst.get();
@@ -50,8 +47,8 @@ public class Load {
 							return;
 						}
 					} else {
-						backupFile = Backup.getFile(regionFolder, mappedFile.getName(), backupMode == null ? BackupMode.NONE : backupMode, p);
-						if (backupFile == null || !backupFile.exists()) {
+						backupFile = BackupCommand.getFile(regionFolder, mappedFile.getName(), backupMode == null ? BackupMode.NONE : backupMode, p);
+						if (backupFile == null || !backupFile.exists() || !backupFile.isDirectory()) {
 							p.sendMessage(GlobalMessageUtils.messageHead
 										  + ChatColor.RED + "There is no backup named '" + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + "' for '"
 										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");

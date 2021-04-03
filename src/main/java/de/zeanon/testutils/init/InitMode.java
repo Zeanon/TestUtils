@@ -5,13 +5,14 @@ import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.commandframework.SWCommand;
-import de.zeanon.testutils.plugin.commands.backup.Backup;
+import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.commands.region.Region;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
 import de.zeanon.testutils.plugin.commands.testutils.SleepModeTestUtils;
-import de.zeanon.testutils.plugin.commands.testutils.TestUtils;
+import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.commands.tnt.TNT;
 import de.zeanon.testutils.plugin.handlers.EventListener;
 import de.zeanon.testutils.plugin.handlers.WakeupListener;
@@ -121,11 +122,11 @@ public class InitMode {
 		Mapper.initialize();
 
 		InitMode.registeredCommands.add(new TNT());
-		InitMode.registeredCommands.add(new Backup());
+		InitMode.registeredCommands.add(new BackupCommand());
 		InitMode.registeredCommands.add(new Region());
 		InitMode.registeredCommands.add(new Stoplag());
 		InitMode.registeredCommands.add(new TestBlock());
-		InitMode.registeredCommands.add(new TestUtils());
+		InitMode.registeredCommands.add(new TestUtilsCommand());
 	}
 
 	public void unregisterCommands() {
@@ -137,7 +138,7 @@ public class InitMode {
 	private void loadConfigs() {
 		@Nullable Throwable cause = null;
 		try {
-			InitMode.config = ThunderFileManager.thunderConfig(de.zeanon.testutils.TestUtils.getInstance().getDataFolder(), "config")
+			InitMode.config = ThunderFileManager.thunderConfig(TestUtils.getPluginFolder(), "config")
 												.fromResource("resources/config.tf")
 												.reloadSetting(Reload.INTELLIGENT)
 												.commentSetting(Comment.PRESERVE)

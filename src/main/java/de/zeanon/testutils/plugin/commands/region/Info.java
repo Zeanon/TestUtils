@@ -2,9 +2,9 @@ package de.zeanon.testutils.plugin.commands.region;
 
 
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
-import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.Region;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
+import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -18,7 +18,7 @@ public class Info {
 
 	public void execute(final @Nullable RegionName regionName, final @NotNull Player p) {
 		if (regionName == null) {
-			final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation());
+			final @NotNull List<TestArea> regions = RegionManager.getApplicableRegions(p.getLocation());
 			if (regions.isEmpty()) {
 				Info.sendRegionInfo(RegionManager.getGlobalRegion(p.getWorld()), p);
 			} else if (regions.size() == 1) {
@@ -30,7 +30,7 @@ public class Info {
 			if (RegionManager.isGlobalRegion(regionName.getName())) {
 				Info.sendRegionInfo(RegionManager.getGlobalRegion(p.getWorld()), p);
 			} else {
-				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
+				final @Nullable TestArea region = RegionManager.getRegion(regionName.getName());
 				if (region != null) {
 					Info.sendRegionInfo(region, p);
 				} else {
