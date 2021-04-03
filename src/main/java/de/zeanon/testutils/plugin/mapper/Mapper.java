@@ -3,9 +3,9 @@ package de.zeanon.testutils.plugin.mapper;
 import de.zeanon.testutils.commandframework.SWCommandUtils;
 import de.zeanon.testutils.commandframework.TypeMapper;
 import de.zeanon.testutils.plugin.utils.enums.*;
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import de.zeanon.testutils.plugin.utils.region.Region;
-import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.region.Region;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -120,7 +120,7 @@ public class Mapper {
 	}
 
 	private @NotNull TypeMapper<RegionName> mapRegionName() {
-		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) ? null : new RegionName(s)
+		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) || !RegionManager.hasRegion(s) ? null : new RegionName(s)
 				, s -> RegionManager.getRegions().stream().map(Region::getName).collect(Collectors.toList()));
 	}
 
@@ -130,11 +130,9 @@ public class Mapper {
 			public Flag.Value<T> map(final @NotNull String[] previousArguments, final @NotNull String s) {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
-					//noinspection rawtypes
-					final @NotNull Enum[] values = (Enum[]) flag.getValueType().getEnumConstants(); //NOSONAR
-					//noinspection rawtypes
-					for (final @NotNull Enum tempEnum : values) { //NOSONAR
-						if ((tempEnum.name()).equalsIgnoreCase(s)) {
+					final Flag.Value<?>[] values = flag.getValues(); //NOSONAR
+					for (final Flag.Value<?> tempEnum : values) { //NOSONAR
+						if ((tempEnum.getValue().name()).equalsIgnoreCase(s)) {
 							// noinspection unchecked
 							return (T) tempEnum;
 						}
@@ -147,9 +145,8 @@ public class Mapper {
 			public List<String> tabCompletes(CommandSender commandSender, String[] previousArguments, String s) {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
-					//noinspection rawtypes
-					final @NotNull Enum[] values = (Enum[]) flag.getValueType().getEnumConstants(); //NOSONAR
-					return Arrays.stream(values).map(Enum::toString).map(String::toLowerCase).collect(Collectors.toList());
+					final Flag.Value<?>[] values = flag.getValues(); //NOSONAR
+					return Arrays.stream(values).map(Flag.Value::getName).collect(Collectors.toList());
 				} else {
 					return null;
 				}

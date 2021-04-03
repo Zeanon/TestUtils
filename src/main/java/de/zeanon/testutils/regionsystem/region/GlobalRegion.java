@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.region;
+package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.testutils.TestUtils;

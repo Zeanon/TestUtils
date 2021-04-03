@@ -1,32 +1,34 @@
-package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
+package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
 
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.EnumSet;
-import java.util.Set;
+import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @Getter
 @AllArgsConstructor
 public enum STOPLAG implements Flag.Value<STOPLAG> {
 
-	ACTIVE("activate", ChatColor.GREEN + "active"),
-	INACTIVE("deactivate", ChatColor.RED + "inactive");
+	ACTIVE("activate", ChatColor.GREEN + "active", null),
+	INACTIVE("deactivate", ChatColor.RED + "inactive", null);
 
-
-	@Getter
-	private static final @NotNull Set<STOPLAG> values;
-
-	static {
-		values = EnumSet.allOf(STOPLAG.class);
-	}
 
 	private final @NotNull String descriptor;
 	private final @NotNull String chatValue;
+	private @Nullable STOPLAG[] values;
+
+
+	@Override
+	public STOPLAG[] getValues() {
+		if (this.values == null) {
+			this.values = STOPLAG.values();
+		}
+		return this.values;
+	}
 
 	@Override
 	public STOPLAG getValue() {

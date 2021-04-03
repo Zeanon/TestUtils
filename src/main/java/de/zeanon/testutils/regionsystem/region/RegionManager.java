@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.region;
+package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
@@ -76,6 +76,7 @@ public class RegionManager {
 		}
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean hasRegion(final @NotNull String name) {
 		return RegionManager.getRegion(name) != null;
 	}

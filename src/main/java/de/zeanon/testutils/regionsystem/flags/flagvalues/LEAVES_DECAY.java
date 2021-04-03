@@ -1,30 +1,32 @@
-package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
+package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.EnumSet;
-import java.util.Set;
+import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @Getter
 @AllArgsConstructor
 public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 
-	ALLOW(ChatColor.GREEN + "allow"),
-	DENY(ChatColor.RED + "deny");
+	ALLOW(ChatColor.GREEN + "allow", null),
+	DENY(ChatColor.RED + "deny", null);
 
-
-	@Getter
-	private static final @NotNull Set<LEAVES_DECAY> values;
-
-	static {
-		values = EnumSet.allOf(LEAVES_DECAY.class);
-	}
 
 	private final @NotNull String chatValue;
+	private @Nullable LEAVES_DECAY[] values;
+
+
+	@Override
+	public LEAVES_DECAY[] getValues() {
+		if (this.values == null) {
+			this.values = LEAVES_DECAY.values();
+		}
+		return this.values;
+	}
 
 	@Override
 	public LEAVES_DECAY getValue() {

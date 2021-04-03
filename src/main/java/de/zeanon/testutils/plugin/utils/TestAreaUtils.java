@@ -1,8 +1,8 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
-import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class TestAreaUtils {
 
 	public @Nullable DefinedRegion getRegion(final @NotNull Player p) {
-		List<DefinedRegion> regions = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation());
+		List<DefinedRegion> regions = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation());
 		if (regions.isEmpty()) {
 			return null;
 		} else {
@@ -43,8 +43,8 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
-		return temp.map(region -> de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
+		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		return temp.map(region -> de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
 	}
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
@@ -67,12 +67,12 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getNorthRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
 			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("north")) {
 				return temp.get();
 			} else {
-				return de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "north");
+				return de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "north");
 			}
 		} else {
 			return null;
@@ -80,12 +80,12 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getSouthRegion(final @NotNull Player p) {
-		final Optional<DefinedRegion> temp = de.zeanon.testutils.plugin.utils.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		final Optional<DefinedRegion> temp = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
 			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("south")) {
 				return temp.get();
 			} else {
-				return de.zeanon.testutils.plugin.utils.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "south");
+				return de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "south");
 			}
 		} else {
 			return null;

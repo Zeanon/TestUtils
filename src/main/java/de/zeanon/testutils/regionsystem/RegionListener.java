@@ -1,12 +1,12 @@
-package de.zeanon.testutils.plugin.handlers;
+package de.zeanon.testutils.regionsystem;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.*;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
-import de.zeanon.testutils.plugin.utils.region.GlobalRegion;
-import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.GlobalRegion;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;

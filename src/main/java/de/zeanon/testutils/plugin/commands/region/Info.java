@@ -1,11 +1,10 @@
 package de.zeanon.testutils.plugin.commands.region;
 
 
-import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
-import de.zeanon.testutils.plugin.utils.region.Region;
-import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.Region;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
@@ -35,7 +34,7 @@ public class Info {
 				if (region != null) {
 					Info.sendRegionInfo(region, p);
 				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
 								  + ChatColor.RED + "The given region does not exist.");
 				}
 			}
@@ -43,28 +42,46 @@ public class Info {
 	}
 
 	private void sendRegionInfo(final @NotNull Region region, final @NotNull Player p) {
-		p.sendMessage(GlobalMessageUtils.messageHead
-					  + ChatColor.RED + "=== Infos for '" + ChatColor.DARK_RED + region.getName() + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
+		p.sendMessage("\n"
+					  + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
+					  + ChatColor.RED + "=== Infos for '" + ChatColor.DARK_RED + region.getName() + ChatColor.RED + "' === " + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD);
 
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
 					  + ChatColor.RED + "World: "
 					  + ChatColor.DARK_RED + region.getWorld().getName());
 
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
 					  + ChatColor.RED + "Type: "
 					  + ChatColor.DARK_RED + region.getType());
 
 
-		final @NotNull StringBuilder flags = new StringBuilder(GlobalMessageUtils.messageHead);
-		flags.append(ChatColor.RED).append("Flags:").append(ChatColor.BLACK).append(" | ");
-		region.getFlags().forEach((flag, value) ->
-										  flags.append(ChatColor.DARK_RED)
-											   .append(flag.toString())
-											   .append(ChatColor.DARK_GRAY)
-											   .append(" : ")
-											   .append(value.getChatValue())
-											   .append(ChatColor.BLACK)
-											   .append(" | "));
-		p.sendMessage(flags.toString());
+		final @NotNull StringBuilder flags = new StringBuilder();
+		final boolean[] lineBreak = {false};
+		region.getFlags().forEach((flag, value) -> {
+			if (!lineBreak[0]) {
+				flags.append(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD)
+					 .append(ChatColor.RED)
+					 .append("Flags: ")
+					 .append(ChatColor.BLACK)
+					 .append("[");
+			}
+
+			flags.append(ChatColor.DARK_RED)
+				 .append(flag.toString())
+				 .append(ChatColor.DARK_GRAY)
+				 .append(" : ")
+				 .append(value.getChatValue());
+
+			if (lineBreak[0]) {
+				flags.append(ChatColor.BLACK)
+					 .append("]\n");
+			} else {
+				flags.append(ChatColor.BLACK)
+					 .append(" | ");
+			}
+
+			lineBreak[0] = !lineBreak[0];
+		});
+		p.sendMessage(lineBreak[0] ? (flags.substring(0, flags.length() - 5) + ChatColor.BLACK + "]") : flags.toString());
 	}
 }

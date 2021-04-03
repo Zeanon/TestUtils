@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.utils.backup;
 
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;

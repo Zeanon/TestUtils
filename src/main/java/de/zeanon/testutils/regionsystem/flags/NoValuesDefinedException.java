@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.enums.flags;
+package de.zeanon.testutils.regionsystem.flags;
 
 public class NoValuesDefinedException extends RuntimeException {
 

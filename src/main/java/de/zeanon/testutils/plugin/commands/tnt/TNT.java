@@ -5,8 +5,8 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.TNTMode;
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -74,21 +74,21 @@ public class TNT extends SWCommand {
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				tempRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT) tempRegion.get(Flag.TNT), tntMode));
-				otherRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT) otherRegion.get(Flag.TNT), tntMode));
+				tempRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.regionsystem.flags.flagvalues.TNT) tempRegion.get(Flag.TNT), tntMode));
+				otherRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.regionsystem.flags.flagvalues.TNT) otherRegion.get(Flag.TNT), tntMode));
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempRegion.inRegion(tempPlayer.getLocation())) {
-						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 											   ? TNT.getNowActivated("your")
 											   : TNT.getNowDeactivated("your"));
-						tempPlayer.sendMessage(otherRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+						tempPlayer.sendMessage(otherRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 											   ? TNT.getNowActivated("the other")
 											   : TNT.getNowDeactivated("the other"));
 					} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
-						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 											   ? TNT.getNowActivated("the other")
 											   : TNT.getNowDeactivated("the other"));
-						tempPlayer.sendMessage(otherRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+						tempPlayer.sendMessage(otherRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 											   ? TNT.getNowActivated("your")
 											   : TNT.getNowDeactivated("your"));
 						//TODO Obviously not that nice
@@ -102,19 +102,19 @@ public class TNT extends SWCommand {
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				tempRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT) tempRegion.get(Flag.TNT), tntMode));
+				tempRegion.set(Flag.TNT, TNTMode.parse((de.zeanon.testutils.regionsystem.flags.flagvalues.TNT) tempRegion.get(Flag.TNT), tntMode));
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempPlayer == p) {
-						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+						tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 											   ? TNT.getNowActivated(regionSide.getName())
 											   : TNT.getNowDeactivated(regionSide.getName()));
 					} else {
 						if (tempRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+							tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 												   ? TNT.getNowActivated("your")
 												   : TNT.getNowDeactivated("your"));
 						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.TNT.ALLOW
+							tempPlayer.sendMessage(tempRegion.get(Flag.TNT) == de.zeanon.testutils.regionsystem.flags.flagvalues.TNT.ALLOW
 												   ? TNT.getNowActivated("the other")
 												   : TNT.getNowDeactivated("the other"));
 						}

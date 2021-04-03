@@ -2,11 +2,11 @@ package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import de.zeanon.testutils.plugin.utils.enums.flags.flagvalues.*;
-import de.zeanon.testutils.plugin.utils.region.DefinedRegion;
-import de.zeanon.testutils.plugin.utils.region.Region;
-import de.zeanon.testutils.plugin.utils.region.RegionManager;
+import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.Region;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;

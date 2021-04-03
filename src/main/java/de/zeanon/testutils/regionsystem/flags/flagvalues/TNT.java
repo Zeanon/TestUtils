@@ -1,9 +1,7 @@
-package de.zeanon.testutils.plugin.utils.enums.flags.flagvalues;
+package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
 import de.zeanon.testutils.plugin.utils.enums.TNTMode;
-import de.zeanon.testutils.plugin.utils.enums.flags.Flag;
-import java.util.EnumSet;
-import java.util.Set;
+import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
@@ -15,18 +13,21 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public enum TNT implements Flag.Value<TNT> {
 
-	ALLOW(ChatColor.GREEN + "allow"),
-	DENY(ChatColor.RED + "deny");
+	ALLOW(ChatColor.GREEN + "allow", null),
+	DENY(ChatColor.RED + "deny", null);
 
-
-	@Getter
-	private static final @NotNull Set<TNT> values;
-
-	static {
-		values = EnumSet.allOf(TNT.class);
-	}
 
 	private final @NotNull String chatValue;
+	private @Nullable TNT[] values;
+
+
+	@Override
+	public TNT[] getValues() {
+		if (this.values == null) {
+			this.values = TNT.values();
+		}
+		return this.values;
+	}
 
 	@Override
 	public TNT getValue() {
