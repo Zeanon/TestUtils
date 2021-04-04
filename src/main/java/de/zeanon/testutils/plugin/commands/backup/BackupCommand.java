@@ -1,10 +1,10 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
+import de.steamwar.commandframework.SWCommand;
+import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.commandframework.SWCommand;
-import de.zeanon.testutils.commandframework.TypeMapper;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;

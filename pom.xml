@@ -161,6 +161,23 @@
                             <goal>install-file</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <id>install-commandframework</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>de.steamwar</groupId>
+                            <artifactId>commandframework</artifactId>
+                            <version>1.0.0</version>
+                            <file>src/main/resources/dependencies/CommandFramework.jar
+                            </file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -180,15 +197,19 @@
                     <relocations>
                         <relocation>
                             <pattern>de.zeanon.thunderfilemanager</pattern>
-                            <shadedPattern>de.zeanon.schemmanager.shaded.thunderfilemanager</shadedPattern>
+                            <shadedPattern>de.zeanon.testutils.shaded.thunderfilemanager</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.zeanon.storagemanagercore</pattern>
-                            <shadedPattern>de.zeanon.schemmanager.shaded.storagemanagercore</shadedPattern>
+                            <shadedPattern>de.zeanon.testutils.shaded.storagemanagercore</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.zeanon.jsonfilemanager</pattern>
-                            <shadedPattern>de.zeanon.schemmanager.shaded.jsonfilemanager</shadedPattern>
+                            <shadedPattern>de.zeanon.testutils.shaded.jsonfilemanager</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>de.steamwar.commandframework</pattern>
+                            <shadedPattern>de.zeanon.testutils.shaded.commandframework</shadedPattern>
                         </relocation>
                     </relocations>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -288,6 +309,14 @@
             <groupId>de.zeanon</groupId>
             <artifactId>jsonfilemanager</artifactId>
             <version>1.1.97</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- CommandFramework-->
+        <dependency>
+            <groupId>de.steamwar</groupId>
+            <artifactId>commandframework</artifactId>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
 

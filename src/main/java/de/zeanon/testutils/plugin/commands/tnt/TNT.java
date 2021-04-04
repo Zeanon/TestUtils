@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.commands.tnt;
 
-import de.zeanon.testutils.commandframework.SWCommand;
+import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;

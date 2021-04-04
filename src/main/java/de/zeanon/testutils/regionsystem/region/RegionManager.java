@@ -24,14 +24,17 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegionManager {
 
-	public static final @NotNull Path REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions");
+	public static final @NotNull Path DEFINED_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Defined");
+	public static final @NotNull Path GLOBAL_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Global");
 	@Getter
 	private final @NotNull List<TestArea> regions = new GapList<>();
 	@Getter
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
 
 	public void initialize() throws IOException {
-		BaseFileUtils.createFolder(RegionManager.REGIONS_FOLDER.toFile());
+		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER.toFile());
+		BaseFileUtils.createFolder(RegionManager.GLOBAL_REGIONS_FOLDER.toFile());
+
 
 		RegionManager.initializeTestAreas();
 		RegionManager.initializeGlobalRegions();
@@ -39,7 +42,7 @@ public class RegionManager {
 
 	public void initializeTestAreas() throws IOException {
 		RegionManager.regions.clear();
-		for (final @NotNull File file : BaseFileUtils.listFilesOfType(RegionManager.REGIONS_FOLDER.toFile(), "json")) {
+		for (final @NotNull File file : BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json")) {
 			if (!file.getName().startsWith("__") && !file.getName().endsWith("__.json")) {
 				RegionManager.regions.add(new TestArea(file));
 			}

@@ -1,6 +1,6 @@
 package de.zeanon.testutils.plugin.commands.region;
 
-import de.zeanon.testutils.commandframework.SWCommand;
+import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.RegionManager;

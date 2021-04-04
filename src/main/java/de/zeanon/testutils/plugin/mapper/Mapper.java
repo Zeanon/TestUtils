@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.mapper;
 
-import de.zeanon.testutils.commandframework.SWCommandUtils;
-import de.zeanon.testutils.commandframework.TypeMapper;
+import de.steamwar.commandframework.SWCommandUtils;
+import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.testutils.plugin.utils.enums.*;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.Region;

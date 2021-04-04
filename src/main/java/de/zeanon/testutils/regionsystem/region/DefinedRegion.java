@@ -30,7 +30,7 @@ public class DefinedRegion extends Region {
 	}
 
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {
-		super(JsonFileManager.jsonFile(RegionManager.REGIONS_FOLDER.resolve(name))
+		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name))
 							 .fromResource("resources/region.json")
 							 .create(),
 			  name,

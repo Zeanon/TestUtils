@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testutils;
 
-import de.zeanon.testutils.commandframework.SWCommand;
-import de.zeanon.testutils.commandframework.TypeMapper;
+import de.steamwar.commandframework.SWCommand;
+import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

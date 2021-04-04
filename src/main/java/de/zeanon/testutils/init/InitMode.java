@@ -1,12 +1,12 @@
 package de.zeanon.testutils.init;
 
+import de.steamwar.commandframework.SWCommand;
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.commands.region.RegionCommand;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
