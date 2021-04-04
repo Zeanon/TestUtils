@@ -20,21 +20,9 @@ public class DefinedRegion extends Region {
 							 .fromResource("resources/region.json")
 							 .create());
 
-		if (this.jsonFile.hasKeyUseArray("points", "max")) {
-			this.maxPoint = this.getPoint("max");
-		} else {
-			this.maxPoint = new Point(this.jsonFile.getIntUseArray("highest", "x"), this.jsonFile.getIntUseArray("highest", "y"), this.jsonFile.getIntUseArray("highest", "z"));
-			this.jsonFile.setWithoutCheck("highest", null);
-			this.setPoint(this.maxPoint, "max");
-		}
+		this.maxPoint = this.getPoint("max");
 
-		if (this.jsonFile.hasKeyUseArray("points", "min")) {
-			this.minPoint = this.getPoint("min");
-		} else {
-			this.minPoint = new Point(this.jsonFile.getIntUseArray("lowest", "x"), this.jsonFile.getIntUseArray("lowest", "y"), this.jsonFile.getIntUseArray("lowest", "z"));
-			this.jsonFile.setWithoutCheck("lowest", null);
-			this.setPoint(this.minPoint, "min");
-		}
+		this.minPoint = this.getPoint("min");
 
 		this.saveData();
 

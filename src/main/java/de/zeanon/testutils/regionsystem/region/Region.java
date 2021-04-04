@@ -42,12 +42,9 @@ public abstract class Region {
 	}
 
 	public void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
-		if (this.get(flagType).equals(value)) {
-			return;
+		if (this.flags.put(flagType, value) != value) {
+			this.saveData();
 		}
-
-		this.flags.put(flagType, value);
-		this.saveData();
 	}
 
 	public Flag.Value<?> get(final @NotNull Flag flagType) {
