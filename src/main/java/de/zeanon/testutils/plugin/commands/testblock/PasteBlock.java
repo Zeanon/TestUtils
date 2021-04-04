@@ -11,6 +11,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
@@ -28,6 +29,12 @@ import org.jetbrains.annotations.Nullable;
 public class PasteBlock {
 
 	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable TestArea tempRegion, final @NotNull String area) {
+		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
 			return;
@@ -57,11 +64,11 @@ public class PasteBlock {
 							.build();
 
 					Operations.complete(operation);
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' has been set on " + area + " side.");
 				}
 			} catch (IOException | WorldEditException e) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
 				e.printStackTrace();
 			}

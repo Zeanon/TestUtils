@@ -13,18 +13,18 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-public class Region extends SWCommand {
+public class RegionCommand extends SWCommand {
 
 
 	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "RegionManager" + ChatColor.DARK_GRAY + "] ";
-	private static final @NotNull String FLAGS_HELP_MESSAGE = Region.getFlagsHelpMessage();
+	private static final @NotNull String FLAGS_HELP_MESSAGE = RegionCommand.getFlagsHelpMessage();
 
-	public Region() {
+	public RegionCommand() {
 		super("region", true, "rg");
 	}
 
 	public static void sendMultipleRegions(final @NotNull List<TestArea> regions, final @NotNull Player p) {
-		p.sendMessage(Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You are standing in multiple regions, please define which one to use: "
 					  + regions.stream().map(r -> ChatColor.DARK_RED + r.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));
 	}
@@ -50,7 +50,7 @@ public class Region extends SWCommand {
 			final Optional<Flag> flag = Flag.getFlags().stream().filter(f -> args[1].equalsIgnoreCase(f.name())).findFirst();
 			if (flag.isPresent()) {
 				if (!RegionManager.hasRegion(args[0])) {
-					p.sendMessage(Region.MESSAGE_HEAD
+					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED
 								  + "'"
 								  + ChatColor.DARK_RED
@@ -72,7 +72,7 @@ public class Region extends SWCommand {
 			}
 		}
 
-		p.sendMessage(Region.FLAGS_HELP_MESSAGE);
+		p.sendMessage(RegionCommand.FLAGS_HELP_MESSAGE);
 	}
 
 	@Register("flag")
@@ -111,7 +111,7 @@ public class Region extends SWCommand {
 	}
 
 	private static @NotNull String getFlagsHelpMessage() {
-		return Region.MESSAGE_HEAD
+		return RegionCommand.MESSAGE_HEAD
 			   + ChatColor.RED
 			   + "Applicable flags are: "
 			   + Flag.getFlags()

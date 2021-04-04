@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.commands.backup;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.Backup;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
@@ -30,8 +31,14 @@ public class Save {
 
 	public void execute(final @Nullable MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
 		if (ConfigUtils.getInt("Backups", "manual") == 0) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Manual backups are disabled.");
+			return;
+		}
+
+		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
+						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;
 		}
 
@@ -51,7 +58,7 @@ public class Save {
 			final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(name).toFile();
 			if (folder.exists()) {
 				CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(BackupCommand.MESSAGE_HEAD
 							  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
 				GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
 													  "/backup save " + name + " -confirm",
@@ -61,7 +68,7 @@ public class Save {
 			}
 		} else {
 			if (mappedFile == null) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(BackupCommand.MESSAGE_HEAD
 							  + ChatColor.RED + "You need to specify the file you want to overwrite.");
 				return;
 			}
@@ -81,7 +88,7 @@ public class Save {
 						Save.save(tempWorld, tempRegion, otherRegion, mappedFile.getName(), folder, p);
 					}
 				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(BackupCommand.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not overwritten.");
 				}
 			}
@@ -89,7 +96,7 @@ public class Save {
 	}
 
 	private void save(final @NotNull World tempWorld, final @NotNull TestArea tempRegion, final @NotNull TestArea otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "Registering Backup for '"
 					  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 					  + ChatColor.RED + "'...");
@@ -97,7 +104,7 @@ public class Save {
 
 		BackupScheduler.getMANUAL_BACKUP().backupSide(tempWorld, otherRegion, folder);
 
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You registered a new backup for '"
 					  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 					  + ChatColor.RED + "' named '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
@@ -114,7 +121,7 @@ public class Save {
 						while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
 							final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 							if (toBeDeleted.isPresent()) {
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups, deleting '" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' due to it being the oldest."); //NOSONAR
 								FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
 								InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), BackupCommand.BACKUP_FOLDER.toFile());

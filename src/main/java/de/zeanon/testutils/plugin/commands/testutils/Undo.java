@@ -16,12 +16,12 @@ public class Undo {
 	public void undo(final @NotNull Player p) {
 		try (final @Nullable EditSession tempSession = SessionFactory.getUndoSession(p)) {
 			if (tempSession == null) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Nothing left to undo.");
 			} else {
 				tempSession.undo(tempSession);
 				SessionFactory.registerRedoSession(p, tempSession);
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You undid your last action.");
 			}
 		}

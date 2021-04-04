@@ -33,13 +33,9 @@ import org.jetbrains.annotations.Nullable;
 public class RegisterBlock {
 
 	public void execute(final @Nullable MappedFile mappedFile, final @NotNull Player p) {
-		if (mappedFile != null && InitMode.forbiddenFileName(mappedFile.getName())) {
-			p.sendMessage(GlobalMessageUtils.messageHead
-						  + ChatColor.RED + "'"
-						  + ChatColor.DARK_RED + mappedFile + ChatColor.RED
-						  + "' is not allowed due to '"
-						  + ChatColor.DARK_RED + mappedFile + ChatColor.RED
-						  + "' being a sub-command of /testblock.");
+		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;
 		}
 
@@ -50,7 +46,7 @@ public class RegisterBlock {
 			return;
 		}
 
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 					  + ChatColor.RED + "Registering new testblock as '"
 					  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile)
 					  + ChatColor.RED + "'...");
@@ -89,11 +85,11 @@ public class RegisterBlock {
 				writer.write(clipboard);
 			}
 
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "You registered a new testblock with the name '"
 						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
 		} catch (WorldEditException | IOException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
 						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
 			e.printStackTrace();

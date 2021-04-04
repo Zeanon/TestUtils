@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -25,13 +26,25 @@ import org.jetbrains.annotations.Nullable;
 public class RenameFolder {
 
 	public void execute(final @NotNull MappedFolder oldMappedFolder, final @NotNull MappedFolder newMappedFolder, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
+		if (oldMappedFolder.getName().contains("./") || oldMappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(oldMappedFolder.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Folder '" + oldMappedFolder.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
+		if (newMappedFolder.getName().contains("./") || newMappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(newMappedFolder.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Folder '" + newMappedFolder.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		try {
 			final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 			final @NotNull File directoryOld = filePath.resolve(oldMappedFolder.getName()).toFile(); //NOSONAR
 			final @NotNull File directoryNew = filePath.resolve(newMappedFolder.getName()).toFile(); //NOSONAR
 
 			if (!directoryOld.exists() || !directoryOld.isDirectory()) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + oldMappedFolder + ChatColor.RED + " does not exist.");
 				return;
 			}
@@ -39,10 +52,10 @@ public class RenameFolder {
 			if (confirmation == null) {
 				CommandRequestUtils.addRenameFolderRequest(p.getUniqueId(), oldMappedFolder.getName());
 				if (directoryNew.exists() && directoryNew.isDirectory()) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + newMappedFolder + ChatColor.RED + " already exists, the folders will be merged.");
 
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "These blocks already exist in " + ChatColor.DARK_RED + newMappedFolder + ChatColor.RED + ", they will be overwritten.");
 					int id = 0;
 					for (final @NotNull File oldFile : BaseFileUtils.listFilesOfType(directoryOld, true, "schem")) {
@@ -58,7 +71,7 @@ public class RenameFolder {
 
 								final @NotNull String name;
 								name = newFile.getName();
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + name
 											  + ChatColor.DARK_GRAY + " [" + ChatColor.GRAY + shortenedRelativePath + ChatColor.DARK_GRAY + "]");
 								id++;
@@ -66,7 +79,7 @@ public class RenameFolder {
 						}
 					}
 
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "These folders already exist in " + ChatColor.GREEN + newMappedFolder + ChatColor.RED + ", they will be merged.");
 					int i = 0;
 					for (final @NotNull File oldFolder : BaseFileUtils.listFolders(directoryOld, true)) {
@@ -76,7 +89,7 @@ public class RenameFolder {
 
 								final @NotNull String name = newFolder.getName();
 								final @NotNull String shortenedRelativePath = FilenameUtils.separatorsToUnix(filePath.resolve(newMappedFolder.getName()).toRealPath().relativize(newFolder.toPath().toRealPath()).toString());
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + name
 											  + ChatColor.DARK_GRAY + " [" + ChatColor.GRAY + shortenedRelativePath + ChatColor.DARK_GRAY + "]");
 								i++;
@@ -84,21 +97,21 @@ public class RenameFolder {
 						}
 					}
 					if (id > 0 && i > 0) {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There are already " + ChatColor.DARK_PURPLE + id + ChatColor.RED
 									  + " blocks and " + ChatColor.DARK_PURPLE + i + ChatColor.RED
 									  + " folders with the same name in " + ChatColor.GREEN + newMappedFolder + ChatColor.RED + ".");
 					} else if (id > 0) {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There are already " + ChatColor.DARK_PURPLE + id + ChatColor.RED
 									  + " blocks with the same name in " + ChatColor.GREEN + newMappedFolder + ChatColor.RED + ".");
 					} else if (i > 0) {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There are already " + ChatColor.DARK_PURPLE + i + ChatColor.RED
 									  + " folders with the same name in " + ChatColor.GREEN + newMappedFolder + ChatColor.RED + ".");
 					}
 				}
-				GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
+				GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.MESSAGE_HEAD
 													  + ChatColor.RED + "Do you really want to rename "
 													  + ChatColor.DARK_RED + oldMappedFolder.getName()
 													  + ChatColor.RED + "?",
@@ -113,23 +126,23 @@ public class RenameFolder {
 							if (RenameFolder.deepMerge(directoryOld, directoryNew)) {
 								RenameFolder.deleteParents(directoryOld, oldMappedFolder.getName(), p);
 							} else {
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + oldMappedFolder + ChatColor.RED + " could not be renamed, for further information please see [console].");
 							}
 						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
+							p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 										  + ChatColor.DARK_RED + oldMappedFolder + ChatColor.RED + " does not exist.");
 						}
 					} else {
 						CommandRequestUtils.removeRenameFolderRequest(p.getUniqueId());
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.DARK_RED + oldMappedFolder + ChatColor.RED + " was not renamed.");
 					}
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "An Error occurred while getting the filepaths for the blocks and folders, for further information please see [console].");
 		}
 	}
@@ -158,7 +171,7 @@ public class RenameFolder {
 	}
 
 	public void usage(final @NotNull Player p) {
-		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.messageHead
+		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.RED + "Usage: ",
 											  RenameFolder.usageMessage(),
 											  RenameFolder.usageHoverMessage(),
@@ -173,14 +186,14 @@ public class RenameFolder {
 										  ? InternalFileUtils.deleteEmptyParent(directory, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
 										  : null;
 
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.GREEN + arg + ChatColor.RED + " was renamed successfully.");
 			if (parentName != null) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Folder " + ChatColor.GREEN + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 			}
 		} catch (IOException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.GREEN + arg + ChatColor.RED + " could not be renamed, for further information please see [console].");
 			e.printStackTrace();
 			CommandRequestUtils.removeRenameFolderRequest(p.getUniqueId());

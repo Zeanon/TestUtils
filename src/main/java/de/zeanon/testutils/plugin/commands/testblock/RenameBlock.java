@@ -1,6 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
@@ -22,11 +23,23 @@ import org.jetbrains.annotations.Nullable;
 public class RenameBlock {
 
 	public void execute(final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
+		if (oldMappedFile.getName().contains("./") || oldMappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(oldMappedFile.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Block '" + oldMappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
+		if (newMappedFile.getName().contains("./") || newMappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(newMappedFile.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Block '" + newMappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 		final @NotNull File oldFile = filePath.resolve(oldMappedFile.getName() + ".schem").toFile(); //NOSONAR
 		final @NotNull File newFile = filePath.resolve(newMappedFile.getName() + ".schem").toFile(); //NOSONAR
 		if (!oldFile.exists() || !oldFile.isDirectory()) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + oldMappedFile + ChatColor.RED + " does not exist.");
 			return;
 		}
@@ -34,10 +47,10 @@ public class RenameBlock {
 		if (confirmation == null) {
 			CommandRequestUtils.addRenameBlockRequest(p.getUniqueId(), oldMappedFile.getName());
 			if (newFile.exists()) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + newMappedFile + ChatColor.RED + " already exists, the file will be overwritten.");
 			}
-			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
+			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.MESSAGE_HEAD
 												  + ChatColor.RED + "Do you really want to rename "
 												  + ChatColor.DARK_RED + oldMappedFile.getName()
 												  + ChatColor.RED + "?",
@@ -51,12 +64,12 @@ public class RenameBlock {
 					if (oldFile.exists()) {
 						RenameBlock.moveFile(p, oldMappedFile.getName(), oldFile, newFile);
 					} else {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.DARK_RED + oldMappedFile + ChatColor.RED + " does not exist.");
 					}
 				} else {
 					CommandRequestUtils.removeRenameBlockRequest(p.getUniqueId());
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + oldMappedFile + ChatColor.RED + " was not renamed.");
 				}
 			}
@@ -86,7 +99,7 @@ public class RenameBlock {
 	}
 
 	public void usage(final @NotNull Player p) {
-		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.messageHead
+		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.RED + "Usage: ",
 											  RenameBlock.usageMessage(),
 											  RenameBlock.usageHoverMessage(),
@@ -106,15 +119,15 @@ public class RenameBlock {
 												? InternalFileUtils.deleteEmptyParent(oldFile, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
 												: null;
 
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + fileName + ChatColor.RED + " was renamed successfully.");
 
 			if (parentName != null) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Folder " + ChatColor.DARK_RED + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 			}
 		} catch (IOException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + fileName + ChatColor.RED + " could not be renamed, for further information please see [console].");
 			e.printStackTrace();
 		}

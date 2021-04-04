@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.commands.testutils;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.commandframework.TypeMapper;
@@ -108,7 +107,7 @@ public class TestUtilsCommand extends SWCommand {
 	@Register(value = {"count"}, help = true)
 	public void countHelp(final @NotNull Player p, final @NotNull String... args) {
 		if (args.length == 1) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Missing argument for "
 						  + ChatColor.YELLOW + "<"
 						  + ChatColor.DARK_RED + "block"
@@ -132,7 +131,7 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 	@Register("registerreset")
-	public void noArsgRegisterReset(final @NotNull Player p) {
+	public void noArgsRegisterReset(final @NotNull Player p) {
 		RegisterReset.execute(p);
 	}
 
@@ -198,16 +197,6 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("registerblock")
 	public void oneArgRegisterBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		RegisterBlock.execute(mappedFile, p);
 	}
 
@@ -218,31 +207,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("delblock")
 	public void oneArgDelBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteBlock.execute(mappedFile, null, p);
 	}
 
 	@Register("delblock")
 	public void twoArgsDelBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteBlock.execute(mappedFile, confirmation, p);
 	}
 
@@ -253,31 +222,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("deleteblock")
 	public void oneArgDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteBlock.execute(mappedFile, null, p);
 	}
 
 	@Register("deleteblock")
 	public void twoArgsDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteBlock.execute(mappedFile, confirmation, p);
 	}
 
@@ -288,31 +237,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("delfolder")
 	public void oneArgDelFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteFolder.execute(mappedFolder, null, p);
 	}
 
 	@Register("delfolder")
 	public void twoArgsDelFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteFolder.execute(mappedFolder, confirmation, p);
 	}
 
@@ -323,31 +252,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("deletefolder")
 	public void oneArgDeleteFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteFolder.execute(mappedFolder, null, p);
 	}
 
 	@Register("deletefolder")
 	public void twoArgsDeleteFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		DeleteFolder.execute(mappedFolder, confirmation, p);
 	}
 
@@ -358,43 +267,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("renameblock")
 	public void twoArgsRenameBlock(final @NotNull Player p, final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(oldMappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(oldMappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + oldMappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(newMappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(oldMappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + newMappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		RenameBlock.execute(oldMappedFile, newMappedFile, null, p);
 	}
 
 	@Register("renameblock")
 	public void threeArgsRenameBlock(final @NotNull Player p, final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(oldMappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(oldMappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + oldMappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(newMappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(oldMappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + newMappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		RenameBlock.execute(oldMappedFile, newMappedFile, confirmation, p);
 	}
 
@@ -405,31 +282,11 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("renamefolder")
 	public void twoArgsRenameFolder(final @NotNull Player p, final @NotNull MappedFolder oldMappedFolder, final @NotNull MappedFolder newMappedFolder) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(oldMappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(oldMappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + oldMappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		RenameFolder.execute(oldMappedFolder, newMappedFolder, null, p);
 	}
 
 	@Register("renamefolder")
 	public void threeArgsRenameFolder(final @NotNull Player p, final @NotNull MappedFolder oldMappedFolder, final @NotNull MappedFolder newMappedFolder, final @NotNull CommandConfirmation confirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(newMappedFolder.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(newMappedFolder.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + newMappedFolder.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-
 		RenameFolder.execute(oldMappedFolder, newMappedFolder, confirmation, p);
 	}
 
@@ -465,50 +322,7 @@ public class TestUtilsCommand extends SWCommand {
 
 	@ClassMapper(value = MappedFile.class, local = true)
 	private @NotNull TypeMapper<MappedFile> mapFile() {
-		return new TypeMapper<MappedFile>() {
-			@Override
-			public MappedFile map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
-					return null;
-				} else {
-					return new MappedFile(s);
-				}
-			}
-
-			@Override
-			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
-				if (commandSender instanceof Player) {
-					final @NotNull Player p = (Player) commandSender;
-					final int lastIndex = arg.lastIndexOf("/");
-					final @NotNull String path;
-					if (lastIndex < 0) {
-						path = "";
-					} else {
-						path = "/" + arg.substring(0, lastIndex);
-					}
-					try {
-						final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
-						final @NotNull Path basePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
-						if (filePath.startsWith(basePath)) {
-							final @NotNull List<String> results = new LinkedList<>();
-							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
-								final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
-								if (!fileName.equalsIgnoreCase("default")) {
-									results.add(fileName);
-								}
-							}
-							return results;
-						} else {
-							return null;
-						}
-					} catch (IOException e) {
-						return null;
-					}
-				} else {
-					return null;
-				}
-			}
-		};
+		return TestBlock.getMappedFileTypeMapper();
 	}
 
 	@ClassMapper(value = MappedFolder.class, local = true)
@@ -528,12 +342,8 @@ public class TestUtilsCommand extends SWCommand {
 				if (commandSender instanceof Player) {
 					final @NotNull Player p = (Player) commandSender;
 					final int lastIndex = arg.lastIndexOf("/");
-					final @NotNull String path;
-					if (lastIndex < 0) {
-						path = "";
-					} else {
-						path = "/" + arg.substring(0, lastIndex);
-					}
+					final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
+
 					try {
 						final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
 						final @NotNull Path basePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();

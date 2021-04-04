@@ -36,7 +36,7 @@ public class List {
 					try {
 						final @NotNull File regionFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).toFile();
 						if (!regionFolder.exists()) {
-							p.sendMessage(GlobalMessageUtils.messageHead
+							p.sendMessage(BackupCommand.MESSAGE_HEAD
 										  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 						} else {
@@ -84,13 +84,13 @@ public class List {
 							}
 
 							if (files.isEmpty()) {
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 											  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 							} else {
 								p.sendMessage("\n"
-											  + GlobalMessageUtils.messageHead
-											  + ChatColor.RED + "=== Backups for '" + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' === " + GlobalMessageUtils.messageHead);
+											  + BackupCommand.MESSAGE_HEAD
+											  + ChatColor.RED + "=== " + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + " === " + BackupCommand.MESSAGE_HEAD);
 								for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
 									BackupCommand.sendLoadBackupMessage(file.getKey().getName(),
 																		file.getValue(),
@@ -99,7 +99,7 @@ public class List {
 							}
 						}
 					} catch (IOException e) {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "There has been an error, listing the backups for '"
 									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 						e.printStackTrace();

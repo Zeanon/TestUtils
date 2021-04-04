@@ -8,7 +8,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
-import de.zeanon.testutils.plugin.commands.region.Region;
+import de.zeanon.testutils.plugin.commands.region.RegionCommand;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
 import de.zeanon.testutils.plugin.commands.testutils.SleepModeTestUtils;
@@ -123,7 +123,7 @@ public class InitMode {
 
 		InitMode.registeredCommands.add(new TNT());
 		InitMode.registeredCommands.add(new BackupCommand());
-		InitMode.registeredCommands.add(new Region());
+		InitMode.registeredCommands.add(new RegionCommand());
 		InitMode.registeredCommands.add(new Stoplag());
 		InitMode.registeredCommands.add(new TestBlock());
 		InitMode.registeredCommands.add(new TestUtilsCommand());

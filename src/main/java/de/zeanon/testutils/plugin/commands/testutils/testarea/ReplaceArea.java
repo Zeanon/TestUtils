@@ -48,7 +48,7 @@ public class ReplaceArea {
 				try {
 					sourceBlocks.add(Objects.notNull(BlockTypes.get(source.name().toLowerCase())).getDefaultState().toBaseBlock());
 				} catch (ObjectNullException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED
 								  + "There has been an error, replacing '"
 								  + ChatColor.DARK_RED
@@ -66,7 +66,7 @@ public class ReplaceArea {
 				try {
 					editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination).name().toLowerCase())).getDefaultState().toBaseBlock());
 				} catch (ObjectNullException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED
 								  + "There has been an error, replacing to '"
 								  + ChatColor.DARK_RED
@@ -83,7 +83,7 @@ public class ReplaceArea {
 
 				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 					if (tempPlayer == p) {
-						tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+						tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											   + ChatColor.RED
 											   + "The "
 											   + ChatColor.DARK_RED
@@ -98,7 +98,7 @@ public class ReplaceArea {
 											   + "'.");
 					} else {
 						if (tempRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+							tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 												   + ChatColor.RED
 												   + "The "
 												   + ChatColor.DARK_RED
@@ -112,7 +112,7 @@ public class ReplaceArea {
 												   + ChatColor.RED
 												   + "'.");
 						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(GlobalMessageUtils.messageHead
+							tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 												   + ChatColor.RED
 												   + "The "
 												   + ChatColor.DARK_RED
@@ -130,7 +130,7 @@ public class ReplaceArea {
 				}
 			}
 		} catch (WorldEditException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "There has been an error, replacing the "
 						  + ChatColor.DARK_RED

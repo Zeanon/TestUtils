@@ -1,6 +1,7 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -21,6 +22,12 @@ import org.jetbrains.annotations.Nullable;
 public class Delete {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
+		if (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName())) {
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
+						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		if (confirmation == null) {
 			final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(p);
 			final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(p);
@@ -40,7 +47,7 @@ public class Delete {
 													  "/backup delete " + mappedFile.getName() + " -confirm",
 													  "/backup delete " + mappedFile.getName() + " -deny", p);
 			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(BackupCommand.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
 			}
 		} else {
@@ -59,19 +66,19 @@ public class Delete {
 							try {
 								FileUtils.deleteDirectory(folder);
 							} catch (IOException e) {
-								p.sendMessage(GlobalMessageUtils.messageHead
+								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see [console].");
 								e.printStackTrace();
 							}
 						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
+							p.sendMessage(BackupCommand.MESSAGE_HEAD
 										  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
 						}
 					}
 				}
 			} else {
 				CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(BackupCommand.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not deleted.");
 			}
 		}
@@ -97,7 +104,7 @@ public class Delete {
 	}
 
 	public void usage(final @NotNull Player p) {
-		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.messageHead
+		GlobalMessageUtils.sendSuggestMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "Usage: ",
 											  Delete.usageMessage(),
 											  Delete.usageHoverMessage(),
@@ -105,7 +112,7 @@ public class Delete {
 	}
 
 	private void sendNotApplicableRegion(final @NotNull Player p) {
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "The given region does not exist.");
 	}
 }

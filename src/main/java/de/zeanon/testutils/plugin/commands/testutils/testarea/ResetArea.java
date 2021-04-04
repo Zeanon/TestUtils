@@ -36,7 +36,7 @@ public class ResetArea {
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'...");
 
@@ -48,16 +48,16 @@ public class ResetArea {
 						ResetArea.pasteSide(tempRegion, editSession, tempFile);
 						ResetArea.pasteSide(oppositeRegion, editSession, oppositeFile);
 
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "You pasted the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					} else {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There is no reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					}
 				} catch (Exception e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error, pasting the reset for '"
 								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					e.printStackTrace();
@@ -68,7 +68,7 @@ public class ResetArea {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side...");
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
@@ -76,16 +76,16 @@ public class ResetArea {
 					if (tempFile.exists()) {
 						ResetArea.pasteSide(tempRegion, editSession, tempFile);
 
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "You pasted the reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side.");
 					} else {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There is no reset for '"
 									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					}
 				} catch (Exception e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error, pasting the reset for '"
 								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 					e.printStackTrace();

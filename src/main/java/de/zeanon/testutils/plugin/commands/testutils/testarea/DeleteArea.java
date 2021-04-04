@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -19,11 +20,17 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteArea {
 
 	public void execute(final @NotNull AreaName name, final @NotNull Player p) {
+		if (name.getName().contains("./") || name.getName().contains(".\\") || InitMode.forbiddenFileName(name.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Area '" + name.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		if (DeleteArea.remove(name.getName())) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "You deleted the testarea '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
 		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Testarea '" + ChatColor.DARK_RED + name + ChatColor.RED + "' does not exist and thus could not be deleted.");
 		}
 	}

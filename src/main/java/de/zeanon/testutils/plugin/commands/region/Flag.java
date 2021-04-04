@@ -19,7 +19,7 @@ public class Flag {
 
 	public void execute(final @Nullable RegionName regionName, final @NotNull de.zeanon.testutils.regionsystem.flags.Flag flag, final @Nullable de.zeanon.testutils.regionsystem.flags.Flag.Value<?> value, final @NotNull Player p) {
 		if (value == null) {
-			p.sendMessage(Region.MESSAGE_HEAD
+			p.sendMessage(RegionCommand.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "Applicable values for '"
 						  + ChatColor.DARK_RED
@@ -40,7 +40,7 @@ public class Flag {
 					regions.get(0).set(flag, value);
 					Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getChatValue(), p);
 				} else {
-					de.zeanon.testutils.plugin.commands.region.Region.sendMultipleRegions(regions, p);
+					RegionCommand.sendMultipleRegions(regions, p);
 				}
 			} else {
 				if (RegionManager.isGlobalRegion(regionName.getName())) {
@@ -52,7 +52,7 @@ public class Flag {
 						region.set(flag, value);
 						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 					} else {
-						p.sendMessage(Region.MESSAGE_HEAD
+						p.sendMessage(RegionCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "The given region does not exist.");
 					}
 				}
@@ -61,7 +61,7 @@ public class Flag {
 	}
 
 	private void sendFlagSet(final @NotNull String regionName, final @NotNull String flag, final @NotNull String value, final @NotNull Player p) {
-		p.sendMessage(Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You have set '"
 					  + ChatColor.DARK_RED + flag
 					  + ChatColor.RED + "' in '"
@@ -73,7 +73,7 @@ public class Flag {
 
 	@SuppressWarnings("unused")
 	private void sendFlagSetFailed(final @NotNull String flag, final @NotNull Player p) {
-		p.sendMessage(Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "The flag '"
 					  + ChatColor.DARK_RED + flag
 					  + ChatColor.RED + "' is not valid.");

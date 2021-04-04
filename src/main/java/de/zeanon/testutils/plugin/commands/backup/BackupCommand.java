@@ -1,14 +1,12 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.commandframework.SWCommand;
 import de.zeanon.testutils.commandframework.TypeMapper;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
-import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
@@ -35,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BackupCommand extends SWCommand {
 
+	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "Backups" + ChatColor.DARK_GRAY + "] ";
 	public static final Path BACKUP_FOLDER = TestUtils.getPluginFolder().resolve("Backups");
 
 	public BackupCommand() {
@@ -164,10 +163,10 @@ public class BackupCommand extends SWCommand {
 	@Register(help = true)
 	public void help(final @NotNull Player p, final @NotNull String... args) {
 		if (args.length == 0) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Missing argument.");
 		} else {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Unknown argument '" + ChatColor.DARK_RED + args[args.length - 1] + ChatColor.RED + "'.");
 		}
 	}
@@ -184,15 +183,6 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"load"})
 	public void oneArgLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(null, mappedFile, null, p);
 	}
 
@@ -203,15 +193,6 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"load"})
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, null, p);
 	}
 
@@ -222,15 +203,6 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"load"})
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(null, mappedFile, backupMode, p);
 	}
 
@@ -241,113 +213,41 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"load"})
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(null, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, null, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
 	@Register({"load"})
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
@@ -358,29 +258,11 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"save"})
 	public void oneArgSave(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Save.execute(mappedFile, null, p);
 	}
 
 	@Register({"save"})
 	public void twoArgsSave(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Save.execute(mappedFile, commandConfirmation, p);
 	}
 
@@ -392,29 +274,11 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"del"})
 	public void oneArgDel(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Delete.execute(mappedFile, null, p);
 	}
 
 	@Register({"del"})
 	public void twoArgsDel(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Delete.execute(mappedFile, commandConfirmation, p);
 	}
 
@@ -426,29 +290,11 @@ public class BackupCommand extends SWCommand {
 
 	@Register({"delete"})
 	public void oneArgDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Delete.execute(mappedFile, null, p);
 	}
 
 	@Register({"delete"})
 	public void twoArgsDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Delete.execute(mappedFile, commandConfirmation, p);
 	}
 
@@ -466,49 +312,22 @@ public class BackupCommand extends SWCommand {
 
 	@Register(value = {"search"}, help = true)
 	public void searchHelp(final @NotNull Player p, final @NotNull String... args) {
-		p.sendMessage(GlobalMessageUtils.messageHead
+		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "Missing sequence to search for.");
 	}
 
 	@Register({"search"})
 	public void oneArgSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Search.execute(mappedFile, null, p);
 	}
 
 	@Register({"search"})
 	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Search.execute(mappedFile, backupMode, p);
 	}
 
 	@Register({"search"})
 	public void twoArgsSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
-		try {
-			if (BaseFileUtils.isChildOf(BackupCommand.BACKUP_FOLDER.resolve(mappedFile.getName()), BackupCommand.BACKUP_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
 		Search.execute(mappedFile, backupMode, p);
 	}
 
@@ -595,18 +414,13 @@ public class BackupCommand extends SWCommand {
 					final @Nullable TestArea region = TestAreaUtils.getRegion(p);
 					if (region != null && previousArguments.length > 0) {
 						final int lastIndex = arg.lastIndexOf("/");
-						final @NotNull String path;
-						if (lastIndex < 0) {
-							path = "";
-						} else {
-							path = "/" + arg.substring(0, lastIndex);
-						}
+						final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
 
 						if (previousArguments[0].equalsIgnoreCase("load")) {
 							if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-manual"))) {
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
@@ -622,8 +436,8 @@ public class BackupCommand extends SWCommand {
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-hourly"))) {
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly").toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
@@ -639,8 +453,8 @@ public class BackupCommand extends SWCommand {
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-daily"))) {
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily").toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
@@ -656,8 +470,8 @@ public class BackupCommand extends SWCommand {
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-startup"))) {
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup").toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
@@ -674,8 +488,8 @@ public class BackupCommand extends SWCommand {
 							} else {
 								final @NotNull java.util.List<String> results = new LinkedList<>();
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 									if (filePath.startsWith(basePath)) {
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
@@ -689,8 +503,8 @@ public class BackupCommand extends SWCommand {
 								}
 
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/hourly").toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
@@ -704,8 +518,8 @@ public class BackupCommand extends SWCommand {
 								}
 
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/daily").toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
@@ -719,8 +533,8 @@ public class BackupCommand extends SWCommand {
 								}
 
 								try {
-									final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + path).toRealPath();
-									final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/automatic/startup" + p.getUniqueId()).toRealPath();
+									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").resolve(path).toRealPath();
+									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
@@ -736,8 +550,8 @@ public class BackupCommand extends SWCommand {
 							}
 						} else if (previousArguments[0].equalsIgnoreCase("save")) {
 							try {
-								final @NotNull Path filePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId() + path).toRealPath();
-								final @NotNull Path basePath = TestUtils.getPluginFolder().resolve("Backups/" + region.getName().substring(0, region.getName().length() - 6) + "/manual/" + p.getUniqueId()).toRealPath();
+								final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
+								final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 								if (filePath.startsWith(basePath)) {
 									final @NotNull java.util.List<String> results = new LinkedList<>();
 									for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {

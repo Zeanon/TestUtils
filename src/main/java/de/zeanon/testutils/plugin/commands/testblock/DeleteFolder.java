@@ -1,6 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
@@ -21,17 +22,23 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteFolder {
 
 	public void execute(final @NotNull MappedFolder mappedFolder, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
+		if (mappedFolder.getName().contains("./") || mappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFolder.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Folder '" + mappedFolder.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 		final @NotNull File file = filePath.resolve(mappedFolder.getName()).toFile();
 		if (!file.exists() || !file.isDirectory()) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " does not exist.");
 			return;
 		}
 
 		if (confirmation == null) {
 			CommandRequestUtils.addDeleteBlockRequest(p.getUniqueId(), mappedFolder.getName());
-			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.messageHead
+			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.MESSAGE_HEAD
 												  + ChatColor.RED + "Do you really want to delete "
 												  + ChatColor.DARK_RED + mappedFolder.getName()
 												  + ChatColor.RED + "?",
@@ -49,23 +56,23 @@ public class DeleteFolder {
 														? InternalFileUtils.deleteEmptyParent(file, filePath.toFile())
 														: null;
 
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " was deleted successfully.");
 
 					if (parentName != null) {
-						p.sendMessage(GlobalMessageUtils.messageHead
+						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "Folder "
 									  + ChatColor.GREEN + parentName
 									  + ChatColor.RED + " was deleted successfully due to being empty.");
 					}
 				} catch (IOException e) {
-					p.sendMessage(GlobalMessageUtils.messageHead
+					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " could not be deleted, for further information please see [console].");
 					e.printStackTrace();
 				}
 			} else {
 				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " was not deleted.");
 			}
 		}
@@ -91,7 +98,7 @@ public class DeleteFolder {
 	}
 
 	public void usage(final @NotNull Player p) {
-		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.messageHead
+		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.RED + "Usage: ",
 											  DeleteFolder.usageMessage(),
 											  DeleteFolder.usageHoverMessage(),

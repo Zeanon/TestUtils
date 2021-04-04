@@ -47,11 +47,11 @@ public class InvertArea {
 
 				editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
 
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
 			}
 		} catch (WorldEditException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
 			e.printStackTrace();
 		}

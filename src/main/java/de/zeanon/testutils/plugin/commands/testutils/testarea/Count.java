@@ -53,7 +53,7 @@ public class Count {
 			final int amount = editSession.countBlocks(region, blocks);
 
 
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "The amount of '"
 						  + ChatColor.DARK_RED
@@ -67,7 +67,7 @@ public class Count {
 						  + area
 						  + " side.");
 		} catch (ObjectNullException e) {
-			p.sendMessage(GlobalMessageUtils.messageHead
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "There has been an error, counting the amount of '"
 						  + ChatColor.DARK_RED

@@ -167,6 +167,7 @@ public class RegionListener implements Listener {
 		RegionListener.regionHasChanged(event.getBlock().getLocation());
 	}
 
+	@SuppressWarnings("DuplicatedCode")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockExplode(final @NotNull BlockExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
@@ -176,7 +177,6 @@ public class RegionListener implements Listener {
 		}
 
 		final @NotNull List<TestArea> applicableRegions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		//noinspection DuplicatedCode
 		if (applicableRegions.isEmpty() && globalRegion.get(Flag.TNT) == TNT.DENY) {
 			event.blockList().clear();
 			return;
@@ -221,6 +221,7 @@ public class RegionListener implements Listener {
 		RegionListener.regionHasChanged(event.getBlock().getLocation());
 	}
 
+	@SuppressWarnings("DuplicatedCode")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityExplode(final @NotNull EntityExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getLocation().getWorld()));
@@ -230,7 +231,6 @@ public class RegionListener implements Listener {
 		}
 
 		final @NotNull List<TestArea> applicableRegions = RegionManager.getApplicableRegions(event.getLocation());
-		//noinspection DuplicatedCode
 		if (applicableRegions.isEmpty() && globalRegion.get(Flag.TNT) == TNT.DENY) {
 			event.blockList().clear();
 			return;

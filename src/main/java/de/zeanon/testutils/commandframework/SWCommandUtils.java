@@ -76,7 +76,7 @@ public class SWCommandUtils {
 				return GameMode.ADVENTURE;
 			}
 			throw new SecurityException();
-		}, s -> Arrays.asList("s", "survival", "0", "c", "creative", "1", "sp", "specator", "3", "a", "adventure", "2")));
+		}, s -> Arrays.asList("s", "survival", "0", "c", "creative", "1", "sp", "spectator", "3", "a", "adventure", "2")));
 	}
 
 	static {

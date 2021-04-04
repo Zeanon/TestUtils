@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
+import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -24,71 +25,78 @@ import org.jetbrains.annotations.Nullable;
 public class Load {
 
 	public void execute(final @Nullable RegionSide regionSide, final @Nullable MappedFile mappedFile, final @Nullable BackupMode backupMode, final @NotNull Player p) {
+		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
+						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
+
 		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
 		final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 
 		if (tempRegion == null || otherRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
-		} else {
-			try {
-				final @NotNull File regionFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).toFile();
-				if (regionFolder.exists() && regionFolder.isDirectory()) {
-					final @Nullable File backupFile;
+			return;
+		}
 
-					if (mappedFile == null) {
-						final @NotNull Optional<File> possibleFirst = BackupCommand.getLatest(regionFolder, p.getUniqueId().toString(), backupMode == null ? BackupMode.NONE : backupMode);
+		try {
+			final @NotNull File regionFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).toFile();
+			if (regionFolder.exists() && regionFolder.isDirectory()) {
+				final @Nullable File backupFile;
 
-						if (possibleFirst.isPresent()) {
-							backupFile = possibleFirst.get();
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no backup for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-							return;
-						}
+				if (mappedFile == null) {
+					final @NotNull Optional<File> possibleFirst = BackupCommand.getLatest(regionFolder, p.getUniqueId().toString(), backupMode == null ? BackupMode.NONE : backupMode);
+
+					if (possibleFirst.isPresent()) {
+						backupFile = possibleFirst.get();
 					} else {
-						backupFile = BackupCommand.getFile(regionFolder, mappedFile.getName(), backupMode == null ? BackupMode.NONE : backupMode, p);
-						if (backupFile == null || !backupFile.exists() || !backupFile.isDirectory()) {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "There is no backup named '" + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + "' for '"
-										  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-							return;
-						}
-					}
-
-					try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-						if (regionSide != null) {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
-
-							BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
-						} else {
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
-
-							BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
-							BackupScheduler.getMANUAL_BACKUP().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
-
-							p.sendMessage(GlobalMessageUtils.messageHead
-										  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
-						}
-					} catch (WorldEditException | IOException e) {
-						e.printStackTrace();
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "There is no backup for '"
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+						return;
 					}
 				} else {
-					p.sendMessage(GlobalMessageUtils.messageHead
-								  + ChatColor.RED + "There is no backup for '"
-								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+					backupFile = BackupCommand.getFile(regionFolder, mappedFile.getName(), backupMode == null ? BackupMode.NONE : backupMode, p);
+					if (backupFile == null || !backupFile.exists() || !backupFile.isDirectory()) {
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "There is no backup named '" + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + "' for '"
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+						return;
+					}
 				}
-			} catch (IOException e) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "There has been an error, pasting the backup for '"
+
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+					if (regionSide != null) {
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
+
+						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
+
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
+					} else {
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
+
+						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
+						BackupScheduler.getMANUAL_BACKUP().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
+
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
+					}
+				} catch (WorldEditException | IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				p.sendMessage(BackupCommand.MESSAGE_HEAD
+							  + ChatColor.RED + "There is no backup for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				e.printStackTrace();
 			}
+		} catch (IOException e) {
+			p.sendMessage(BackupCommand.MESSAGE_HEAD
+						  + ChatColor.RED + "There has been an error, pasting the backup for '"
+						  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
+			e.printStackTrace();
 		}
 	}
 }

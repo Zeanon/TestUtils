@@ -14,18 +14,18 @@ import org.jetbrains.annotations.NotNull;
 public class Reload {
 
 	public void execute(final @NotNull Player p) {
-		p.sendMessage(Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "Reloading all region files...");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				try {
 					RegionManager.initialize();
-					p.sendMessage(Region.MESSAGE_HEAD
+					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "Reloaded all region files.");
 				} catch (IOException e) {
 					e.printStackTrace();
-					p.sendMessage(Region.MESSAGE_HEAD
+					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error reloading the region files, for more information please see [console]");
 				}
 			}

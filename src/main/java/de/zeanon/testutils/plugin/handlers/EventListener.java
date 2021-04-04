@@ -24,7 +24,7 @@ public class EventListener implements Listener {
 			&& args[2].toLowerCase().startsWith("testarea_")
 			&& (args[2].toLowerCase().endsWith("_north") || args[2].toLowerCase().endsWith("_south"))) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(GlobalMessageUtils.messageHead
+			event.getPlayer().sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 										  + ChatColor.RED + "You are not allowed to create a region which starts with '"
 										  + ChatColor.DARK_RED + "testarea_"
 										  + ChatColor.RED + "' and ends with '"

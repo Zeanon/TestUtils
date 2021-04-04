@@ -24,7 +24,7 @@ public class Info {
 			} else if (regions.size() == 1) {
 				Info.sendRegionInfo(regions.get(0), p);
 			} else {
-				de.zeanon.testutils.plugin.commands.region.Region.sendMultipleRegions(regions, p);
+				RegionCommand.sendMultipleRegions(regions, p);
 			}
 		} else {
 			if (RegionManager.isGlobalRegion(regionName.getName())) {
@@ -34,7 +34,7 @@ public class Info {
 				if (region != null) {
 					Info.sendRegionInfo(region, p);
 				} else {
-					p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
+					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "The given region does not exist.");
 				}
 			}
@@ -43,14 +43,14 @@ public class Info {
 
 	private void sendRegionInfo(final @NotNull Region region, final @NotNull Player p) {
 		p.sendMessage("\n"
-					  + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
-					  + ChatColor.RED + "=== " + ChatColor.DARK_RED + region.getName() + ChatColor.RED + " === " + de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD);
+					  + RegionCommand.MESSAGE_HEAD
+					  + ChatColor.RED + "=== " + ChatColor.DARK_RED + region.getName() + ChatColor.RED + " === " + RegionCommand.MESSAGE_HEAD);
 
-		p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "World: "
 					  + ChatColor.DARK_RED + region.getWorld().getName());
 
-		p.sendMessage(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD
+		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "Type: "
 					  + ChatColor.DARK_RED + region.getType());
 
@@ -59,7 +59,7 @@ public class Info {
 		final boolean[] lineBreak = {false};
 		region.getFlags().forEach((flag, value) -> {
 			if (!lineBreak[0]) {
-				flags.append(de.zeanon.testutils.plugin.commands.region.Region.MESSAGE_HEAD)
+				flags.append(RegionCommand.MESSAGE_HEAD)
 					 .append(ChatColor.RED)
 					 .append("Flags: ")
 					 .append(ChatColor.BLACK)

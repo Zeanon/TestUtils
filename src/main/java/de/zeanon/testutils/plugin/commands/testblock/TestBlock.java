@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
@@ -41,11 +40,11 @@ public class TestBlock extends SWCommand {
 			if (tempFile.exists() && tempFile.isFile()) {
 				return new Pair<>(mappedFile.getName(), BaseFileUtils.createNewInputStreamFromFile(tempFile));
 			} else if (BaseFileUtils.removeExtension(tempFile).exists() && BaseFileUtils.removeExtension(tempFile).isDirectory()) {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "'" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "' is not a valid block but a directory.");
 				return null;
 			} else {
-				p.sendMessage(GlobalMessageUtils.messageHead
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "'" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "' is not a valid block.");
 				return new Pair<>("default", TestBlock.getDefaultBlock(p.getUniqueId().toString()));
 			}
@@ -54,72 +53,7 @@ public class TestBlock extends SWCommand {
 		}
 	}
 
-
-	@Register
-	public void noArgs(final @NotNull Player p) {
-		PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), "the other");
-	}
-
-	@Register
-	public void oneArg(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
-	}
-
-	@Register
-	public void oneArg(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getOppositeRegion(p), "the other");
-	}
-
-	@Register
-	public void twoArgs(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
-	}
-
-	@Register
-	public void twoArgs(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
-		try {
-			if (BaseFileUtils.isChildOf(TestBlock.TESTBLOCK_FOLDER.resolve(mappedFile.getName()), TestBlock.TESTBLOCK_FOLDER) || InitMode.forbiddenFileName(mappedFile.getName())) {
-				p.sendMessage(GlobalMessageUtils.messageHead
-							  + ChatColor.RED + "File '" + mappedFile.getName() + "' resolution error: Path is not allowed.");
-				return;
-			}
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
-	}
-
-
-	private static @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {
-		final @NotNull File tempFile = TestBlock.TESTBLOCK_FOLDER.resolve(uuid).resolve("default.schem").toFile();
-		if (tempFile.exists() && tempFile.isFile()) {
-			return BaseFileUtils.createNewInputStreamFromFile(tempFile);
-		} else {
-			return BaseFileUtils.createNewInputStreamFromResource("resources/default.schem");
-		}
-	}
-
-
-	@ClassMapper(value = MappedFile.class, local = true)
-	private @NotNull TypeMapper<MappedFile> mapFile() {
+	public static @NotNull TypeMapper<MappedFile> getMappedFileTypeMapper() {
 		return new TypeMapper<MappedFile>() {
 			@Override
 			public MappedFile map(final @NotNull String[] previous, final @NotNull String s) {
@@ -131,11 +65,12 @@ public class TestBlock extends SWCommand {
 			}
 
 			@Override
-			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
+			public List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
 				if (commandSender instanceof Player) {
 					final @NotNull Player p = (Player) commandSender;
 					final int lastIndex = arg.lastIndexOf("/");
 					final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
+
 					try {
 						final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
 						final @NotNull Path basePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
@@ -159,5 +94,47 @@ public class TestBlock extends SWCommand {
 				}
 			}
 		};
+	}
+
+
+	@Register
+	public void noArgs(final @NotNull Player p) {
+		PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), "the other");
+	}
+
+	@Register
+	public void oneArg(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
+	}
+
+	@Register
+	public void oneArg(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getOppositeRegion(p), "the other");
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
+		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
+		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
+	}
+
+
+	private static @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {
+		final @NotNull File tempFile = TestBlock.TESTBLOCK_FOLDER.resolve(uuid).resolve("default.schem").toFile();
+		if (tempFile.exists() && tempFile.isFile()) {
+			return BaseFileUtils.createNewInputStreamFromFile(tempFile);
+		} else {
+			return BaseFileUtils.createNewInputStreamFromResource("resources/default.schem");
+		}
+	}
+
+
+	@ClassMapper(value = MappedFile.class, local = true)
+	private @NotNull TypeMapper<MappedFile> mapFile() {
+		return TestBlock.getMappedFileTypeMapper();
 	}
 }
