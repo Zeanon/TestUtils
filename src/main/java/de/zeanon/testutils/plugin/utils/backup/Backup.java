@@ -67,14 +67,19 @@ public abstract class Backup extends BukkitRunnable {
 							this.backupSide(tempWorld, northRegion, folder);
 							northRegion.setHasChanged(false);
 
-							Backup.this.cleanup(backupFolder);
+							new BukkitRunnable() {
+								@Override
+								public void run() {
+									Backup.this.cleanup(backupFolder);
+								}
+							}.runTaskAsynchronously(TestUtils.getInstance());
 						}
 					} else {
 						new BukkitRunnable() {
 							@Override
 							public void run() {
 								try {
-									if (regionFolder.isDirectory()) {
+									if (regionFolder.exists() && regionFolder.isDirectory()) {
 										FileUtils.deleteDirectory(regionFolder);
 										InternalFileUtils.deleteEmptyParent(regionFolder, TestUtilsCommand.TESTAREA_FOLDER.toFile());
 									}
