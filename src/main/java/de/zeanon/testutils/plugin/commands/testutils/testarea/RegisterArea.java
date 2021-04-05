@@ -1,6 +1,9 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
+import de.zeanon.jsonfilemanager.JsonFileManager;
+import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
 import de.zeanon.testutils.init.InitMode;
+import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.regionsystem.flags.Flag;
@@ -49,7 +52,6 @@ public class RegisterArea {
 											new Region.Point(x + 58, y + 65, z - 96),
 											world);
 
-
 		RegionManager.addRegion(regionSouth);
 		RegionManager.addRegion(regionNorth);
 
@@ -63,5 +65,13 @@ public class RegisterArea {
 		regionNorth.set(Flag.FIRE, FIRE.DENY);
 		regionSouth.set(Flag.TNT, TNT.DENY);
 		regionNorth.set(Flag.TNT, TNT.DENY);
+
+		final @NotNull JsonFile jsonFile = JsonFileManager.jsonFile(TestUtilsCommand.TESTAREA_FOLDER.resolve(name), "warp.json")
+														  .fromResource("resources/warp.json")
+														  .create();
+		jsonFile.setUseArray(new String[]{"world"}, world);
+		jsonFile.setUseArray(new String[]{"x"}, x + 0.5);
+		jsonFile.setUseArray(new String[]{"y"}, y);
+		jsonFile.setUseArray(new String[]{"z"}, z + 0.5);
 	}
 }

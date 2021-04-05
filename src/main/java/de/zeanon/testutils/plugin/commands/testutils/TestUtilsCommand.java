@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Material;
@@ -79,6 +78,7 @@ public class TestUtilsCommand extends SWCommand {
 		//TODO
 	}
 
+
 	@Register(value = {"update"}, help = true)
 	public void updateHelp(final @NotNull Player p, final @NotNull String... args) {
 		Update.sendUpdateUsage(p);
@@ -94,15 +94,18 @@ public class TestUtilsCommand extends SWCommand {
 		Update.execute(confirmation, p);
 	}
 
+
 	@Register("undo")
 	public void noArgsUndo(final @NotNull Player p) {
 		Undo.undo(p);
 	}
 
+
 	@Register("redo")
 	public void noArgsRedo(final @NotNull Player p) {
 		Redo.redo(p);
 	}
+
 
 	@Register(value = {"count"}, help = true)
 	public void countHelp(final @NotNull Player p, final @NotNull String... args) {
@@ -130,10 +133,12 @@ public class TestUtilsCommand extends SWCommand {
 		Count.execute(material, regionSide, p);
 	}
 
+
 	@Register("registerreset")
 	public void noArgsRegisterReset(final @NotNull Player p) {
 		RegisterReset.execute(p);
 	}
+
 
 	@Register("resetarea")
 	public void noArgsResetArea(final @NotNull Player p) {
@@ -145,6 +150,7 @@ public class TestUtilsCommand extends SWCommand {
 		ResetArea.execute(regionSide, p);
 	}
 
+
 	@Register("invertarea")
 	public void noArgsInvertArea(final @NotNull Player p) {
 		InvertArea.execute(null, p);
@@ -154,6 +160,7 @@ public class TestUtilsCommand extends SWCommand {
 	public void oneArgInvertArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		InvertArea.execute(regionSide, p);
 	}
+
 
 	@Register("replacearea")
 	public void noArgsReplaceArea(final @NotNull Player p) {
@@ -180,6 +187,7 @@ public class TestUtilsCommand extends SWCommand {
 		ReplaceArea.execute(regionSide, source, destination, p);
 	}
 
+
 	@Register("replacetnt")
 	public void noArgsReplaceTNT(final @NotNull Player p) {
 		ReplaceArea.execute(null, Material.TNT, Material.OBSIDIAN, p);
@@ -190,6 +198,7 @@ public class TestUtilsCommand extends SWCommand {
 		ReplaceArea.execute(regionSide, Material.TNT, Material.OBSIDIAN, p);
 	}
 
+
 	@Register("registerblock")
 	public void noArgsRegisterBlock(final @NotNull Player p) {
 		RegisterBlock.execute(null, p);
@@ -199,6 +208,7 @@ public class TestUtilsCommand extends SWCommand {
 	public void oneArgRegisterBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		RegisterBlock.execute(mappedFile, p);
 	}
+
 
 	@Register(value = {"delblock"}, help = true)
 	public void delBlockHelp(final @NotNull Player p, final @NotNull String... args) {
@@ -215,6 +225,7 @@ public class TestUtilsCommand extends SWCommand {
 		DeleteBlock.execute(mappedFile, confirmation, p);
 	}
 
+
 	@Register(value = {"deleteblock"}, help = true)
 	public void deleteBlockHelp(final @NotNull Player p, final @NotNull String... args) {
 		DeleteBlock.usage(p);
@@ -229,6 +240,7 @@ public class TestUtilsCommand extends SWCommand {
 	public void twoArgsDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
 		DeleteBlock.execute(mappedFile, confirmation, p);
 	}
+
 
 	@Register(value = {"delfolder"}, help = true)
 	public void delFolderHelp(final @NotNull Player p, final @NotNull String... args) {
@@ -245,6 +257,7 @@ public class TestUtilsCommand extends SWCommand {
 		DeleteFolder.execute(mappedFolder, confirmation, p);
 	}
 
+
 	@Register(value = {"deletefolder"}, help = true)
 	public void deleteFolderHelp(final @NotNull Player p, final @NotNull String... args) {
 		DeleteFolder.usage(p);
@@ -259,6 +272,7 @@ public class TestUtilsCommand extends SWCommand {
 	public void twoArgsDeleteFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder, final @NotNull CommandConfirmation confirmation) {
 		DeleteFolder.execute(mappedFolder, confirmation, p);
 	}
+
 
 	@Register(value = {"renameblock"}, help = true)
 	public void renameBlockHelp(final @NotNull Player p, final @NotNull String... args) {
@@ -275,6 +289,7 @@ public class TestUtilsCommand extends SWCommand {
 		RenameBlock.execute(oldMappedFile, newMappedFile, confirmation, p);
 	}
 
+
 	@Register(value = {"renamefolder"}, help = true)
 	public void renameFolderHelp(final @NotNull Player p, final @NotNull String... args) {
 		RenameBlock.usage(p);
@@ -289,6 +304,7 @@ public class TestUtilsCommand extends SWCommand {
 	public void threeArgsRenameFolder(final @NotNull Player p, final @NotNull MappedFolder oldMappedFolder, final @NotNull MappedFolder newMappedFolder, final @NotNull CommandConfirmation confirmation) {
 		RenameFolder.execute(oldMappedFolder, newMappedFolder, confirmation, p);
 	}
+
 
 	@Register(value = "registerarea", help = true)
 	public void registerAreaHelp(final @NotNull Player p, final @NotNull String... args) {
@@ -305,6 +321,7 @@ public class TestUtilsCommand extends SWCommand {
 		RegisterArea.execute(areaName, p);
 	}
 
+
 	@Register(value = "deletearea", help = true)
 	public void deleteAreaHelp(final @NotNull Player p, final @NotNull String... args) {
 		//TODO
@@ -314,6 +331,18 @@ public class TestUtilsCommand extends SWCommand {
 	public void oneArgDeleteArea(final @NotNull Player p, final @NotNull AreaName areaName) {
 		DeleteArea.execute(areaName, p);
 	}
+
+
+	@Register(value = "warp", help = true)
+	public void warpHelp(final @NotNull Player p, final @NotNull String... args) {
+		//TODO
+	}
+
+	@Register("warp")
+	public void oneArgWarp(final @NotNull Player p, final @NotNull AreaName areaName) {
+		Warp.execute(areaName, p);
+	}
+
 
 	@ClassMapper(value = CommandConfirmation.class, local = true)
 	private @NotNull TypeMapper<CommandConfirmation> mapCommandConfirmation() {
@@ -361,29 +390,6 @@ public class TestUtilsCommand extends SWCommand {
 						return null;
 					}
 				} else {
-					return null;
-				}
-			}
-		};
-	}
-
-	@ClassMapper(value = AreaName.class, local = true)
-	private @NotNull TypeMapper<AreaName> mapArea() {
-		return new TypeMapper<AreaName>() {
-			@Override
-			public AreaName map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
-					return null;
-				} else {
-					return new AreaName(s);
-				}
-			}
-
-			@Override
-			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
-				try {
-					return BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()).stream().map(File::getName).collect(Collectors.toList());
-				} catch (IOException e) {
 					return null;
 				}
 			}

@@ -2,10 +2,15 @@ package de.zeanon.testutils.plugin.mapper;
 
 import de.steamwar.commandframework.SWCommandUtils;
 import de.steamwar.commandframework.TypeMapper;
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.testutils.init.InitMode;
+import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.enums.*;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.Region;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +34,7 @@ public class Mapper {
 		SWCommandUtils.addMapper(CommandConfirmation.class, Mapper.mapCommandConfirmation());
 		SWCommandUtils.addMapper(RegionName.class, Mapper.mapRegionName());
 		SWCommandUtils.addMapper(Flag.Value.class.getTypeName(), Mapper.mapFlagValue());
+		SWCommandUtils.addMapper(AreaName.class, Mapper.mapAreaName());
 	}
 
 	private @NotNull TypeMapper<RegionSide> mapRegionSide() {
@@ -161,6 +167,28 @@ public class Mapper {
 						return null;
 					}
 				} else {
+					return null;
+				}
+			}
+		};
+	}
+
+	private @NotNull TypeMapper<AreaName> mapAreaName() {
+		return new TypeMapper<AreaName>() {
+			@Override
+			public AreaName map(final @NotNull String[] previous, final @NotNull String s) {
+				if (InitMode.forbiddenFileName(s)) {
+					return null;
+				} else {
+					return new AreaName(s);
+				}
+			}
+
+			@Override
+			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
+				try {
+					return BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()).stream().map(File::getName).collect(Collectors.toList());
+				} catch (IOException e) {
 					return null;
 				}
 			}
