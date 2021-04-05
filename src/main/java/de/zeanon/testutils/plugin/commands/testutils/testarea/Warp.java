@@ -12,6 +12,7 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,10 +41,11 @@ public class Warp {
 														jsonFile.getDoubleUseArray("x"),
 														jsonFile.getDoubleUseArray("y"),
 														jsonFile.getDoubleUseArray("z"),
-														180,
+														-180,
 														0);
 
 		p.teleport(teleport);
+		p.getWorld().playSound(teleport, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 					  + ChatColor.RED + "You have been teleported to '" + ChatColor.DARK_RED + name.getName() + ChatColor.RED + "'.");
 	}
