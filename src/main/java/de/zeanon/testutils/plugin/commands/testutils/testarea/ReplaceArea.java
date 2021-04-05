@@ -13,7 +13,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -32,8 +32,8 @@ public class ReplaceArea {
 	}
 
 	private void replaceArea(final @NotNull Player p,
-							 final @Nullable TestArea tempRegion,
-							 final @Nullable TestArea otherRegion,
+							 final @Nullable DefinedRegion tempRegion,
+							 final @Nullable DefinedRegion otherRegion,
 							 final @NotNull String area,
 							 final @NotNull Material source,
 							 final @NotNull Material destination) {

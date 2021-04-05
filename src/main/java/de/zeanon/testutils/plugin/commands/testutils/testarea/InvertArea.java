@@ -12,7 +12,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
@@ -33,7 +33,7 @@ public class InvertArea {
 		}
 	}
 
-	private void invertArea(final @NotNull Player p, final @Nullable TestArea tempRegion, final @NotNull String area) {
+	private void invertArea(final @NotNull Player p, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

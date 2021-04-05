@@ -9,7 +9,7 @@ import de.zeanon.testutils.plugin.utils.backup.Backup;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -43,8 +43,8 @@ public class Save {
 		}
 
 		if (confirmation == null) {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -80,8 +80,8 @@ public class Save {
 
 					final @NotNull org.bukkit.World tempWorld = p.getWorld();
 					final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(region).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
-					final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(region);
-					final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(region);
+					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
+					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
 					if (tempRegion == null || otherRegion == null) {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {
@@ -95,7 +95,7 @@ public class Save {
 		}
 	}
 
-	private void save(final @NotNull World tempWorld, final @NotNull TestArea tempRegion, final @NotNull TestArea otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
+	private void save(final @NotNull World tempWorld, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion, final @NotNull String name, final @NotNull File folder, final @NotNull Player p) {
 		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "Registering Backup for '"
 					  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)

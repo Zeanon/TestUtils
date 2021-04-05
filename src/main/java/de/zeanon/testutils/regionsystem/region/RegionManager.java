@@ -1,16 +1,12 @@
 package de.zeanon.testutils.regionsystem.region;
 
-import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -27,7 +23,7 @@ public class RegionManager {
 	public static final @NotNull Path DEFINED_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Defined");
 	public static final @NotNull Path GLOBAL_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Global");
 	@Getter
-	private final @NotNull List<TestArea> regions = new GapList<>();
+	private final @NotNull Set<DefinedRegion> regions = new HashSet<>();
 	@Getter
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
 
@@ -66,19 +62,17 @@ public class RegionManager {
 		}
 	}
 
-	public @NotNull List<TestArea> getApplicableRegions(final @NotNull Location location) {
+	public @NotNull List<DefinedRegion> getApplicableRegions(final @NotNull Location location) {
 		return RegionManager.regions.stream().filter(r -> r.inRegion(location)).collect(Collectors.toList());
 	}
 
-	public @Nullable TestArea getRegion(final @NotNull String name) {
-		Optional<TestArea> temp = RegionManager.regions.stream().filter(r -> r.getName().equals(name)).findFirst();
+	public @Nullable DefinedRegion getRegion(final @NotNull String name) {
+		Optional<DefinedRegion> temp = RegionManager.regions.stream().filter(r -> r.getName().equals(name)).findFirst();
 		return temp.orElse(null);
 	}
 
-	public void addRegion(final @NotNull TestArea region) {
-		if (!RegionManager.regions.contains(region)) {
-			RegionManager.regions.add(region);
-		}
+	public void addRegion(final @NotNull DefinedRegion region) {
+		RegionManager.regions.add(region);
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -90,7 +84,7 @@ public class RegionManager {
 		return RegionManager.getGlobalRegions().containsKey(name);
 	}
 
-	public boolean removeRegion(final @NotNull TestArea region) {
+	public boolean removeRegion(final @NotNull DefinedRegion region) {
 		if (RegionManager.regions.remove(region)) {
 			region.deleteRegion();
 			return true;
@@ -104,7 +98,7 @@ public class RegionManager {
 	}
 
 	public void saveRegions() {
-		for (final @NotNull TestArea region : RegionManager.getRegions()) {
+		for (final @NotNull DefinedRegion region : RegionManager.getRegions()) {
 			region.saveData();
 		}
 

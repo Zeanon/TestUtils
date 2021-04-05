@@ -11,12 +11,11 @@ import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 public class RegisterReset {
 
 	public void execute(final @NotNull Player p) {
-		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
-		final @Nullable TestArea oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 		if (tempRegion == null || oppositeRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -42,8 +41,8 @@ public class RegisterReset {
 							  + ChatColor.RED + "Registering reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 							  + ChatColor.RED + "'...");
-				RegisterReset.registerSide(p, tempRegion);
-				RegisterReset.registerSide(p, oppositeRegion);
+				RegisterReset.registerSide(tempRegion);
+				RegisterReset.registerSide(oppositeRegion);
 
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You registered a new reset for '"
@@ -57,8 +56,9 @@ public class RegisterReset {
 		}
 	}
 
-	private void registerSide(final @NotNull Player p, final @NotNull TestArea tempRegion) throws WorldEditException, IOException {
-		final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+
+	public void registerSide(final @NotNull DefinedRegion tempRegion) throws WorldEditException, IOException {
+		final @NotNull BukkitWorld tempWorld = new BukkitWorld(tempRegion.getWorld());
 		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
@@ -75,6 +75,7 @@ public class RegisterReset {
 			Operations.complete(forwardExtentCopy);
 
 			final @NotNull File tempFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem").toFile();
+			System.out.println(tempFile.getAbsolutePath());
 
 			BaseFileUtils.createFile(tempFile);
 

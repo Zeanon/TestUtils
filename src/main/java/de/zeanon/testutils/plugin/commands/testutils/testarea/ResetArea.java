@@ -15,7 +15,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -30,8 +30,8 @@ public class ResetArea {
 
 	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
 		if (regionSide == null) {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable TestArea oppositeRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || oppositeRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -64,7 +64,7 @@ public class ResetArea {
 				}
 			}
 		} else {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
 			if (tempRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
 			} else {
@@ -94,7 +94,7 @@ public class ResetArea {
 		}
 	}
 
-	private void pasteSide(final @NotNull TestArea tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
+	private void pasteSide(final @NotNull DefinedRegion tempRegion, final @NotNull EditSession editSession, final @NotNull File file) throws IOException, WorldEditException { //NOSONAR
 		try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(BaseFileUtils.createNewInputStreamFromFile(file))) {
 			final @NotNull Clipboard clipboard = reader.read();
 

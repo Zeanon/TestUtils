@@ -10,7 +10,7 @@ import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -31,8 +31,8 @@ public class Load {
 			return;
 		}
 
-		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
-		final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 
 		if (tempRegion == null || otherRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);

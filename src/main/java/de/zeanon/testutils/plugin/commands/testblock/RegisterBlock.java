@@ -18,7 +18,7 @@ import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class RegisterBlock {
 			return;
 		}
 
-		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 
 		if (tempRegion == null) {
 			GlobalMessageUtils.sendNotApplicableRegion(p);

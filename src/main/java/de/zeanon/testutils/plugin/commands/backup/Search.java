@@ -9,7 +9,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -26,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
 public class Search {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable BackupMode backupMode, final @NotNull Player p) {
-		final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
-		final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 		new BukkitRunnable() {
 			@Override

@@ -108,8 +108,8 @@ public class InitMode {
 
 		InitMode.registerCommands();
 
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
+		TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
+		TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
 
 		BackupScheduler.backup();
 	}

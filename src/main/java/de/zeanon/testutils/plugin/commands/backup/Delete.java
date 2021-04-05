@@ -7,7 +7,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -29,8 +29,8 @@ public class Delete {
 		}
 
 		if (confirmation == null) {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(p);
-			final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -56,8 +56,8 @@ public class Delete {
 				if (region != null) {
 					CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
 
-					final @Nullable TestArea tempRegion = TestAreaUtils.getNorthRegion(region);
-					final @Nullable TestArea otherRegion = TestAreaUtils.getSouthRegion(region);
+					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
+					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
 					if (tempRegion == null || otherRegion == null) {
 						Delete.sendNotApplicableRegion(p);
 					} else {

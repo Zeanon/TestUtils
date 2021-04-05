@@ -3,8 +3,8 @@ package de.zeanon.testutils.plugin.commands.region;
 import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
 import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
-import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class RegionCommand extends SWCommand {
 		super("region", true, "rg");
 	}
 
-	public static void sendMultipleRegions(final @NotNull List<TestArea> regions, final @NotNull Player p) {
+	public static void sendMultipleRegions(final @NotNull List<DefinedRegion> regions, final @NotNull Player p) {
 		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You are standing in multiple regions, please define which one to use: "
 					  + regions.stream().map(r -> ChatColor.DARK_RED + r.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));

@@ -6,7 +6,7 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.plugin.utils.enums.TNTMode;
 import de.zeanon.testutils.regionsystem.flags.Flag;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -68,8 +68,8 @@ public class TNT extends SWCommand {
 
 	private void execute(final @NotNull Player p, final @NotNull RegionSide regionSide, final @Nullable TNTMode tntMode) {
 		if (regionSide == RegionSide.NONE) {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p);
-			final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);
@@ -97,8 +97,8 @@ public class TNT extends SWCommand {
 				}
 			}
 		} else {
-			final @Nullable TestArea tempRegion = TestAreaUtils.getRegion(p, regionSide);
-			final @Nullable TestArea otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
 
 			if (tempRegion == null || otherRegion == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

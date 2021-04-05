@@ -7,7 +7,7 @@ import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -54,7 +54,7 @@ public class DailyBackup extends Backup {
 	}
 
 	@Override
-	protected boolean doBackup(final @NotNull TestArea southRegion, final @NotNull TestArea northRegion) {
+	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
 		return true;
 	}
 }

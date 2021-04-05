@@ -1,9 +1,9 @@
 package de.zeanon.testutils.plugin.commands.region;
 
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
-import de.zeanon.testutils.regionsystem.region.TestArea;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class Flag {
 								  .collect(Collectors.joining(ChatColor.RED + ", ")));
 		} else {
 			if (regionName == null) {
-				final @NotNull List<TestArea> regions = RegionManager.getApplicableRegions(p.getLocation()); //NOSONAR
+				final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation()); //NOSONAR
 				if (regions.isEmpty()) {
 					final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld()); //NOSONAR
 					globalRegion.set(flag, value);
@@ -47,7 +47,7 @@ public class Flag {
 					RegionManager.getGlobalRegion(p.getWorld()).set(flag, value);
 					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 				} else {
-					final @Nullable TestArea region = RegionManager.getRegion(regionName.getName()); //NOSONAR
+					final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName()); //NOSONAR
 					if (region != null) {
 						region.set(flag, value);
 						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);

@@ -12,7 +12,7 @@ import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import de.zeanon.testutils.regionsystem.region.TestArea;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -411,7 +411,7 @@ public class BackupCommand extends SWCommand {
 			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
 				if (commandSender instanceof Player) {
 					final @NotNull Player p = (Player) commandSender;
-					final @Nullable TestArea region = TestAreaUtils.getRegion(p);
+					final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p);
 					if (region != null && previousArguments.length > 0) {
 						final int lastIndex = arg.lastIndexOf("/");
 						final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
