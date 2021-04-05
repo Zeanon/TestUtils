@@ -39,7 +39,9 @@ public class Warp {
 		final @NotNull Location teleport = new Location(Bukkit.getWorld(Objects.notNull(jsonFile.getStringUseArray("world"))),
 														jsonFile.getDoubleUseArray("x"),
 														jsonFile.getDoubleUseArray("y"),
-														jsonFile.getDoubleUseArray("z"));
+														jsonFile.getDoubleUseArray("z"),
+														180,
+														0);
 
 		p.teleport(teleport);
 		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
