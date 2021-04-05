@@ -3,7 +3,6 @@ package de.zeanon.testutils.plugin.utils.backup;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -13,29 +12,28 @@ public class ManualBackup extends Backup {
 		super(BackupMode.MANUAL);
 	}
 
-	@SneakyThrows
 	@Override
 	public void run() {
-		throw new NoSuchMethodException("This method is not supported for manual backups.");
+		throw new UnsupportedOperationException("This method is not supported for manual backups.");
 	}
 
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
-		//NOTHING
+		throw new UnsupportedOperationException("This method is not supported for manual backups.");
 	}
 
 	@Override
 	protected void systemOutStart() {
-		//DO NOTHING
+		throw new UnsupportedOperationException("This method is not supported for manual backups.");
 	}
 
 	@Override
 	protected void systemOutDone() {
-		//DO NOTHING
+		throw new UnsupportedOperationException("This method is not supported for manual backups.");
 	}
 
 	@Override
 	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
-		return false;
+		throw new UnsupportedOperationException("This method is not supported for manual backups.");
 	}
 }
