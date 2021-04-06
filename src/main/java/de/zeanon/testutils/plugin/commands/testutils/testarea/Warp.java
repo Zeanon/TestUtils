@@ -1,20 +1,17 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
-import de.zeanon.jsonfilemanager.JsonFileManager;
-import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.init.InitMode;
-import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
-import java.io.File;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.RegionManager;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @UtilityClass
@@ -27,20 +24,17 @@ public class Warp {
 			return;
 		}
 
-		final @NotNull File warpData = TestUtilsCommand.TESTAREA_FOLDER.resolve(name.getName()).resolve("warp.json").toFile();
-		if (!warpData.exists()) {
+		final @Nullable DefinedRegion definedRegion = RegionManager.getRegion(name + "_north");
+		if (definedRegion == null) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "The given region does not exist.");
 			return;
 		}
 
-		final @NotNull JsonFile jsonFile = JsonFileManager.jsonFile(warpData)
-														  .fromResource("resources/warp.json")
-														  .create();
-		final @NotNull Location teleport = new Location(Bukkit.getWorld(Objects.notNull(jsonFile.getStringUseArray("world"))),
-														jsonFile.getDoubleUseArray("x"),
-														jsonFile.getDoubleUseArray("y"),
-														jsonFile.getDoubleUseArray("z"),
+		final @NotNull Location teleport = new Location(definedRegion.getWorld(),
+														definedRegion.getMinimumPoint().getX() + 58.5,
+														definedRegion.getMinimumPoint().getY(),
+														definedRegion.getMaximumPoint().getZ() + 0.5,
 														-180,
 														0);
 
