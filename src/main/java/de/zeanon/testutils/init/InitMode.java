@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -111,7 +112,13 @@ public class InitMode {
 		TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
 		TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
 
-		BackupScheduler.backup();
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				BackupScheduler.backup();
+			}
+		}.runTask(TestUtils.getInstance());
 	}
 
 	public boolean forbiddenFileName(final @NotNull String name) {

@@ -21,7 +21,7 @@ public class BackupScheduler {
 		//Initialize hourly backups
 		final @NotNull LocalDateTime hourlyStart = LocalDateTime.now()
 																.withMinute(0)
-																.withSecond(1)
+																.withSecond(2)
 																.plusHours(1);
 
 
@@ -32,7 +32,7 @@ public class BackupScheduler {
 		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(5)
 															 .plusDays(1);
 
-		BackupScheduler.scheduleAtFixedRate(new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackupScheduler.scheduleAtFixedRate(new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS) % (24 * 60 * 60), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
 
 
