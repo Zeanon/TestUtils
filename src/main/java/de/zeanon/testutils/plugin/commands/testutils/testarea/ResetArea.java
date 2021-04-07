@@ -70,7 +70,7 @@ public class ResetArea {
 			} else {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Pasting the reset for '"
-							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side...");
+							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on " + regionSide.getName() + " side...");
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
 					final @NotNull File tempFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem").toFile();
 					if (tempFile.exists()) {
@@ -78,7 +78,7 @@ public class ResetArea {
 
 						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "You pasted the reset for '"
-									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on your side.");
+									  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on " + regionSide.getName() + " side.");
 					} else {
 						p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 									  + ChatColor.RED + "There is no reset for '"
