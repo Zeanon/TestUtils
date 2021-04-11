@@ -25,7 +25,7 @@ public class HourlyBackup extends Backup {
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
 		try {
-			final @NotNull File hourlyBackup = new File(backupFolder, HourlyBackup.this.sequence.getPath(null));
+			final @NotNull File hourlyBackup = new File(backupFolder, this.sequence.getPath(null));
 			if (hourlyBackup.exists()) {
 				@NotNull List<File> files = BaseFileUtils.listFolders(hourlyBackup);
 				while (files.size() > ConfigUtils.getInt("Backups", "hourly")) {

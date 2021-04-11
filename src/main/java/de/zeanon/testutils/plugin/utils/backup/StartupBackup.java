@@ -25,7 +25,7 @@ public class StartupBackup extends Backup {
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
 		try {
-			final @NotNull File startupBackup = new File(backupFolder, StartupBackup.this.sequence.getPath(null));
+			final @NotNull File startupBackup = new File(backupFolder, this.sequence.getPath(null));
 			if (startupBackup.exists()) {
 				@NotNull List<File> files = BaseFileUtils.listFolders(startupBackup);
 				while (files.size() > ConfigUtils.getInt("Backups", "startup")) {

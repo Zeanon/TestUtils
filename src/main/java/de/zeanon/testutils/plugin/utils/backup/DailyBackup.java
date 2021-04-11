@@ -26,7 +26,7 @@ public class DailyBackup extends Backup {
 	@Override
 	protected void cleanup(final @NotNull File backupFolder) {
 		try {
-			final @NotNull File dailyBackup = new File(backupFolder, DailyBackup.this.sequence.getPath(null));
+			final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
 			if (dailyBackup.exists()) {
 				@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
 				while (files.size() > ConfigUtils.getInt("Backups", "daily")) {
