@@ -49,6 +49,7 @@ public class DefinedRegion extends Region {
 		this.hasChanged = false;
 	}
 
+
 	public boolean inRegion(final @NotNull Location location) {
 		return this.getWorld().equals(location.getWorld())
 			   && this.maxPoint.getX() >= location.getBlockX()

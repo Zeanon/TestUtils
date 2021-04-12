@@ -8,6 +8,7 @@ import de.zeanon.testutils.regionsystem.flags.Flag;
 import java.util.EnumMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -82,6 +83,7 @@ public abstract class Region {
 
 
 	@Getter
+	@EqualsAndHashCode
 	@AllArgsConstructor
 	public static class Point {
 
@@ -89,8 +91,23 @@ public abstract class Region {
 		final int y;
 		final int z;
 
+		public static @Nullable Point fromString(final @NotNull String string) {
+			if (!string.startsWith("[x=") || !string.endsWith("]") || !string.contains("|y=") || !string.contains("|z=")) {
+				return null;
+			}
+
+			final @NotNull String[] parts = string.substring(1, string.length() - 2).split("\\|");
+
+			return new Point(Integer.parseInt(parts[0].substring(2)), Integer.parseInt(parts[1].substring(2)), Integer.parseInt(parts[2].substring(2)));
+		}
+
 		public @NotNull BlockVector3 toBlockVector3() {
 			return BlockVector3.at(this.x, this.y, this.z);
+		}
+
+		@Override
+		public String toString() {
+			return "[x=" + this.x + "|y=" + this.y + "|z=" + this.z + "]";
 		}
 	}
 }
