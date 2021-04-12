@@ -4,6 +4,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import de.zeanon.jsonfilemanager.internal.files.raw.JsonFile;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.regionsystem.RegionType;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,12 +23,17 @@ public abstract class Region {
 
 	protected final @NotNull String name;
 	protected final @NotNull World world;
+	protected final @NotNull RegionType regionType;
 	protected final @NotNull Map<Flag, Flag.Value<?>> flags;
 
-	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world) {
+	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world, final @NotNull RegionType regionType) {
 		this.jsonFile = jsonFile;
 		this.name = name;
 		this.world = world;
+		this.jsonFile.setUseArray(new String[]{"world"}, world.getName());
+
+		this.regionType = regionType;
+		this.jsonFile.setUseArray(new String[]{"regiontype"}, regionType.name());
 
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
@@ -37,6 +43,8 @@ public abstract class Region {
 		this.jsonFile = jsonFile;
 		this.name = BaseFileUtils.removeExtension(this.jsonFile.getName());
 		this.world = Objects.notNull(Bukkit.getWorld(Objects.notNull(this.jsonFile.getStringUseArray("world"))));
+
+		this.regionType = RegionType.valueOf(this.jsonFile.getStringUseArray("regiontype"));
 
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
@@ -64,7 +72,10 @@ public abstract class Region {
 		return this.name;
 	}
 
-	public abstract @NotNull String getType();
+
+	public @NotNull RegionType getType() {
+		return this.regionType;
+	}
 
 
 	public void saveData() {
@@ -73,7 +84,7 @@ public abstract class Region {
 
 
 	private void readFlags() {
-		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(Region.this.jsonFile.getMap("flags"));
+		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(this.jsonFile.getMap("flags"));
 		for (final @NotNull Flag flag : Flag.getFlags()) {
 			final @Nullable String flagValue = tempFlagMap.get(flag.toString());
 			this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
@@ -91,6 +102,7 @@ public abstract class Region {
 		final int y;
 		final int z;
 
+		@SuppressWarnings("unused")
 		public static @Nullable Point fromString(final @NotNull String string) {
 			if (!string.startsWith("[x=") || !string.endsWith("]") || !string.contains("|y=") || !string.contains("|z=")) {
 				return null;

@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem.region;
 
+import de.zeanon.testutils.regionsystem.RegionType;
 import java.io.File;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +16,7 @@ public class TestArea extends DefinedRegion {
 		super(name,
 			  firstPoint,
 			  secondPoint,
-			  world);
-	}
-
-	@Override
-	public @NotNull String getType() {
-		return "TestArea";
+			  world,
+			  RegionType.TESTAREA);
 	}
 }

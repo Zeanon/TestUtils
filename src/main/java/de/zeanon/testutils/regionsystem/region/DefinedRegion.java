@@ -2,6 +2,7 @@ package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
+import de.zeanon.testutils.regionsystem.RegionType;
 import java.io.File;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,11 +35,31 @@ public class DefinedRegion extends Region {
 							 .fromResource("resources/region.json")
 							 .create(),
 			  name,
-			  world);
+			  world,
+			  RegionType.DEFINED_REGION);
 
 		final @NotNull Pair<Point, Point> points = this.sortPoints(firstPoint, secondPoint);
 
-		this.jsonFile.setUseArray(new String[]{"world"}, world.getName());
+		this.maxPoint = points.getKey();
+		this.setPoint(this.maxPoint, "max");
+		this.minPoint = points.getValue();
+		this.setPoint(this.minPoint, "min");
+
+		this.saveData();
+
+		this.hasChanged = false;
+	}
+
+	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world, final @NotNull RegionType regionType) {
+		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name + ".json"))
+							 .fromResource("resources/region.json")
+							 .create(),
+			  name,
+			  world,
+			  regionType);
+
+		final @NotNull Pair<Point, Point> points = this.sortPoints(firstPoint, secondPoint);
+
 		this.maxPoint = points.getKey();
 		this.setPoint(this.maxPoint, "max");
 		this.minPoint = points.getValue();
@@ -58,11 +79,6 @@ public class DefinedRegion extends Region {
 			   && this.minPoint.getY() <= location.getBlockY()
 			   && this.maxPoint.getZ() >= location.getBlockZ()
 			   && this.minPoint.getZ() <= location.getBlockZ();
-	}
-
-	@Override
-	public @NotNull String getType() {
-		return "DefinedRegion";
 	}
 
 	public boolean hasChanged() {
