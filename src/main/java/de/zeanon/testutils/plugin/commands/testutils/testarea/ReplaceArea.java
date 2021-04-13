@@ -37,52 +37,69 @@ public class ReplaceArea {
 							 final @NotNull String area,
 							 final @NotNull Material source,
 							 final @NotNull Material destination) {
-		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-			if (tempRegion == null || otherRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
+		if (tempRegion == null || otherRegion == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
+			return;
+		}
 
-				final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
-				try {
-					sourceBlocks.add(Objects.notNull(BlockTypes.get(source.name().toLowerCase())).getDefaultState().toBaseBlock());
-				} catch (ObjectNullException e) {
-					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-								  + ChatColor.RED
-								  + "There has been an error, replacing '"
-								  + ChatColor.DARK_RED
-								  + source
-								  + ChatColor.RED
-								  + " on "
-								  + area
-								  + " side due to '"
-								  + ChatColor.DARK_RED
-								  + source
-								  + ChatColor.RED
-								  + "' not being a valid block.");
-				}
+		final @NotNull World bukkitWorld = new BukkitWorld(p.getWorld());
+		try (final @NotNull EditSession editSession = SessionFactory.createSession(p, bukkitWorld)) {
+			final @NotNull CuboidRegion region = new CuboidRegion(bukkitWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 
-				try {
-					editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination).name().toLowerCase())).getDefaultState().toBaseBlock());
-				} catch (ObjectNullException e) {
-					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-								  + ChatColor.RED
-								  + "There has been an error, replacing to '"
-								  + ChatColor.DARK_RED
-								  + destination
-								  + ChatColor.RED
-								  + " on "
-								  + area
-								  + " side due to '"
-								  + ChatColor.DARK_RED
-								  + destination
-								  + ChatColor.RED
-								  + "' not being a valid block.");
-				}
+			final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
+			try {
+				sourceBlocks.add(Objects.notNull(BlockTypes.get(source.name().toLowerCase())).getDefaultState().toBaseBlock());
+			} catch (ObjectNullException e) {
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+							  + ChatColor.RED
+							  + "There has been an error, replacing '"
+							  + ChatColor.DARK_RED
+							  + source
+							  + ChatColor.RED
+							  + " on "
+							  + area
+							  + " side due to '"
+							  + ChatColor.DARK_RED
+							  + source
+							  + ChatColor.RED
+							  + "' not being a valid block.");
+			}
 
-				for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
-					if (tempPlayer == p) {
+			try {
+				editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination).name().toLowerCase())).getDefaultState().toBaseBlock());
+			} catch (ObjectNullException e) {
+				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+							  + ChatColor.RED
+							  + "There has been an error, replacing to '"
+							  + ChatColor.DARK_RED
+							  + destination
+							  + ChatColor.RED
+							  + " on "
+							  + area
+							  + " side due to '"
+							  + ChatColor.DARK_RED
+							  + destination
+							  + ChatColor.RED
+							  + "' not being a valid block.");
+			}
+
+			for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
+				if (tempPlayer == p) {
+					tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+										   + ChatColor.RED
+										   + "The "
+										   + ChatColor.DARK_RED
+										   + source
+										   + ChatColor.RED
+										   + " on "
+										   + area
+										   + " side has been replaced to '"
+										   + ChatColor.DARK_RED
+										   + destination
+										   + ChatColor.RED
+										   + "'.");
+				} else {
+					if (tempRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											   + ChatColor.RED
 											   + "The "
@@ -90,42 +107,26 @@ public class ReplaceArea {
 											   + source
 											   + ChatColor.RED
 											   + " on "
-											   + area
+											   + "your"
 											   + " side has been replaced to '"
 											   + ChatColor.DARK_RED
 											   + destination
 											   + ChatColor.RED
 											   + "'.");
-					} else {
-						if (tempRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-												   + ChatColor.RED
-												   + "The "
-												   + ChatColor.DARK_RED
-												   + source
-												   + ChatColor.RED
-												   + " on "
-												   + "your"
-												   + " side has been replaced to '"
-												   + ChatColor.DARK_RED
-												   + destination
-												   + ChatColor.RED
-												   + "'.");
-						} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
-							tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-												   + ChatColor.RED
-												   + "The "
-												   + ChatColor.DARK_RED
-												   + source
-												   + ChatColor.RED
-												   + " on "
-												   + "the other"
-												   + " side has been replaced to '"
-												   + ChatColor.DARK_RED
-												   + destination
-												   + ChatColor.RED
-												   + "'.");
-						}
+					} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
+						tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+											   + ChatColor.RED
+											   + "The "
+											   + ChatColor.DARK_RED
+											   + source
+											   + ChatColor.RED
+											   + " on "
+											   + "the other"
+											   + " side has been replaced to '"
+											   + ChatColor.DARK_RED
+											   + destination
+											   + ChatColor.RED
+											   + "'.");
 					}
 				}
 			}

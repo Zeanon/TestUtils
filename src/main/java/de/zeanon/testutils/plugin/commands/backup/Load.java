@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
@@ -65,7 +66,7 @@ public class Load {
 					}
 				}
 
-				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
 					if (regionSide != null) {
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");

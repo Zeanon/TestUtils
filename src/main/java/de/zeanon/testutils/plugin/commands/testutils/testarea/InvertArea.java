@@ -34,22 +34,23 @@ public class InvertArea {
 	}
 
 	private void invertArea(final @NotNull Player p, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
-		try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
-			if (tempRegion == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-				final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
+		if (tempRegion == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
+			return;
+		}
 
-				final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
-				airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
-				editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.BLUE_STAINED_GLASS).getDefaultState().toBaseBlock());
+		try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
+			final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+			final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 
-				editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+			final @NotNull Set<BaseBlock> airBlocks = new HashSet<>();
+			airBlocks.add(Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+			editSession.replaceBlocks(region, airBlocks, Objects.notNull(BlockTypes.BLUE_STAINED_GLASS).getDefaultState().toBaseBlock());
 
-				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-							  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
-			}
+			editSession.replaceBlocks(region, (Set<BaseBlock>) null, Objects.notNull(BlockTypes.AIR).getDefaultState().toBaseBlock());
+
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
 		} catch (WorldEditException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");

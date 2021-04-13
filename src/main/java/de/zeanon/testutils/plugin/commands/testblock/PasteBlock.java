@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
@@ -44,7 +45,7 @@ public class PasteBlock {
 		if (testBlock != null) { //NOSONAR
 			try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getValue())) {
 				final @NotNull Clipboard clipboard = reader.read();
-				try (final @NotNull EditSession editSession = SessionFactory.createSession(p)) {
+				try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
 
 					final @NotNull BlockVector3 pastePoint;
 

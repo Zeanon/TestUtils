@@ -2,7 +2,7 @@ package de.zeanon.testutils.plugin.utils;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.internal.utility.basic.SizedStack;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class SessionFactory {
 		redoSessions = new HashMap<>();
 	}
 
-	public @NotNull EditSession createSession(final @NotNull Player p) {
+	public @NotNull EditSession createSession(final @NotNull Player p, final @NotNull World world) {
 		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
 			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
 			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
@@ -32,7 +32,7 @@ public class SessionFactory {
 		} else {
 			SessionFactory.undoSessions.put(p.getUniqueId().toString(), new SizedStack<>(ConfigUtils.getInt("Max History")));
 		}
-		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(p.getWorld()), -1);
+		final @NotNull EditSession tempSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1);
 		SessionFactory.undoSessions.get(p.getUniqueId().toString()).push(tempSession);
 		return tempSession;
 	}
