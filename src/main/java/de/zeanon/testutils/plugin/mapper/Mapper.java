@@ -30,6 +30,7 @@ public class Mapper {
 		SWCommandUtils.addMapper(TNTMode.class, Mapper.mapTNTMode());
 		SWCommandUtils.addMapper(GlobalToggle.class, Mapper.mapGlobalToggle());
 		SWCommandUtils.addMapper(StoplagToggle.class, Mapper.mapStoplagToggle());
+		SWCommandUtils.addMapper(RemoveEntities.class, Mapper.mapRemoveEntities());
 		SWCommandUtils.addMapper(BackupMode.class, Mapper.mapBackupMode());
 		SWCommandUtils.addMapper(CommandConfirmation.class, Mapper.mapCommandConfirmation());
 		SWCommandUtils.addMapper(RegionName.class, Mapper.mapRegionName());

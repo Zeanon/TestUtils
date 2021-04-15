@@ -15,6 +15,7 @@ import de.zeanon.testutils.regionsystem.region.Region;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -104,7 +105,7 @@ public class Stoplag extends SWCommand {
 
 	private static void removeEntities(final @NotNull Region region) {
 		for (final @NotNull Entity entity : region.getWorld().getEntities()) {
-			if (region.inRegion(entity.getLocation())) {
+			if (entity.getType() != EntityType.PLAYER && region.inRegion(entity.getLocation())) {
 				entity.remove();
 			}
 		}
