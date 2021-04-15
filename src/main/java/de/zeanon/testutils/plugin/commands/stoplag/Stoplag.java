@@ -5,13 +5,16 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.GlobalToggle;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
+import de.zeanon.testutils.plugin.utils.enums.RemoveEntities;
 import de.zeanon.testutils.plugin.utils.enums.StoplagToggle;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.region.GlobalRegion;
+import de.zeanon.testutils.regionsystem.region.Region;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,42 +28,67 @@ public class Stoplag extends SWCommand {
 
 	@Register
 	public void noArgs(final @NotNull Player p) {
-		this.execute(p, null, true, false);
+		this.execute(p, null, true, false, false);
 	}
 
 	@Register
 	public void oneArg(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		this.execute(p, regionSide, true, false);
+		this.execute(p, regionSide, true, false, false);
 	}
 
 	@Register
 	public void oneArg(final @NotNull Player p, final @NotNull StoplagToggle stoplagToggle) {
-		this.execute(p, null, stoplagToggle != StoplagToggle.C, false);
+		this.execute(p, null, stoplagToggle != StoplagToggle.C, false, false);
 	}
 
 	@Register
 	public void oneArg(final @NotNull Player p, final @NotNull GlobalToggle globalToggle) {
-		this.execute(p, null, true, globalToggle == GlobalToggle.GLOBAL);
+		this.execute(p, null, true, globalToggle == GlobalToggle.GLOBAL, false);
+	}
+
+	@Register
+	public void oneArg(final @NotNull Player p, final @NotNull RemoveEntities removeEntities) {
+		this.execute(p, null, true, false, removeEntities == RemoveEntities.REMOVEENTITIES);
 	}
 
 	@Register
 	public void twoArgs(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull StoplagToggle stoplagToggle) {
-		this.execute(p, regionSide, stoplagToggle != StoplagToggle.C, false);
+		this.execute(p, regionSide, stoplagToggle != StoplagToggle.C, false, false);
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull RemoveEntities removeEntities) {
+		this.execute(p, regionSide, true, false, removeEntities == RemoveEntities.REMOVEENTITIES);
 	}
 
 	@Register
 	public void twoArgs(final @NotNull Player p, final @NotNull StoplagToggle stoplagToggle, final @NotNull RegionSide regionSide) {
-		this.execute(p, regionSide, stoplagToggle != StoplagToggle.C, false);
+		this.execute(p, regionSide, stoplagToggle != StoplagToggle.C, false, false);
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull RemoveEntities removeEntities, final @NotNull RegionSide regionSide) {
+		this.execute(p, regionSide, true, false, removeEntities == RemoveEntities.REMOVEENTITIES);
 	}
 
 	@Register
 	public void twoArgs(final @NotNull Player p, final @NotNull GlobalToggle globalToggle, final @NotNull StoplagToggle stoplagToggle) {
-		this.execute(p, null, stoplagToggle != StoplagToggle.C, globalToggle == GlobalToggle.GLOBAL);
+		this.execute(p, null, stoplagToggle != StoplagToggle.C, globalToggle == GlobalToggle.GLOBAL, false);
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull GlobalToggle globalToggle, final @NotNull RemoveEntities removeEntities) {
+		this.execute(p, null, true, globalToggle == GlobalToggle.GLOBAL, removeEntities == RemoveEntities.REMOVEENTITIES);
 	}
 
 	@Register
 	public void twoArgs(final @NotNull Player p, final @NotNull StoplagToggle stoplagToggle, final @NotNull GlobalToggle globalToggle) {
-		this.execute(p, null, stoplagToggle != StoplagToggle.C, globalToggle == GlobalToggle.GLOBAL);
+		this.execute(p, null, stoplagToggle != StoplagToggle.C, globalToggle == GlobalToggle.GLOBAL, false);
+	}
+
+	@Register
+	public void twoArgs(final @NotNull Player p, final @NotNull RemoveEntities removeEntities, final @NotNull GlobalToggle globalToggle) {
+		this.execute(p, null, true, globalToggle == GlobalToggle.GLOBAL, removeEntities == RemoveEntities.REMOVEENTITIES);
 	}
 
 
@@ -74,11 +102,22 @@ public class Stoplag extends SWCommand {
 			   + org.bukkit.ChatColor.RED + "Stoplag has been deactivated on the " + area + " side of your TestArea.";
 	}
 
+	private static void removeEntities(final @NotNull Region region) {
+		for (final @NotNull Entity entity : region.getWorld().getEntities()) {
+			if (region.inRegion(entity.getLocation())) {
+				entity.remove();
+			}
+		}
+	}
 
-	private void execute(final @NotNull Player p, final @Nullable RegionSide regionSide, final boolean activate, final boolean global) {
+	private void execute(final @NotNull Player p, final @Nullable RegionSide regionSide, final boolean activate, final boolean global, final boolean removeEntities) {
 		if (global) {
-			RegionManager.getGlobalRegion(p.getWorld()).set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
-			for (final @NotNull Player player : Bukkit.getOnlinePlayers()) {
+			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
+			globalRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			if (removeEntities) {
+				Stoplag.removeEntities(globalRegion);
+			}
+			for (final @NotNull Player player : p.getWorld().getPlayers()) {
 				player.sendMessage(activate ? GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + p.getName()
 											  + ChatColor.RED + " has activated Stoplag globally."
@@ -100,6 +139,10 @@ public class Stoplag extends SWCommand {
 
 			tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 			otherRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			if (removeEntities) {
+				Stoplag.removeEntities(tempRegion);
+				Stoplag.removeEntities(otherRegion);
+			}
 			for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 				if ((tempRegion.inRegion(tempPlayer.getLocation())
 					 || otherRegion.inRegion(tempPlayer.getLocation()))) {
@@ -120,6 +163,9 @@ public class Stoplag extends SWCommand {
 			}
 
 			tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			if (removeEntities) {
+				Stoplag.removeEntities(tempRegion);
+			}
 			for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 				if (tempPlayer == p) {
 					tempPlayer.sendMessage(activate

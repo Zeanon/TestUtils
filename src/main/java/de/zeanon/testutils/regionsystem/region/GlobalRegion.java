@@ -2,6 +2,7 @@ package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.testutils.regionsystem.RegionType;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,5 +17,11 @@ public class GlobalRegion extends Region {
 			  "__" + world.getName() + "__",
 			  world,
 			  RegionType.GLOBAL_REGION);
+	}
+
+
+	@Override
+	public boolean inRegion(final @NotNull Location location) {
+		return this.getWorld().equals(location.getWorld());
 	}
 }

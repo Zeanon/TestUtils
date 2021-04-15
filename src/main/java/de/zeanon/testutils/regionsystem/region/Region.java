@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,6 +68,8 @@ public abstract class Region {
 	public @NotNull World getWorld() {
 		return this.world;
 	}
+
+	public abstract boolean inRegion(final @NotNull Location location);
 
 	public @NotNull String getName() {
 		return this.name;

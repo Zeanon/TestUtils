@@ -95,6 +95,17 @@ public class Mapper {
 		}, s -> tabCompletes);
 	}
 
+	private @NotNull TypeMapper<RemoveEntities> mapRemoveEntities() {
+		final @NotNull List<String> tabCompletes = Collections.singletonList("-removeentities");
+		return SWCommandUtils.createMapper(s -> {
+			if ("-removeentities".equalsIgnoreCase(s)) {
+				return RemoveEntities.REMOVEENTITIES;
+			} else {
+				return null;
+			}
+		}, s -> tabCompletes);
+	}
+
 	private @NotNull TypeMapper<BackupMode> mapBackupMode() {
 		final @NotNull List<String> tabCompletes = Arrays.asList("-manual", "-hourly", "-daily", "-startup");
 		return SWCommandUtils.createMapper(s -> {

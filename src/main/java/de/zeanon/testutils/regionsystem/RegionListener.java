@@ -363,12 +363,12 @@ public class RegionListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onInteract(final @NotNull PlayerInteractEvent event) {
 		if (event.getClickedBlock() != null) {
-			if (RegionManager.getGlobalRegion(event.getClickedBlock().getWorld()).get(Flag.STOPLAG) == STOPLAG.ACTIVE) {
-				event.setCancelled(true);
-				return;
-			}
-
 			if (event.getClickedBlock().getType() == Material.TNT && event.getItem() != null && event.getItem().getType() == Material.FLINT_AND_STEEL) {
+				if (RegionManager.getGlobalRegion(event.getClickedBlock().getWorld()).get(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+					event.setCancelled(true);
+					return;
+				}
+
 				for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getClickedBlock().getLocation())) {
 					if (region.get(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 						event.setCancelled(true);
