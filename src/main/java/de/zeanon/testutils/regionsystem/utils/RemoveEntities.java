@@ -38,31 +38,4 @@ public class RemoveEntities {
 		}
 		return count;
 	}
-
-	public long removeEntities(final @NotNull List<? extends Region> regions) {
-		long count = 0;
-		final @NotNull Map<World, Set<Region>> worldRegionMap = new HashMap<>();
-		for (final @NotNull Region region : regions) {
-			if (worldRegionMap.containsKey(region.getWorld())) {
-				worldRegionMap.get(region.getWorld()).add(region);
-			} else {
-				worldRegionMap.put(region.getWorld(), new HashSet<>(Collections.singletonList(region)));
-			}
-		}
-		for (final @NotNull Map.Entry<World, Set<Region>> mapEntry : worldRegionMap.entrySet()) {
-			count += mapEntry.getKey().getEntities().stream()
-							 .filter(e -> !(e instanceof Player))
-							 .filter(e -> {
-								 for (final @NotNull Region region : mapEntry.getValue()) {
-									 if (region.inRegion(e.getLocation())) {
-										 return true;
-									 }
-								 }
-								 return false;
-							 })
-							 .peek(Entity::remove) //NOSONAR
-							 .count();
-		}
-		return count;
-	}
 }
