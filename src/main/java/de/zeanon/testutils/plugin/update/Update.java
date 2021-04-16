@@ -50,6 +50,7 @@ public class Update {
 			if (!Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
 						.equals(TestUtils.getInstance().getDescription().getVersion())
 				|| !InitMode.getConfig().hasKeyUseArray("Max History")
+				|| !InitMode.getConfig().hasKeyUseArray("Max Back")
 				|| !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual")
 				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup")
@@ -68,6 +69,9 @@ public class Update {
 			final int maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
 								   ? InitMode.getConfig().getIntUseArray("Max History")
 								   : 10;
+			final int maxBack = InitMode.getConfig().hasKeyUseArray("Max Back")
+								? InitMode.getConfig().getIntUseArray("Max Back")
+								: 10;
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 
@@ -92,6 +96,7 @@ public class Update {
 			//noinspection unchecked
 			InitMode.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
 												new Pair<>(new String[]{"Max History"}, maxHistory),
+												new Pair<>(new String[]{"Max Back"}, maxBack),
 												new Pair<>(new String[]{"Automatic Reload"}, autoReload),
 												new Pair<>(new String[]{"Backups", "manual"}, maxManual),
 												new Pair<>(new String[]{"Backups", "startup"}, maxStartup),

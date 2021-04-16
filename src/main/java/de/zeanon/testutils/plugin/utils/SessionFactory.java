@@ -50,11 +50,9 @@ public class SessionFactory {
 	}
 
 	public @Nullable EditSession getUndoSession(final @NotNull Player p) {
-		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
-			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
-			if (!tempStack.empty()) {
-				return tempStack.pop();
-			}
+		final @Nullable SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+		if (tempStack != null && !tempStack.empty()) {
+			return tempStack.pop();
 		}
 		return null;
 	}
@@ -72,11 +70,9 @@ public class SessionFactory {
 	}
 
 	public @Nullable EditSession getRedoSession(final @NotNull Player p) {
-		if (SessionFactory.redoSessions.containsKey(p.getUniqueId().toString())) {
-			SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(p.getUniqueId().toString());
-			if (!tempStack.empty()) {
-				return tempStack.pop();
-			}
+		final @Nullable SizedStack<EditSession> tempStack = SessionFactory.redoSessions.get(p.getUniqueId().toString());
+		if (tempStack != null && !tempStack.empty()) {
+			return tempStack.pop();
 		}
 		return null;
 	}

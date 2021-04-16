@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.cleaninventory;
+package de.zeanon.testutils.plugin.commands.inventoryclean;
 
 import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -11,10 +11,10 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 
-public class CleanInventory extends SWCommand {
+public class InventoryClean extends SWCommand {
 
-	public CleanInventory() {
-		super("cleaninventory");
+	public InventoryClean() {
+		super("inventoryclean");
 	}
 
 
@@ -26,11 +26,11 @@ public class CleanInventory extends SWCommand {
 
 	@Register
 	public void noArgs(final @NotNull Player p) {
-		CleanInventory.cleanInventory(p);
+		InventoryClean.inventoryClean(p);
 	}
 
 
-	private static void cleanInventory(final @NotNull Player p) {
+	private static void inventoryClean(final @NotNull Player p) {
 		final @NotNull Inventory inventory = p.getInventory();
 		final @NotNull Set<Material> containedItems = new HashSet<>();
 		inventory.forEach(itemStack -> {

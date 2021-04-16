@@ -344,6 +344,17 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
+	@Register(value = "back", help = true)
+	public void backHelp(final @NotNull Player p, final @NotNull String... args) {
+		//TODO
+	}
+
+	@Register("back")
+	public void oneArgBack(final @NotNull Player p, final @NotNull AreaName areaName) {
+		Warp.back(p);
+	}
+
+
 	@Register("removeentities")
 	public void noArgsRemoveEntities(final @NotNull Player p) {
 		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, null, false);

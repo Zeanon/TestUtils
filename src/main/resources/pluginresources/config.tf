@@ -21,6 +21,9 @@ Plugin Version = ${project.version}
 # Define the maximum amount of undos possible for the "/tu undo" command
 Max History = 10
 
+# Define the amount of back commands someone can perform
+Max Back = 10;
+
 # Should the plugin automatically reload the Server after it got updated?
 # If you have PlugMan installed, it will only reload itself, not the whole server.
 # PlugMan: https://dev.bukkit.org/projects/plugman

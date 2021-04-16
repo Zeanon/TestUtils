@@ -75,6 +75,8 @@ public class ConfigUtils {
 			return true;
 		} else if (Arrays.equals(new String[]{"Max History"}, key)) {
 			return 10;
+		} else if (Arrays.equals(new String[]{"Max Back"}, key)) {
+			return 10;
 		} else if (Arrays.equals(new String[]{"Plugin Version"}, key)) {
 			return TestUtils.getInstance().getDescription().getVersion();
 		} else if (Arrays.equals(new String[]{"Backups", "manual"}, key)) {
