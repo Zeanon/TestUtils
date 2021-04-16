@@ -68,28 +68,30 @@ public class Update {
 		try {
 			final int maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
 								   ? InitMode.getConfig().getIntUseArray("Max History")
-								   : 10;
+								   : (int) ConfigUtils.getDefaultValue("Max History");
+
 			final int maxBack = InitMode.getConfig().hasKeyUseArray("Max Back")
 								? InitMode.getConfig().getIntUseArray("Max Back")
-								: 10;
+								: (int) ConfigUtils.getDefaultValue("Max Back");
+
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 
 			final int maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
 								  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
-								  : 10;
+								  : (int) ConfigUtils.getDefaultValue("Backups", "manual");
 
 			final int maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
 								   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
-								   : 10;
+								   : (int) ConfigUtils.getDefaultValue("Backups", "startup");
 
 			final int maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
 								  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
-								  : 24;
+								  : (int) ConfigUtils.getDefaultValue("Backups", "hourly");
 
 			final int maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
 								 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
-								 : 7;
+								 : (int) ConfigUtils.getDefaultValue("Backups", "daily");
 
 			InitMode.getConfig().setDataFromResource("resources/config.tf");
 

@@ -350,7 +350,7 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 	@Register("back")
-	public void oneArgBack(final @NotNull Player p, final @NotNull AreaName areaName) {
+	public void oneArgBack(final @NotNull Player p) {
 		Warp.back(p);
 	}
 
