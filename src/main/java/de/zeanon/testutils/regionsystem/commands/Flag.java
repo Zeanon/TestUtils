@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.region;
+package de.zeanon.testutils.regionsystem.commands;
 
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;

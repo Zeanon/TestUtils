@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.region;
+package de.zeanon.testutils.regionsystem.commands;
 
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.region.RegionManager;

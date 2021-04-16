@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.commands.region;
+package de.zeanon.testutils.regionsystem.commands;
 
 import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
@@ -35,13 +35,23 @@ public class RegionCommand extends SWCommand {
 	}
 
 	@Register("info")
-	public void noArgsRegion(final @NotNull Player p) {
+	public void noArgsInfo(final @NotNull Player p) {
 		Info.execute(null, p);
 	}
 
 	@Register("info")
-	public void oneArgRegion(final @NotNull Player p, final @NotNull RegionName regionName) {
+	public void oneArgInfo(final @NotNull Player p, final @NotNull RegionName regionName) {
 		Info.execute(regionName, p);
+	}
+
+	@Register("removeentities")
+	public void noArgsRemoveEntities(final @NotNull Player p) {
+		RemoveEntities.execute(null, p);
+	}
+
+	@Register("removeentities")
+	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull RegionName regionName) {
+		RemoveEntities.execute(regionName, p);
 	}
 
 	@Register(value = {"flag"}, help = true)
@@ -59,7 +69,7 @@ public class RegionCommand extends SWCommand {
 								  + "' is not a valid region.");
 					return;
 				}
-				de.zeanon.testutils.plugin.commands.region.Flag.execute(null, flag.get(), null, p);
+				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag.get(), null, p);
 				return;
 			}
 		}
@@ -67,7 +77,7 @@ public class RegionCommand extends SWCommand {
 		if (args.length == 1) {
 			final Optional<Flag> flag = Flag.getFlags().stream().filter(f -> args[0].equalsIgnoreCase(f.name())).findFirst();
 			if (flag.isPresent()) {
-				de.zeanon.testutils.plugin.commands.region.Flag.execute(null, flag.get(), null, p);
+				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag.get(), null, p);
 				return;
 			}
 		}
@@ -77,37 +87,32 @@ public class RegionCommand extends SWCommand {
 
 	@Register("flag")
 	public void oneArgFlag(final @NotNull Player p, final @NotNull Flag flag) {
-		de.zeanon.testutils.plugin.commands.region.Flag.execute(null, flag, null, p);
+		de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, null, p);
 	}
 
 	@Register("flag")
 	public void twoArgsFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
-		de.zeanon.testutils.plugin.commands.region.Flag.execute(null, flag, value, p);
+		de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, value, p);
 	}
 
 	@Register("flag")
 	public void twoArgsFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag) {
-		de.zeanon.testutils.plugin.commands.region.Flag.execute(regionName, flag, null, p);
+		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, null, p);
 	}
 
 	@Register("flag")
 	public void threeArgsFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
-		de.zeanon.testutils.plugin.commands.region.Flag.execute(regionName, flag, value, p);
+		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, value, p);
 	}
 
 	@Register("flag")
 	public void threeArgsFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value, final @NotNull RegionName regionName) {
-		de.zeanon.testutils.plugin.commands.region.Flag.execute(regionName, flag, value, p);
+		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, value, p);
 	}
 
 	@Register("reload")
 	public void noArgsReload(final @NotNull Player p) {
 		Reload.execute(p);
-	}
-
-	@Register("save")
-	public void test(final @NotNull Player p) {
-		RegionManager.saveRegions();
 	}
 
 	private static @NotNull String getFlagsHelpMessage() {

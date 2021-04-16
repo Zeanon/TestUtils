@@ -344,6 +344,22 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
+	@Register("removeentities")
+	public void noArgsRemoveEntities(final @NotNull Player p) {
+		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, null, false);
+	}
+
+	@Register("removeentities")
+	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, regionSide, false);
+	}
+
+	@Register("removeentities")
+	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull GlobalToggle globalToggle) {
+		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, null, true);
+	}
+
+
 	@ClassMapper(value = CommandConfirmation.class, local = true)
 	private @NotNull TypeMapper<CommandConfirmation> mapCommandConfirmation() {
 		return TestUtilsCommand.getCommandConfirmationMapper();
