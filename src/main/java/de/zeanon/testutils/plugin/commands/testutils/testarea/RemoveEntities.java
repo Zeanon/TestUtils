@@ -20,9 +20,9 @@ public class RemoveEntities {
 		if (global) {
 			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-						  + ChatColor.RED + "You have removed '"
+						  + ChatColor.RED + "You have removed "
 						  + ChatColor.DARK_RED + de.zeanon.testutils.regionsystem.utils.RemoveEntities.removeEntities(globalRegion)
-						  + ChatColor.RED + "' entities globally.");
+						  + ChatColor.RED + " entities globally.");
 			return;
 		}
 
@@ -37,9 +37,9 @@ public class RemoveEntities {
 			}
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-						  + ChatColor.RED + "You have removed '"
+						  + ChatColor.RED + "You have removed "
 						  + ChatColor.DARK_RED + de.zeanon.testutils.regionsystem.utils.RemoveEntities.removeEntities(tempRegion, otherRegion)
-						  + ChatColor.RED + "' entities in your TestArea.");
+						  + ChatColor.RED + " entities in your TestArea.");
 		} else {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
 			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
@@ -50,9 +50,9 @@ public class RemoveEntities {
 				return;
 			}
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-						  + ChatColor.RED + "You have removed '"
+						  + ChatColor.RED + "You have removed "
 						  + ChatColor.DARK_RED + de.zeanon.testutils.regionsystem.utils.RemoveEntities.removeEntities(tempRegion)
-						  + ChatColor.RED + "' entities on the " + regionSide.getName() + " of your TestArea.");
+						  + ChatColor.RED + " entities on the " + regionSide.getName() + " of your TestArea.");
 			de.zeanon.testutils.regionsystem.utils.RemoveEntities.removeEntities(tempRegion);
 		}
 	}
