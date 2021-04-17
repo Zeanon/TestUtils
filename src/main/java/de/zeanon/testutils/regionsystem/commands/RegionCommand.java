@@ -16,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 public class RegionCommand extends SWCommand {
 
 
-	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "RegionManager" + ChatColor.DARK_GRAY + "] ";
+	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "RegionSystem" + ChatColor.DARK_GRAY + "] ";
 	private static final @NotNull String FLAGS_HELP_MESSAGE = RegionCommand.getFlagsHelpMessage();
+
 
 	public RegionCommand() {
 		super("region", true, "rg");

@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,20 +21,21 @@ public enum FALL_DAMAGE implements Flag.Value<FALL_DAMAGE> {
 	private final @NotNull String chatValue;
 
 	@Override
-	public FALL_DAMAGE[] getValues() {
+	public @NotNull FALL_DAMAGE[] getValues() {
 		if (FALL_DAMAGE.values == null) {
 			FALL_DAMAGE.values = FALL_DAMAGE.values(); //NOSONAR
 		}
-		return FALL_DAMAGE.values;
+		//noinspection NullableProblems
+		return Objects.notNull(FALL_DAMAGE.values);
 	}
 
 	@Override
-	public FALL_DAMAGE getValue() {
+	public @NotNull FALL_DAMAGE getValue() {
 		return this;
 	}
 
 	@Override
-	public FALL_DAMAGE getValueOf(final @NotNull String name) {
+	public @NotNull FALL_DAMAGE getValueOf(final @NotNull String name) {
 		try {
 			return FALL_DAMAGE.valueOf(name);
 		} catch (IllegalArgumentException e) {

@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,20 +21,21 @@ public enum FIRE implements Flag.Value<FIRE> {
 	private final @NotNull String chatValue;
 
 	@Override
-	public FIRE[] getValues() {
+	public @NotNull FIRE[] getValues() {
 		if (FIRE.values == null) {
 			FIRE.values = FIRE.values(); //NOSONAR
 		}
-		return FIRE.values;
+		//noinspection NullableProblems
+		return Objects.notNull(FIRE.values);
 	}
 
 	@Override
-	public FIRE getValue() {
+	public @NotNull FIRE getValue() {
 		return this;
 	}
 
 	@Override
-	public FIRE getValueOf(final @NotNull String name) {
+	public @NotNull FIRE getValueOf(final @NotNull String name) {
 		try {
 			return FIRE.valueOf(name);
 		} catch (IllegalArgumentException e) {

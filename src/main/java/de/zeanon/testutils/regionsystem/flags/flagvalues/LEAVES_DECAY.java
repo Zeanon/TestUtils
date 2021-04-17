@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,20 +21,21 @@ public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 	private final @NotNull String chatValue;
 
 	@Override
-	public LEAVES_DECAY[] getValues() {
+	public @NotNull LEAVES_DECAY[] getValues() {
 		if (LEAVES_DECAY.values == null) {
 			LEAVES_DECAY.values = LEAVES_DECAY.values(); //NOSONAR
 		}
-		return LEAVES_DECAY.values;
+		//noinspection NullableProblems
+		return Objects.notNull(LEAVES_DECAY.values);
 	}
 
 	@Override
-	public LEAVES_DECAY getValue() {
+	public @NotNull LEAVES_DECAY getValue() {
 		return this;
 	}
 
 	@Override
-	public LEAVES_DECAY getValueOf(final @NotNull String name) {
+	public @NotNull LEAVES_DECAY getValueOf(final @NotNull String name) {
 		try {
 			return LEAVES_DECAY.valueOf(name);
 		} catch (IllegalArgumentException e) {

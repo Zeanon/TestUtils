@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.utils.enums.TNTMode;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
@@ -21,19 +22,20 @@ public enum TNT implements Flag.Value<TNT> {
 	private final @NotNull String chatValue;
 
 	@Override
-	public TNT[] getValues() {
+	public @NotNull TNT[] getValues() {
 		if (TNT.values == null) {
 			TNT.values = TNT.values(); //NOSONAR
 		}
-		return TNT.values;
+		//noinspection NullableProblems
+		return Objects.notNull(TNT.values);
 	}
 
 	@Override
-	public TNT getValue() {
+	public @NotNull TNT getValue() {
 		return this;
 	}
 
-	public TNT getValue(final @Nullable TNTMode tntMode) {
+	public @NotNull TNT getValue(final @Nullable TNTMode tntMode) {
 		if (tntMode == null) {
 			return this == TNT.ALLOW ? TNT.DENY : TNT.ALLOW;
 		} else {
@@ -42,7 +44,7 @@ public enum TNT implements Flag.Value<TNT> {
 	}
 
 	@Override
-	public TNT getValueOf(final @NotNull String name) {
+	public @NotNull TNT getValueOf(final @NotNull String name) {
 		try {
 			return TNT.valueOf(name);
 		} catch (IllegalArgumentException e) {

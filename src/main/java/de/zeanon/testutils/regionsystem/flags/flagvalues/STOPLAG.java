@@ -1,6 +1,7 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,20 +23,21 @@ public enum STOPLAG implements Flag.Value<STOPLAG> {
 	private final @NotNull String chatValue;
 
 	@Override
-	public STOPLAG[] getValues() {
+	public @NotNull STOPLAG[] getValues() {
 		if (STOPLAG.values == null) {
 			STOPLAG.values = STOPLAG.values(); //NOSONAR
 		}
-		return STOPLAG.values;
+		//noinspection NullableProblems
+		return Objects.notNull(STOPLAG.values);
 	}
 
 	@Override
-	public STOPLAG getValue() {
+	public @NotNull STOPLAG getValue() {
 		return this;
 	}
 
 	@Override
-	public STOPLAG getValueOf(final @NotNull String name) {
+	public @NotNull STOPLAG getValueOf(final @NotNull String name) {
 		try {
 			return STOPLAG.valueOf(name);
 		} catch (IllegalArgumentException e) {
