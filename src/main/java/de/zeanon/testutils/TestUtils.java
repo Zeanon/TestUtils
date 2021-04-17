@@ -26,6 +26,7 @@ public final class TestUtils extends JavaPlugin {
 	@Setter(AccessLevel.PRIVATE)
 	private static Path pluginFolder;
 
+
 	@Override
 	public void onEnable() {
 		TestUtils.setInstance(this);
@@ -39,6 +40,7 @@ public final class TestUtils extends JavaPlugin {
 		InitMode.initPlugin();
 	}
 
+	
 	@Override
 	public void onDisable() {
 		InitMode.unregisterCommands();

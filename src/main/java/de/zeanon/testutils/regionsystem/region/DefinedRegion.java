@@ -86,7 +86,6 @@ public class DefinedRegion extends Region {
 		return this.hasChanged;
 	}
 
-
 	public void setHasChanged(final boolean hasChanged) {
 		this.hasChanged = hasChanged;
 	}
@@ -99,10 +98,12 @@ public class DefinedRegion extends Region {
 		return this.maxPoint;
 	}
 
+
 	protected void deleteRegion() {
 		this.jsonFile.clearData();
 		this.jsonFile.deleteFile();
 	}
+
 
 	private Point getPoint(final @NotNull String path) {
 		return new Point(this.jsonFile.getIntUseArray("points", path, "x"),
@@ -118,6 +119,7 @@ public class DefinedRegion extends Region {
 				new Pair<>(new String[]{"points", path, "z"}, point.getZ())
 												);
 	}
+
 
 	private Pair<Point, Point> sortPoints(final @NotNull Point firstPoint, final @NotNull Point secondPoint) {
 		return new Pair<>(new Point(

@@ -21,6 +21,7 @@ public enum TNT implements Flag.Value<TNT> {
 	private static @Nullable TNT[] values;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull TNT[] getValues() {
 		if (TNT.values == null) {

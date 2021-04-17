@@ -21,11 +21,11 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Region {
 
 	protected final @NotNull JsonFile jsonFile;
-
 	protected final @NotNull String name;
 	protected final @NotNull World world;
 	protected final @NotNull RegionType regionType;
 	protected final @NotNull Map<Flag, Flag.Value<?>> flags;
+
 
 	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world, final @NotNull RegionType regionType) {
 		this.jsonFile = jsonFile;
@@ -51,6 +51,7 @@ public abstract class Region {
 		this.readFlags();
 	}
 
+
 	public void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
 		if (this.flags.put(flagType, value) != value) {
 			this.saveData();
@@ -75,11 +76,9 @@ public abstract class Region {
 		return this.name;
 	}
 
-
 	public @NotNull RegionType getType() {
 		return this.regionType;
 	}
-
 
 	public void saveData() {
 		this.jsonFile.save();

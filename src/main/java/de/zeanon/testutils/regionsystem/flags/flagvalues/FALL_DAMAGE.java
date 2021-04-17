@@ -20,6 +20,7 @@ public enum FALL_DAMAGE implements Flag.Value<FALL_DAMAGE> {
 	private static @Nullable FALL_DAMAGE[] values;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull FALL_DAMAGE[] getValues() {
 		if (FALL_DAMAGE.values == null) {

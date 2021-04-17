@@ -20,12 +20,14 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegionManager {
 
+
 	public static final @NotNull Path DEFINED_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Defined");
 	public static final @NotNull Path GLOBAL_REGIONS_FOLDER = TestUtils.getPluginFolder().resolve("Regions").resolve("Global");
 	@Getter
 	private final @NotNull Set<DefinedRegion> regions = new HashSet<>();
 	@Getter
 	private final @NotNull Map<String, GlobalRegion> globalRegions = new HashMap<>();
+
 
 	public void initialize() throws IOException {
 		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER.toFile());
@@ -51,6 +53,7 @@ public class RegionManager {
 			RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
 		}
 	}
+
 
 	public @NotNull GlobalRegion getGlobalRegion(final @NotNull World world) {
 		final @Nullable GlobalRegion globalRegion = RegionManager.globalRegions.get("__" + world.getName() + "__");

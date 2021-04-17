@@ -18,6 +18,7 @@ public enum Flag {
 	FALL_DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.ALLOW),
 	DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.ALLOW);
 
+
 	@Getter
 	private static final @NotNull Set<Flag> flags;
 
@@ -30,11 +31,13 @@ public enum Flag {
 	private final @NotNull Flag.Value<?> defaultValue;
 	private final Value<?>[] values;
 
+
 	<T extends Enum<T> & Value<T>> Flag(final @NotNull Class<? extends Value<T>> valueType, final @NotNull Flag.Value<T> defaultValue) {
 		this.valueType = valueType;
 		this.defaultValue = defaultValue;
 		this.values = defaultValue.getValues();
 	}
+
 
 	public Value<?> getFlagValueOf(final @NotNull String name) {
 		return this.defaultValue.getValueOf(name);
@@ -47,7 +50,6 @@ public enum Flag {
 
 
 	public interface Value<T extends Enum<T> & Value<T>> {
-
 
 		T getValue();
 

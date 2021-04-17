@@ -13,7 +13,9 @@ public enum RegionType {
 	DEFINED_REGION("DefinedRegion"),
 	TESTAREA("TestArea");
 
+
 	private final @NotNull String name;
+
 
 	@Override
 	public @NotNull String toString() {

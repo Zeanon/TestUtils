@@ -22,6 +22,7 @@ public enum STOPLAG implements Flag.Value<STOPLAG> {
 	private final @NotNull String descriptor;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull STOPLAG[] getValues() {
 		if (STOPLAG.values == null) {

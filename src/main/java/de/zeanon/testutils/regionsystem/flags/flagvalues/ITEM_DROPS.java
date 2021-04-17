@@ -20,6 +20,7 @@ public enum ITEM_DROPS implements Flag.Value<ITEM_DROPS> {
 	private static @Nullable ITEM_DROPS[] values;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull ITEM_DROPS[] getValues() {
 		if (ITEM_DROPS.values == null) {

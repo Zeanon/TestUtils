@@ -20,6 +20,7 @@ public enum FIRE implements Flag.Value<FIRE> {
 	private static @Nullable FIRE[] values;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull FIRE[] getValues() {
 		if (FIRE.values == null) {

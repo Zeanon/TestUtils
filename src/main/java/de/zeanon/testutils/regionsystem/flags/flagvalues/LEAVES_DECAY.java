@@ -20,6 +20,7 @@ public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 	private static @Nullable LEAVES_DECAY[] values;
 	private final @NotNull String chatValue;
 
+
 	@Override
 	public @NotNull LEAVES_DECAY[] getValues() {
 		if (LEAVES_DECAY.values == null) {
