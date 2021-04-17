@@ -30,8 +30,8 @@ public class RegionManager {
 
 
 	public void initialize() throws IOException {
-		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER.toFile());
-		BaseFileUtils.createFolder(RegionManager.GLOBAL_REGIONS_FOLDER.toFile());
+		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER);
+		BaseFileUtils.createFolder(RegionManager.GLOBAL_REGIONS_FOLDER);
 
 
 		RegionManager.initializeTestAreas();

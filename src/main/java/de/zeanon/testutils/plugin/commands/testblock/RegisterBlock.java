@@ -19,9 +19,8 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -76,12 +75,12 @@ public class RegisterBlock {
 
 			Operations.complete(copy);
 
-			File tempFile = mappedFile != null ? TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem").toFile()
-											   : TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem").toFile();
+			final @NotNull Path tempFile = mappedFile != null ? TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem")
+															  : TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem");
 
 			BaseFileUtils.createFile(tempFile);
 
-			try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
+			try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(BaseFileUtils.createNewOutputStreamFromFile(tempFile))) {
 				writer.write(clipboard);
 			}
 
