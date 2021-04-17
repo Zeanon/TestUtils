@@ -28,7 +28,8 @@ public class Flag {
 						  + "' are: "
 						  + Arrays.stream(flag.getValues())
 								  .map(v -> ChatColor.DARK_RED + v.getName())
-								  .collect(Collectors.joining(ChatColor.RED + ", ")));
+								  .collect(Collectors.joining(ChatColor.RED + ", "))
+						  + ".");
 		} else {
 			if (regionName == null) {
 				final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation()); //NOSONAR

@@ -5,6 +5,7 @@ import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.interfaces.DataMap;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.init.InitMode;
@@ -112,8 +113,7 @@ public class ConfigUtils {
 					throw new ObjectNullException("File does not contain '" + Arrays.toString(key) + "' -> could not find '" + tempKey + "'");
 				}
 			}
-			//noinspection unchecked
-			return (V) tempValue;
+			return Objects.toDef(tempValue);
 		}
 
 		@SuppressWarnings("rawtypes")

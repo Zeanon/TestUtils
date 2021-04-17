@@ -58,7 +58,7 @@ public abstract class Region {
 		}
 	}
 
-	public Flag.Value<?> get(final @NotNull Flag flagType) {
+	public @Nullable Flag.Value<?> get(final @NotNull Flag flagType) {
 		return this.flags.get(flagType);
 	}
 

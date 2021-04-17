@@ -66,32 +66,32 @@ public class Update {
 
 	public void updateConfig() {
 		try {
-			final int maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
-								   ? InitMode.getConfig().getIntUseArray("Max History")
-								   : (int) ConfigUtils.getDefaultValue("Max History");
+			final Integer maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
+									   ? InitMode.getConfig().getIntUseArray("Max History")
+									   : Objects.toInt(ConfigUtils.getDefaultValue("Max History"));
 
-			final int maxBack = InitMode.getConfig().hasKeyUseArray("Max Back")
-								? InitMode.getConfig().getIntUseArray("Max Back")
-								: (int) ConfigUtils.getDefaultValue("Max Back");
+			final Integer maxBack = InitMode.getConfig().hasKeyUseArray("Max Back")
+									? InitMode.getConfig().getIntUseArray("Max Back")
+									: Objects.toInt(ConfigUtils.getDefaultValue("Max Back"));
 
 			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
 									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
 
-			final int maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
-								  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
-								  : (int) ConfigUtils.getDefaultValue("Backups", "manual");
+			final Integer maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
+									  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
+									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "manual"));
 
-			final int maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
-								   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
-								   : (int) ConfigUtils.getDefaultValue("Backups", "startup");
+			final Integer maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
+									   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
+									   : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "startup"));
 
-			final int maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
-								  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
-								  : (int) ConfigUtils.getDefaultValue("Backups", "hourly");
+			final Integer maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
+									  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
+									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "hourly"));
 
-			final int maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
-								 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
-								 : (int) ConfigUtils.getDefaultValue("Backups", "daily");
+			final Integer maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
+									 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
+									 : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "daily"));
 
 			InitMode.getConfig().setDataFromResource("resources/config.tf");
 
