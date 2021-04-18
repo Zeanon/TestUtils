@@ -5,7 +5,6 @@ import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
@@ -400,7 +399,7 @@ public class BackupCommand extends SWCommand {
 		return new TypeMapper<MappedFile>() {
 			@Override
 			public MappedFile map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
+				if (TestAreaUtils.forbiddenFileName(s)) {
 					return null;
 				} else {
 					return new MappedFile(s);

@@ -116,6 +116,11 @@ public class RegionCommand extends SWCommand {
 		Reload.execute(p);
 	}
 
+	@Register("save")
+	public void noArgsSave(final @NotNull Player p) {
+		Save.execute(p);
+	}
+
 	private static @NotNull String getFlagsHelpMessage() {
 		return RegionCommand.MESSAGE_HEAD
 			   + ChatColor.RED

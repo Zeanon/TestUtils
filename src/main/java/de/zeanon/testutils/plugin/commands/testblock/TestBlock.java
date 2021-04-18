@@ -5,7 +5,6 @@ import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
@@ -57,7 +56,7 @@ public class TestBlock extends SWCommand {
 		return new TypeMapper<MappedFile>() {
 			@Override
 			public MappedFile map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
+				if (TestAreaUtils.forbiddenFileName(s)) {
 					return null;
 				} else {
 					return new MappedFile(s);

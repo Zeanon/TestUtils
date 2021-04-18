@@ -1,9 +1,9 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.SizedStack;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
@@ -25,7 +25,7 @@ public class Warp {
 	private final @NotNull Map<String, SizedStack<Location>> backLocations = new HashMap<>();
 
 	public void execute(final @NotNull AreaName name, final @NotNull Player p) {
-		if (name.getName().contains("./") || name.getName().contains(".\\") || InitMode.forbiddenFileName(name.getName())) {
+		if (TestAreaUtils.illegalName(name.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Area '" + name.getName() + "' resolution error: Name is not allowed.");
 			return;

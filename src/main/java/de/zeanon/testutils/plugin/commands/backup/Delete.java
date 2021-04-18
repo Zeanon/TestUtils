@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class Delete {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName())) {
+		if (TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

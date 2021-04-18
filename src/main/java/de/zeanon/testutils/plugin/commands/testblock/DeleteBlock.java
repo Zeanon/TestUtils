@@ -1,10 +1,10 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import java.io.File;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteBlock {
 
 	public void execute(final @NotNull MappedFile mappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName())) {
+		if (TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

@@ -86,7 +86,7 @@ public abstract class Region {
 
 
 	private void readFlags() {
-		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(this.jsonFile.getMap("flags"));
+		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(this.jsonFile.getDirectMapReference("flags"));
 		for (final @NotNull Flag flag : Flag.getFlags()) {
 			final @Nullable String flagValue = tempFlagMap.get(flag.toString());
 			this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));

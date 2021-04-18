@@ -1,10 +1,10 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import java.io.File;
@@ -23,13 +23,13 @@ import org.jetbrains.annotations.Nullable;
 public class RenameBlock {
 
 	public void execute(final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (oldMappedFile.getName().contains("./") || oldMappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(oldMappedFile.getName())) {
+		if (TestAreaUtils.illegalName(oldMappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Block '" + oldMappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;
 		}
 
-		if (newMappedFile.getName().contains("./") || newMappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(newMappedFile.getName())) {
+		if (TestAreaUtils.illegalName(newMappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Block '" + newMappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

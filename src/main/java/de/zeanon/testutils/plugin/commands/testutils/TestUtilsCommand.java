@@ -3,12 +3,12 @@ package de.zeanon.testutils.plugin.commands.testutils;
 import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.commands.testblock.*;
 import de.zeanon.testutils.plugin.commands.testutils.testarea.*;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.*;
 import java.io.File;
 import java.io.IOException;
@@ -386,7 +386,7 @@ public class TestUtilsCommand extends SWCommand {
 		return new TypeMapper<MappedFolder>() {
 			@Override
 			public MappedFolder map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
+				if (TestAreaUtils.forbiddenFileName(s)) {
 					return null;
 				} else {
 					return new MappedFolder(s);

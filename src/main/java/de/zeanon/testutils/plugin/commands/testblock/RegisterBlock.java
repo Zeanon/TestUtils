@@ -14,7 +14,6 @@ import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
@@ -32,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 public class RegisterBlock {
 
 	public void execute(final @Nullable MappedFile mappedFile, final @NotNull Player p) {
-		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+		if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

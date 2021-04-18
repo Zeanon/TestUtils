@@ -2,11 +2,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
-import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
-import de.zeanon.testutils.plugin.utils.ConfigUtils;
-import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
-import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFolder;
 import java.io.File;
@@ -26,13 +22,13 @@ import org.jetbrains.annotations.Nullable;
 public class RenameFolder {
 
 	public void execute(final @NotNull MappedFolder oldMappedFolder, final @NotNull MappedFolder newMappedFolder, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (oldMappedFolder.getName().contains("./") || oldMappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(oldMappedFolder.getName())) {
+		if (TestAreaUtils.illegalName(oldMappedFolder.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Folder '" + oldMappedFolder.getName() + "' resolution error: Name is not allowed.");
 			return;
 		}
 
-		if (newMappedFolder.getName().contains("./") || newMappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(newMappedFolder.getName())) {
+		if (TestAreaUtils.illegalName(newMappedFolder.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Folder '" + newMappedFolder.getName() + "' resolution error: Name is not allowed.");
 			return;
@@ -170,6 +166,7 @@ public class RenameFolder {
 		return "/testutils renamefolder ";
 	}
 
+	@SuppressWarnings("unused")
 	public void usage(final @NotNull Player p) {
 		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.RED + "Usage: ",

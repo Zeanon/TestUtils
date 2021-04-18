@@ -1,7 +1,7 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class RegisterArea {
 
 	public void execute(final @Nullable AreaName name, final @NotNull Player p) {
-		if (name != null && (name.getName().contains("./") || name.getName().contains(".\\") || InitMode.forbiddenFileName(name.getName()))) {
+		if (name != null && TestAreaUtils.illegalName(name.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Area '" + name.getName() + "' resolution error: Name is not allowed.");
 			return;

@@ -62,8 +62,6 @@ public class Info {
 		final boolean[] lineBreak = {false};
 		final int[] currentCount = new int[]{0};
 		final int flagCount = region.getFlags().size();
-		final @NotNull TextComponent separator = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " "));
 
 		final @NotNull TextComponent flags = new TextComponent(RegionCommand.MESSAGE_HEAD
 															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---\n");
@@ -82,13 +80,13 @@ public class Info {
 			currentFlag.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rg flag " + region.getName() + " " + flag.toString() + " "));
 			flags.addExtra(currentFlag);
 
-			if (lineBreak[0]) {
-				flags.addExtra(ChatColor.BLACK + "]\n");
+			if (currentCount[0] == flagCount) {
+				flags.addExtra(ChatColor.BLACK + "]");
 			} else {
-				if (currentCount[0] == flagCount) {
-					flags.addExtra(ChatColor.BLACK + "]");
+				if (lineBreak[0]) {
+					flags.addExtra(ChatColor.BLACK + "]\n");
 				} else {
-					flags.addExtra(separator);
+					flags.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
 				}
 			}
 

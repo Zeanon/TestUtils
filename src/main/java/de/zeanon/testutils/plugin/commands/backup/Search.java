@@ -2,9 +2,9 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
@@ -32,7 +32,7 @@ public class Search {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName())) {
+				if (TestAreaUtils.illegalName(mappedFile.getName())) {
 					p.sendMessage(BackupCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 					return;
@@ -106,7 +106,7 @@ public class Search {
 									  + ChatColor.RED + "=== " + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + " === " + BackupCommand.MESSAGE_HEAD);
 						for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
 							BackupCommand.sendLoadBackupMessage(file.getKey().getName(),
-																file.getValue(),
+																Objects.notNull(file.getValue()),
 																p);
 						}
 					}

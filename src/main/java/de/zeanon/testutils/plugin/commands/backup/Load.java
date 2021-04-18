@@ -3,7 +3,6 @@ package de.zeanon.testutils.plugin.commands.backup;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -26,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class Load {
 
 	public void execute(final @Nullable RegionSide regionSide, final @Nullable MappedFile mappedFile, final @Nullable BackupMode backupMode, final @NotNull Player p) {
-		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+		if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

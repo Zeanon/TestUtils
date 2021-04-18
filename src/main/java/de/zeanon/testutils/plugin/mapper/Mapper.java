@@ -3,8 +3,8 @@ package de.zeanon.testutils.plugin.mapper;
 import de.steamwar.commandframework.SWCommandUtils;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.*;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.Region;
@@ -189,7 +189,7 @@ public class Mapper {
 		return new TypeMapper<AreaName>() {
 			@Override
 			public AreaName map(final @NotNull String[] previous, final @NotNull String s) {
-				if (InitMode.forbiddenFileName(s)) {
+				if (TestAreaUtils.forbiddenFileName(s)) {
 					return null;
 				} else {
 					return new AreaName(s);

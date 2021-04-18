@@ -26,7 +26,6 @@ import de.zeanon.testutils.regionsystem.region.RegionManager;
 import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -43,7 +42,6 @@ public class InitMode {
 
 
 	final @NotNull Set<SWCommand> registeredCommands = new HashSet<>();
-	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
 	@Getter
 	private ThunderConfig config;
 
@@ -120,10 +118,6 @@ public class InitMode {
 				BackupScheduler.backup();
 			}
 		}.runTask(TestUtils.getInstance());
-	}
-
-	public boolean forbiddenFileName(final @NotNull String name) {
-		return InitMode.forbiddenNames.contains(name.toLowerCase());
 	}
 
 	public void registerCommands() {

@@ -3,7 +3,6 @@ package de.zeanon.testutils.plugin.commands.backup;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.Backup;
 import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
@@ -36,7 +35,7 @@ public class Save {
 			return;
 		}
 
-		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+		if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "Backup '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

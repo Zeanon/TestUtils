@@ -1,10 +1,10 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFolder;
 import java.io.File;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class DeleteFolder {
 
 	public void execute(final @NotNull MappedFolder mappedFolder, final @Nullable CommandConfirmation confirmation, final @NotNull Player p) {
-		if (mappedFolder.getName().contains("./") || mappedFolder.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFolder.getName())) {
+		if (TestAreaUtils.illegalName(mappedFolder.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Folder '" + mappedFolder.getName() + "' resolution error: Name is not allowed.");
 			return;

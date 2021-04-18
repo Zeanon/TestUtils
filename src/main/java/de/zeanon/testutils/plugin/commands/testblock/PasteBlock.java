@@ -12,9 +12,9 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
+import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class PasteBlock {
 
 	public void pasteBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile, final @Nullable DefinedRegion tempRegion, final @NotNull String area) {
-		if (mappedFile != null && (mappedFile.getName().contains("./") || mappedFile.getName().contains(".\\") || InitMode.forbiddenFileName(mappedFile.getName()))) {
+		if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
 			return;

@@ -3,8 +3,7 @@ package de.zeanon.testutils.plugin.utils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.RegionManager;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +12,16 @@ import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class TestAreaUtils {
+
+	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
+
+	public boolean forbiddenFileName(final @NotNull String name) {
+		return TestAreaUtils.forbiddenNames.stream().anyMatch(name::equalsIgnoreCase);
+	}
+
+	public boolean illegalName(final @NotNull String name) {
+		return name.contains("./") || name.contains(".\\") || name.contains("§") || TestAreaUtils.forbiddenFileName(name);
+	}
 
 	public @Nullable DefinedRegion getRegion(final @NotNull Player p) {
 		final @NotNull List<DefinedRegion> regions = de.zeanon.testutils.regionsystem.region.RegionManager.getApplicableRegions(p.getLocation());
