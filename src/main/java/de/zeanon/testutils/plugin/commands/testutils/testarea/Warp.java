@@ -14,6 +14,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,11 +45,8 @@ public class Warp {
 														-180,
 														0);
 
-		Warp.registerBackLocation(p, p.getLocation());
-		p.teleport(teleport);
-		p.getWorld().playSound(teleport, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-					  + ChatColor.RED + "You have been teleported to '" + ChatColor.DARK_RED + name.getName() + ChatColor.RED + "'.");
+		Warp.teleportPlayer(p, teleport, GlobalMessageUtils.MESSAGE_HEAD
+										 + ChatColor.RED + "You have been teleported to '" + ChatColor.DARK_RED + name.getName() + ChatColor.RED + "'.");
 	}
 
 	public void back(final @NotNull Player p) {
@@ -59,10 +57,8 @@ public class Warp {
 			return;
 		}
 
-		p.teleport(backLocation);
-		p.getWorld().playSound(backLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-					  + ChatColor.RED + "You have been teleported back.");
+		Warp.teleportPlayer(p, backLocation, GlobalMessageUtils.MESSAGE_HEAD
+											 + ChatColor.RED + "You have been teleported back.");
 	}
 
 	public @Nullable Location getBackLocation(final @NotNull Player p) {
@@ -72,6 +68,14 @@ public class Warp {
 		}
 		return null;
 	}
+
+	public void teleportPlayer(final @NotNull Player p, final @NotNull Location location, final @NotNull String message) {
+		Warp.registerBackLocation(p, p.getLocation());
+		p.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+		p.getWorld().playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+		p.sendMessage(message);
+	}
+
 
 	private void registerBackLocation(final @NotNull Player p, final @NotNull Location location) {
 		if (Warp.backLocations.containsKey(p.getUniqueId().toString())) {

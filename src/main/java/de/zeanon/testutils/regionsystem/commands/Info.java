@@ -66,7 +66,7 @@ public class Info {
 				TextComponent.fromLegacyText(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " "));
 
 		final @NotNull TextComponent flags = new TextComponent(RegionCommand.MESSAGE_HEAD
-															   + ChatColor.RED + "=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " === \n");
+															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---\n");
 		region.getFlags().forEach((flag, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {

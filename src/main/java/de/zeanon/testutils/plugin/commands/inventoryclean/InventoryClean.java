@@ -5,9 +5,9 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import java.util.HashSet;
 import java.util.Set;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -32,13 +32,13 @@ public class InventoryClean extends SWCommand {
 
 	private static void inventoryClean(final @NotNull Player p) {
 		final @NotNull Inventory inventory = p.getInventory();
-		final @NotNull Set<Material> containedItems = new HashSet<>();
+		final @NotNull Set<ItemStack> containedItems = new HashSet<>();
 		inventory.forEach(itemStack -> {
 			if (itemStack == null) {
 				return;
 			}
 
-			if (containedItems.contains(itemStack.getType())) {
+			if (containedItems.stream().anyMatch(itemStack::isSimilar)) {
 				itemStack.setAmount(0);
 				return;
 			}
@@ -47,7 +47,7 @@ public class InventoryClean extends SWCommand {
 				itemStack.setAmount(1);
 			}
 
-			containedItems.add(itemStack.getType());
+			containedItems.add(itemStack);
 		});
 
 		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
