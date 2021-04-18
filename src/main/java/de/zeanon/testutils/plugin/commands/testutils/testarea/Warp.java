@@ -45,6 +45,7 @@ public class Warp {
 														-180,
 														0);
 
+		Warp.registerBackLocation(p, p.getLocation());
 		Warp.teleportPlayer(p, teleport, GlobalMessageUtils.MESSAGE_HEAD
 										 + ChatColor.RED + "You have been teleported to '" + ChatColor.DARK_RED + name.getName() + ChatColor.RED + "'.");
 	}
@@ -70,7 +71,6 @@ public class Warp {
 	}
 
 	public void teleportPlayer(final @NotNull Player p, final @NotNull Location location, final @NotNull String message) {
-		Warp.registerBackLocation(p, p.getLocation());
 		p.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
 		p.getWorld().playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 		p.sendMessage(message);
