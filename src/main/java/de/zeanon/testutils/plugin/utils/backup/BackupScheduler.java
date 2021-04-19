@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -17,11 +18,21 @@ public class BackupScheduler {
 	private final @NotNull Backup MANUAL_BACKUP = new ManualBackup();
 
 
-	public void backup() {
+	public void initialize() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				BackupScheduler.initBackups();
+			}
+		}.runTask(TestUtils.getInstance());
+	}
+
+
+	public void initBackups() {
 		//Initialize hourly backups
 		final @NotNull LocalDateTime hourlyStart = LocalDateTime.now()
 																.withMinute(0)
-																.withSecond(2)
+																.withSecond(1)
 																.plusHours(1);
 
 
@@ -30,9 +41,10 @@ public class BackupScheduler {
 
 		//Initialize daily backups
 		final @NotNull LocalDateTime dailyStart = hourlyStart.withHour(5)
+															 .withSecond(0)
 															 .plusDays(1);
 
-		BackupScheduler.scheduleAtFixedRate(new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS) % (24 * 60 * 60), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+		BackupScheduler.scheduleAtFixedRate(new DailyBackup(), LocalDateTime.now().until(dailyStart, ChronoUnit.SECONDS) % (TimeUnit.DAYS.toSeconds(1)), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
 
 

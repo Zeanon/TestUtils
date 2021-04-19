@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,12 +108,7 @@ public class InitMode {
 		TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
 
 
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				BackupScheduler.backup();
-			}
-		}.runTask(TestUtils.getInstance());
+		BackupScheduler.initialize();
 	}
 
 	public void registerCommands() {
