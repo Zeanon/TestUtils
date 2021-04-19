@@ -31,8 +31,6 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,9 +100,7 @@ public class InitMode {
 		}
 
 
-		for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
-			ScoreBoard.initialize(p);
-		}
+		ScoreBoard.initialize();
 
 
 		InitMode.registerCommands();

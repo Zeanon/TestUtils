@@ -37,12 +37,12 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onJoin(final @NotNull PlayerJoinEvent event) {
 		Update.updateAvailable(event.getPlayer());
-		ScoreBoard.initialize(event.getPlayer());
+		ScoreBoard.register(event.getPlayer());
 	}
 
 	@EventHandler
 	public void onLeave(final @NotNull PlayerQuitEvent event) {
-		ScoreBoard.uninitialize(event.getPlayer());
+		ScoreBoard.unregister(event.getPlayer());
 	}
 
 	@EventHandler

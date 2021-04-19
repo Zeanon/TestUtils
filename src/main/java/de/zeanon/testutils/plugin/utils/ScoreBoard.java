@@ -24,7 +24,19 @@ public class ScoreBoard {
 
 	private final @NotNull List<Player> registeredPlayers = new GapList<>();
 
-	static {
+	public void initialize() {
+		ScoreBoard.registerPlayers();
+
+		ScoreBoard.initTask();
+	}
+
+	public void registerPlayers() {
+		for (final @NotNull Player p : Bukkit.getOnlinePlayers()) {
+			ScoreBoard.register(p);
+		}
+	}
+
+	public void initTask() {
 		Bukkit.getScheduler().runTaskTimer(TestUtils.getInstance(), () -> ScoreBoard.registeredPlayers.forEach(p -> {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
@@ -37,12 +49,12 @@ public class ScoreBoard {
 		}), 0L, 5L);
 	}
 
-	public void uninitialize(final @NotNull Player p) {
+	public void unregister(final @NotNull Player p) {
 		p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
 		ScoreBoard.registeredPlayers.remove(p);
 	}
 
-	public void initialize(final @NotNull Player p) {
+	public void register(final @NotNull Player p) {
 		if (!ScoreBoard.registeredPlayers.contains(p)) {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
