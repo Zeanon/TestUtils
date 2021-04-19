@@ -103,7 +103,7 @@ public class Stoplag extends SWCommand {
 	private void execute(final @NotNull Player p, final @Nullable RegionSide regionSide, final boolean activate, final boolean global, final boolean removeEntities) {
 		if (global) {
 			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
-			globalRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			globalRegion.setFlag(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 			if (removeEntities) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You have removed '"
@@ -129,8 +129,8 @@ public class Stoplag extends SWCommand {
 				return;
 			}
 
-			tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
-			otherRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			tempRegion.setFlag(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			otherRegion.setFlag(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 			if (removeEntities) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You have removed '"
@@ -156,7 +156,7 @@ public class Stoplag extends SWCommand {
 				return;
 			}
 
-			tempRegion.set(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
+			tempRegion.setFlag(Flag.STOPLAG, activate ? STOPLAG.ACTIVE : STOPLAG.INACTIVE);
 			if (removeEntities) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You have removed '"

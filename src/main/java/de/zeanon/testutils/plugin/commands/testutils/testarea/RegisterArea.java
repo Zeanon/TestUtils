@@ -52,15 +52,15 @@ public class RegisterArea {
 		RegionManager.addRegion(regionSouth);
 		RegionManager.addRegion(regionNorth);
 
-		regionSouth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
-		regionNorth.set(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
-		regionSouth.set(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
-		regionNorth.set(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
-		regionSouth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
-		regionNorth.set(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
-		regionSouth.set(Flag.FIRE, FIRE.DENY);
-		regionNorth.set(Flag.FIRE, FIRE.DENY);
-		regionSouth.set(Flag.TNT, TNT.DENY);
-		regionNorth.set(Flag.TNT, TNT.DENY);
+		regionSouth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
+		regionNorth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
+		regionSouth.setFlag(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
+		regionNorth.setFlag(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
+		regionSouth.setFlag(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
+		regionNorth.setFlag(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
+		regionSouth.setFlag(Flag.FIRE, FIRE.DENY);
+		regionNorth.setFlag(Flag.FIRE, FIRE.DENY);
+		regionSouth.setFlag(Flag.TNT, TNT.DENY);
+		regionNorth.setFlag(Flag.TNT, TNT.DENY);
 	}
 }

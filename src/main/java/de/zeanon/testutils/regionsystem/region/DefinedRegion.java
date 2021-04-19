@@ -1,6 +1,7 @@
 package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.regionsystem.RegionType;
 import java.io.File;
@@ -42,7 +43,7 @@ public class DefinedRegion extends Region {
 
 		this.maxPoint = points.getKey();
 		this.setPoint(this.maxPoint, "max");
-		this.minPoint = points.getValue();
+		this.minPoint = Objects.notNull(points.getValue());
 		this.setPoint(this.minPoint, "min");
 
 		this.saveData();
@@ -62,7 +63,7 @@ public class DefinedRegion extends Region {
 
 		this.maxPoint = points.getKey();
 		this.setPoint(this.maxPoint, "max");
-		this.minPoint = points.getValue();
+		this.minPoint = Objects.notNull(points.getValue());
 		this.setPoint(this.minPoint, "min");
 
 		this.saveData();
@@ -105,7 +106,7 @@ public class DefinedRegion extends Region {
 	}
 
 
-	private Point getPoint(final @NotNull String path) {
+	private @NotNull Point getPoint(final @NotNull String path) {
 		return new Point(this.jsonFile.getIntUseArray("points", path, "x"),
 						 this.jsonFile.getIntUseArray("points", path, "y"),
 						 this.jsonFile.getIntUseArray("points", path, "z"));
@@ -121,7 +122,7 @@ public class DefinedRegion extends Region {
 	}
 
 
-	private Pair<Point, Point> sortPoints(final @NotNull Point firstPoint, final @NotNull Point secondPoint) {
+	private @NotNull Pair<Point, Point> sortPoints(final @NotNull Point firstPoint, final @NotNull Point secondPoint) {
 		return new Pair<>(new Point(
 				Math.max(firstPoint.getX(), secondPoint.getX()),
 				Math.max(firstPoint.getY(), secondPoint.getY()),

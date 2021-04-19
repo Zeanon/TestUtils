@@ -31,10 +31,10 @@ public abstract class Region {
 		this.jsonFile = jsonFile;
 		this.name = name;
 		this.world = world;
-		this.jsonFile.setUseArray(new String[]{"world"}, world.getName());
+		this.jsonFile.setUseArray(new String[]{"world"}, this.world.getName());
 
 		this.regionType = regionType;
-		this.jsonFile.setUseArray(new String[]{"regiontype"}, regionType.name());
+		this.jsonFile.setUseArray(new String[]{"regiontype"}, this.regionType.name());
 
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
@@ -52,13 +52,13 @@ public abstract class Region {
 	}
 
 
-	public void set(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
+	public void setFlag(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
 		if (this.flags.put(flagType, value) != value) {
 			this.saveData();
 		}
 	}
 
-	public @Nullable Flag.Value<?> get(final @NotNull Flag flagType) {
+	public @Nullable Flag.Value<?> getFlag(final @NotNull Flag flagType) {
 		return this.flags.get(flagType);
 	}
 

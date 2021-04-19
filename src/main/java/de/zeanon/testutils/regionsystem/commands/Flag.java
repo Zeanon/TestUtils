@@ -35,22 +35,22 @@ public class Flag {
 				final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation()); //NOSONAR
 				if (regions.isEmpty()) {
 					final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld()); //NOSONAR
-					globalRegion.set(flag, value);
+					globalRegion.setFlag(flag, value);
 					Flag.sendFlagSet(globalRegion.getName(), flag.toString(), value.getChatValue(), p);
 				} else if (regions.size() == 1) {
-					regions.get(0).set(flag, value);
+					regions.get(0).setFlag(flag, value);
 					Flag.sendFlagSet(regions.get(0).getName(), flag.toString(), value.getChatValue(), p);
 				} else {
 					RegionCommand.sendMultipleRegions(regions, p);
 				}
 			} else {
 				if (RegionManager.isGlobalRegion(regionName.getName())) {
-					RegionManager.getGlobalRegion(p.getWorld()).set(flag, value);
+					RegionManager.getGlobalRegion(p.getWorld()).setFlag(flag, value);
 					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 				} else {
 					final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName()); //NOSONAR
 					if (region != null) {
-						region.set(flag, value);
+						region.setFlag(flag, value);
 						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 					} else {
 						p.sendMessage(RegionCommand.MESSAGE_HEAD

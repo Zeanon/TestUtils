@@ -81,7 +81,7 @@ public class ScoreBoard {
 		infoBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
 
 		final @NotNull String areaname = tempRegion.getName().substring(0, tempRegion.getName().length() - 6);
-		final boolean stoplagOther = otherRegion.get(Flag.STOPLAG) == STOPLAG.ACTIVE;
+		final boolean stoplagOther = otherRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
 		final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
 		for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 14 : 16))); i++) {
 			headerAndFooterLine.append("=");
@@ -148,7 +148,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + tempRegion.get(Flag.TNT).getChatValue());
+							  + Objects.notNull(tempRegion.getFlag(Flag.TNT)).getChatValue());
 		infoBoard.getScore(ChatColor.BOLD + "" + ChatColor.BOLD).setScore(5);
 
 		final @NotNull Team tntInfoOther = scoreboard.registerNewTeam("tntinfoother");
@@ -159,7 +159,7 @@ public class ScoreBoard {
 							   + ">>"
 							   + ChatColor.DARK_RED
 							   + " other: "
-							   + otherRegion.get(Flag.TNT).getChatValue());
+							   + Objects.notNull(otherRegion.getFlag(Flag.TNT)).getChatValue());
 		infoBoard.getScore(ChatColor.DARK_AQUA + "" + ChatColor.DARK_AQUA).setScore(4);
 
 		final @NotNull Score stoplag = infoBoard.getScore(ChatColor.DARK_GRAY
@@ -178,7 +178,7 @@ public class ScoreBoard {
 								  + ">>"
 								  + ChatColor.DARK_RED
 								  + " here: "
-								  + tempRegion.get(Flag.STOPLAG).getChatValue());
+								  + Objects.notNull(tempRegion.getFlag(Flag.STOPLAG)).getChatValue());
 		infoBoard.getScore(ChatColor.DARK_BLUE + "" + ChatColor.DARK_BLUE).setScore(2);
 
 		final @NotNull Team stoplagInfoOther = scoreboard.registerNewTeam("stoplaginfoother");
@@ -189,7 +189,7 @@ public class ScoreBoard {
 								   + ">>"
 								   + ChatColor.DARK_RED
 								   + " other: "
-								   + otherRegion.get(Flag.STOPLAG).getChatValue());
+								   + Objects.notNull(otherRegion.getFlag(Flag.STOPLAG)).getChatValue());
 		infoBoard.getScore(ChatColor.DARK_GRAY + "" + ChatColor.DARK_GRAY).setScore(1);
 
 		final @NotNull Team footer = scoreboard.registerNewTeam("footer");
@@ -207,7 +207,7 @@ public class ScoreBoard {
 	private void updateScoreBoard(final @NotNull Player p, final @NotNull DefinedRegion tempRegion, final @NotNull DefinedRegion otherRegion, final @NotNull Scoreboard scoreboard) {
 		if (scoreboard.getObjective("testareainfo") != null) {
 			final @NotNull String areaname = tempRegion.getName().substring(0, tempRegion.getName().length() - 6);
-			final boolean stoplagOther = otherRegion.get(Flag.STOPLAG) == STOPLAG.ACTIVE;
+			final boolean stoplagOther = otherRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
 			final @NotNull StringBuilder headerAndFooterLine = new StringBuilder();
 			for (int i = 0; i < (Math.max(areaname.length() + 4, (stoplagOther ? 14 : 16))); i++) {
 				headerAndFooterLine.append("=");
@@ -241,7 +241,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + tempRegion.get(Flag.TNT).getChatValue());
+							  + Objects.notNull(tempRegion.getFlag(Flag.TNT)).getChatValue());
 
 			Objects.notNull(scoreboard.getTeam("tntinfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -250,7 +250,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " other: "
-							  + otherRegion.get(Flag.TNT).getChatValue());
+							  + Objects.notNull(otherRegion.getFlag(Flag.TNT)).getChatValue());
 
 			Objects.notNull(scoreboard.getTeam("stoplaginfohere"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -259,7 +259,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " here: "
-							  + tempRegion.get(Flag.STOPLAG).getChatValue());
+							  + Objects.notNull(tempRegion.getFlag(Flag.STOPLAG)).getChatValue());
 
 			Objects.notNull(scoreboard.getTeam("stoplaginfoother"))
 				   .setPrefix(ChatColor.DARK_GRAY
@@ -268,7 +268,7 @@ public class ScoreBoard {
 							  + ">>"
 							  + ChatColor.DARK_RED
 							  + " other: "
-							  + otherRegion.get(Flag.STOPLAG).getChatValue());
+							  + Objects.notNull(otherRegion.getFlag(Flag.STOPLAG)).getChatValue());
 
 			Objects.notNull(scoreboard.getTeam("footer"))
 				   .setPrefix(ChatColor.DARK_GRAY
