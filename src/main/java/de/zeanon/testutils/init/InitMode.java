@@ -8,6 +8,7 @@ import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
+import de.zeanon.testutils.plugin.commands.gamemode.GamemodeCommand;
 import de.zeanon.testutils.plugin.commands.inventoryclean.InventoryClean;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
@@ -130,6 +131,7 @@ public class InitMode {
 		InitMode.registeredCommands.add(new TestBlock());
 		InitMode.registeredCommands.add(new TestUtilsCommand());
 		InitMode.registeredCommands.add(new InventoryClean());
+		InitMode.registeredCommands.add(new GamemodeCommand());
 	}
 
 	public void unregisterCommands() {

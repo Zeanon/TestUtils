@@ -12,7 +12,6 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,40 +22,38 @@ public class ScoreBoard {
 
 	private final ScoreboardManager scoreboardManager = Objects.notNull(Bukkit.getScoreboardManager());
 
-	private final List<String> scoreBoards = new GapList<>();
+	private final @NotNull List<Player> registeredPlayers = new GapList<>();
 
-
-	public void initialize(final @NotNull Player p) {
-		if (!ScoreBoard.scoreBoards.contains(p.getUniqueId().toString())) {
-			ScoreBoard.scoreBoards.add(p.getUniqueId().toString());
-
+	static {
+		Bukkit.getScheduler().runTaskTimer(TestUtils.getInstance(), () -> ScoreBoard.registeredPlayers.forEach(p -> {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+			final @NotNull Scoreboard scoreboard = p.getScoreboard();
+			if (tempRegion != null && otherRegion != null) {
+				ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion, scoreboard);
+			} else if (scoreboard.getObjective("testareainfo") != null) {
+				p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
+			}
+		}), 0L, 5L);
+	}
+
+	public void uninitialize(final @NotNull Player p) {
+		p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
+		ScoreBoard.registeredPlayers.remove(p);
+	}
+
+	public void initialize(final @NotNull Player p) {
+		if (!ScoreBoard.registeredPlayers.contains(p)) {
+			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
+
 			if (tempRegion != null && otherRegion != null) {
 				ScoreBoard.setScoreBoard(p, tempRegion, otherRegion);
 			} else {
 				p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
 			}
 
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					if (Bukkit.getOnlinePlayers().contains(p)) {
-						final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
-						final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
-						final @NotNull Scoreboard scoreboard = p.getScoreboard();
-						if (tempRegion != null && otherRegion != null) {
-							ScoreBoard.updateScoreBoard(p, tempRegion, otherRegion, scoreboard);
-						} else if (scoreboard.getObjective("testareainfo") != null) {
-							p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
-						}
-					} else {
-						p.setScoreboard(ScoreBoard.scoreboardManager.getNewScoreboard());
-						ScoreBoard.scoreBoards.remove(p.getUniqueId().toString());
-						this.cancel();
-					}
-				}
-			}.runTaskTimer(TestUtils.getInstance(), 0, 5);
+			ScoreBoard.registeredPlayers.add(p);
 		}
 	}
 

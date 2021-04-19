@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +38,11 @@ public class EventListener implements Listener {
 	public void onJoin(final @NotNull PlayerJoinEvent event) {
 		Update.updateAvailable(event.getPlayer());
 		ScoreBoard.initialize(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onLeave(final @NotNull PlayerQuitEvent event) {
+		ScoreBoard.uninitialize(event.getPlayer());
 	}
 
 	@EventHandler
