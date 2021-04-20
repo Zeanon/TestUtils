@@ -37,7 +37,7 @@ public class DeleteFolder {
 		}
 
 		if (confirmation == null) {
-			CommandRequestUtils.addDeleteBlockRequest(p.getUniqueId(), mappedFolder.getName());
+			CommandRequestUtils.addDeleteFolderRequest(p.getUniqueId(), mappedFolder.getName());
 			GlobalMessageUtils.sendBooleanMessage(GlobalMessageUtils.MESSAGE_HEAD
 												  + ChatColor.RED + "Do you really want to delete "
 												  + ChatColor.DARK_RED + mappedFolder.getName()
@@ -47,8 +47,8 @@ public class DeleteFolder {
 			return;
 		}
 
-		if (CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), mappedFolder.getName())) {
-			CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
+		if (CommandRequestUtils.checkDeleteFolderRequest(p.getUniqueId(), mappedFolder.getName())) {
+			CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());
 			if (confirmation.confirm()) { //NOSONAR
 				try {
 					FileUtils.deleteDirectory(file);
@@ -71,7 +71,7 @@ public class DeleteFolder {
 					e.printStackTrace();
 				}
 			} else {
-				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());
+				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " was not deleted.");
 			}

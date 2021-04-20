@@ -19,20 +19,6 @@ public enum BackupMode {
 		this.path = path;
 	}
 
-	public static BackupMode parse(final @NotNull String cycle) {
-		switch (cycle) {
-			case "-manual":
-				return BackupMode.MANUAL;
-			case "-startup":
-				return BackupMode.STARTUP;
-			case "-hourly":
-				return BackupMode.HOURLY;
-			case "-daily":
-				return BackupMode.DAILY;
-			default:
-				return BackupMode.NONE;
-		}
-	}
 
 	@Contract(pure = true)
 	public @NotNull String getPath(final @Nullable String uuid) {

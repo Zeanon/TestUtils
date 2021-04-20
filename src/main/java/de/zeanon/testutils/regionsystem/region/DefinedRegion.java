@@ -31,6 +31,7 @@ public class DefinedRegion extends Region {
 		this.hasChanged = false;
 	}
 
+	@SuppressWarnings("unused")
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {
 		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name + ".json"))
 							 .fromResource("resources/region.json")

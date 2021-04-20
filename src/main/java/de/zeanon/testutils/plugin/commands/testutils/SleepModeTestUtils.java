@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class SleepModeTestUtils extends SWCommand {
 
 	public SleepModeTestUtils() {
-		super("testutils", "tu");
+		super("testutils", true, "tu");
 	}
 
 

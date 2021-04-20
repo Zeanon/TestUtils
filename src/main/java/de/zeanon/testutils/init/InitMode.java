@@ -99,13 +99,13 @@ public class InitMode {
 		}
 
 
-		ScoreBoard.initialize();
-
-
 		InitMode.registerCommands();
 
 		TestUtils.getPluginManager().registerEvents(new EventListener(), de.zeanon.testutils.TestUtils.getInstance());
 		TestUtils.getPluginManager().registerEvents(new RegionListener(), de.zeanon.testutils.TestUtils.getInstance());
+
+
+		ScoreBoard.initialize();
 
 
 		BackupScheduler.initialize();
