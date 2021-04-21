@@ -2,9 +2,9 @@ package de.zeanon.testutils.regionsystem.commands;
 
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.Region;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;

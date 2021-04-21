@@ -6,7 +6,6 @@ import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;

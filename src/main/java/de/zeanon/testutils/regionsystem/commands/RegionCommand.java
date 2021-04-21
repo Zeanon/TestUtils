@@ -2,9 +2,9 @@ package de.zeanon.testutils.regionsystem.commands;
 
 import de.steamwar.commandframework.SWCommand;
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,15 +1,19 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.storagemanagercore.internal.base.cache.provider.CollectionsProvider;
+import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.interfaces.DataMap;
+import de.zeanon.storagemanagercore.internal.base.settings.Comment;
+import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.update.Update;
+import de.zeanon.thunderfilemanager.ThunderFileManager;
+import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +31,41 @@ import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class ConfigUtils {
+
+	@Getter
+	private ThunderConfig config;
+
+	public void loadConfigs() {
+		@Nullable Throwable cause = null;
+		try {
+			ConfigUtils.config = ThunderFileManager.thunderConfig(TestUtils.getPluginFolder(), "config")
+												   .fromResource("resources/config.tf")
+												   .reloadSetting(Reload.INTELLIGENT)
+												   .commentSetting(Comment.PRESERVE)
+												   .concurrentData(true)
+												   .create();
+
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' loaded.");
+		} catch (final @NotNull RuntimeIOException | FileParseException e) {
+			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be loaded.");
+			e.printStackTrace();
+			cause = e;
+		}
+
+		if (cause != null) {
+			throw new RuntimeIOException(cause);
+		}
+	}
+
+	public void initConfigs() {
+		if (!ConfigUtils.getConfig().hasKeyUseArray("Plugin Version")
+			|| !Objects.notNull(ConfigUtils.getConfig().getStringUseArray("Plugin Version"))
+					   .equals(de.zeanon.testutils.TestUtils.getInstance().getDescription().getVersion())) {
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Updating Configs...");
+			Update.checkConfigUpdate();
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
+		}
+	}
 
 	/**
 	 * get an int from the config.
@@ -36,8 +76,8 @@ public class ConfigUtils {
 	 */
 	public int getInt(final @NotNull String... key) {
 		try {
-			if (InitMode.getConfig().hasKeyUseArray(key)) {
-				return InitMode.getConfig().getIntUseArray(key);
+			if (ConfigUtils.getConfig().hasKeyUseArray(key)) {
+				return ConfigUtils.getConfig().getIntUseArray(key);
 			} else {
 				throw new ObjectNullException();
 			}
@@ -61,8 +101,8 @@ public class ConfigUtils {
 	 */
 	public boolean getBoolean(final @NotNull String... key) {
 		try {
-			if (InitMode.getConfig().hasKeyUseArray(key)) {
-				return InitMode.getConfig().getBooleanUseArray(key);
+			if (ConfigUtils.getConfig().hasKeyUseArray(key)) {
+				return ConfigUtils.getConfig().getBooleanUseArray(key);
 			} else {
 				throw new ObjectNullException();
 			}
@@ -96,7 +136,7 @@ public class ConfigUtils {
 
 	public @NotNull <V> V getDataFromResource(final @NotNull String resource, final @NotNull String... key) throws ResourceParser.ThunderParseException {
 		// noinspection ConstantConditions
-		return ResourceParser.internalGet(ResourceParser.initialReadWithOutComments(BaseFileUtils.createNewInputStreamFromResource(resource), InitMode.getConfig().collectionsProvider()), key);
+		return ResourceParser.internalGet(ResourceParser.initialReadWithOutComments(BaseFileUtils.createNewInputStreamFromResource(resource), ConfigUtils.getConfig().collectionsProvider()), key);
 	}
 
 

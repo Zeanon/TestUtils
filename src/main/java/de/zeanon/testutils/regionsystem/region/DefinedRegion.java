@@ -1,8 +1,10 @@
 package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
+import de.zeanon.jsonfilemanager.internal.files.section.JsonFileSection;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.RegionType;
 import java.io.File;
 import org.bukkit.Location;
@@ -101,25 +103,27 @@ public class DefinedRegion extends Region {
 	}
 
 
-	protected void deleteRegion() {
+	public void deleteRegion() {
 		this.jsonFile.clearData();
 		this.jsonFile.deleteFile();
 	}
 
 
 	private @NotNull Point getPoint(final @NotNull String path) {
-		return new Point(this.jsonFile.getIntUseArray("points", path, "x"),
-						 this.jsonFile.getIntUseArray("points", path, "y"),
-						 this.jsonFile.getIntUseArray("points", path, "z"));
+		final @NotNull JsonFileSection section = this.jsonFile.getSectionUseArray("points", path);
+		return new Point(section.getIntUseArray("x"),
+						 section.getIntUseArray("y"),
+						 section.getIntUseArray("z"));
 	}
 
 	private void setPoint(final @NotNull Point point, final @NotNull String path) {
+		final @NotNull JsonFileSection section = this.jsonFile.getSectionUseArray("points", path);
 		//noinspection unchecked
-		this.jsonFile.setAllUseArrayWithoutCheck(
-				new Pair<>(new String[]{"points", path, "x"}, point.getX()),
-				new Pair<>(new String[]{"points", path, "y"}, point.getY()),
-				new Pair<>(new String[]{"points", path, "z"}, point.getZ())
-												);
+		section.setAllUseArrayWithoutCheck(
+				new Pair<>(new String[]{"x"}, point.getX()),
+				new Pair<>(new String[]{"y"}, point.getX()),
+				new Pair<>(new String[]{"z"}, point.getX())
+										  );
 	}
 
 

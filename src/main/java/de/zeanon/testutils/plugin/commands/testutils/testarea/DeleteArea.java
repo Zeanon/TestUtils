@@ -5,8 +5,8 @@ import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.io.File;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
@@ -37,8 +37,8 @@ public class DeleteArea {
 	}
 
 	private boolean remove(final @NotNull String name) {
-		final @Nullable DefinedRegion southRegion = de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(name + "_south");
-		final @Nullable DefinedRegion northRegion = de.zeanon.testutils.regionsystem.region.RegionManager.getRegion(name + "_north");
+		final @Nullable DefinedRegion southRegion = RegionManager.getRegion(name + "_south");
+		final @Nullable DefinedRegion northRegion = RegionManager.getRegion(name + "_north");
 		if (southRegion != null && northRegion != null && RegionManager.removeRegion(southRegion) && RegionManager.removeRegion(northRegion)) {
 			try {
 				final @NotNull File resetFolder = TestUtilsCommand.TESTAREA_FOLDER.resolve(name.substring(0, name.length() - 6)).toFile();

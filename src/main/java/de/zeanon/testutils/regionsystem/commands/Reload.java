@@ -1,7 +1,7 @@
 package de.zeanon.testutils.regionsystem.commands;
 
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import java.io.IOException;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;

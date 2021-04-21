@@ -1,6 +1,7 @@
 package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.RegionType;
 import org.bukkit.Location;
 import org.bukkit.World;

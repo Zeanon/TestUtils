@@ -1,9 +1,9 @@
 package de.zeanon.testutils.regionsystem.commands;
 
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
-import de.zeanon.testutils.regionsystem.region.RegionManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
