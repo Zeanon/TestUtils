@@ -5,7 +5,6 @@ import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.init.InitMode;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import java.io.IOException;
@@ -47,15 +46,15 @@ public class Update {
 
 	public void checkConfigUpdate() {
 		try {
-			if (!Objects.notNull(InitMode.getConfig().getStringUseArray("Plugin Version"))
+			if (!Objects.notNull(ConfigUtils.getConfig().getStringUseArray("Plugin Version"))
 						.equals(TestUtils.getInstance().getDescription().getVersion())
-				|| !InitMode.getConfig().hasKeyUseArray("Max History")
-				|| !InitMode.getConfig().hasKeyUseArray("Max Back")
-				|| !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "manual")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "startup")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
-				|| !InitMode.getConfig().hasKeyUseArray("Backups", "daily")) {
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Max History")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Max Back")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "startup")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "hourly")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "daily")) {
 
 				Update.updateConfig();
 			}
@@ -66,44 +65,44 @@ public class Update {
 
 	public void updateConfig() {
 		try {
-			final Integer maxHistory = InitMode.getConfig().hasKeyUseArray("Max History")
-									   ? InitMode.getConfig().getIntUseArray("Max History")
+			final Integer maxHistory = ConfigUtils.getConfig().hasKeyUseArray("Max History")
+									   ? ConfigUtils.getConfig().getIntUseArray("Max History")
 									   : Objects.toInt(ConfigUtils.getDefaultValue("Max History"));
 
-			final Integer maxBack = InitMode.getConfig().hasKeyUseArray("Max Back")
-									? InitMode.getConfig().getIntUseArray("Max Back")
+			final Integer maxBack = ConfigUtils.getConfig().hasKeyUseArray("Max Back")
+									? ConfigUtils.getConfig().getIntUseArray("Max Back")
 									: Objects.toInt(ConfigUtils.getDefaultValue("Max Back"));
 
-			final boolean autoReload = !InitMode.getConfig().hasKeyUseArray("Automatic Reload")
-									   || InitMode.getConfig().getBooleanUseArray("Automatic Reload");
+			final boolean autoReload = !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
+									   || ConfigUtils.getConfig().getBooleanUseArray("Automatic Reload");
 
-			final Integer maxManual = InitMode.getConfig().hasKeyUseArray("Backups", "manual")
-									  ? InitMode.getConfig().getIntUseArray("Backups", "manual")
+			final Integer maxManual = ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
+									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "manual")
 									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "manual"));
 
-			final Integer maxStartup = InitMode.getConfig().hasKeyUseArray("Backups", "startup")
-									   ? InitMode.getConfig().getIntUseArray("Backups", "startup")
+			final Integer maxStartup = ConfigUtils.getConfig().hasKeyUseArray("Backups", "startup")
+									   ? ConfigUtils.getConfig().getIntUseArray("Backups", "startup")
 									   : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "startup"));
 
-			final Integer maxHourly = InitMode.getConfig().hasKeyUseArray("Backups", "hourly")
-									  ? InitMode.getConfig().getIntUseArray("Backups", "hourly")
+			final Integer maxHourly = ConfigUtils.getConfig().hasKeyUseArray("Backups", "hourly")
+									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "hourly")
 									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "hourly"));
 
-			final Integer maxDaily = InitMode.getConfig().hasKeyUseArray("Backups", "daily")
-									 ? InitMode.getConfig().getIntUseArray("Backups", "daily")
+			final Integer maxDaily = ConfigUtils.getConfig().hasKeyUseArray("Backups", "daily")
+									 ? ConfigUtils.getConfig().getIntUseArray("Backups", "daily")
 									 : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "daily"));
 
-			InitMode.getConfig().setDataFromResource("resources/config.tf");
+			ConfigUtils.getConfig().setDataFromResource("resources/config.tf");
 
 			//noinspection unchecked
-			InitMode.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
-												new Pair<>(new String[]{"Max History"}, maxHistory),
-												new Pair<>(new String[]{"Max Back"}, maxBack),
-												new Pair<>(new String[]{"Automatic Reload"}, autoReload),
-												new Pair<>(new String[]{"Backups", "manual"}, maxManual),
-												new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
-												new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
-												new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
+			ConfigUtils.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
+												   new Pair<>(new String[]{"Max History"}, maxHistory),
+												   new Pair<>(new String[]{"Max Back"}, maxBack),
+												   new Pair<>(new String[]{"Automatic Reload"}, autoReload),
+												   new Pair<>(new String[]{"Backups", "manual"}, maxManual),
+												   new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
+												   new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
+												   new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
 		} catch (RuntimeIOException e) {

@@ -169,8 +169,7 @@
                             <groupId>de.steamwar</groupId>
                             <artifactId>commandframework</artifactId>
                             <version>1.0.0</version>
-                            <file>src/main/resources/dependencies/CommandFramework.jar
-                            </file>
+                            <file>src/main/resources/dependencies/CommandFramework.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
