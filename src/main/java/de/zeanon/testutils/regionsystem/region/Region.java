@@ -84,6 +84,10 @@ public abstract class Region {
 		this.jsonFile.save();
 	}
 
+	public void readData() {
+		this.jsonFile.reload();
+	}
+
 
 	private void readFlags() {
 		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(this.jsonFile.getDirectMapReference("flags"));

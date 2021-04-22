@@ -11,7 +11,8 @@ public enum RegionType {
 
 	GLOBAL_REGION("GlobalRegion"),
 	DEFINED_REGION("DefinedRegion"),
-	TESTAREA("TestArea");
+	TESTAREA("TestArea"),
+	DEFAULT("Default");
 
 
 	private final @NotNull String name;

@@ -1,6 +1,7 @@
 package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
+import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.RegionType;
 import org.bukkit.Location;
@@ -14,6 +15,7 @@ public class GlobalRegion extends Region {
 	public GlobalRegion(final @NotNull World world) {
 		super(JsonFileManager.jsonFile(RegionManager.GLOBAL_REGIONS_FOLDER.resolve("__" + world.getName() + "__.json"))
 							 .fromResource("resources/global.json")
+							 .reloadSetting(Reload.MANUALLY)
 							 .create(),
 			  "__" + world.getName() + "__",
 			  world,

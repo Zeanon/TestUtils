@@ -8,5 +8,6 @@
     "damage": "ALLOW",
     "stoplag": "INACTIVE"
   },
+  "regiontype": "GLOBAL_REGION",
   "world": "world"
 }

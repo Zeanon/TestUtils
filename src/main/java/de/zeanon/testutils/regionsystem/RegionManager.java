@@ -1,5 +1,6 @@
 package de.zeanon.testutils.regionsystem;
 
+import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
@@ -45,7 +46,12 @@ public class RegionManager {
 		RegionManager.regions.clear();
 		for (final @NotNull File file : BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json")) {
 			if (!file.getName().startsWith("__") && !file.getName().endsWith("__.json")) {
-				RegionManager.regions.add(new TestArea(file));
+				try {
+					RegionManager.regions.add(new TestArea(file));
+				} catch (final @NotNull ObjectNullException e) {
+					System.out.println("[" + TestUtils.getInstance().getName() + "] >> TestAreas >> " + file.getName() + " could not be initialized properly, please check the region file.");
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -53,7 +59,12 @@ public class RegionManager {
 	public void initializeGlobalRegions() {
 		RegionManager.globalRegions.clear();
 		for (final @NotNull World world : Bukkit.getWorlds()) {
-			RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
+			try {
+				RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
+			} catch (final @NotNull ObjectNullException e) {
+				System.out.println("[" + TestUtils.getInstance().getName() + "] >> GlobalRegions >> " + world.getName() + " could not be initialized properly, please check the region file.");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -111,5 +122,9 @@ public class RegionManager {
 		for (final @NotNull Map.Entry<String, GlobalRegion> globalRegion : RegionManager.getGlobalRegions().entrySet()) {
 			globalRegion.getValue().saveData();
 		}
+	}
+
+	public void reloadRegions() throws IOException {
+		RegionManager.initialize();
 	}
 }

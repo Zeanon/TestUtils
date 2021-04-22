@@ -8,6 +8,7 @@
     "damage": "ALLOW",
     "stoplag": "INACTIVE"
   },
+  "regiontype": "DEFINED_REGION",
   "world": "world",
   "points": {
     "max": {

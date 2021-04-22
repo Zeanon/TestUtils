@@ -2,6 +2,7 @@ package de.zeanon.testutils.regionsystem.region;
 
 import de.zeanon.jsonfilemanager.JsonFileManager;
 import de.zeanon.jsonfilemanager.internal.files.section.JsonFileSection;
+import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.regionsystem.RegionManager;
@@ -22,6 +23,7 @@ public class DefinedRegion extends Region {
 	public DefinedRegion(final @NotNull File file) {
 		super(JsonFileManager.jsonFile(file)
 							 .fromResource("resources/region.json")
+							 .reloadSetting(Reload.MANUALLY)
 							 .create());
 
 		this.maxPoint = this.getPoint("max");
@@ -37,6 +39,7 @@ public class DefinedRegion extends Region {
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world) {
 		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name + ".json"))
 							 .fromResource("resources/region.json")
+							 .reloadSetting(Reload.MANUALLY)
 							 .create(),
 			  name,
 			  world,
@@ -57,6 +60,7 @@ public class DefinedRegion extends Region {
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world, final @NotNull RegionType regionType) {
 		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name + ".json"))
 							 .fromResource("resources/region.json")
+							 .reloadSetting(Reload.MANUALLY)
 							 .create(),
 			  name,
 			  world,

@@ -20,7 +20,7 @@ public class Reload {
 			@Override
 			public void run() {
 				try {
-					RegionManager.initialize();
+					RegionManager.reloadRegions();
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "Reloaded all region files.");
 				} catch (IOException e) {
