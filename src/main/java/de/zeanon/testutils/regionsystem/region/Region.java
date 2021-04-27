@@ -42,7 +42,7 @@ public abstract class Region {
 		this.readFlags();
 
 		this.nbts = new EnumMap<>(Tag.class);
-		this.readNBT();
+		this.readTags();
 	}
 
 	protected Region(final @NotNull JsonFile jsonFile) {
@@ -56,7 +56,7 @@ public abstract class Region {
 		this.readFlags();
 
 		this.nbts = new EnumMap<>(Tag.class);
-		this.readNBT();
+		this.readTags();
 	}
 
 
@@ -74,17 +74,17 @@ public abstract class Region {
 		return this.flags;
 	}
 
-	public void setNBT(final @NotNull Tag nbtType, final @NotNull Tag.Value<?> value) {
+	public void setTag(final @NotNull Tag nbtType, final @NotNull Tag.Value<?> value) {
 		if (this.nbts.put(nbtType, value) != value) {
 			this.saveData();
 		}
 	}
 
-	public @Nullable Tag.Value<?> getNBT(final @NotNull Tag nbtType) {
+	public @Nullable Tag.Value<?> getTag(final @NotNull Tag nbtType) {
 		return this.nbts.get(nbtType);
 	}
 
-	public @NotNull Map<Tag, Tag.Value<?>> getNBTs() {
+	public @NotNull Map<Tag, Tag.Value<?>> getTags() {
 		return this.nbts;
 	}
 
@@ -122,7 +122,7 @@ public abstract class Region {
 		this.jsonFile.setUseArrayWithoutCheck(new String[]{"flags"}, this.flags);
 	}
 
-	protected void readNBT() {
+	protected void readTags() {
 		final @Nullable Map<String, String> tempTagMap = this.jsonFile.getDirectMapReference("tags");
 		final boolean noMap = tempTagMap == null;
 

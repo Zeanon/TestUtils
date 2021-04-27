@@ -65,9 +65,9 @@ public abstract class Backup extends BukkitRunnable {
 							tempWorld = southRegion.getWorld();
 							final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).resolve(this.sequence.getPath(null)).resolve(name).toFile();
 							this.backupSide(tempWorld, southRegion, folder);
-							southRegion.setNBT(Tag.CHANGED, CHANGED.FALSE);
+							southRegion.setTag(Tag.CHANGED, CHANGED.FALSE);
 							this.backupSide(tempWorld, northRegion, folder);
-							northRegion.setNBT(Tag.CHANGED, CHANGED.FALSE);
+							northRegion.setTag(Tag.CHANGED, CHANGED.FALSE);
 
 							new BukkitRunnable() {
 								@Override

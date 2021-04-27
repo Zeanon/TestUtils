@@ -564,7 +564,7 @@ public class RegionListener implements Listener {
 			@Override
 			public void run() {
 				for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(location)) {
-					region.setNBT(Tag.CHANGED, CHANGED.TRUE);
+					region.setTag(Tag.CHANGED, CHANGED.TRUE);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

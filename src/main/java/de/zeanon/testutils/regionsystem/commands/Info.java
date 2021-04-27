@@ -97,11 +97,11 @@ public class Info {
 
 		lineBreak[0] = false;
 		currentCount[0] = 0;
-		final int nbtCount = region.getNBTs().size();
+		final int nbtCount = region.getTags().size();
 
 		final @NotNull TextComponent nbts = new TextComponent(RegionCommand.MESSAGE_HEAD
 															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---\n");
-		region.getNBTs().forEach((nbt, value) -> {
+		region.getTags().forEach((nbt, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {
 				nbts.addExtra(RegionCommand.MESSAGE_HEAD + ChatColor.BLACK + "[");

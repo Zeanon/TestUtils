@@ -56,6 +56,6 @@ public class HourlyBackup extends Backup {
 
 	@Override
 	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
-		return southRegion.getNBT(Tag.CHANGED) == CHANGED.TRUE || northRegion.getNBT(Tag.CHANGED) == CHANGED.TRUE;
+		return southRegion.getTag(Tag.CHANGED) == CHANGED.TRUE || northRegion.getTag(Tag.CHANGED) == CHANGED.TRUE;
 	}
 }

@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
-import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
@@ -58,54 +57,27 @@ public class ConfigUtils {
 		}
 	}
 
-	/**
-	 * get an int from the config.
-	 *
-	 * @param key the Config key.
-	 *
-	 * @return value.
-	 */
-	public int getInt(final @NotNull String... key) {
-		try {
-			if (ConfigUtils.getConfig().hasKeyUseArray(key)) {
-				return ConfigUtils.getConfig().getIntUseArray(key);
-			} else {
-				throw new ObjectNullException();
-			}
-		} catch (Exception e) {
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					Update.updateConfig();
-				}
-			}.runTaskAsynchronously(TestUtils.getInstance());
-			return ConfigUtils.getDefaultValue(key);
-		}
+	public boolean getBoolean(final @NotNull String... key) {
+		return ConfigUtils.get(key);
 	}
 
-	/**
-	 * get a boolean from the config.
-	 *
-	 * @param key the Config key.
-	 *
-	 * @return value.
-	 */
-	public boolean getBoolean(final @NotNull String... key) {
-		try {
-			if (ConfigUtils.getConfig().hasKeyUseArray(key)) {
-				return ConfigUtils.getConfig().getBooleanUseArray(key);
-			} else {
-				throw new ObjectNullException();
-			}
-		} catch (Exception e) {
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					Update.updateConfig();
-				}
-			}.runTaskAsynchronously(TestUtils.getInstance());
-			return ConfigUtils.getDefaultValue(key);
+	public int getInt(final @NotNull String... key) {
+		return ConfigUtils.get(key);
+	}
+
+	public @NotNull <V> V get(final @NotNull String... key) {
+		final @Nullable V result = ConfigUtils.getConfig().getUseArray(key);
+		if (result != null) {
+			return result;
 		}
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				Update.updateConfig();
+			}
+		}.runTaskAsynchronously(TestUtils.getInstance());
+		return ConfigUtils.getDefaultValue(key);
 	}
 
 	/**

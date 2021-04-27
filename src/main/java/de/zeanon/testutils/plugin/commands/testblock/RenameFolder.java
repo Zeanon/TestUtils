@@ -178,10 +178,10 @@ public class RenameFolder {
 	private void deleteParents(final @NotNull File directory, final @NotNull String arg, final @NotNull Player p) {
 		try {
 			FileUtils.deleteDirectory(directory);
-			@Nullable String parentName = Objects.notNull(directory.getAbsoluteFile().getParentFile().listFiles()).length == 0
-										  && ConfigUtils.getBoolean("Delete empty Folders")
-										  ? InternalFileUtils.deleteEmptyParent(directory, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
-										  : null;
+			final @Nullable String parentName = Objects.notNull(directory.getAbsoluteFile().getParentFile().listFiles()).length == 0
+												&& ConfigUtils.getBoolean("Delete empty Folders")
+												? InternalFileUtils.deleteEmptyParent(directory, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
+												: null;
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.GREEN + arg + ChatColor.RED + " was renamed successfully.");
