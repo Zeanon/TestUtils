@@ -112,24 +112,42 @@ public abstract class Region {
 
 
 	protected void readFlags() {
-		final @Nullable Map<String, String> tempFlagMap = this.jsonFile.getDirectMapReference("flags");
-		final boolean noMap = tempFlagMap == null;
+		final @Nullable Map<String, Object> tempFlagMap = this.jsonFile.getDirectMapReference("flags");
 
-		for (final @NotNull Flag flag : Flag.getFlags()) {
-			final @Nullable String flagValue = noMap ? null : tempFlagMap.get(flag.toString());
-			this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
+		if (tempFlagMap == null) {
+			return;
 		}
+
+		for (final @NotNull Map.Entry<String, Object> entry : tempFlagMap.entrySet()) {
+			try {
+				final @NotNull Flag flag = Flag.valueOf(entry.getKey().toUpperCase());
+				final @Nullable String flagValue = Objects.toString(tempFlagMap.get(flag.toString()));
+				this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
+			} catch (final @NotNull IllegalArgumentException e) {
+				//NOTHING
+			}
+		}
+
 		this.jsonFile.setUseArrayWithoutCheck(new String[]{"flags"}, this.flags);
 	}
 
 	protected void readTags() {
-		final @Nullable Map<String, String> tempTagMap = this.jsonFile.getDirectMapReference("tags");
-		final boolean noMap = tempTagMap == null;
+		final @Nullable Map<String, Object> tempTagMap = this.jsonFile.getDirectMapReference("tags");
 
-		for (final @NotNull Tag tempTag : Tag.getTags()) {
-			final @Nullable String tagValue = noMap ? null : tempTagMap.get(tempTag.toString());
-			this.nbts.put(tempTag, tagValue == null ? tempTag.getDefaultValue() : tempTag.getTagValueOf(tagValue.toUpperCase()));
+		if (tempTagMap == null) {
+			return;
 		}
+
+		for (final @NotNull Map.Entry<String, Object> entry : tempTagMap.entrySet()) {
+			try {
+				final @NotNull Tag tag = Tag.valueOf(entry.getKey().toUpperCase());
+				final @Nullable String tagValue = Objects.toString(tempTagMap.get(tag.toString()));
+				this.nbts.put(tag, tagValue == null ? tag.getDefaultValue() : tag.getTagValueOf(tagValue.toUpperCase()));
+			} catch (final @NotNull IllegalArgumentException e) {
+				//NOTHING
+			}
+		}
+
 		this.jsonFile.setUseArrayWithoutCheck(new String[]{"tags"}, this.nbts);
 	}
 

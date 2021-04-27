@@ -67,30 +67,30 @@ public class Update {
 		try {
 			final Integer maxHistory = ConfigUtils.getConfig().hasKeyUseArray("Max History")
 									   ? ConfigUtils.getConfig().getIntUseArray("Max History")
-									   : Objects.toInt(ConfigUtils.getDefaultValue("Max History"));
+									   : Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Max History"));
 
 			final Integer maxBack = ConfigUtils.getConfig().hasKeyUseArray("Max Back")
 									? ConfigUtils.getConfig().getIntUseArray("Max Back")
-									: Objects.toInt(ConfigUtils.getDefaultValue("Max Back"));
+									: Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Max Back"));
 
 			final boolean autoReload = !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
 									   || ConfigUtils.getConfig().getBooleanUseArray("Automatic Reload");
 
 			final Integer maxManual = ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
 									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "manual")
-									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "manual"));
+									  : Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Backups", "manual"));
 
 			final Integer maxStartup = ConfigUtils.getConfig().hasKeyUseArray("Backups", "startup")
 									   ? ConfigUtils.getConfig().getIntUseArray("Backups", "startup")
-									   : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "startup"));
+									   : Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Backups", "startup"));
 
 			final Integer maxHourly = ConfigUtils.getConfig().hasKeyUseArray("Backups", "hourly")
 									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "hourly")
-									  : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "hourly"));
+									  : Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Backups", "hourly"));
 
 			final Integer maxDaily = ConfigUtils.getConfig().hasKeyUseArray("Backups", "daily")
 									 ? ConfigUtils.getConfig().getIntUseArray("Backups", "daily")
-									 : Objects.toInt(ConfigUtils.getDefaultValue("Backups", "daily"));
+									 : Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Backups", "daily"));
 
 			ConfigUtils.getConfig().setDataFromResource("resources/config.tf");
 

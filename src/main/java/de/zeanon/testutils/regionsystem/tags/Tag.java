@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @Getter
@@ -32,6 +33,13 @@ public enum Tag {
 		this.values = defaultValue.getValues();
 	}
 
+	public static @Nullable Tag getTag(final @NotNull String name) {
+		try {
+			return Tag.valueOf(name);
+		} catch (final @NotNull IllegalArgumentException e) {
+			return null;
+		}
+	}
 
 	public Value<?> getTagValueOf(final @NotNull String name) {
 		return this.defaultValue.getValueOf(name);
