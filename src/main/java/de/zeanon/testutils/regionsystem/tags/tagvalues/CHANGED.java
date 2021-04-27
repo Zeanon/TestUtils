@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public enum CHANGED implements Tag.Value<CHANGED> {
 
 	TRUE(ChatColor.GREEN + "true", ChatColor.RED + "The given region has been changed since the last Backup and thus will be saved at the next hourly Backup."),
-	FALSE(ChatColor.RED + "unchanged", ChatColor.RED + "The given region has not been changed since the last Backup and thus will not be saved at the next hourly Backup.");
+	FALSE(ChatColor.RED + "false", ChatColor.RED + "The given region has not been changed since the last Backup and thus will not be saved at the next hourly Backup.");
 
 
 	private static @Nullable CHANGED[] values;
