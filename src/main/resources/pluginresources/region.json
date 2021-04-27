@@ -1,25 +1,7 @@
 {
-  "flags": {
-    "fire": "DENY",
-    "item_drops": "DENY",
-    "tnt": "DENY",
-    "leaves_decay": "DENY",
-    "fall_damage": "ALLOW",
-    "damage": "ALLOW",
-    "stoplag": "INACTIVE"
-  },
   "regiontype": "DEFINED_REGION",
   "world": "world",
-  "points": {
-    "max": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "min": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    }
-  }
+  "points": {},
+  "flags": {},
+  "tags": {}
 }

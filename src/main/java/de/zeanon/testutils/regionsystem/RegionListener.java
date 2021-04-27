@@ -6,6 +6,8 @@ import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
+import de.zeanon.testutils.regionsystem.tags.Tag;
+import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -202,19 +204,17 @@ public class RegionListener implements Listener {
 		event.blockList().removeIf(block -> {
 			final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
 			if (internalApplicableRegions.isEmpty()) {
-				return true;
-			} else {
-				boolean remove = false;
-				for (final @NotNull DefinedRegion region : internalApplicableRegions) {
-					region.setHasChanged(true);
-
-					if (region.getFlag(Flag.TNT) == TNT.DENY) {
-						remove = true;
-						break;
-					}
-				}
-				return remove;
+				return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
 			}
+
+			for (final @NotNull DefinedRegion region : internalApplicableRegions) {
+				if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+					return true;
+				}
+			}
+
+			RegionListener.regionHasChanged(block.getLocation());
+			return false;
 		});
 
 		RegionListener.regionHasChanged(event.getBlock().getLocation());
@@ -256,19 +256,17 @@ public class RegionListener implements Listener {
 		event.blockList().removeIf(block -> {
 			final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
 			if (internalApplicableRegions.isEmpty()) {
-				return true;
-			} else {
-				boolean remove = false;
-				for (final @NotNull DefinedRegion region : internalApplicableRegions) {
-					region.setHasChanged(true);
-
-					if (region.getFlag(Flag.TNT) == TNT.DENY) {
-						remove = true;
-						break;
-					}
-				}
-				return remove;
+				return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
 			}
+
+			for (final @NotNull DefinedRegion region : internalApplicableRegions) {
+				if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+					return true;
+				}
+			}
+
+			RegionListener.regionHasChanged(block.getLocation());
+			return false;
 		});
 
 		RegionListener.regionHasChanged(event.getLocation());
@@ -291,17 +289,13 @@ public class RegionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockMultiPlace(final @NotNull BlockMultiPlaceEvent event) {
-		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
-			region.setHasChanged(true);
-		}
+		RegionListener.regionHasChanged(event.getBlock().getLocation());
 
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				for (final @NotNull BlockState tempState : event.getReplacedBlockStates()) {
-					for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(tempState.getLocation())) {
-						region.setHasChanged(true);
-					}
+					RegionListener.regionHasChanged(tempState.getLocation());
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
@@ -570,7 +564,7 @@ public class RegionListener implements Listener {
 			@Override
 			public void run() {
 				for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(location)) {
-					region.setHasChanged(true);
+					region.setNBT(Tag.CHANGED, CHANGED.TRUE);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

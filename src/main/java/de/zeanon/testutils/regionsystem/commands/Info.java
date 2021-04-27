@@ -92,6 +92,42 @@ public class Info {
 
 			lineBreak[0] = !lineBreak[0];
 		});
+
 		p.spigot().sendMessage(flags);
+
+		lineBreak[0] = false;
+		currentCount[0] = 0;
+		final int nbtCount = region.getNBTs().size();
+
+		final @NotNull TextComponent nbts = new TextComponent(RegionCommand.MESSAGE_HEAD
+															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---\n");
+		region.getNBTs().forEach((nbt, value) -> {
+			currentCount[0]++;
+			if (!lineBreak[0]) {
+				nbts.addExtra(RegionCommand.MESSAGE_HEAD + ChatColor.BLACK + "[");
+			}
+
+			final @NotNull TextComponent currentFlag = new TextComponent(ChatColor.DARK_RED + nbt.toString() + ChatColor.DARK_GRAY + " : " + value.getChatValue());
+			currentFlag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+													 new ComponentBuilder(new TextComponent(
+															 TextComponent.fromLegacyText(
+																	 value.getDescription())))
+															 .create()));
+			nbts.addExtra(currentFlag);
+
+			if (currentCount[0] == nbtCount) {
+				nbts.addExtra(ChatColor.BLACK + "]");
+			} else {
+				if (lineBreak[0]) {
+					nbts.addExtra(ChatColor.BLACK + "]\n");
+				} else {
+					nbts.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
+				}
+			}
+
+			lineBreak[0] = !lineBreak[0];
+		});
+
+		p.spigot().sendMessage(nbts);
 	}
 }

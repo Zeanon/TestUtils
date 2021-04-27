@@ -9,13 +9,14 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 public enum RegionType {
 
-	GLOBAL_REGION("GlobalRegion"),
-	DEFINED_REGION("DefinedRegion"),
-	TESTAREA("TestArea"),
-	DEFAULT("Default");
+	GLOBAL_REGION("GlobalRegion", "resources/global.json"),
+	DEFINED_REGION("DefinedRegion", "resources/region.json"),
+	TESTAREA("TestArea", "resources/testarea.json"),
+	DEFAULT("Default", "resources/region.json");
 
 
 	private final @NotNull String name;
+	private final @NotNull String resource;
 
 
 	@Override

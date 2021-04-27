@@ -17,7 +17,6 @@ public class DefinedRegion extends Region {
 
 	private final @NotNull Point maxPoint;
 	private final @NotNull Point minPoint;
-	private boolean hasChanged;
 
 
 	public DefinedRegion(final @NotNull File file) {
@@ -31,8 +30,6 @@ public class DefinedRegion extends Region {
 		this.minPoint = this.getPoint("min");
 
 		this.saveData();
-
-		this.hasChanged = false;
 	}
 
 	@SuppressWarnings("unused")
@@ -53,13 +50,11 @@ public class DefinedRegion extends Region {
 		this.setPoint(this.minPoint, "min");
 
 		this.saveData();
-
-		this.hasChanged = false;
 	}
 
 	public DefinedRegion(final @NotNull String name, final @NotNull Point firstPoint, final @NotNull Point secondPoint, final @NotNull World world, final @NotNull RegionType regionType) {
 		super(JsonFileManager.jsonFile(RegionManager.DEFINED_REGIONS_FOLDER.resolve(name + ".json"))
-							 .fromResource("resources/region.json")
+							 .fromResource(regionType.getResource())
 							 .reloadSetting(Reload.MANUALLY)
 							 .create(),
 			  name,
@@ -74,8 +69,6 @@ public class DefinedRegion extends Region {
 		this.setPoint(this.minPoint, "min");
 
 		this.saveData();
-
-		this.hasChanged = false;
 	}
 
 
@@ -88,14 +81,6 @@ public class DefinedRegion extends Region {
 			   && this.minPoint.getY() <= location.getBlockY()
 			   && this.maxPoint.getZ() >= location.getBlockZ()
 			   && this.minPoint.getZ() <= location.getBlockZ();
-	}
-
-	public boolean hasChanged() {
-		return this.hasChanged;
-	}
-
-	public void setHasChanged(final boolean hasChanged) {
-		this.hasChanged = hasChanged;
 	}
 
 	public @NotNull Point getMinimumPoint() {
@@ -115,19 +100,18 @@ public class DefinedRegion extends Region {
 
 	private @NotNull Point getPoint(final @NotNull String path) {
 		final @NotNull JsonFileSection section = this.jsonFile.getSectionUseArray("points", path);
-		return new Point(section.getIntUseArray("x"),
-						 section.getIntUseArray("y"),
-						 section.getIntUseArray("z"));
+		return new Point(section.getInt("x"),
+						 section.getInt("y"),
+						 section.getInt("z"));
 	}
 
 	private void setPoint(final @NotNull Point point, final @NotNull String path) {
-		final @NotNull JsonFileSection section = this.jsonFile.getSectionUseArray("points", path);
+		final @NotNull JsonFileSection section = this.jsonFile.getOrCreateSectionUseArray("points", path);
 		//noinspection unchecked
 		section.setAllUseArrayWithoutCheck(
 				new Pair<>(new String[]{"x"}, point.getX()),
 				new Pair<>(new String[]{"y"}, point.getX()),
-				new Pair<>(new String[]{"z"}, point.getX())
-										  );
+				new Pair<>(new String[]{"z"}, point.getX()));
 	}
 
 

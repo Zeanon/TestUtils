@@ -6,6 +6,7 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.RegionType;
 import de.zeanon.testutils.regionsystem.flags.Flag;
+import de.zeanon.testutils.regionsystem.tags.Tag;
 import java.util.EnumMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public abstract class Region {
 	protected final @NotNull World world;
 	protected final @NotNull RegionType regionType;
 	protected final @NotNull Map<Flag, Flag.Value<?>> flags;
+	protected final @NotNull Map<Tag, Tag.Value<?>> nbts;
 
 
 	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world, final @NotNull RegionType regionType) {
@@ -38,6 +40,9 @@ public abstract class Region {
 
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
+
+		this.nbts = new EnumMap<>(Tag.class);
+		this.readNBT();
 	}
 
 	protected Region(final @NotNull JsonFile jsonFile) {
@@ -49,6 +54,9 @@ public abstract class Region {
 
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
+
+		this.nbts = new EnumMap<>(Tag.class);
+		this.readNBT();
 	}
 
 
@@ -64,6 +72,20 @@ public abstract class Region {
 
 	public @NotNull Map<Flag, Flag.Value<?>> getFlags() {
 		return this.flags;
+	}
+
+	public void setNBT(final @NotNull Tag nbtType, final @NotNull Tag.Value<?> value) {
+		if (this.nbts.put(nbtType, value) != value) {
+			this.saveData();
+		}
+	}
+
+	public @Nullable Tag.Value<?> getNBT(final @NotNull Tag nbtType) {
+		return this.nbts.get(nbtType);
+	}
+
+	public @NotNull Map<Tag, Tag.Value<?>> getNBTs() {
+		return this.nbts;
 	}
 
 	public @NotNull World getWorld() {
@@ -89,13 +111,26 @@ public abstract class Region {
 	}
 
 
-	private void readFlags() {
-		final @NotNull Map<String, String> tempFlagMap = Objects.notNull(this.jsonFile.getDirectMapReference("flags"));
+	protected void readFlags() {
+		final @Nullable Map<String, String> tempFlagMap = this.jsonFile.getDirectMapReference("flags");
+		final boolean noMap = tempFlagMap == null;
+
 		for (final @NotNull Flag flag : Flag.getFlags()) {
-			final @Nullable String flagValue = tempFlagMap.get(flag.toString());
+			final @Nullable String flagValue = noMap ? null : tempFlagMap.get(flag.toString());
 			this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
 		}
 		this.jsonFile.setUseArrayWithoutCheck(new String[]{"flags"}, this.flags);
+	}
+
+	protected void readNBT() {
+		final @Nullable Map<String, String> tempTagMap = this.jsonFile.getDirectMapReference("tags");
+		final boolean noMap = tempTagMap == null;
+
+		for (final @NotNull Tag tempTag : Tag.getTags()) {
+			final @Nullable String tagValue = noMap ? null : tempTagMap.get(tempTag.toString());
+			this.nbts.put(tempTag, tagValue == null ? tempTag.getDefaultValue() : tempTag.getTagValueOf(tagValue.toUpperCase()));
+		}
+		this.jsonFile.setUseArrayWithoutCheck(new String[]{"tags"}, this.nbts);
 	}
 
 

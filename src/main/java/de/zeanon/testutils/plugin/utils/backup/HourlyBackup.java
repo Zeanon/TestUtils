@@ -7,6 +7,8 @@ import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.InternalFileUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.tags.Tag;
+import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
@@ -54,6 +56,6 @@ public class HourlyBackup extends Backup {
 
 	@Override
 	protected boolean doBackup(final @NotNull DefinedRegion southRegion, final @NotNull DefinedRegion northRegion) {
-		return southRegion.hasChanged() || northRegion.hasChanged();
+		return southRegion.getNBT(Tag.CHANGED) == CHANGED.TRUE || northRegion.getNBT(Tag.CHANGED) == CHANGED.TRUE;
 	}
 }

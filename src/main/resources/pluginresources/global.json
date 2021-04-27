@@ -1,13 +1,6 @@
 {
-  "flags": {
-    "fire": "DENY",
-    "item_drops": "DENY",
-    "tnt": "DENY",
-    "leaves_decay": "DENY",
-    "fall_damage": "ALLOW",
-    "damage": "ALLOW",
-    "stoplag": "INACTIVE"
-  },
   "regiontype": "GLOBAL_REGION",
-  "world": "world"
+  "world": "world",
+  "flags": {},
+  "tags": {}
 }

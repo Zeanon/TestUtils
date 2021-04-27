@@ -37,7 +37,6 @@ public class RegionManager {
 		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER);
 		BaseFileUtils.createFolder(RegionManager.GLOBAL_REGIONS_FOLDER);
 
-
 		RegionManager.initializeTestAreas();
 		RegionManager.initializeGlobalRegions();
 	}
