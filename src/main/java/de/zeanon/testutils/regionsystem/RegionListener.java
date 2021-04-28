@@ -11,8 +11,8 @@ import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,7 +42,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -66,7 +66,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -90,7 +90,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -107,7 +107,9 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		if (event.getBlock().getType() != event.getChangedType()) {
+			RegionListener.tagChangedRegions(event.getBlock().getLocation());
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -131,7 +133,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -148,7 +150,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -165,7 +167,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@SuppressWarnings("DuplicatedCode")
@@ -177,47 +179,16 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> applicableRegions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		if (applicableRegions.isEmpty() && globalRegion.getFlag(Flag.TNT) == TNT.DENY) {
-			event.blockList().clear();
-			return;
-		}
-
-		for (final @NotNull DefinedRegion region : applicableRegions) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE && region.getFlag(Flag.TNT) == TNT.DENY) {
-				event.blockList().clear();
-				event.setCancelled(true);
-				return;
-			}
-
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
 			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 				event.setCancelled(true);
 				return;
 			}
-
-			if (region.getFlag(Flag.TNT) == TNT.DENY) {
-				event.blockList().clear();
-				return;
-			}
 		}
 
-		event.blockList().removeIf(block -> {
-			final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
-			if (internalApplicableRegions.isEmpty()) {
-				return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
-			}
+		event.blockList().removeIf(block -> RegionListener.doNotDestroyBlock(block, globalRegion));
 
-			for (final @NotNull DefinedRegion region : internalApplicableRegions) {
-				if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
-					return true;
-				}
-			}
-
-			RegionListener.regionHasChanged(block.getLocation());
-			return false;
-		});
-
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@SuppressWarnings("DuplicatedCode")
@@ -229,47 +200,16 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> applicableRegions = RegionManager.getApplicableRegions(event.getLocation());
-		if (applicableRegions.isEmpty() && globalRegion.getFlag(Flag.TNT) == TNT.DENY) {
-			event.blockList().clear();
-			return;
-		}
-
-		for (final @NotNull DefinedRegion region : applicableRegions) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE && region.getFlag(Flag.TNT) == TNT.DENY) {
-				event.blockList().clear();
-				event.setCancelled(true);
-				return;
-			}
-
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getLocation())) {
 			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 				event.setCancelled(true);
 				return;
 			}
-
-			if (region.getFlag(Flag.TNT) == TNT.DENY) {
-				event.blockList().clear();
-				return;
-			}
 		}
 
-		event.blockList().removeIf(block -> {
-			final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
-			if (internalApplicableRegions.isEmpty()) {
-				return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
-			}
+		event.blockList().removeIf(block -> RegionListener.doNotDestroyBlock(block, globalRegion));
 
-			for (final @NotNull DefinedRegion region : internalApplicableRegions) {
-				if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
-					return true;
-				}
-			}
-
-			RegionListener.regionHasChanged(block.getLocation());
-			return false;
-		});
-
-		RegionListener.regionHasChanged(event.getLocation());
+		RegionListener.tagChangedRegions(event.getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -289,13 +229,13 @@ public class RegionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockMultiPlace(final @NotNull BlockMultiPlaceEvent event) {
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				for (final @NotNull BlockState tempState : event.getReplacedBlockStates()) {
-					RegionListener.regionHasChanged(tempState.getLocation());
+					RegionListener.tagChangedRegions(tempState.getLocation());
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
@@ -303,7 +243,7 @@ public class RegionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(final @NotNull BlockPlaceEvent event) {
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -324,7 +264,7 @@ public class RegionListener implements Listener {
 				}
 			}
 
-			RegionListener.regionHasChanged(event.getBlock().getLocation());
+			RegionListener.tagChangedRegions(event.getBlock().getLocation());
 		}
 	}
 
@@ -333,14 +273,14 @@ public class RegionListener implements Listener {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getBlock().getWorld()));
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setDropItems(false);
-			RegionListener.regionHasChanged(event.getBlock().getLocation());
+			RegionListener.tagChangedRegions(event.getBlock().getLocation());
 			return;
 		}
 
 		final @NotNull List<DefinedRegion> applicableRegions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
 		if (applicableRegions.isEmpty() && globalRegion.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
 			event.setDropItems(false);
-			RegionListener.regionHasChanged(event.getBlock().getLocation());
+			RegionListener.tagChangedRegions(event.getBlock().getLocation());
 			return;
 		}
 
@@ -350,7 +290,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -370,7 +310,7 @@ public class RegionListener implements Listener {
 				}
 			}
 
-			RegionListener.regionHasChanged(event.getClickedBlock().getLocation());
+			RegionListener.tagChangedRegions(event.getClickedBlock().getLocation());
 		}
 	}
 
@@ -384,19 +324,11 @@ public class RegionListener implements Listener {
 		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getLocation())) {
 			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 				event.setCancelled(true);
-				if (event.getEntityType() == EntityType.PRIMED_TNT) {
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							event.getLocation().getBlock().setType(Material.TNT, false);
-						}
-					}.runTaskLater(TestUtils.getInstance(), 1);
-					return;
-				}
+				return;
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getLocation());
+		RegionListener.tagChangedRegions(event.getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -413,7 +345,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -430,7 +362,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -447,7 +379,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -464,7 +396,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -480,7 +412,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -497,7 +429,7 @@ public class RegionListener implements Listener {
 			}
 		}
 
-		RegionListener.regionHasChanged(event.getBlock().getLocation());
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -516,7 +448,7 @@ public class RegionListener implements Listener {
 				}
 			}
 
-			RegionListener.regionHasChanged(destination);
+			RegionListener.tagChangedRegions(destination);
 		}
 
 		final @Nullable Location source = event.getSource().getLocation();
@@ -532,7 +464,7 @@ public class RegionListener implements Listener {
 				}
 			}
 
-			RegionListener.regionHasChanged(source);
+			RegionListener.tagChangedRegions(source);
 		}
 	}
 
@@ -559,7 +491,39 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	private static void regionHasChanged(final @NotNull Location location) {
+	private static boolean doNotDestroyBlock(final @NotNull Block block, final @NotNull GlobalRegion globalRegion) {
+		final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
+		if (internalApplicableRegions.isEmpty()) {
+			return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
+		}
+
+		boolean destroy = true;
+		boolean dropItems = true;
+		for (final @NotNull DefinedRegion region : internalApplicableRegions) {
+			if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+				destroy = false;
+			}
+
+			if (region.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
+				dropItems = false;
+			}
+		}
+
+		if (!destroy) {
+			return true;
+		}
+
+		RegionListener.tagChangedRegions(block.getLocation());
+
+		if (!dropItems) {
+			block.setType(Material.AIR);
+			return true;
+		}
+
+		return false;
+	}
+
+	private static void tagChangedRegions(final @NotNull Location location) {
 		new BukkitRunnable() {
 			@Override
 			public void run() {

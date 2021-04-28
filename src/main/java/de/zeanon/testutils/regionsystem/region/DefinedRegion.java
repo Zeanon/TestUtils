@@ -110,8 +110,8 @@ public class DefinedRegion extends Region {
 		//noinspection unchecked
 		section.setAllUseArrayWithoutCheck(
 				new Pair<>(new String[]{"x"}, point.getX()),
-				new Pair<>(new String[]{"y"}, point.getX()),
-				new Pair<>(new String[]{"z"}, point.getX()));
+				new Pair<>(new String[]{"y"}, point.getY()),
+				new Pair<>(new String[]{"z"}, point.getZ()));
 	}
 
 
