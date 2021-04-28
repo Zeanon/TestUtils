@@ -26,7 +26,7 @@ public abstract class Region {
 	protected final @NotNull World world;
 	protected final @NotNull RegionType regionType;
 	protected final @NotNull Map<Flag, Flag.Value<?>> flags;
-	protected final @NotNull Map<Tag, Tag.Value<?>> nbts;
+	protected final @NotNull Map<Tag, Tag.Value<?>> tags;
 
 
 	protected Region(final @NotNull JsonFile jsonFile, final @NotNull String name, final @NotNull World world, final @NotNull RegionType regionType) {
@@ -41,7 +41,7 @@ public abstract class Region {
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
 
-		this.nbts = new EnumMap<>(Tag.class);
+		this.tags = new EnumMap<>(Tag.class);
 		this.readTags();
 	}
 
@@ -55,14 +55,20 @@ public abstract class Region {
 		this.flags = new EnumMap<>(Flag.class);
 		this.readFlags();
 
-		this.nbts = new EnumMap<>(Tag.class);
+		this.tags = new EnumMap<>(Tag.class);
 		this.readTags();
 	}
 
 
-	public void setFlag(final @NotNull Flag flagType, final @NotNull Flag.Value<?> value) {
-		if (this.flags.put(flagType, value) != value) {
-			this.saveData();
+	public void setFlag(final @NotNull Flag flagType, final @Nullable Flag.Value<?> value) {
+		if (value == null) {
+			if (this.flags.remove(flagType) != null) {
+				this.saveData();
+			}
+		} else {
+			if (this.flags.put(flagType, value) != value) {
+				this.saveData();
+			}
 		}
 	}
 
@@ -74,18 +80,24 @@ public abstract class Region {
 		return this.flags;
 	}
 
-	public void setTag(final @NotNull Tag nbtType, final @NotNull Tag.Value<?> value) {
-		if (this.nbts.put(nbtType, value) != value) {
-			this.saveData();
+	public void setTag(final @NotNull Tag tagType, final @Nullable Tag.Value<?> value) {
+		if (value == null) {
+			if (this.tags.remove(tagType) != null) {
+				this.saveData();
+			}
+		} else {
+			if (this.tags.put(tagType, value) != value) {
+				this.saveData();
+			}
 		}
 	}
 
-	public @Nullable Tag.Value<?> getTag(final @NotNull Tag nbtType) {
-		return this.nbts.get(nbtType);
+	public @Nullable Tag.Value<?> getTag(final @NotNull Tag tagType) {
+		return this.tags.get(tagType);
 	}
 
 	public @NotNull Map<Tag, Tag.Value<?>> getTags() {
-		return this.nbts;
+		return this.tags;
 	}
 
 	public @NotNull World getWorld() {
@@ -142,13 +154,13 @@ public abstract class Region {
 			try {
 				final @NotNull Tag tag = Tag.valueOf(entry.getKey().toUpperCase());
 				final @Nullable String tagValue = Objects.toString(tempTagMap.get(tag.toString()));
-				this.nbts.put(tag, tagValue == null ? tag.getDefaultValue() : tag.getTagValueOf(tagValue.toUpperCase()));
+				this.tags.put(tag, tagValue == null ? tag.getDefaultValue() : tag.getTagValueOf(tagValue.toUpperCase()));
 			} catch (final @NotNull IllegalArgumentException e) {
 				//NOTHING
 			}
 		}
 
-		this.jsonFile.setUseArrayWithoutCheck(new String[]{"tags"}, this.nbts);
+		this.jsonFile.setUseArrayWithoutCheck(new String[]{"tags"}, this.tags);
 	}
 
 
