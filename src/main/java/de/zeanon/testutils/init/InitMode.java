@@ -4,6 +4,7 @@ import de.steamwar.commandframework.SWCommand;
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
+import de.zeanon.testutils.plugin.commands.countingwand.CountingwandCommand;
 import de.zeanon.testutils.plugin.commands.gamemode.GamemodeCommand;
 import de.zeanon.testutils.plugin.commands.inventoryclean.InventoryClean;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
@@ -112,6 +113,7 @@ public class InitMode {
 		InitMode.registeredCommands.add(new TestUtilsCommand());
 		InitMode.registeredCommands.add(new InventoryClean());
 		InitMode.registeredCommands.add(new GamemodeCommand());
+		InitMode.registeredCommands.add(new CountingwandCommand());
 	}
 
 	public void unregisterCommands() {

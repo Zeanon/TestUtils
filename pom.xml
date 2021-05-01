@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.91-Alpha</version>
+    <version>1.0.92-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -120,7 +120,7 @@
                         <configuration>
                             <groupId>de.zeanon</groupId>
                             <artifactId>storagemanagercore</artifactId>
-                            <version>1.1.100</version>
+                            <version>1.1.101</version>
                             <file>src/main/resources/dependencies/StorageManagerCore.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
@@ -136,7 +136,7 @@
                         <configuration>
                             <groupId>de.zeanon</groupId>
                             <artifactId>thunderfilemanager</artifactId>
-                            <version>1.1.100</version>
+                            <version>1.1.101</version>
                             <file>src/main/resources/dependencies/ThunderFileManager.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
@@ -152,7 +152,7 @@
                         <configuration>
                             <groupId>de.zeanon</groupId>
                             <artifactId>jsonfilemanager</artifactId>
-                            <version>1.1.100</version>
+                            <version>1.1.101</version>
                             <file>src/main/resources/dependencies/JsonFileManager.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
@@ -292,7 +292,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>storagemanagercore</artifactId>
-            <version>1.1.100</version>
+            <version>1.1.101</version>
             <scope>compile</scope>
         </dependency>
 
@@ -300,7 +300,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>thunderfilemanager</artifactId>
-            <version>1.1.100</version>
+            <version>1.1.101</version>
             <scope>compile</scope>
         </dependency>
 
@@ -308,7 +308,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>jsonfilemanager</artifactId>
-            <version>1.1.100</version>
+            <version>1.1.101</version>
             <scope>compile</scope>
         </dependency>
 

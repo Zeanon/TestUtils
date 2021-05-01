@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class Count {
 
 	public void execute(final @NotNull Material material, final @Nullable RegionSide regionSide, final @NotNull Player p) {
-		final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p, regionSide);
 		if (regionSide == null) {
 			if (region == null) {
 				GlobalMessageUtils.sendNotApplicableRegion(p);

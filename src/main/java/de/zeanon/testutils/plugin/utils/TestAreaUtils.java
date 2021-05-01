@@ -52,8 +52,14 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p) {
-		final @NotNull Optional<DefinedRegion> temp = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
-		return temp.map(region -> RegionManager.getRegion(region.getName().substring(0, region.getName().length() - 5) + (region.getName().substring(region.getName().length() - 5).equalsIgnoreCase("north") ? "south" : "north"))).orElse(null);
+		final @NotNull Optional<DefinedRegion> optionalRegion = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
+		return optionalRegion.map(region -> RegionManager.getRegion(region
+																			.getName()
+																			.substring(0, region.getName().length() - 6)
+																	+ (region.getName()
+																			 .substring(region.getName().length() - 6)
+																			 .equalsIgnoreCase("_north") ? "_south" : "_north")))
+							 .orElse(null);
 	}
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
@@ -78,10 +84,10 @@ public class TestAreaUtils {
 	public @Nullable DefinedRegion getNorthRegion(final @NotNull Player p) {
 		final @NotNull Optional<DefinedRegion> temp = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
-			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("north")) {
+			if (temp.get().getName().substring(temp.get().getName().length() - 6).equalsIgnoreCase("_north")) {
 				return temp.get();
 			} else {
-				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "north");
+				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_north");
 			}
 		} else {
 			return null;
@@ -91,10 +97,10 @@ public class TestAreaUtils {
 	public @Nullable DefinedRegion getSouthRegion(final @NotNull Player p) {
 		final @NotNull Optional<DefinedRegion> temp = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		if (temp.isPresent()) {
-			if (temp.get().getName().substring(temp.get().getName().length() - 5).equalsIgnoreCase("south")) {
+			if (temp.get().getName().substring(temp.get().getName().length() - 6).equalsIgnoreCase("_south")) {
 				return temp.get();
 			} else {
-				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 5) + "south");
+				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_south");
 			}
 		} else {
 			return null;

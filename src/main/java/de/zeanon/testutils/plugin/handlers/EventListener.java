@@ -1,14 +1,16 @@
 package de.zeanon.testutils.plugin.handlers;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.commands.countingwand.Countingwand;
 import de.zeanon.testutils.plugin.update.Update;
-import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.ScoreBoard;
-import net.md_5.bungee.api.ChatColor;
+import de.zeanon.testutils.regionsystem.region.Region;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -17,21 +19,28 @@ import org.jetbrains.annotations.NotNull;
 
 public class EventListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onCommand(final @NotNull PlayerCommandPreprocessEvent event) {
-		final @NotNull String[] args = event.getMessage().replace("worldguard:", "").split("\\s+");
-		if ((args[0].equalsIgnoreCase("/rg") || args[0].equalsIgnoreCase("/region"))
-			&& (args[1].equalsIgnoreCase("define") || args[1].equalsIgnoreCase("d") || args[1].equalsIgnoreCase("create"))
-			&& args[2].toLowerCase().startsWith("testarea_")
-			&& (args[2].toLowerCase().endsWith("_north") || args[2].toLowerCase().endsWith("_south"))) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-										  + ChatColor.RED + "You are not allowed to create a region which starts with '"
-										  + ChatColor.DARK_RED + "testarea_"
-										  + ChatColor.RED + "' and ends with '"
-										  + ChatColor.DARK_RED + args[2].substring(args[2].length() - 6)
-										  + "'.");
+	@EventHandler
+	public void onBlockBreak(final @NotNull BlockBreakEvent event) {
+		if (!Countingwand.isCountingwand(event.getPlayer().getInventory().getItemInMainHand())) {
+			return;
 		}
+
+		event.setCancelled(true);
+		Countingwand.checkSelection(Region.Point.fromLocation(event.getBlock().getLocation()), true, event.getPlayer());
+	}
+
+	@EventHandler
+	public void onPlayerInteract(final @NotNull PlayerInteractEvent event) {
+		if (!Countingwand.isCountingwand(event.getItem())) {
+			return;
+		}
+
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		event.setCancelled(true);
+		Countingwand.checkSelection(Region.Point.fromLocation(Objects.notNull(event.getClickedBlock()).getLocation()), false, event.getPlayer());
 	}
 
 	@EventHandler

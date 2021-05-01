@@ -6,8 +6,8 @@ import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
+import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.Region;
-import de.zeanon.testutils.regionsystem.region.TestArea;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
@@ -38,16 +38,16 @@ public class RegisterArea {
 	}
 
 	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {
-		TestArea regionSouth = new TestArea(name + "_south",
-											new Region.Point(x - 58, y, z + 1),
-											new Region.Point(x + 58, y + 65, z + 97),
-											world);
+		DefinedRegion regionSouth = new DefinedRegion(name + "_south",
+													  new Region.Point(x - 58, y, z + 1),
+													  new Region.Point(x + 58, y + 65, z + 97),
+													  world);
 
 
-		TestArea regionNorth = new TestArea(name + "_north",
-											new Region.Point(x - 58, y, z),
-											new Region.Point(x + 58, y + 65, z - 96),
-											world);
+		DefinedRegion regionNorth = new DefinedRegion(name + "_north",
+													  new Region.Point(x - 58, y, z),
+													  new Region.Point(x + 58, y + 65, z - 96),
+													  world);
 
 		RegionManager.addRegion(regionSouth);
 		RegionManager.addRegion(regionNorth);

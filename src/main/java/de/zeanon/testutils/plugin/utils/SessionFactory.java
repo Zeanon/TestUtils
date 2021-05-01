@@ -24,8 +24,8 @@ public class SessionFactory {
 	}
 
 	public @NotNull EditSession createSession(final @NotNull Player p, final @NotNull World world) {
-		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
-			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+		final @Nullable SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+		if (tempStack != null) {
 			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
 				tempStack.resize(ConfigUtils.getInt("Max History"));
 			}
@@ -38,8 +38,8 @@ public class SessionFactory {
 	}
 
 	public void registerUndoSession(final @NotNull Player p, final @NotNull EditSession session) {
-		if (SessionFactory.undoSessions.containsKey(p.getUniqueId().toString())) {
-			SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+		final @Nullable SizedStack<EditSession> tempStack = SessionFactory.undoSessions.get(p.getUniqueId().toString());
+		if (tempStack != null) {
 			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max History")) {
 				tempStack.resize(ConfigUtils.getInt("Max History"));
 			}

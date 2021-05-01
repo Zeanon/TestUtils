@@ -184,6 +184,10 @@ public abstract class Region {
 			return new Point(Integer.parseInt(parts[0].substring(2)), Integer.parseInt(parts[1].substring(2)), Integer.parseInt(parts[2].substring(2)));
 		}
 
+		public static @NotNull Point fromLocation(final @NotNull Location location) {
+			return new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		}
+
 		public @NotNull BlockVector3 toBlockVector3() {
 			return BlockVector3.at(this.x, this.y, this.z);
 		}

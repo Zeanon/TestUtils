@@ -1,13 +1,13 @@
 package de.zeanon.testutils.plugin.utils;
 
 
-import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class ScoreBoard {
 
 	private final @NotNull ScoreboardManager scoreboardManager = Objects.notNull(Bukkit.getScoreboardManager());
-	private final @NotNull List<Player> registeredPlayers = new GapList<>();
+	private final @NotNull Set<Player> registeredPlayers = new HashSet<>();
 
 	public void initialize() {
 		ScoreBoard.registerPlayers();

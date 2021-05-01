@@ -2,12 +2,10 @@ package de.zeanon.testutils.regionsystem;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
-import de.zeanon.testutils.regionsystem.region.TestArea;
-import java.io.File;
+import de.zeanon.testutils.regionsystem.region.Region;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
@@ -37,54 +35,50 @@ public class RegionManager {
 		BaseFileUtils.createFolder(RegionManager.DEFINED_REGIONS_FOLDER);
 		BaseFileUtils.createFolder(RegionManager.GLOBAL_REGIONS_FOLDER);
 
-		RegionManager.initializeTestAreas();
+		RegionManager.initializeDefinedRegions();
 		RegionManager.initializeGlobalRegions();
 	}
 
-	public void initializeTestAreas() throws IOException {
+	public void initializeDefinedRegions() throws IOException {
 		RegionManager.regions.clear();
-		for (final @NotNull File file : BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json")) {
-			if (!file.getName().startsWith("__") && !file.getName().endsWith("__.json")) {
-				try {
-					RegionManager.regions.add(new TestArea(file));
-				} catch (final @NotNull ObjectNullException e) {
-					System.out.println("[" + TestUtils.getInstance().getName() + "] >> TestAreas >> " + file.getName() + " could not be initialized properly, please check the region file.");
-					e.printStackTrace();
-				}
+		BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json").forEach(file -> {
+			try {
+				RegionManager.regions.add(new DefinedRegion(file));
+			} catch (final @NotNull ObjectNullException e) {
+				System.out.println("[" + TestUtils.getInstance().getName() + "] >> TestAreas >> " + file.getName() + " could not be initialized properly, please check the region file.");
+				e.printStackTrace();
 			}
-		}
+		});
 	}
 
 	public void initializeGlobalRegions() {
 		RegionManager.globalRegions.clear();
-		for (final @NotNull World world : Bukkit.getWorlds()) {
+		Bukkit.getWorlds().forEach(world -> {
 			try {
 				RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
 			} catch (final @NotNull ObjectNullException e) {
 				System.out.println("[" + TestUtils.getInstance().getName() + "] >> GlobalRegions >> " + world.getName() + " could not be initialized properly, please check the region file.");
 				e.printStackTrace();
 			}
-		}
+		});
 	}
 
 
 	public @NotNull GlobalRegion getGlobalRegion(final @NotNull World world) {
-		final @Nullable GlobalRegion globalRegion = RegionManager.globalRegions.get("__" + world.getName() + "__");
-		if (globalRegion == null) {
-			RegionManager.initializeGlobalRegions();
-			return Objects.notNull(RegionManager.globalRegions.get("__" + world.getName() + "__"));
-		} else {
-			return globalRegion;
-		}
+		return RegionManager.globalRegions.entrySet()
+										  .stream()
+										  .filter(entry -> entry.getKey().equals("__" + world.getName() + "__"))
+										  .map(Map.Entry::getValue)
+										  .findFirst()
+										  .orElseGet(() -> new GlobalRegion(world));
 	}
 
 	public @NotNull List<DefinedRegion> getApplicableRegions(final @NotNull Location location) {
-		return RegionManager.regions.stream().filter(r -> r.inRegion(location)).collect(Collectors.toList());
+		return RegionManager.regions.stream().filter(region -> region.inRegion(location)).collect(Collectors.toList());
 	}
 
 	public @Nullable DefinedRegion getRegion(final @NotNull String name) {
-		Optional<DefinedRegion> temp = RegionManager.regions.stream().filter(r -> r.getName().equals(name)).findFirst();
-		return temp.orElse(null);
+		return RegionManager.regions.stream().filter(region -> region.getName().equals(name)).findFirst().orElse(null);
 	}
 
 	public void addRegion(final @NotNull DefinedRegion region) {
@@ -93,7 +87,7 @@ public class RegionManager {
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean hasRegion(final @NotNull String name) {
-		return RegionManager.getRegion(name) != null;
+		return RegionManager.regions.stream().anyMatch(region -> region.getName().equals(name));
 	}
 
 	public boolean hasGlobalRegion(final @NotNull String name) {
@@ -114,13 +108,9 @@ public class RegionManager {
 	}
 
 	public void saveRegions() {
-		for (final @NotNull DefinedRegion region : RegionManager.getRegions()) {
-			region.saveData();
-		}
+		RegionManager.getRegions().forEach(Region::saveData);
 
-		for (final @NotNull Map.Entry<String, GlobalRegion> globalRegion : RegionManager.getGlobalRegions().entrySet()) {
-			globalRegion.getValue().saveData();
-		}
+		RegionManager.getGlobalRegions().forEach((name, region) -> region.saveData());
 	}
 
 	public void reloadRegions() throws IOException {
