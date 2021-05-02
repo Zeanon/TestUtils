@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Countingwand {
 
-	public final @NotNull ItemStack WAND_ITEM = new ItemStack(Material.BLAZE_ROD);
+	public final @NotNull ItemStack WAND_ITEM = new ItemStack(Material.STICK);
 	private final @NotNull Map<String, Pair<Region.Point, Region.Point>> selections = new HashMap<>();
 
 	static {
