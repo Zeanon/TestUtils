@@ -45,7 +45,7 @@ public class RemoveEntities {
 		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 					  + ChatColor.RED + "You have removed '"
 					  + ChatColor.DARK_RED + de.zeanon.testutils.regionsystem.utils.RemoveEntities.removeEntities(region)
-					  + ChatColor.RED + "' in '"
+					  + ChatColor.RED + "' entities in '"
 					  + ChatColor.DARK_RED + region.getName()
 					  + ChatColor.RED + "'.");
 	}

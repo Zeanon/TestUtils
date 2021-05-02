@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import java.util.Map;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class CommandRequestUtils {
 
 	public @Nullable String checkDeleteBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
 		return (CommandRequestUtils.deleteBackupRequests.containsKey(uuid.toString())
-				&& CommandRequestUtils.deleteBackupRequests.get(uuid.toString()).getKey().equalsIgnoreCase(name))
+				&& Objects.notNull(CommandRequestUtils.deleteBackupRequests.get(uuid.toString()).getKey()).equalsIgnoreCase(name))
 			   ? CommandRequestUtils.deleteBackupRequests.get(uuid.toString()).getValue()
 			   : null;
 	}
@@ -60,7 +61,7 @@ public class CommandRequestUtils {
 
 	public @Nullable String checkOverwriteBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
 		return (CommandRequestUtils.overwriteBackupRequests.containsKey(uuid.toString())
-				&& CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getKey().equalsIgnoreCase(name))
+				&& Objects.notNull(CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getKey()).equalsIgnoreCase(name))
 			   ? CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getValue()
 			   : null;
 	}

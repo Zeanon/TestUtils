@@ -92,8 +92,8 @@ public class List {
 								p.sendMessage("\n"
 											  + BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "=== " + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + " === " + BackupCommand.MESSAGE_HEAD);
-								for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(f -> f.getKey().lastModified())).collect(Collectors.toList())) {
-									BackupCommand.sendLoadBackupMessage(file.getKey().getName(),
+								for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(file -> Objects.notNull(file.getKey()).lastModified())).collect(Collectors.toList())) {
+									BackupCommand.sendLoadBackupMessage(Objects.notNull(file.getKey()).getName(),
 																		Objects.notNull(file.getValue()),
 																		p);
 								}

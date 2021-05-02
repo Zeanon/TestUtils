@@ -44,7 +44,7 @@ public class DefinedRegion extends Region {
 
 		final @NotNull Pair<Point, Point> points = this.sortPoints(firstPoint, secondPoint);
 
-		this.maxPoint = points.getKey();
+		this.maxPoint = Objects.notNull(points.getKey());
 		this.setPoint(this.maxPoint, "max");
 		this.minPoint = Objects.notNull(points.getValue());
 		this.setPoint(this.minPoint, "min");
@@ -63,7 +63,7 @@ public class DefinedRegion extends Region {
 
 		final @NotNull Pair<Point, Point> points = this.sortPoints(firstPoint, secondPoint);
 
-		this.maxPoint = points.getKey();
+		this.maxPoint = Objects.notNull(points.getKey());
 		this.setPoint(this.maxPoint, "max");
 		this.minPoint = Objects.notNull(points.getValue());
 		this.setPoint(this.minPoint, "min");

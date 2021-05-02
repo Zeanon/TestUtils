@@ -26,9 +26,9 @@ public class Countingwand {
 	static {
 		Countingwand.WAND_ITEM.setAmount(1);
 		final @NotNull ItemMeta wandMeta = Objects.notNull(Countingwand.WAND_ITEM.getItemMeta());
-		wandMeta.setDisplayName("Counting Wand");
-		wandMeta.setLore(Arrays.asList(ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Left click: select pos #1",
-									   ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Right click: select pos #2"));
+		wandMeta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Counting Wand");
+		wandMeta.setLore(Arrays.asList(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Left click: select pos #1",
+									   ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Right click: select pos #2"));
 		Countingwand.WAND_ITEM.setItemMeta(wandMeta);
 	}
 
@@ -47,7 +47,11 @@ public class Countingwand {
 				newPos = !point.equals(selection.setValue(point));
 			}
 		} else {
-			selection = new Pair<>(point, point);
+			if (pos1) {
+				selection = new Pair<>(point, null);
+			} else {
+				selection = new Pair<>(null, point);
+			}
 			Countingwand.selections.put(p.getUniqueId().toString(), selection);
 			newPos = true;
 		}
@@ -71,13 +75,17 @@ public class Countingwand {
 						  + ChatColor.DARK_GRAY
 						  + "] ("
 						  + ChatColor.DARK_RED
-						  + Countingwand.getAmount(selection.getKey(), Objects.notNull(selection.getValue()))
+						  + Countingwand.getAmount(selection.getKey(), selection.getValue())
 						  + ChatColor.DARK_GRAY
 						  + ")");
 		}
 	}
 
-	public int getAmount(final @NotNull Region.Point point1, final @NotNull Region.Point point2) {
+	public int getAmount(final @Nullable Region.Point point1, final @Nullable Region.Point point2) {
+		if (point1 == null || point2 == null) {
+			return 0;
+		}
+
 		return (Math.abs(point1.getX() - point2.getX()) + 1) * (Math.abs(point1.getY() - point2.getY()) + 1) * (Math.abs(point1.getZ() - point2.getZ()) + 1);
 	}
 }

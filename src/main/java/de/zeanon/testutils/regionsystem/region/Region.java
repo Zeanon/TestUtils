@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+@SuppressWarnings("unused")
 public abstract class Region {
 
 	protected final @NotNull JsonFile jsonFile;
@@ -186,6 +187,14 @@ public abstract class Region {
 
 		public static @NotNull Point fromLocation(final @NotNull Location location) {
 			return new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		}
+
+		public Point add(int x, int y, int z) {
+			return new Point(this.x + x, this.y + y, this.z + z);
+		}
+
+		public Point subtract(int x, int y, int z) {
+			return new Point(this.x - x, this.y - y, this.z - z);
 		}
 
 		public @NotNull BlockVector3 toBlockVector3() {
