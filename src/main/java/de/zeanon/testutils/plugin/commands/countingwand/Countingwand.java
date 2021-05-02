@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.commands.countingwand;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
+import de.zeanon.testutils.plugin.utils.ItemUtils;
 import de.zeanon.testutils.regionsystem.region.Region;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,10 @@ public class Countingwand {
 		wandMeta.setLore(Arrays.asList(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Left click: select pos #1",
 									   ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Right click: select pos #2"));
 		Countingwand.WAND_ITEM.setItemMeta(wandMeta);
+	}
+
+	public void giveItem(final @NotNull Player p) {
+		ItemUtils.giveItemToPlayer(p, Countingwand.WAND_ITEM);
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")

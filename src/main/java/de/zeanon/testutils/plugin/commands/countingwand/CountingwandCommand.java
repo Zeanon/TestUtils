@@ -13,6 +13,6 @@ public class CountingwandCommand extends SWCommand {
 
 	@Register
 	public void genericCommand(final @NotNull Player p) {
-		p.getInventory().addItem(Countingwand.WAND_ITEM);
+		Countingwand.giveItem(p);
 	}
 }
