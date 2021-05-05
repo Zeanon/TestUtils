@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class RegionListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockFromTo(final @NotNull BlockFromToEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -45,7 +45,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockIgnite(final @NotNull BlockIgniteEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -69,7 +69,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBurn(final @NotNull BlockBurnEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -93,7 +93,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPhysics(final @NotNull BlockPhysicsEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -112,7 +112,7 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onLeavesDecay(final @NotNull LeavesDecayEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -136,7 +136,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockForm(final @NotNull BlockFormEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -153,7 +153,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockSpread(final @NotNull BlockSpreadEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -171,7 +171,7 @@ public class RegionListener implements Listener {
 	}
 
 	@SuppressWarnings("DuplicatedCode")
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockExplode(final @NotNull BlockExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -192,7 +192,7 @@ public class RegionListener implements Listener {
 	}
 
 	@SuppressWarnings("DuplicatedCode")
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityExplode(final @NotNull EntityExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getLocation().getWorld()));
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -212,7 +212,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onExplosionPrime(final @NotNull ExplosionPrimeEvent event) {
 		if (RegionManager.getGlobalRegion(event.getEntity().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -227,7 +227,7 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockMultiPlace(final @NotNull BlockMultiPlaceEvent event) {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 
@@ -241,12 +241,12 @@ public class RegionListener implements Listener {
 		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPlace(final @NotNull BlockPlaceEvent event) {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onCanBuild(final @NotNull BlockCanBuildEvent event) {
 		if (event.isBuildable()) {
 			if (event.getMaterial() == Material.TNT) {
@@ -268,7 +268,7 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(final @NotNull BlockBreakEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getBlock().getWorld()));
 		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
@@ -293,7 +293,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onInteract(final @NotNull PlayerInteractEvent event) {
 		if (event.getClickedBlock() != null) {
 			if (event.getClickedBlock().getType() == Material.TNT && event.getItem() != null && event.getItem().getType() == Material.FLINT_AND_STEEL && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -314,7 +314,7 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntitySpawn(final @NotNull EntitySpawnEvent event) {
 		if (RegionManager.getGlobalRegion(Objects.notNull(event.getLocation().getWorld())).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -331,7 +331,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityChangeBlock(final @NotNull EntityChangeBlockEvent event) {
 		if (RegionManager.getGlobalRegion(event.getEntity().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -348,7 +348,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPistonExtend(final @NotNull BlockPistonExtendEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -365,7 +365,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPistonRetract(final @NotNull BlockPistonRetractEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -382,7 +382,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockGrow(final @NotNull BlockGrowEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -399,7 +399,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockRedstoneEvent(final @NotNull BlockRedstoneEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setNewCurrent(event.getOldCurrent());
@@ -415,7 +415,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockDispense(final @NotNull BlockDispenseEvent event) {
 		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
@@ -432,7 +432,7 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onInventoryMoveItem(final @NotNull InventoryMoveItemEvent event) {
 		final @Nullable Location destination = event.getDestination().getLocation();
 		if (destination != null) {
@@ -468,7 +468,7 @@ public class RegionListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDamage(final @NotNull EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player) {
 			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getEntity().getWorld()));

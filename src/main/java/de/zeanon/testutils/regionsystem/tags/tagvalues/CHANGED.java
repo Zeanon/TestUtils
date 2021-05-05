@@ -39,7 +39,7 @@ public enum CHANGED implements Tag.Value<CHANGED> {
 	@Override
 	public @NotNull CHANGED getValueOf(final @NotNull String name) {
 		try {
-			return CHANGED.valueOf(name);
+			return CHANGED.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
 			return CHANGED.FALSE;
 		}

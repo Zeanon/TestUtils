@@ -38,8 +38,12 @@ public enum DAMAGE implements Flag.Value<DAMAGE> {
 	@Override
 	public @NotNull DAMAGE getValueOf(final @NotNull String name) {
 		try {
-			return DAMAGE.valueOf(name);
+			return DAMAGE.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("false")) {
+				return DAMAGE.DENY;
+			}
+
 			return DAMAGE.ALLOW;
 		}
 	}

@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.backup;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.backup.Backup;
@@ -11,6 +12,7 @@ import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -54,16 +56,36 @@ public class Save {
 										 ? LocalDateTime.now().format(Backup.getFormatter())
 										 : mappedFile.getName();
 
-			final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(name).toFile();
-			if (folder.exists()) {
-				CommandRequestUtils.addOverwriteBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6));
-				p.sendMessage(BackupCommand.MESSAGE_HEAD
-							  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
-				GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
-													  "/backup save " + name + " -confirm",
-													  "/backup save " + name + " -deny", p);
-			} else {
-				Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
+			try {
+				final @NotNull Path backupFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString());
+				final @NotNull File folder = backupFolder.resolve(name).toFile();
+				final @NotNull List<File> files = BaseFileUtils.listFolders(backupFolder.toFile());
+				if (folder.exists()) {
+					CommandRequestUtils.addSaveBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6), null);
+					p.sendMessage(BackupCommand.MESSAGE_HEAD
+								  + ChatColor.RED + "The Backup " + ChatColor.DARK_RED + name + ChatColor.RED + " already exists.");
+					GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
+														  "/backup save " + name + " -confirm",
+														  "/backup save " + name + " -deny", p);
+				} else if (files.size() >= ConfigUtils.getInt("Backups", "manual")) {
+					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
+					if (toBeDeleted.isPresent()) {
+						CommandRequestUtils.addSaveBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6), toBeDeleted.get().getName());
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups.");
+						GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "'" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' will be deleted due to being the oldest.",
+															  "/backup save " + name + " -confirm",
+															  "/backup save " + name + " -deny", p);
+					} else {
+						p.sendMessage(BackupCommand.MESSAGE_HEAD
+									  + ChatColor.RED + "There has been an error saving the Backup, please see [console] for further information.");
+						System.err.println("Could not determine oldest file to delete.");
+					}
+				} else {
+					Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
+				}
+			} catch (final @NotNull IOException e) {
+				throw new RuntimeIOException(e);
 			}
 		} else {
 			if (mappedFile == null) {
@@ -72,15 +94,26 @@ public class Save {
 				return;
 			}
 
-			final @Nullable String region = CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), mappedFile.getName());
-			CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
-			if (region != null) {
+			final @Nullable Pair<String, String> checkedRequest = CommandRequestUtils.checkSaveBackupRequest(p.getUniqueId(), mappedFile.getName());
+			CommandRequestUtils.removeSaveBackupRequest(p.getUniqueId());
+			if (checkedRequest != null && checkedRequest.getKey() != null) {
 				if (confirmation.confirm()) { //NOSONAR
-
 					final @NotNull org.bukkit.World tempWorld = p.getWorld();
-					final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(region).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
-					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
-					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
+					if (checkedRequest.getValue() != null) {
+						try {
+							final @NotNull File toBeDeleted = BackupCommand.BACKUP_FOLDER.resolve(checkedRequest.getKey()).resolve("manual").resolve(p.getUniqueId().toString()).resolve(checkedRequest.getValue()).toFile();
+							FileUtils.deleteDirectory(toBeDeleted); //NOSONAR
+							InternalFileUtils.deleteEmptyParent(toBeDeleted, BackupCommand.BACKUP_FOLDER.toFile());
+							p.sendMessage(BackupCommand.MESSAGE_HEAD
+										  + ChatColor.RED + "'" + ChatColor.DARK_RED + checkedRequest.getValue() + ChatColor.RED + "' was deleted.");
+						} catch (final @NotNull IOException e) {
+							throw new RuntimeIOException(e);
+						}
+					}
+
+					final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(checkedRequest.getKey()).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
+					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(checkedRequest.getKey());
+					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(checkedRequest.getKey());
 					if (tempRegion == null || otherRegion == null) {
 						GlobalMessageUtils.sendNotApplicableRegion(p);
 					} else {

@@ -38,8 +38,12 @@ public enum LEAVES_DECAY implements Flag.Value<LEAVES_DECAY> {
 	@Override
 	public @NotNull LEAVES_DECAY getValueOf(final @NotNull String name) {
 		try {
-			return LEAVES_DECAY.valueOf(name);
+			return LEAVES_DECAY.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("false")) {
+				return LEAVES_DECAY.DENY;
+			}
+
 			return LEAVES_DECAY.ALLOW;
 		}
 	}

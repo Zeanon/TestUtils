@@ -2,6 +2,7 @@ package de.zeanon.testutils.regionsystem.commands;
 
 
 import de.zeanon.testutils.plugin.utils.enums.RegionName;
+import de.zeanon.testutils.plugin.utils.enums.StringModifiers;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.Region;
@@ -46,7 +47,7 @@ public class Info {
 	}
 
 	private void sendRegionInfo(final @NotNull Region region, final @NotNull Player p) {
-		p.sendMessage("\n"
+		p.sendMessage(StringModifiers.LINE_BREAK
 					  + RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "=== " + ChatColor.DARK_RED + region.getName() + ChatColor.RED + " ===");
 
@@ -64,7 +65,7 @@ public class Info {
 		final int flagCount = region.getFlags().size();
 
 		final @NotNull TextComponent flags = new TextComponent(RegionCommand.MESSAGE_HEAD
-															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---\n");
+															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---" + StringModifiers.LINE_BREAK);
 		region.getFlags().forEach((flag, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {
@@ -84,7 +85,7 @@ public class Info {
 				flags.addExtra(ChatColor.BLACK + "]");
 			} else {
 				if (lineBreak[0]) {
-					flags.addExtra(ChatColor.BLACK + "]\n");
+					flags.addExtra(ChatColor.BLACK + "]" + StringModifiers.LINE_BREAK);
 				} else {
 					flags.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
 				}
@@ -100,14 +101,14 @@ public class Info {
 		final int nbtCount = region.getTags().size();
 
 		final @NotNull TextComponent nbts = new TextComponent(RegionCommand.MESSAGE_HEAD
-															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---\n");
-		region.getTags().forEach((nbt, value) -> {
+															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---" + StringModifiers.LINE_BREAK);
+		region.getTags().forEach((tag, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {
 				nbts.addExtra(RegionCommand.MESSAGE_HEAD + ChatColor.BLACK + "[");
 			}
 
-			final @NotNull TextComponent currentFlag = new TextComponent(ChatColor.DARK_RED + nbt.toString() + ChatColor.DARK_GRAY + " : " + value.getChatValue());
+			final @NotNull TextComponent currentFlag = new TextComponent(ChatColor.DARK_RED + tag.toString() + ChatColor.DARK_GRAY + " : " + value.getChatValue());
 			currentFlag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 													 new ComponentBuilder(new TextComponent(
 															 TextComponent.fromLegacyText(
@@ -119,7 +120,7 @@ public class Info {
 				nbts.addExtra(ChatColor.BLACK + "]");
 			} else {
 				if (lineBreak[0]) {
-					nbts.addExtra(ChatColor.BLACK + "]\n");
+					nbts.addExtra(ChatColor.BLACK + "]" + StringModifiers.LINE_BREAK);
 				} else {
 					nbts.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
 				}

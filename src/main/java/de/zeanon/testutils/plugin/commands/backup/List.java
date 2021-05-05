@@ -8,6 +8,7 @@ import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
+import de.zeanon.testutils.plugin.utils.enums.StringModifiers;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class List {
 											  + ChatColor.RED + "There are no " + (backupMode == null ? "" : backupMode + " ") + "backups for '"
 											  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 							} else {
-								p.sendMessage("\n"
+								p.sendMessage(StringModifiers.LINE_BREAK
 											  + BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "=== " + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + " === " + BackupCommand.MESSAGE_HEAD);
 								for (final @NotNull Pair<File, String> file : files.stream().sorted(Comparator.comparingLong(file -> Objects.notNull(file.getKey()).lastModified())).collect(Collectors.toList())) {

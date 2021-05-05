@@ -47,8 +47,12 @@ public enum TNT implements Flag.Value<TNT> {
 	@Override
 	public @NotNull TNT getValueOf(final @NotNull String name) {
 		try {
-			return TNT.valueOf(name);
+			return TNT.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("false")) {
+				return TNT.DENY;
+			}
+
 			return TNT.ALLOW;
 		}
 	}

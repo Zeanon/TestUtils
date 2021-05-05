@@ -34,9 +34,10 @@ public enum Tag {
 		this.values = defaultValue.getValues();
 	}
 
+
 	public static @Nullable Tag getTag(final @NotNull String name) {
 		try {
-			return Tag.valueOf(name);
+			return Tag.valueOf(name.toUpperCase());
 		} catch (final @NotNull IllegalArgumentException e) {
 			return null;
 		}

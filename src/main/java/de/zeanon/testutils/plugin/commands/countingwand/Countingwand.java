@@ -27,7 +27,7 @@ public class Countingwand {
 	static {
 		Countingwand.WAND_ITEM.setAmount(1);
 		final @NotNull ItemMeta wandMeta = Objects.notNull(Countingwand.WAND_ITEM.getItemMeta());
-		wandMeta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Counting Wand");
+		wandMeta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Zollstock");
 		wandMeta.setLore(Arrays.asList(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Left click: select pos #1",
 									   ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Right click: select pos #2"));
 		Countingwand.WAND_ITEM.setItemMeta(wandMeta);

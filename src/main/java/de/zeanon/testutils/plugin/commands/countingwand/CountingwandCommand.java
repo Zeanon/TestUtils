@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class CountingwandCommand extends SWCommand {
 
 	public CountingwandCommand() {
-		super("countingwand", true, "/countingwand", "cwand", "/cwand");
+		super("countingwand", true, "zollstock", "/zollstock", "/countingwand", "cwand", "/cwand");
 	}
 
 	@Register

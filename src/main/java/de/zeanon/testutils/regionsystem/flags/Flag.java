@@ -5,8 +5,10 @@ import java.util.EnumSet;
 import java.util.Set;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
+@SuppressWarnings("unused")
 @Getter
 public enum Flag {
 
@@ -29,7 +31,7 @@ public enum Flag {
 
 	private final @NotNull Class<? extends Value<?>> valueType;
 	private final @NotNull Flag.Value<?> defaultValue;
-	private final Value<?>[] values;
+	private final @NotNull Value<?>[] values;
 
 
 	<T extends Enum<T> & Value<T>> Flag(final @NotNull Class<? extends Value<T>> valueType, final @NotNull Flag.Value<T> defaultValue) {
@@ -38,6 +40,14 @@ public enum Flag {
 		this.values = defaultValue.getValues();
 	}
 
+
+	public static @Nullable Flag getFlag(final @NotNull String name) {
+		try {
+			return Flag.valueOf(name.toUpperCase());
+		} catch (final @NotNull IllegalArgumentException e) {
+			return null;
+		}
+	}
 
 	public Value<?> getFlagValueOf(final @NotNull String name) {
 		return this.defaultValue.getValueOf(name);

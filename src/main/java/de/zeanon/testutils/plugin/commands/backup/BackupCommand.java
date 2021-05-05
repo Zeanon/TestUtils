@@ -377,7 +377,7 @@ public class BackupCommand extends SWCommand {
 					final @NotNull Player p = (Player) commandSender;
 					if (previousArguments[0].equalsIgnoreCase("save")
 						&& previousArguments.length > 1
-						&& CommandRequestUtils.checkOverwriteBackupRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1]) != null) {
+						&& CommandRequestUtils.checkSaveBackupRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1]) != null) {
 						return tabCompletions;
 					} else if ((previousArguments[0].equalsIgnoreCase("del") || previousArguments[0].equalsIgnoreCase("delete"))
 							   && previousArguments.length > 1

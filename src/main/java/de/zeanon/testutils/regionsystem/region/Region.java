@@ -77,6 +77,15 @@ public abstract class Region {
 		return this.flags.get(flagType);
 	}
 
+	public @NotNull Flag.Value<?> getFlagOrDefault(final @NotNull Flag flagType, final @NotNull Flag.Value<?> defaultValue) {
+		final @Nullable Flag.Value<?> value = this.getFlag(flagType);
+		if (value != null) {
+			return value;
+		} else {
+			return defaultValue;
+		}
+	}
+
 	public @NotNull Map<Flag, Flag.Value<?>> getFlags() {
 		return this.flags;
 	}
@@ -135,7 +144,7 @@ public abstract class Region {
 			try {
 				final @NotNull Flag flag = Flag.valueOf(entry.getKey().toUpperCase());
 				final @Nullable String flagValue = Objects.toString(tempFlagMap.get(flag.toString()));
-				this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue.toUpperCase()));
+				this.flags.put(flag, flagValue == null ? flag.getDefaultValue() : flag.getFlagValueOf(flagValue));
 			} catch (final @NotNull IllegalArgumentException e) {
 				//NOTHING
 			}

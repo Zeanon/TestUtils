@@ -40,8 +40,12 @@ public enum STOPLAG implements Flag.Value<STOPLAG> {
 	@Override
 	public @NotNull STOPLAG getValueOf(final @NotNull String name) {
 		try {
-			return STOPLAG.valueOf(name);
+			return STOPLAG.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("true")) {
+				return STOPLAG.ACTIVE;
+			}
+
 			return STOPLAG.INACTIVE;
 		}
 	}

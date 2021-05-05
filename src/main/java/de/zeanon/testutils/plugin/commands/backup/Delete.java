@@ -50,11 +50,10 @@ public class Delete {
 							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
 			}
 		} else {
+			final @Nullable String region = CommandRequestUtils.checkDeleteBackupRequest(p.getUniqueId(), mappedFile.getName());
+			CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
 			if (confirmation.confirm()) { //NOSONAR
-				final @Nullable String region = CommandRequestUtils.checkDeleteBackupRequest(p.getUniqueId(), mappedFile.getName());
 				if (region != null) {
-					CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
-
 					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
 					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
 					if (tempRegion == null || otherRegion == null) {
@@ -76,7 +75,6 @@ public class Delete {
 					}
 				}
 			} else {
-				CommandRequestUtils.removeOverwriteBackupRequest(p.getUniqueId());
 				p.sendMessage(BackupCommand.MESSAGE_HEAD
 							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not deleted.");
 			}

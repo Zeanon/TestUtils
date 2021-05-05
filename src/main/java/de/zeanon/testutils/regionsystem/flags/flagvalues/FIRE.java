@@ -38,8 +38,11 @@ public enum FIRE implements Flag.Value<FIRE> {
 	@Override
 	public @NotNull FIRE getValueOf(final @NotNull String name) {
 		try {
-			return FIRE.valueOf(name);
+			return FIRE.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("false")) {
+				return FIRE.DENY;
+			}
 			return FIRE.ALLOW;
 		}
 	}

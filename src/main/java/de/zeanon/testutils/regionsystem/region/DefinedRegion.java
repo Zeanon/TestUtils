@@ -75,12 +75,12 @@ public class DefinedRegion extends Region {
 	@Override
 	public boolean inRegion(final @NotNull Location location) {
 		return this.getWorld().equals(location.getWorld())
-			   && this.maxPoint.getX() >= location.getX()
-			   && this.minPoint.getX() <= location.getX()
-			   && this.maxPoint.getY() >= location.getY()
-			   && this.minPoint.getY() <= location.getY()
-			   && this.maxPoint.getZ() >= location.getZ()
-			   && this.minPoint.getZ() <= location.getZ();
+			   && this.maxPoint.getX() >= location.getBlockX()
+			   && this.minPoint.getX() <= location.getBlockX()
+			   && this.maxPoint.getY() >= location.getBlockY()
+			   && this.minPoint.getY() <= location.getBlockY()
+			   && this.maxPoint.getZ() >= location.getBlockZ()
+			   && this.minPoint.getZ() <= location.getBlockZ();
 	}
 
 	public @NotNull Point getMinimumPoint() {

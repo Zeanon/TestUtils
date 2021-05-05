@@ -16,6 +16,7 @@ public class CommandRequestUtils {
 	private final @NotNull Map<String, String> deleteBlockRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> deleteFolderRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, Pair<String, String>> deleteBackupRequests = new ConcurrentHashMap<>();
+	private final @NotNull Map<String, Pair<String, Pair<String, String>>> timeOutBackupRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, Pair<String, String>> overwriteBackupRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameFolderRequests = new ConcurrentHashMap<>();
@@ -51,18 +52,18 @@ public class CommandRequestUtils {
 	}
 
 
-	public void addOverwriteBackupRequest(final @NotNull UUID uuid, final @NotNull String name, final @NotNull String region) {
-		CommandRequestUtils.overwriteBackupRequests.put(uuid.toString(), new Pair<>(name, region));
+	public void addSaveBackupRequest(final @NotNull UUID uuid, final @NotNull String name, final @NotNull String region, final @Nullable String overWriteFile) {
+		CommandRequestUtils.timeOutBackupRequests.put(uuid.toString(), new Pair<>(name, new Pair<>(region, overWriteFile)));
 	}
 
-	public void removeOverwriteBackupRequest(final @NotNull UUID uuid) {
-		CommandRequestUtils.overwriteBackupRequests.remove(uuid.toString());
+	public void removeSaveBackupRequest(final @NotNull UUID uuid) {
+		CommandRequestUtils.timeOutBackupRequests.remove(uuid.toString());
 	}
 
-	public @Nullable String checkOverwriteBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
-		return (CommandRequestUtils.overwriteBackupRequests.containsKey(uuid.toString())
-				&& Objects.notNull(CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getKey()).equalsIgnoreCase(name))
-			   ? CommandRequestUtils.overwriteBackupRequests.get(uuid.toString()).getValue()
+	public @Nullable Pair<String, String> checkSaveBackupRequest(final @NotNull UUID uuid, final @NotNull String name) {
+		return (CommandRequestUtils.timeOutBackupRequests.containsKey(uuid.toString())
+				&& Objects.notNull(CommandRequestUtils.timeOutBackupRequests.get(uuid.toString()).getKey()).equalsIgnoreCase(name))
+			   ? CommandRequestUtils.timeOutBackupRequests.get(uuid.toString()).getValue()
 			   : null;
 	}
 

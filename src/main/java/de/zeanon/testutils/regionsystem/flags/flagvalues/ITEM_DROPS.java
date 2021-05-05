@@ -38,8 +38,12 @@ public enum ITEM_DROPS implements Flag.Value<ITEM_DROPS> {
 	@Override
 	public @NotNull ITEM_DROPS getValueOf(final @NotNull String name) {
 		try {
-			return ITEM_DROPS.valueOf(name);
+			return ITEM_DROPS.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e) {
+			if (name.equalsIgnoreCase("false")) {
+				return ITEM_DROPS.DENY;
+			}
+
 			return ITEM_DROPS.ALLOW;
 		}
 	}
