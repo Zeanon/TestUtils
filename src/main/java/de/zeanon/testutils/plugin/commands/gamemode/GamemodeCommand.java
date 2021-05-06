@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 public class GamemodeCommand extends SWCommand {
 
 	public GamemodeCommand() {
-		super("gamemode", true, "gm", "g");
+		super("gamemode", "gm", "g");
 
 		this.inject(TestUtils.getInstance());
 	}

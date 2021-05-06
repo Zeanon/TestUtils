@@ -49,6 +49,10 @@ public enum Flag {
 		}
 	}
 
+	public static boolean hasFlag(final @NotNull String name) {
+		return Flag.getFlag(name) != null;
+	}
+
 	public Value<?> getFlagValueOf(final @NotNull String name) {
 		return this.defaultValue.getValueOf(name);
 	}

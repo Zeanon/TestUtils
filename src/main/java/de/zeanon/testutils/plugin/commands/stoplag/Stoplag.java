@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class Stoplag extends SWCommand {
 
 	public Stoplag() {
-		super("stoplag", true);
+		super("stoplag");
 	}
 
 	@Register

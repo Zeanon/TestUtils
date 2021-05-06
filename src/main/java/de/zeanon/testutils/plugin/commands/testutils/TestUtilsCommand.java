@@ -29,7 +29,7 @@ public class TestUtilsCommand extends SWCommand {
 	public static final @NotNull Path TESTAREA_FOLDER = de.zeanon.testutils.TestUtils.getPluginFolder().resolve("TestAreas");
 
 	public TestUtilsCommand() {
-		super("testutils", true, "tu");
+		super("testutils", "tu");
 	}
 
 	public static TypeMapper<CommandConfirmation> getCommandConfirmationMapper() {
@@ -151,48 +151,57 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
+	@Register("invarea")
 	@Register("invertarea")
 	public void noArgsInvertArea(final @NotNull Player p) {
 		InvertArea.execute(null, p);
 	}
 
+	@Register("invarea")
 	@Register("invertarea")
 	public void oneArgInvertArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		InvertArea.execute(regionSide, p);
 	}
 
 
+	@Register("reparea")
 	@Register("replacearea")
 	public void noArgsReplaceArea(final @NotNull Player p) {
 		ReplaceArea.execute(null, Material.OBSIDIAN, Material.TNT, p);
 	}
 
+	@Register("reparea")
 	@Register("replacearea")
 	public void oneArgReplaceArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		ReplaceArea.execute(regionSide, Material.OBSIDIAN, Material.TNT, p);
 	}
 
+	@Register("reparea")
 	@Register("replacearea")
 	public void twoArgsReplaceArea(final @NotNull Player p, final @NotNull Material source, final @NotNull Material destination) {
 		ReplaceArea.execute(null, source, destination, p);
 	}
 
+	@Register("reparea")
 	@Register("replacearea")
 	public void threeArgsReplaceArea(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull Material source, final @NotNull Material destination) {
 		ReplaceArea.execute(regionSide, source, destination, p);
 	}
 
+	@Register("reparea")
 	@Register("replacearea")
 	public void threeArgsReplaceArea(final @NotNull Player p, final @NotNull Material source, final @NotNull Material destination, final @NotNull RegionSide regionSide) {
 		ReplaceArea.execute(regionSide, source, destination, p);
 	}
 
 
+	@Register("reptnt")
 	@Register("replacetnt")
 	public void noArgsReplaceTNT(final @NotNull Player p) {
 		ReplaceArea.execute(null, Material.TNT, Material.OBSIDIAN, p);
 	}
 
+	@Register("reptnt")
 	@Register("replacetnt")
 	public void oneArgReplaceTNT(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		ReplaceArea.execute(regionSide, Material.TNT, Material.OBSIDIAN, p);
@@ -211,31 +220,18 @@ public class TestUtilsCommand extends SWCommand {
 
 
 	@Register(value = {"delblock"}, help = true)
-	public void delBlockHelp(final @NotNull Player p, final @NotNull String... args) {
-		DeleteBlock.usage(p);
-	}
-
-	@Register("delblock")
-	public void oneArgDelBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		DeleteBlock.execute(mappedFile, null, p);
-	}
-
-	@Register("delblock")
-	public void twoArgsDelBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
-		DeleteBlock.execute(mappedFile, confirmation, p);
-	}
-
-
 	@Register(value = {"deleteblock"}, help = true)
 	public void deleteBlockHelp(final @NotNull Player p, final @NotNull String... args) {
 		DeleteBlock.usage(p);
 	}
 
+	@Register("delblock")
 	@Register("deleteblock")
 	public void oneArgDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		DeleteBlock.execute(mappedFile, null, p);
 	}
 
+	@Register("delblock")
 	@Register("deleteblock")
 	public void twoArgsDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
 		DeleteBlock.execute(mappedFile, confirmation, p);
@@ -243,31 +239,18 @@ public class TestUtilsCommand extends SWCommand {
 
 
 	@Register(value = {"delfolder"}, help = true)
-	public void delFolderHelp(final @NotNull Player p, final @NotNull String... args) {
-		DeleteFolder.usage(p);
-	}
-
-	@Register("delfolder")
-	public void oneArgDelFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder) {
-		DeleteFolder.execute(mappedFolder, null, p);
-	}
-
-	@Register("delfolder")
-	public void twoArgsDelFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder, final @NotNull CommandConfirmation confirmation) {
-		DeleteFolder.execute(mappedFolder, confirmation, p);
-	}
-
-
 	@Register(value = {"deletefolder"}, help = true)
 	public void deleteFolderHelp(final @NotNull Player p, final @NotNull String... args) {
 		DeleteFolder.usage(p);
 	}
 
+	@Register("delfolder")
 	@Register("deletefolder")
 	public void oneArgDeleteFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder) {
 		DeleteFolder.execute(mappedFolder, null, p);
 	}
 
+	@Register("delfolder")
 	@Register("deletefolder")
 	public void twoArgsDeleteFolder(final @NotNull Player p, final @NotNull MappedFolder mappedFolder, final @NotNull CommandConfirmation confirmation) {
 		DeleteFolder.execute(mappedFolder, confirmation, p);
@@ -322,11 +305,13 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
+	@Register(value = "delarea", help = true)
 	@Register(value = "deletearea", help = true)
 	public void deleteAreaHelp(final @NotNull Player p, final @NotNull String... args) {
 		//TODO
 	}
 
+	@Register("delarea")
 	@Register("deletearea")
 	public void oneArgDeleteArea(final @NotNull Player p, final @NotNull AreaName areaName) {
 		DeleteArea.execute(areaName, p);

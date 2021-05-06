@@ -6,11 +6,11 @@ import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class RegionCommand extends SWCommand {
@@ -21,13 +21,13 @@ public class RegionCommand extends SWCommand {
 
 
 	public RegionCommand() {
-		super("region", true, "rg");
+		super("region", "rg");
 	}
 
 	public static void sendMultipleRegions(final @NotNull List<DefinedRegion> regions, final @NotNull Player p) {
 		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You are standing in multiple regions, please define which one to use: "
-					  + regions.stream().map(r -> ChatColor.DARK_RED + r.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));
+					  + regions.stream().map(region -> ChatColor.DARK_RED + region.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));
 	}
 
 	@Register(help = true)
@@ -60,38 +60,17 @@ public class RegionCommand extends SWCommand {
 
 	@Register(value = {"flag"}, help = true)
 	public void flagHelp(final @NotNull Player p, final @NotNull String... args) {
-		if (args.length > 1) {
-			final Optional<Flag> flag = Flag.getFlags().stream().filter(f -> args[1].equalsIgnoreCase(f.name())).findFirst();
-			if (flag.isPresent()) {
-				if (!RegionManager.hasRegion(args[0])) {
-					p.sendMessage(RegionCommand.MESSAGE_HEAD
-								  + ChatColor.RED
-								  + "'"
-								  + ChatColor.DARK_RED
-								  + args[0]
-								  + ChatColor.RED
-								  + "' is not a valid region.");
-					return;
-				}
-				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag.get(), null, p);
-				return;
-			}
-		}
-
-		if (args.length == 1) {
-			final Optional<Flag> flag = Flag.getFlags().stream().filter(f -> args[0].equalsIgnoreCase(f.name())).findFirst();
-			if (flag.isPresent()) {
-				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag.get(), null, p);
-				return;
-			}
-		}
-
-		p.sendMessage(RegionCommand.FLAGS_HELP_MESSAGE);
+		RegionCommand.flagHelpInternal(p, args);
 	}
 
 	@Register("flag")
 	public void oneArgFlag(final @NotNull Player p, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, null, p);
+	}
+
+	@Register("test")
+	public void test(final @NotNull Player p, final int i) {
+		p.sendMessage("Yoyo stinkt");
 	}
 
 	@Register("flag")
@@ -115,37 +94,25 @@ public class RegionCommand extends SWCommand {
 	}
 
 
+	@Register(value = {"delflag"}, help = true)
 	@Register(value = {"removeflag"}, help = true)
 	public void removeFlagHelp(final @NotNull Player p, final @NotNull String... args) {
-		if (args.length > 1) {
-			final Optional<Flag> flag = Flag.getFlags().stream().filter(f -> args[1].equalsIgnoreCase(f.name())).findFirst();
-			if (flag.isPresent()) {
-				if (!RegionManager.hasRegion(args[0])) {
-					p.sendMessage(RegionCommand.MESSAGE_HEAD
-								  + ChatColor.RED
-								  + "'"
-								  + ChatColor.DARK_RED
-								  + args[0]
-								  + ChatColor.RED
-								  + "' is not a valid region.");
-				}
-				return;
-			}
-		}
-
-		p.sendMessage(RegionCommand.FLAGS_HELP_MESSAGE);
+		RegionCommand.flagHelpInternal(p, args);
 	}
 
+	@Register("delflag")
 	@Register("removeflag")
 	public void oneArgRemoveFlag(final @NotNull Player p, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(null, flag, p);
 	}
 
+	@Register("delflag")
 	@Register("removeflag")
 	public void twoArgsRemoveFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
 		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(null, flag, p);
 	}
 
+	@Register("delflag")
 	@Register("removeflag")
 	public void twoArgsRemoveFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(regionName, flag, p);
@@ -162,13 +129,53 @@ public class RegionCommand extends SWCommand {
 		Save.execute(p);
 	}
 
+
 	private static @NotNull String getFlagsHelpMessage() {
 		return RegionCommand.MESSAGE_HEAD
 			   + ChatColor.RED
 			   + "Applicable flags are: "
 			   + Flag.getFlags()
 					 .stream()
-					 .map(f -> ChatColor.DARK_RED + f.toString())
+					 .map(flag -> ChatColor.DARK_RED + flag.toString())
 					 .collect(Collectors.joining(ChatColor.RED + ", "));
+	}
+
+	private static void flagHelpInternal(final @NotNull Player p, final @NotNull String... args) {
+		if (args.length > 1) {
+			@Nullable Flag flag = Flag.getFlag(args[0]);
+			if (flag != null) {
+				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, null, p);
+				return;
+			}
+
+			flag = Flag.getFlag(args[1]);
+			if (flag != null) {
+				if (!RegionManager.hasRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
+					p.sendMessage(RegionCommand.MESSAGE_HEAD
+								  + ChatColor.RED
+								  + "'"
+								  + ChatColor.DARK_RED
+								  + args[0]
+								  + ChatColor.RED
+								  + "' is not a valid region.");
+					return;
+				}
+				de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, null, p);
+				return;
+			}
+		}
+
+		if (args.length == 1 && !RegionManager.hasRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
+			p.sendMessage(RegionCommand.MESSAGE_HEAD
+						  + ChatColor.RED
+						  + "'"
+						  + ChatColor.DARK_RED
+						  + args[0]
+						  + ChatColor.RED
+						  + "' is not a valid region.");
+			return;
+		}
+
+		p.sendMessage(RegionCommand.FLAGS_HELP_MESSAGE);
 	}
 }

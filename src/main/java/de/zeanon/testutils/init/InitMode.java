@@ -11,7 +11,7 @@ import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
 import de.zeanon.testutils.plugin.commands.testutils.SleepModeTestUtils;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
-import de.zeanon.testutils.plugin.commands.tnt.TNT;
+import de.zeanon.testutils.plugin.commands.tnt.TNTCommand;
 import de.zeanon.testutils.plugin.handlers.EventListener;
 import de.zeanon.testutils.plugin.handlers.WakeupListener;
 import de.zeanon.testutils.plugin.mapper.Mapper;
@@ -105,7 +105,7 @@ public class InitMode {
 	public void registerCommands() {
 		Mapper.initialize();
 
-		InitMode.registeredCommands.add(new TNT());
+		InitMode.registeredCommands.add(new TNTCommand());
 		InitMode.registeredCommands.add(new BackupCommand());
 		InitMode.registeredCommands.add(new RegionCommand());
 		InitMode.registeredCommands.add(new Stoplag());

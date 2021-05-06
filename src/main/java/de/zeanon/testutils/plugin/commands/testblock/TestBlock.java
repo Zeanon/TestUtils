@@ -30,7 +30,7 @@ public class TestBlock extends SWCommand {
 
 
 	public TestBlock() {
-		super("testblock", true, "tb");
+		super("testblock", "tb");
 	}
 
 	public static @Nullable Pair<String, InputStream> getBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile) {

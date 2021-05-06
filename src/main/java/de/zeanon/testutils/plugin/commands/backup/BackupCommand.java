@@ -36,7 +36,7 @@ public class BackupCommand extends SWCommand {
 	public static final Path BACKUP_FOLDER = TestUtils.getPluginFolder().resolve("Backups");
 
 	public BackupCommand() {
-		super("backup", true);
+		super("backup");
 	}
 
 	public static @NotNull Optional<File> getLatest(final @NotNull File regionFolder, final @NotNull String uuid, final @Nullable BackupMode backUpMode) throws IOException {
@@ -267,31 +267,18 @@ public class BackupCommand extends SWCommand {
 
 
 	@Register(value = {"del"}, help = true)
-	public void delHelp(final @NotNull Player p, final @NotNull String... args) {
-		Delete.usage(p);
-	}
-
-	@Register({"del"})
-	public void oneArgDel(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		Delete.execute(mappedFile, null, p);
-	}
-
-	@Register({"del"})
-	public void twoArgsDel(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
-		Delete.execute(mappedFile, commandConfirmation, p);
-	}
-
-
 	@Register(value = {"delete"}, help = true)
 	public void deleteHelp(final @NotNull Player p, final @NotNull String... args) {
 		Delete.usage(p);
 	}
 
+	@Register({"del"})
 	@Register({"delete"})
 	public void oneArgDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		Delete.execute(mappedFile, null, p);
 	}
 
+	@Register({"del"})
 	@Register({"delete"})
 	public void twoArgsDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
 		Delete.execute(mappedFile, commandConfirmation, p);
