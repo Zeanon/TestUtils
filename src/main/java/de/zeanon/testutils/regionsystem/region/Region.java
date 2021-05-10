@@ -73,6 +73,12 @@ public abstract class Region {
 		}
 	}
 
+	public void removeFlag(final @NotNull Flag flagType) {
+		if (this.flags.remove(flagType) != null) {
+			this.saveData();
+		}
+	}
+
 	public @Nullable Flag.Value<?> getFlag(final @NotNull Flag flagType) {
 		return this.flags.get(flagType);
 	}
@@ -99,6 +105,12 @@ public abstract class Region {
 			if (this.tags.put(tagType, value) != value) {
 				this.saveData();
 			}
+		}
+	}
+
+	public void removeTag(final @NotNull Tag tagType) {
+		if (this.tags.remove(tagType) != null) {
+			this.saveData();
 		}
 	}
 
@@ -198,11 +210,11 @@ public abstract class Region {
 			return new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		}
 
-		public Point add(int x, int y, int z) {
+		public Point add(final int x, final int y, final int z) {
 			return new Point(this.x + x, this.y + y, this.z + z);
 		}
 
-		public Point subtract(int x, int y, int z) {
+		public Point subtract(final int x, final int y, final int z) {
 			return new Point(this.x - x, this.y - y, this.z - z);
 		}
 

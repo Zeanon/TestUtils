@@ -8,11 +8,11 @@ import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
 import de.zeanon.testutils.regionsystem.tags.Tag;
 import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
-import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,6 +21,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,17 +54,22 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		if (regions.isEmpty() && globalRegion.getFlag(Flag.FIRE) == FIRE.DENY) {
-			event.setCancelled(true);
-			return;
-		}
+		boolean ignore = true;
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			final @Nullable Flag.Value<?> value = region.getFlag(Flag.FIRE);
+			if (value != null) {
+				ignore = false;
+			}
 
-		for (final @NotNull DefinedRegion region : regions) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || region.getFlag(Flag.FIRE) == FIRE.DENY) {
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || value == FIRE.DENY) {
 				event.setCancelled(true);
 				return;
 			}
+		}
+
+		if (ignore && globalRegion.getFlag(Flag.FIRE) == FIRE.DENY) {
+			event.setCancelled(true);
+			return;
 		}
 
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
@@ -77,17 +83,22 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		if (regions.isEmpty() && globalRegion.getFlag(Flag.FIRE) == FIRE.DENY) {
-			event.setCancelled(true);
-			return;
-		}
+		boolean ignore = true;
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			final @Nullable Flag.Value<?> value = region.getFlag(Flag.FIRE);
+			if (value != null) {
+				ignore = false;
+			}
 
-		for (final @NotNull DefinedRegion region : regions) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || region.getFlag(Flag.FIRE) == FIRE.DENY) {
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || value == FIRE.DENY) {
 				event.setCancelled(true);
 				return;
 			}
+		}
+
+		if (ignore && globalRegion.getFlag(Flag.FIRE) == FIRE.DENY) {
+			event.setCancelled(true);
+			return;
 		}
 
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
@@ -120,17 +131,22 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		if (regions.isEmpty() && globalRegion.getFlag(Flag.LEAVES_DECAY) == LEAVES_DECAY.DENY) {
-			event.setCancelled(true);
-			return;
-		}
-
+		boolean ignore = true;
 		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || region.getFlag(Flag.LEAVES_DECAY) == LEAVES_DECAY.DENY) {
+			final @Nullable Flag.Value<?> value = region.getFlag(Flag.LEAVES_DECAY);
+			if (value != null) {
+				ignore = false;
+			}
+
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || value == LEAVES_DECAY.DENY) {
 				event.setCancelled(true);
 				return;
 			}
+		}
+
+		if (ignore && globalRegion.getFlag(Flag.LEAVES_DECAY) == LEAVES_DECAY.DENY) {
+			event.setCancelled(true);
+			return;
 		}
 
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
@@ -277,17 +293,30 @@ public class RegionListener implements Listener {
 			return;
 		}
 
-		final @NotNull List<DefinedRegion> applicableRegions = RegionManager.getApplicableRegions(event.getBlock().getLocation());
-		if (applicableRegions.isEmpty() && globalRegion.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
-			event.setDropItems(false);
-			RegionListener.tagChangedRegions(event.getBlock().getLocation());
-			return;
+		boolean ignore = true;
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			final @Nullable Flag.Value<?> value = region.getFlag(Flag.ITEM_DROPS);
+
+			if (value != null) {
+				ignore = false;
+			}
+
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || value == ITEM_DROPS.DENY) {
+				if (event.getBlock().getState() instanceof Container) {
+					((Container) event.getBlock().getState()).getInventory().clear();
+				}
+
+				event.setDropItems(false);
+				RegionListener.tagChangedRegions(event.getBlock().getLocation());
+				return;
+			}
 		}
 
-		for (final @NotNull DefinedRegion region : applicableRegions) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || region.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
-				event.setDropItems(false);
+		if (ignore && globalRegion.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
+			if (event.getBlock() instanceof InventoryHolder) {
+				((InventoryHolder) event.getBlock()).getInventory().clear();
 			}
+			event.setDropItems(false);
 		}
 
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
@@ -472,41 +501,80 @@ public class RegionListener implements Listener {
 	public void onPlayerDamage(final @NotNull EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player) {
 			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getEntity().getWorld()));
-			final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(event.getEntity().getLocation());
-			if (regions.isEmpty() && (globalRegion.getFlag(Flag.DAMAGE) == DAMAGE.DENY
-									  || (event.getCause() == EntityDamageEvent.DamageCause.FALL
-										  && globalRegion.getFlag(Flag.FALL_DAMAGE) == FALL_DAMAGE.DENY))) {
-				event.setCancelled(true);
-				return;
-			}
 
-			for (final @NotNull DefinedRegion region : regions) {
-				if (region.getFlag(Flag.DAMAGE) == DAMAGE.DENY
-					|| (event.getCause() == EntityDamageEvent.DamageCause.FALL
-						&& region.getFlag(Flag.FALL_DAMAGE) == FALL_DAMAGE.DENY)) {
+			if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+				boolean ignore = true;
+
+				for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getEntity().getLocation())) {
+					final @Nullable Flag.Value<?> damageValue = region.getFlag(Flag.DAMAGE);
+					final @Nullable Flag.Value<?> fallDamageValue = region.getFlag(Flag.FALL_DAMAGE);
+
+					if (damageValue != null || fallDamageValue != null) {
+						ignore = false;
+					}
+
+					if (damageValue == DAMAGE.DENY || fallDamageValue == FALL_DAMAGE.DENY) {
+						event.setCancelled(true);
+						return;
+					}
+				}
+
+				if (ignore && (globalRegion.getFlag(Flag.DAMAGE) == DAMAGE.DENY || globalRegion.getFlag(Flag.FALL_DAMAGE) == FALL_DAMAGE.DENY)) {
 					event.setCancelled(true);
-					return;
+				}
+			} else {
+				boolean ignore = true;
+
+				for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getEntity().getLocation())) {
+					final @Nullable Flag.Value<?> damageValue = region.getFlag(Flag.DAMAGE);
+
+					if (damageValue != null) {
+						ignore = false;
+					}
+
+					if (damageValue == DAMAGE.DENY) {
+						event.setCancelled(true);
+						return;
+					}
+				}
+
+				if (ignore && globalRegion.getFlag(Flag.DAMAGE) == DAMAGE.DENY) {
+					event.setCancelled(true);
 				}
 			}
 		}
 	}
 
 	private static boolean doNotDestroyBlock(final @NotNull Block block, final @NotNull GlobalRegion globalRegion) {
-		final @NotNull List<DefinedRegion> internalApplicableRegions = RegionManager.getApplicableRegions(block.getLocation());
-		if (internalApplicableRegions.isEmpty()) {
-			return globalRegion.getFlag(Flag.TNT) == TNT.DENY || globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE;
-		}
+		boolean ignoreDestroy = true;
+		boolean ignoreDrops = true;
 
 		boolean destroy = true;
 		boolean dropItems = true;
-		for (final @NotNull DefinedRegion region : internalApplicableRegions) {
-			if (region.getFlag(Flag.TNT) == TNT.DENY || region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(block.getLocation())) {
+			final @Nullable Flag.Value<?> tntValue = region.getFlag(Flag.TNT);
+			final @Nullable Flag.Value<?> stoplagValue = region.getFlag(Flag.STOPLAG);
+			final @Nullable Flag.Value<?> dropValue = region.getFlag(Flag.ITEM_DROPS);
+
+			if (tntValue != null || stoplagValue != null) {
+				ignoreDestroy = false;
+			}
+
+			if (dropValue != null) {
+				ignoreDrops = false;
+			}
+
+			if (tntValue == TNT.DENY || stoplagValue == STOPLAG.ACTIVE) {
 				destroy = false;
 			}
 
-			if (region.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.DENY) {
+			if (dropValue == ITEM_DROPS.DENY) {
 				dropItems = false;
 			}
+		}
+
+		if (ignoreDestroy) {
+			destroy = globalRegion.getFlag(Flag.TNT) == TNT.ALLOW && globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.INACTIVE;
 		}
 
 		if (!destroy) {
@@ -515,8 +583,18 @@ public class RegionListener implements Listener {
 
 		RegionListener.tagChangedRegions(block.getLocation());
 
+
+		if (ignoreDrops) {
+			dropItems = globalRegion.getFlag(Flag.ITEM_DROPS) == ITEM_DROPS.ALLOW;
+		}
+
 		if (!dropItems) {
+			if (block.getState() instanceof Container) {
+				((Container) block.getState()).getInventory().clear();
+			}
+
 			block.setType(Material.AIR);
+			RegionListener.tagChangedRegions(block.getLocation());
 			return true;
 		}
 

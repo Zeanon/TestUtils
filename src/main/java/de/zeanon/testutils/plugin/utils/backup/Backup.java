@@ -26,7 +26,6 @@ import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.tags.Tag;
-import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,9 +64,9 @@ public abstract class Backup extends BukkitRunnable {
 							tempWorld = southRegion.getWorld();
 							final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).resolve(this.sequence.getPath(null)).resolve(name).toFile();
 							this.backupSide(tempWorld, southRegion, folder);
-							southRegion.setTag(Tag.CHANGED, CHANGED.FALSE);
+							southRegion.removeTag(Tag.CHANGED);
 							this.backupSide(tempWorld, northRegion, folder);
-							northRegion.setTag(Tag.CHANGED, CHANGED.FALSE);
+							northRegion.removeTag(Tag.CHANGED);
 
 							new BukkitRunnable() {
 								@Override
@@ -90,7 +89,7 @@ public abstract class Backup extends BukkitRunnable {
 										FileUtils.deleteDirectory(backupFolder);
 										InternalFileUtils.deleteEmptyParent(backupFolder, BackupCommand.BACKUP_FOLDER.toFile());
 									}
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									throw new RuntimeIOException(e);
 								}
 							}
@@ -98,7 +97,7 @@ public abstract class Backup extends BukkitRunnable {
 					}
 				}
 				this.systemOutDone();
-			} catch (IOException | RuntimeIOException e) {
+			} catch (final IOException | RuntimeIOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -128,7 +127,7 @@ public abstract class Backup extends BukkitRunnable {
 			try (final @NotNull ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
 				writer.write(clipboard);
 			}
-		} catch (IOException | WorldEditException exception) {
+		} catch (final IOException | WorldEditException exception) {
 			exception.printStackTrace();
 		}
 	}
@@ -141,7 +140,7 @@ public abstract class Backup extends BukkitRunnable {
 
 			final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-			Operation operation = clipboardHolder
+			final Operation operation = clipboardHolder
 					.createPaste(editSession)
 					.to(pastePoint)
 					.ignoreAirBlocks(false)
