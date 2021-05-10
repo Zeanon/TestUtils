@@ -20,22 +20,22 @@ public class RemoveFlag {
 			final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation()); //NOSONAR
 			if (regions.isEmpty()) {
 				final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld()); //NOSONAR
-				globalRegion.setFlag(flag, null);
+				globalRegion.removeFlag(flag);
 				RemoveFlag.sendFlagRemoved(globalRegion.getName(), flag.toString(), p);
 			} else if (regions.size() == 1) {
-				regions.get(0).setFlag(flag, null);
+				regions.get(0).removeFlag(flag);
 				RemoveFlag.sendFlagRemoved(regions.get(0).getName(), flag.toString(), p);
 			} else {
 				RegionCommand.sendMultipleRegions(regions, p);
 			}
 		} else {
 			if (RegionManager.isGlobalRegion(regionName.getName())) {
-				RegionManager.getGlobalRegion(p.getWorld()).setFlag(flag, null);
+				RegionManager.getGlobalRegion(p.getWorld()).removeFlag(flag);
 				RemoveFlag.sendFlagRemoved(regionName.getName(), flag.toString(), p);
 			} else {
 				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName()); //NOSONAR
 				if (region != null) {
-					region.setFlag(flag, null);
+					region.removeFlag(flag);
 					RemoveFlag.sendFlagRemoved(regionName.getName(), flag.toString(), p);
 				} else {
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
