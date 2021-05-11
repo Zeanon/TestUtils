@@ -59,7 +59,7 @@ public class ResetArea {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You pasted the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-			} catch (Exception e) {
+			} catch (final @NotNull Exception e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
@@ -89,7 +89,7 @@ public class ResetArea {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You pasted the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "' on " + regionSide.getName() + " side.");
-			} catch (Exception e) {
+			} catch (final @NotNull Exception e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
@@ -106,7 +106,7 @@ public class ResetArea {
 
 			final @NotNull ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
 
-			Operation operation = clipboardHolder
+			final Operation operation = clipboardHolder
 					.createPaste(editSession)
 					.to(pastePoint)
 					.ignoreAirBlocks(false)

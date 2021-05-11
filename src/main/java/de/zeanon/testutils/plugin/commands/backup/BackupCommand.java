@@ -170,97 +170,100 @@ public class BackupCommand extends SWCommand {
 		}
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void noArgsLoad(final @NotNull Player p) {
 		Load.execute(null, null, null, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void oneArgLoad(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		Load.execute(regionSide, null, null, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void oneArgLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		Load.execute(null, mappedFile, null, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void oneArgLoad(final @NotNull Player p, final @NotNull BackupMode backupMode) {
 		Load.execute(null, null, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
 		Load.execute(regionSide, mappedFile, null, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
 		Load.execute(regionSide, null, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
 		Load.execute(null, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
 		Load.execute(regionSide, null, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
 		Load.execute(null, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void twoArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
 		Load.execute(regionSide, mappedFile, null, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"load"})
+	@Register("load")
 	public void threeArgsLoad(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
 		Load.execute(regionSide, mappedFile, backupMode, p);
 	}
 
-	@Register({"save"})
+	@Register("save")
+	@Register("register")
 	public void noArgsSave(final @NotNull Player p) {
 		Save.execute(null, null, p);
 	}
 
-	@Register({"save"})
+	@Register("save")
+	@Register("register")
 	public void oneArgSave(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		Save.execute(mappedFile, null, p);
 	}
 
-	@Register({"save"})
+	@Register("save")
+	@Register("register")
 	public void twoArgsSave(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
 		Save.execute(mappedFile, commandConfirmation, p);
 	}
@@ -272,25 +275,25 @@ public class BackupCommand extends SWCommand {
 		Delete.usage(p);
 	}
 
-	@Register({"del"})
-	@Register({"delete"})
+	@Register("del")
+	@Register("delete")
 	public void oneArgDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		Delete.execute(mappedFile, null, p);
 	}
 
-	@Register({"del"})
-	@Register({"delete"})
+	@Register("del")
+	@Register("delete")
 	public void twoArgsDelete(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation commandConfirmation) {
 		Delete.execute(mappedFile, commandConfirmation, p);
 	}
 
 
-	@Register({"list"})
+	@Register("list")
 	public void noArgsList(final @NotNull Player p) {
 		List.execute(null, p);
 	}
 
-	@Register({"list"})
+	@Register("list")
 	public void oneArgList(final @NotNull Player p, final @NotNull BackupMode backupMode) {
 		List.execute(backupMode, p);
 	}
@@ -302,17 +305,17 @@ public class BackupCommand extends SWCommand {
 					  + ChatColor.RED + "Missing sequence to search for.");
 	}
 
-	@Register({"search"})
+	@Register("search")
 	public void oneArgSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		Search.execute(mappedFile, null, p);
 	}
 
-	@Register({"search"})
+	@Register("search")
 	public void twoArgsSearch(final @NotNull Player p, final @NotNull BackupMode backupMode, final @NotNull MappedFile mappedFile) {
 		Search.execute(mappedFile, backupMode, p);
 	}
 
-	@Register({"search"})
+	@Register("search")
 	public void twoArgsSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull BackupMode backupMode) {
 		Search.execute(mappedFile, backupMode, p);
 	}
@@ -362,7 +365,7 @@ public class BackupCommand extends SWCommand {
 				final @NotNull java.util.List<String> tabCompletions = Arrays.asList("-confirm", "-deny");
 				if (commandSender instanceof Player && previousArguments.length > 0) {
 					final @NotNull Player p = (Player) commandSender;
-					if (previousArguments[0].equalsIgnoreCase("save")
+					if ((previousArguments[0].equalsIgnoreCase("save") || previousArguments[0].equalsIgnoreCase("register"))
 						&& previousArguments.length > 1
 						&& CommandRequestUtils.checkSaveBackupRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1]) != null) {
 						return tabCompletions;
@@ -417,7 +420,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									return null;
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-hourly"))) {
@@ -434,7 +437,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									return null;
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-daily"))) {
@@ -451,7 +454,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									return null;
 								}
 							} else if (Arrays.stream(previousArguments).anyMatch(s -> s.equalsIgnoreCase("-startup"))) {
@@ -468,7 +471,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									return null;
 								}
 							} else {
@@ -484,7 +487,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException ignored) {
+								} catch (final IOException ignored) {
 									//DO NOTHING
 								}
 
@@ -499,7 +502,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException ignored) {
+								} catch (final IOException ignored) {
 									//DO NOTHING
 								}
 
@@ -514,7 +517,7 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException ignored) {
+								} catch (final IOException ignored) {
 									//DO NOTHING
 								}
 
@@ -529,12 +532,12 @@ public class BackupCommand extends SWCommand {
 									} else {
 										return null;
 									}
-								} catch (IOException ignored) {
+								} catch (final IOException ignored) {
 									//DO NOTHING
 								}
 								return results;
 							}
-						} else if (previousArguments[0].equalsIgnoreCase("save")) {
+						} else if (previousArguments[0].equalsIgnoreCase("save") || previousArguments[0].equalsIgnoreCase("register") || previousArguments[0].equalsIgnoreCase("del") || previousArguments[0].equalsIgnoreCase("delete")) {
 							try {
 								final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
 								final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
@@ -548,7 +551,7 @@ public class BackupCommand extends SWCommand {
 								} else {
 									return null;
 								}
-							} catch (IOException e) {
+							} catch (final IOException e) {
 								return null;
 							}
 						} else {

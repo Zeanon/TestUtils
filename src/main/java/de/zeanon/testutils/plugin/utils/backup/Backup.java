@@ -49,57 +49,66 @@ public abstract class Backup extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if (ConfigUtils.getInt("Backups", this.sequence.toString()) > 0) {
-			this.systemOutStart();
-			try {
-				final @NotNull String name = LocalDateTime.now().format(Backup.getFormatter());
-				@NotNull org.bukkit.World tempWorld;
-				for (final @NotNull File regionFolder : BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile())) {
-					final @NotNull File backupFolder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).toFile();
+		if (ConfigUtils.getInt("Backups", Backup.this.sequence.toString()) > 0) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					Backup.this.execute();
+				}
+			}.runTask(TestUtils.getInstance());
+		}
+	}
 
-					final @Nullable DefinedRegion southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
-					final @Nullable DefinedRegion northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
-					if (southRegion != null && northRegion != null) {
-						if (this.doBackup(southRegion, northRegion)) {
-							tempWorld = southRegion.getWorld();
-							final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).resolve(this.sequence.getPath(null)).resolve(name).toFile();
-							this.backupSide(tempWorld, southRegion, folder);
-							southRegion.removeTag(Tag.CHANGED);
-							this.backupSide(tempWorld, northRegion, folder);
-							northRegion.removeTag(Tag.CHANGED);
+	public void execute() {
+		Backup.this.systemOutStart();
+		try {
+			final @NotNull String name = LocalDateTime.now().format(Backup.getFormatter());
+			@NotNull org.bukkit.World tempWorld;
+			for (final @NotNull File regionFolder : BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile())) {
+				final @NotNull File backupFolder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).toFile();
 
-							new BukkitRunnable() {
-								@Override
-								public void run() {
-									Backup.this.cleanup(backupFolder);
-								}
-							}.runTaskAsynchronously(TestUtils.getInstance());
-						}
-					} else {
+				final @Nullable DefinedRegion southRegion = RegionManager.getRegion(regionFolder.getName() + "_south");
+				final @Nullable DefinedRegion northRegion = RegionManager.getRegion(regionFolder.getName() + "_north");
+				if (southRegion != null && northRegion != null) {
+					if (Backup.this.doBackup(southRegion, northRegion)) {
+						tempWorld = southRegion.getWorld();
+						final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(regionFolder.getName()).resolve(Backup.this.sequence.getPath(null)).resolve(name).toFile();
+						Backup.this.backupSide(tempWorld, southRegion, folder);
+						southRegion.removeTag(Tag.CHANGED);
+						Backup.this.backupSide(tempWorld, northRegion, folder);
+						northRegion.removeTag(Tag.CHANGED);
+
 						new BukkitRunnable() {
 							@Override
 							public void run() {
-								try {
-									if (regionFolder.exists() && regionFolder.isDirectory()) {
-										FileUtils.deleteDirectory(regionFolder);
-										InternalFileUtils.deleteEmptyParent(regionFolder, TestUtilsCommand.TESTAREA_FOLDER.toFile());
-									}
-
-									if (backupFolder.exists() && backupFolder.isDirectory()) {
-										FileUtils.deleteDirectory(backupFolder);
-										InternalFileUtils.deleteEmptyParent(backupFolder, BackupCommand.BACKUP_FOLDER.toFile());
-									}
-								} catch (final IOException e) {
-									throw new RuntimeIOException(e);
-								}
+								Backup.this.cleanup(backupFolder);
 							}
 						}.runTaskAsynchronously(TestUtils.getInstance());
 					}
+				} else {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							try {
+								if (regionFolder.exists() && regionFolder.isDirectory()) {
+									FileUtils.deleteDirectory(regionFolder);
+									InternalFileUtils.deleteEmptyParent(regionFolder, TestUtilsCommand.TESTAREA_FOLDER.toFile());
+								}
+
+								if (backupFolder.exists() && backupFolder.isDirectory()) {
+									FileUtils.deleteDirectory(backupFolder);
+									InternalFileUtils.deleteEmptyParent(backupFolder, BackupCommand.BACKUP_FOLDER.toFile());
+								}
+							} catch (final @NotNull IOException e) {
+								throw new RuntimeIOException(e);
+							}
+						}
+					}.runTaskAsynchronously(TestUtils.getInstance());
 				}
-				this.systemOutDone();
-			} catch (final IOException | RuntimeIOException e) {
-				e.printStackTrace();
 			}
+			Backup.this.systemOutDone();
+		} catch (final @NotNull IOException | RuntimeIOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -127,7 +136,7 @@ public abstract class Backup extends BukkitRunnable {
 			try (final @NotNull ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(tempFile))) {
 				writer.write(clipboard);
 			}
-		} catch (final IOException | WorldEditException exception) {
+		} catch (final @NotNull IOException | WorldEditException exception) {
 			exception.printStackTrace();
 		}
 	}

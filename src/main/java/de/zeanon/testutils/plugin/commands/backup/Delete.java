@@ -52,8 +52,8 @@ public class Delete {
 		} else {
 			final @Nullable String region = CommandRequestUtils.checkDeleteBackupRequest(p.getUniqueId(), mappedFile.getName());
 			CommandRequestUtils.removeDeleteBackupRequest(p.getUniqueId());
-			if (confirmation.confirm()) { //NOSONAR
-				if (region != null) {
+			if (region != null) {
+				if (confirmation.confirm()) { //NOSONAR
 					final @Nullable DefinedRegion tempRegion = TestAreaUtils.getNorthRegion(region);
 					final @Nullable DefinedRegion otherRegion = TestAreaUtils.getSouthRegion(region);
 					if (tempRegion == null || otherRegion == null) {
@@ -63,7 +63,9 @@ public class Delete {
 						if (folder.exists() && folder.isDirectory()) {
 							try {
 								FileUtils.deleteDirectory(folder);
-							} catch (IOException e) {
+								p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+											  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was deleted successfully.");
+							} catch (final IOException e) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see [console].");
 								e.printStackTrace();
@@ -73,10 +75,10 @@ public class Delete {
 										  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " does not exist.");
 						}
 					}
+				} else {
+					p.sendMessage(BackupCommand.MESSAGE_HEAD
+								  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not deleted.");
 				}
-			} else {
-				p.sendMessage(BackupCommand.MESSAGE_HEAD
-							  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not deleted.");
 			}
 		}
 	}

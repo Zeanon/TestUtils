@@ -74,19 +74,19 @@ public class RegisterBlock {
 
 			Operations.complete(copy);
 
-			final @NotNull Path tempFile = mappedFile != null ? TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem")
-															  : TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem");
+			final @NotNull Path tempFile = mappedFile != null ? TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem")
+															  : TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem");
 
 			BaseFileUtils.createFile(tempFile);
 
-			try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(BaseFileUtils.createNewOutputStreamFromFile(tempFile))) {
+			try (final ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(BaseFileUtils.createNewOutputStreamFromFile(tempFile))) {
 				writer.write(clipboard);
 			}
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "You registered a new testblock with the name '"
 						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
-		} catch (WorldEditException | IOException e) {
+		} catch (final WorldEditException | IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
 						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");

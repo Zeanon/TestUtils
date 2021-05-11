@@ -35,7 +35,7 @@ public class RenameBlock {
 			return;
 		}
 
-		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
+		final @NotNull Path filePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 		final @NotNull File oldFile = filePath.resolve(oldMappedFile.getName() + ".schem").toFile(); //NOSONAR
 		final @NotNull File newFile = filePath.resolve(newMappedFile.getName() + ".schem").toFile(); //NOSONAR
 		if (!oldFile.exists() || !oldFile.isDirectory()) {
@@ -116,7 +116,7 @@ public class RenameBlock {
 			FileUtils.moveFile(oldFile, newFile);
 
 			final @Nullable String parentName = Objects.notNull(oldFile.getAbsoluteFile().getParentFile().listFiles()).length == 0
-												? InternalFileUtils.deleteEmptyParent(oldFile, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
+												? InternalFileUtils.deleteEmptyParent(oldFile, TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
 												: null;
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
@@ -126,7 +126,7 @@ public class RenameBlock {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Folder " + ChatColor.DARK_RED + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + fileName + ChatColor.RED + " could not be renamed, for further information please see [console].");
 			e.printStackTrace();

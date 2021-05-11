@@ -363,7 +363,7 @@ public class TestUtilsCommand extends SWCommand {
 
 	@ClassMapper(value = MappedFile.class, local = true)
 	private @NotNull TypeMapper<MappedFile> mapFile() {
-		return TestBlock.getMappedFileTypeMapper();
+		return TestBlockCommand.getMappedFileTypeMapper();
 	}
 
 	@ClassMapper(value = MappedFolder.class, local = true)
@@ -386,8 +386,8 @@ public class TestUtilsCommand extends SWCommand {
 					final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
 
 					try {
-						final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
-						final @NotNull Path basePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
+						final @NotNull Path filePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
+						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
 							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile())) {
@@ -398,7 +398,7 @@ public class TestUtilsCommand extends SWCommand {
 						} else {
 							return null;
 						}
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						return null;
 					}
 				} else {

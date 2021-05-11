@@ -28,7 +28,7 @@ public class DeleteBlock {
 			return;
 		}
 
-		final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
+		final @NotNull Path filePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 		final @NotNull File file = filePath.resolve(mappedFile + ".schem").toFile();
 		if (!file.exists() || !file.isDirectory()) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
@@ -65,7 +65,7 @@ public class DeleteBlock {
 									  + ChatColor.DARK_RED + parentName
 									  + ChatColor.RED + " was deleted successfully due to being empty.");
 					}
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " could not be deleted, for further information please see [console].");
 					e.printStackTrace();

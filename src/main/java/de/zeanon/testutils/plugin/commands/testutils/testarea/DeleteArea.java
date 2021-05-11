@@ -45,7 +45,7 @@ public class DeleteArea {
 				if (resetFolder.exists() && resetFolder.isDirectory()) {
 					FileUtils.deleteDirectory(resetFolder);
 				}
-			} catch (IOException e) {
+			} catch (final @NotNull IOException e) {
 				e.printStackTrace();
 			}
 
@@ -54,7 +54,7 @@ public class DeleteArea {
 				if (backUpFolder.exists() && backUpFolder.isDirectory()) {
 					FileUtils.deleteDirectory(backUpFolder);
 				}
-			} catch (IOException e) {
+			} catch (final @NotNull IOException e) {
 				e.printStackTrace();
 			}
 

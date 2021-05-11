@@ -41,7 +41,7 @@ public class PasteBlock {
 			return;
 		}
 
-		final @Nullable Pair<String, InputStream> testBlock = TestBlock.getBlock(p, mappedFile);
+		final @Nullable Pair<String, InputStream> testBlock = TestBlockCommand.getBlock(p, mappedFile);
 		if (testBlock != null) { //NOSONAR
 			try (final @NotNull ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(testBlock.getValue())) {
 				final @NotNull Clipboard clipboard = reader.read();
@@ -58,7 +58,7 @@ public class PasteBlock {
 						pastePoint = tempRegion.getMinimumPoint().toBlockVector3();
 					}
 
-					Operation operation = clipboardHolder
+					final Operation operation = clipboardHolder
 							.createPaste(editSession)
 							.to(pastePoint)
 							.ignoreAirBlocks(true)
@@ -68,7 +68,7 @@ public class PasteBlock {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "Testblock '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' has been set on " + area + " side.");
 				}
-			} catch (IOException | WorldEditException e) {
+			} catch (final IOException | WorldEditException e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
 				e.printStackTrace();

@@ -8,8 +8,8 @@ import de.zeanon.testutils.plugin.commands.countingwand.CountingwandCommand;
 import de.zeanon.testutils.plugin.commands.gamemode.GamemodeCommand;
 import de.zeanon.testutils.plugin.commands.inventoryclean.InventoryClean;
 import de.zeanon.testutils.plugin.commands.stoplag.Stoplag;
-import de.zeanon.testutils.plugin.commands.testblock.TestBlock;
-import de.zeanon.testutils.plugin.commands.testutils.SleepModeTestUtils;
+import de.zeanon.testutils.plugin.commands.testblock.TestBlockCommand;
+import de.zeanon.testutils.plugin.commands.testutils.SleepModeTestUtilsCommand;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.commands.tnt.TNTCommand;
 import de.zeanon.testutils.plugin.handlers.EventListener;
@@ -55,12 +55,12 @@ public class InitMode {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Loading Config...");
 			ConfigUtils.loadConfigs();
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config file are loaded successfully.");
-		} catch (RuntimeIOException e) {
+		} catch (final RuntimeIOException e) {
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not load config file.");
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Maybe try to delete the config file and reload the plugin.");
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
 
-			de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
@@ -68,12 +68,12 @@ public class InitMode {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Config...");
 			ConfigUtils.initConfigs();
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config file is initialized successfully.");
-		} catch (RuntimeIOException e) {
+		} catch (final RuntimeIOException e) {
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not update config file.");
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Maybe try to delete the config file and reload the plugin.");
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
 
-			de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
@@ -81,11 +81,11 @@ public class InitMode {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Regions...");
 			RegionManager.initialize();
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
 
-			de.zeanon.testutils.TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
@@ -109,7 +109,7 @@ public class InitMode {
 		InitMode.registeredCommands.add(new BackupCommand());
 		InitMode.registeredCommands.add(new RegionCommand());
 		InitMode.registeredCommands.add(new Stoplag());
-		InitMode.registeredCommands.add(new TestBlock());
+		InitMode.registeredCommands.add(new TestBlockCommand());
 		InitMode.registeredCommands.add(new TestUtilsCommand());
 		InitMode.registeredCommands.add(new InventoryClean());
 		InitMode.registeredCommands.add(new GamemodeCommand());
@@ -123,8 +123,8 @@ public class InitMode {
 	}
 
 	private void enableSleepModeWorldEdit() {
-		new SleepModeTestUtils();
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
+		InitMode.registeredCommands.add(new SleepModeTestUtilsCommand());
+		TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
 
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not load plugin, it needs FastAsyncWorldEdit or WorldEdit to work.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + de.zeanon.testutils.TestUtils.getInstance().getName() + " will automatically activate when one of the above gets enabled.");
@@ -132,8 +132,8 @@ public class InitMode {
 	}
 
 	private void enableSleepModeWorldGuard() {
-		new SleepModeTestUtils();
-		de.zeanon.testutils.TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
+		InitMode.registeredCommands.add(new SleepModeTestUtilsCommand());
+		TestUtils.getPluginManager().registerEvents(new WakeupListener(), de.zeanon.testutils.TestUtils.getInstance());
 
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> WorldGuard detected, this plugin replaces WorldGuard, please only use one.");
 		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + de.zeanon.testutils.TestUtils.getInstance().getName() + " will automatically activate when WorldGuard gets disabled.");

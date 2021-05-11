@@ -51,7 +51,7 @@ public class InvertArea {
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "The testarea on " + area + " side has been inverted.");
-		} catch (WorldEditException e) {
+		} catch (final @NotNull WorldEditException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
 			e.printStackTrace();

@@ -66,7 +66,7 @@ public class Count {
 						  + "' on "
 						  + area
 						  + " side.");
-		} catch (ObjectNullException e) {
+		} catch (final @NotNull ObjectNullException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "There has been an error, counting the amount of '"

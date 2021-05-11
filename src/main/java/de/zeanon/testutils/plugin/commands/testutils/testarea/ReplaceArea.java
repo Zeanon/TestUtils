@@ -3,9 +3,10 @@ package de.zeanon.testutils.plugin.commands.testutils.testarea;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.function.mask.BlockTypeMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.World;
-import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
@@ -14,8 +15,6 @@ import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -46,10 +45,10 @@ public class ReplaceArea {
 		try (final @NotNull EditSession editSession = SessionFactory.createSession(p, bukkitWorld)) {
 			final @NotNull CuboidRegion region = new CuboidRegion(bukkitWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
 
-			final @NotNull Set<BaseBlock> sourceBlocks = new HashSet<>();
+			final @NotNull BlockType sourceBlock;
 			try {
-				sourceBlocks.add(Objects.notNull(BlockTypes.get(source.name().toLowerCase())).getDefaultState().toBaseBlock());
-			} catch (ObjectNullException e) {
+				sourceBlock = Objects.notNull(BlockTypes.get(source.name().toLowerCase()));
+			} catch (final @NotNull ObjectNullException e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED
 							  + "There has been an error, replacing '"
@@ -63,11 +62,12 @@ public class ReplaceArea {
 							  + source
 							  + ChatColor.RED
 							  + "' not being a valid block.");
+				return;
 			}
 
 			try {
-				editSession.replaceBlocks(region, sourceBlocks, Objects.notNull(BlockTypes.get(Objects.notNull(destination).name().toLowerCase())).getDefaultState().toBaseBlock());
-			} catch (ObjectNullException e) {
+				editSession.replaceBlocks(region, new BlockTypeMask(editSession, sourceBlock), Objects.notNull(BlockTypes.get(Objects.notNull(destination).name().toLowerCase())).getDefaultState().toBaseBlock());
+			} catch (final @NotNull ObjectNullException e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED
 							  + "There has been an error, replacing to '"
@@ -81,17 +81,18 @@ public class ReplaceArea {
 							  + destination
 							  + ChatColor.RED
 							  + "' not being a valid block.");
+				return;
 			}
 
 			for (final @NotNull Player tempPlayer : p.getWorld().getPlayers()) {
 				if (tempPlayer == p) {
 					tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 										   + ChatColor.RED
-										   + "The "
+										   + "All "
 										   + ChatColor.DARK_RED
 										   + source
 										   + ChatColor.RED
-										   + " on "
+										   + "'s on "
 										   + area
 										   + " side has been replaced to '"
 										   + ChatColor.DARK_RED
@@ -102,11 +103,11 @@ public class ReplaceArea {
 					if (tempRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											   + ChatColor.RED
-											   + "The "
+											   + "All "
 											   + ChatColor.DARK_RED
 											   + source
 											   + ChatColor.RED
-											   + " on "
+											   + "'s on "
 											   + "your"
 											   + " side has been replaced to '"
 											   + ChatColor.DARK_RED
@@ -116,11 +117,11 @@ public class ReplaceArea {
 					} else if (otherRegion.inRegion(tempPlayer.getLocation())) {
 						tempPlayer.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											   + ChatColor.RED
-											   + "The "
+											   + "All "
 											   + ChatColor.DARK_RED
 											   + source
 											   + ChatColor.RED
-											   + " on "
+											   + "'s on "
 											   + "the other"
 											   + " side has been replaced to '"
 											   + ChatColor.DARK_RED
@@ -130,16 +131,20 @@ public class ReplaceArea {
 					}
 				}
 			}
-		} catch (WorldEditException e) {
+		} catch (final @NotNull WorldEditException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "There has been an error, replacing the "
 						  + ChatColor.DARK_RED
-						  + "Obsidian"
+						  + source
 						  + ChatColor.RED
-						  + " on "
+						  + "'s on "
 						  + area
-						  + " side.");
+						  + " side to '"
+						  + ChatColor.DARK_RED
+						  + destination
+						  + ChatColor.RED
+						  + "'.");
 			e.printStackTrace();
 		}
 	}

@@ -23,19 +23,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-public class TestBlock extends SWCommand {
+public class TestBlockCommand extends SWCommand {
 
 
 	public static final @NotNull Path TESTBLOCK_FOLDER = TestUtils.getPluginFolder().resolve("TestBlocks");
 
 
-	public TestBlock() {
+	public TestBlockCommand() {
 		super("testblock", "tb");
 	}
 
 	public static @Nullable Pair<String, InputStream> getBlock(final @NotNull Player p, final @Nullable MappedFile mappedFile) {
 		if (mappedFile != null) {
-			final @NotNull File tempFile = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem").toFile();
+			final @NotNull File tempFile = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem").toFile();
 			if (tempFile.exists() && tempFile.isFile()) {
 				return new Pair<>(mappedFile.getName(), BaseFileUtils.createNewInputStreamFromFile(tempFile));
 			} else if (BaseFileUtils.removeExtension(tempFile).exists() && BaseFileUtils.removeExtension(tempFile).isDirectory()) {
@@ -45,10 +45,10 @@ public class TestBlock extends SWCommand {
 			} else {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "'" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "' is not a valid block.");
-				return new Pair<>("default", TestBlock.getDefaultBlock(p.getUniqueId().toString()));
+				return new Pair<>("default", TestBlockCommand.getDefaultBlock(p.getUniqueId().toString()));
 			}
 		} else {
-			return new Pair<>("default", TestBlock.getDefaultBlock(p.getUniqueId().toString()));
+			return new Pair<>("default", TestBlockCommand.getDefaultBlock(p.getUniqueId().toString()));
 		}
 	}
 
@@ -71,8 +71,8 @@ public class TestBlock extends SWCommand {
 					final @NotNull String path = arg.substring(0, Math.max(lastIndex, 0));
 
 					try {
-						final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
-						final @NotNull Path basePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
+						final @NotNull Path filePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
+						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
 							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
@@ -85,7 +85,7 @@ public class TestBlock extends SWCommand {
 						} else {
 							return null;
 						}
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						return null;
 					}
 				} else {
@@ -123,7 +123,7 @@ public class TestBlock extends SWCommand {
 
 
 	private static @NotNull InputStream getDefaultBlock(final @NotNull String uuid) {
-		final @NotNull File tempFile = TestBlock.TESTBLOCK_FOLDER.resolve(uuid).resolve("default.schem").toFile();
+		final @NotNull File tempFile = TestBlockCommand.TESTBLOCK_FOLDER.resolve(uuid).resolve("default.schem").toFile();
 		if (tempFile.exists() && tempFile.isFile()) {
 			return BaseFileUtils.createNewInputStreamFromFile(tempFile);
 		} else {
@@ -134,6 +134,6 @@ public class TestBlock extends SWCommand {
 
 	@ClassMapper(value = MappedFile.class, local = true)
 	private @NotNull TypeMapper<MappedFile> mapFile() {
-		return TestBlock.getMappedFileTypeMapper();
+		return TestBlockCommand.getMappedFileTypeMapper();
 	}
 }

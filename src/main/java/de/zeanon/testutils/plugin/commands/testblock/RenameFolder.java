@@ -35,7 +35,7 @@ public class RenameFolder {
 		}
 
 		try {
-			final @NotNull Path filePath = TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
+			final @NotNull Path filePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString());
 			final @NotNull File directoryOld = filePath.resolve(oldMappedFolder.getName()).toFile(); //NOSONAR
 			final @NotNull File directoryNew = filePath.resolve(newMappedFolder.getName()).toFile(); //NOSONAR
 
@@ -136,7 +136,7 @@ public class RenameFolder {
 					}
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "An Error occurred while getting the filepaths for the blocks and folders, for further information please see [console].");
@@ -180,7 +180,7 @@ public class RenameFolder {
 			FileUtils.deleteDirectory(directory);
 			final @Nullable String parentName = Objects.notNull(directory.getAbsoluteFile().getParentFile().listFiles()).length == 0
 												&& ConfigUtils.getBoolean("Delete empty Folders")
-												? InternalFileUtils.deleteEmptyParent(directory, TestBlock.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
+												? InternalFileUtils.deleteEmptyParent(directory, TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toFile())
 												: null;
 
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
@@ -189,7 +189,7 @@ public class RenameFolder {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "Folder " + ChatColor.GREEN + parentName + ChatColor.RED + " was deleted successfully due to being empty.");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.GREEN + arg + ChatColor.RED + " could not be renamed, for further information please see [console].");
 			e.printStackTrace();
@@ -214,7 +214,7 @@ public class RenameFolder {
 						FileUtils.moveToDirectory(tempFile, newFile, true);
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 				return false;
 			}

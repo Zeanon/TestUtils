@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-public class SleepModeTestUtils extends SWCommand {
+public class SleepModeTestUtilsCommand extends SWCommand {
 
-	public SleepModeTestUtils() {
+	public SleepModeTestUtilsCommand() {
 		super("testutils", "tu");
 	}
 
