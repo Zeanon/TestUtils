@@ -83,6 +83,15 @@ public abstract class Region {
 		return this.flags.get(flagType);
 	}
 
+	public @NotNull Flag.Value<?> getFlagOrDefault(final @NotNull Flag flagType) {
+		final @Nullable Flag.Value<?> value = this.getFlag(flagType);
+		if (value != null) {
+			return value;
+		} else {
+			return flagType.getDefaultValue();
+		}
+	}
+
 	public @NotNull Flag.Value<?> getFlagOrDefault(final @NotNull Flag flagType, final @NotNull Flag.Value<?> defaultValue) {
 		final @Nullable Flag.Value<?> value = this.getFlag(flagType);
 		if (value != null) {
@@ -95,6 +104,7 @@ public abstract class Region {
 	public @NotNull Map<Flag, Flag.Value<?>> getFlags() {
 		return this.flags;
 	}
+
 
 	public void setTag(final @NotNull Tag tagType, final @Nullable Tag.Value<?> value) {
 		if (value == null) {
@@ -116,6 +126,24 @@ public abstract class Region {
 
 	public @Nullable Tag.Value<?> getTag(final @NotNull Tag tagType) {
 		return this.tags.get(tagType);
+	}
+
+	public @NotNull Tag.Value<?> getTagOrDefault(final @NotNull Tag tagType) {
+		final @Nullable Tag.Value<?> value = this.getTag(tagType);
+		if (value != null) {
+			return value;
+		} else {
+			return tagType.getDefaultValue();
+		}
+	}
+
+	public @NotNull Tag.Value<?> getTagOrDefault(final @NotNull Tag tagType, final @NotNull Tag.Value<?> defaultValue) {
+		final @Nullable Tag.Value<?> value = this.getTag(tagType);
+		if (value != null) {
+			return value;
+		} else {
+			return defaultValue;
+		}
 	}
 
 	public @NotNull Map<Tag, Tag.Value<?>> getTags() {

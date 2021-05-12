@@ -50,6 +50,7 @@ public class BackupScheduler {
 		BackupScheduler.internalScheduler.schedule(new StartupBackup(), 0, TimeUnit.SECONDS);
 	}
 
+
 	public void terminate() {
 		for (final @NotNull Runnable task : BackupScheduler.internalScheduler.shutdownNow()) {
 			//noinspection rawtypes

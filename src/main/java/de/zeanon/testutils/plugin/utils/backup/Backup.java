@@ -47,6 +47,7 @@ public abstract class Backup extends BukkitRunnable {
 	private static final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
 	protected final @NotNull BackupMode sequence;
 
+
 	@Override
 	public void run() {
 		if (ConfigUtils.getInt("Backups", Backup.this.sequence.toString()) > 0) {
@@ -158,6 +159,7 @@ public abstract class Backup extends BukkitRunnable {
 			Operations.complete(operation);
 		}
 	}
+
 
 	protected abstract void cleanup(final @NotNull File backupFolder);
 
