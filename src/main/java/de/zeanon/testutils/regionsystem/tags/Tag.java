@@ -1,8 +1,6 @@
 package de.zeanon.testutils.regionsystem.tags;
 
 
-import java.util.EnumSet;
-import java.util.Set;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,11 +14,7 @@ public enum Tag {
 
 
 	@Getter
-	private static final @NotNull Set<Tag> tags;
-
-	static {
-		tags = EnumSet.allOf(Tag.class);
-	}
+	private static final @NotNull Tag[] tags = Tag.values();
 
 
 	private final @NotNull Class<? extends Value<?>> valueType;

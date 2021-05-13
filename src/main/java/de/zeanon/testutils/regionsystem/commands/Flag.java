@@ -23,7 +23,7 @@ public class Flag {
 						  + ChatColor.RED
 						  + "Applicable values for '"
 						  + ChatColor.DARK_RED
-						  + flag.toString()
+						  + flag
 						  + ChatColor.RED
 						  + "' are: "
 						  + Arrays.stream(flag.getValues())

@@ -139,7 +139,7 @@ public class Mapper {
 	}
 
 	private @NotNull TypeMapper<RegionName> mapRegionName() {
-		return SWCommandUtils.createMapper(s -> Flag.getFlags().stream().anyMatch(f -> s.equalsIgnoreCase(f.name())) || (!RegionManager.hasRegion(s) && !RegionManager.hasGlobalRegion(s)) ? null : new RegionName(s)
+		return SWCommandUtils.createMapper(s -> Arrays.stream(Flag.getFlags()).anyMatch(f -> s.equalsIgnoreCase(f.name())) || (!RegionManager.hasRegion(s) && !RegionManager.hasGlobalRegion(s)) ? null : new RegionName(s)
 				, s -> Stream.concat(RegionManager.getRegions().stream().map(Region::getName), RegionManager.getGlobalRegions().values().stream().map(Region::getName)).collect(Collectors.toList()));
 	}
 
@@ -161,7 +161,7 @@ public class Mapper {
 			}
 
 			@Override
-			public List<String> tabCompletes(CommandSender commandSender, String[] previousArguments, String s) {
+			public List<String> tabCompletes(final CommandSender commandSender, final String[] previousArguments, final String s) {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
 					final Flag.Value<?>[] values = flag.getValues(); //NOSONAR
@@ -175,7 +175,7 @@ public class Mapper {
 				if (previous.length > 0) {
 					try {
 						return Flag.valueOf(previous[previous.length - 1].toUpperCase());
-					} catch (IllegalArgumentException e) {
+					} catch (final IllegalArgumentException e) {
 						return null;
 					}
 				} else {
@@ -200,7 +200,7 @@ public class Mapper {
 			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
 				try {
 					return BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()).stream().map(File::getName).collect(Collectors.toList());
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					return null;
 				}
 			}

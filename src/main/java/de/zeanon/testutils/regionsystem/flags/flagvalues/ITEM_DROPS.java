@@ -1,12 +1,10 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 @Getter
@@ -17,17 +15,13 @@ public enum ITEM_DROPS implements Flag.Value<ITEM_DROPS> {
 	DENY(ChatColor.RED + "deny");
 
 
-	private static @Nullable ITEM_DROPS[] values;
+	private static final @NotNull ITEM_DROPS[] values = ITEM_DROPS.values();
 	private final @NotNull String chatValue;
 
 
 	@Override
 	public @NotNull ITEM_DROPS[] getValues() {
-		if (ITEM_DROPS.values == null) {
-			ITEM_DROPS.values = ITEM_DROPS.values(); //NOSONAR
-		}
-		//noinspection NullableProblems
-		return Objects.notNull(ITEM_DROPS.values);
+		return ITEM_DROPS.values;
 	}
 
 	@Override
@@ -39,7 +33,7 @@ public enum ITEM_DROPS implements Flag.Value<ITEM_DROPS> {
 	public @NotNull ITEM_DROPS getValueOf(final @NotNull String name) {
 		try {
 			return ITEM_DROPS.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			if (name.equalsIgnoreCase("false")) {
 				return ITEM_DROPS.DENY;
 			}

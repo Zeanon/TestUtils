@@ -76,9 +76,9 @@ public class Info {
 			currentFlag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 													 new ComponentBuilder(new TextComponent(
 															 TextComponent.fromLegacyText(
-																	 ChatColor.RED + "Edit the value of '" + ChatColor.DARK_RED + flag.toString() + ChatColor.RED + "'")))
+																	 ChatColor.RED + "Edit the value of '" + ChatColor.DARK_RED + flag + ChatColor.RED + "'")))
 															 .create()));
-			currentFlag.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rg flag " + region.getName() + " " + flag.toString() + " "));
+			currentFlag.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rg flag " + region.getName() + " " + flag + " "));
 			flags.addExtra(currentFlag);
 
 			if (currentCount[0] == flagCount) {

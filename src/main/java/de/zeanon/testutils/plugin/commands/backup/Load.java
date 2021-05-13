@@ -67,13 +67,12 @@ public class Load {
 
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
 					if (regionSide != null) {
-						p.sendMessage(BackupCommand.MESSAGE_HEAD
-									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
+						p.sendMessage(BackupCommand.MESSAGE_HEAD + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
 
 						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
 
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
-									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide.toString() + " side.");
+									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
 					} else {
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
@@ -84,7 +83,7 @@ public class Load {
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
 					}
-				} catch (WorldEditException | IOException e) {
+				} catch (final WorldEditException | IOException e) {
 					e.printStackTrace();
 				}
 			} else {
@@ -92,7 +91,7 @@ public class Load {
 							  + ChatColor.RED + "There is no backup for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, pasting the backup for '"
 						  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");

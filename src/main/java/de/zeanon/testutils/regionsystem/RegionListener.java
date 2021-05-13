@@ -186,7 +186,6 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@SuppressWarnings("DuplicatedCode")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockExplode(final @NotNull BlockExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
@@ -207,7 +206,6 @@ public class RegionListener implements Listener {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
-	@SuppressWarnings("DuplicatedCode")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityExplode(final @NotNull EntityExplodeEvent event) {
 		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getLocation().getWorld()));

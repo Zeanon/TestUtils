@@ -1,8 +1,6 @@
 package de.zeanon.testutils.regionsystem.flags;
 
 
-import java.util.EnumSet;
-import java.util.Set;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,11 +20,7 @@ public enum Flag {
 
 
 	@Getter
-	private static final @NotNull Set<Flag> flags;
-
-	static {
-		flags = EnumSet.allOf(Flag.class);
-	}
+	private static final @NotNull Flag[] flags = Flag.values();
 
 
 	private final @NotNull Class<? extends Value<?>> valueType;

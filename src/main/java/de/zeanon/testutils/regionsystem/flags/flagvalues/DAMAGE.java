@@ -1,12 +1,10 @@
 package de.zeanon.testutils.regionsystem.flags.flagvalues;
 
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 @Getter
@@ -17,18 +15,15 @@ public enum DAMAGE implements Flag.Value<DAMAGE> {
 	DENY(ChatColor.RED + "deny");
 
 
-	private static @Nullable DAMAGE[] values;
+	private static final @NotNull DAMAGE[] values = DAMAGE.values();
 	private final @NotNull String chatValue;
 
 
 	@Override
 	public @NotNull DAMAGE[] getValues() {
-		if (DAMAGE.values == null) {
-			DAMAGE.values = DAMAGE.values(); //NOSONAR
-		}
-		//noinspection NullableProblems
-		return Objects.notNull(DAMAGE.values);
+		return DAMAGE.values;
 	}
+
 
 	@Override
 	public @NotNull DAMAGE getValue() {
@@ -39,7 +34,7 @@ public enum DAMAGE implements Flag.Value<DAMAGE> {
 	public @NotNull DAMAGE getValueOf(final @NotNull String name) {
 		try {
 			return DAMAGE.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			if (name.equalsIgnoreCase("false")) {
 				return DAMAGE.DENY;
 			}

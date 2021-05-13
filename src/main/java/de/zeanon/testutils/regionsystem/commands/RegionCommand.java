@@ -5,6 +5,7 @@ import de.zeanon.testutils.plugin.utils.enums.RegionName;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.flags.Flag;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
@@ -134,10 +135,9 @@ public class RegionCommand extends SWCommand {
 		return RegionCommand.MESSAGE_HEAD
 			   + ChatColor.RED
 			   + "Applicable flags are: "
-			   + Flag.getFlags()
-					 .stream()
-					 .map(flag -> ChatColor.DARK_RED + flag.toString())
-					 .collect(Collectors.joining(ChatColor.RED + ", "));
+			   + Arrays.stream(Flag.getFlags())
+					   .map(flag -> ChatColor.DARK_RED + flag.toString())
+					   .collect(Collectors.joining(ChatColor.RED + ", "));
 	}
 
 	private static void flagHelpInternal(final @NotNull Player p, final @NotNull String... args) {
