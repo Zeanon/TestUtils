@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.94-Alpha</version>
+    <version>1.0.95-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
 
@@ -239,6 +239,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <parameters>true</parameters>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>

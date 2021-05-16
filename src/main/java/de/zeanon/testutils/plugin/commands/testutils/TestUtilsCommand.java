@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.commands.testutils;
 import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.commands.testblock.*;
 import de.zeanon.testutils.plugin.commands.testutils.testarea.*;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
@@ -73,35 +74,30 @@ public class TestUtilsCommand extends SWCommand {
 		};
 	}
 
-	@Register(help = true)
-	public void help(final @NotNull Player p, final @NotNull String... args) {
-		//TODO
-	}
-
 
 	@Register(value = {"update"}, help = true)
 	public void updateHelp(final @NotNull Player p, final @NotNull String... args) {
 		Update.sendUpdateUsage(p);
 	}
 
-	@Register("update")
+	@Register(value = "update", description = "Update the plugin.")
 	public void noArgsUpdate(final @NotNull Player p) {
 		Update.execute(null, p);
 	}
 
-	@Register("update")
+	@Register(value = "update", description = "Confirm the update.")
 	public void oneArgUpdate(final @NotNull Player p, final @NotNull CommandConfirmation confirmation) {
 		Update.execute(confirmation, p);
 	}
 
 
-	@Register("undo")
+	@Register(value = "undo", description = "Undo your last action.")
 	public void noArgsUndo(final @NotNull Player p) {
 		Undo.undo(p);
 	}
 
 
-	@Register("redo")
+	@Register(value = "redo", description = "Redo the last undone action.")
 	public void noArgsRedo(final @NotNull Player p) {
 		Redo.redo(p);
 	}
@@ -118,7 +114,7 @@ public class TestUtilsCommand extends SWCommand {
 		}
 	}
 
-	@Register("count")
+	@Register(value = "count", description = "Count the amount of the given blocks in the region you are currently standing in.")
 	public void oneArgCount(final @NotNull Player p, final @NotNull Material material) {
 		Count.execute(material, null, p);
 	}
@@ -390,7 +386,7 @@ public class TestUtilsCommand extends SWCommand {
 						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
-							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile())) {
+							for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile()))) {
 								final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 								results.add(fileName);
 							}

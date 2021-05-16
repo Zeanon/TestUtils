@@ -31,29 +31,24 @@ public class RegionCommand extends SWCommand {
 					  + regions.stream().map(region -> ChatColor.DARK_RED + region.getName()).collect(Collectors.joining(ChatColor.RED + ", ")));
 	}
 
-	@Register(help = true)
-	public void help(final @NotNull Player p, final @NotNull String... args) {
-		//TODO
-	}
 
-
-	@Register("info")
+	@Register(value = "info", description = "Get the info about the region you are currently standing in.")
 	public void noArgsInfo(final @NotNull Player p) {
 		Info.execute(null, p);
 	}
 
-	@Register("info")
+	@Register(value = "info", description = "Get the info about the given region.")
 	public void oneArgInfo(final @NotNull Player p, final @NotNull RegionName regionName) {
 		Info.execute(regionName, p);
 	}
 
 
-	@Register("removeentities")
+	@Register(value = "removeentities", description = "Remove all entities in the region you are currently standing in.")
 	public void noArgsRemoveEntities(final @NotNull Player p) {
 		RemoveEntities.execute(null, p);
 	}
 
-	@Register("removeentities")
+	@Register(value = "removeentities", description = "Remove all entities in the given region.")
 	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull RegionName regionName) {
 		RemoveEntities.execute(regionName, p);
 	}
@@ -64,32 +59,22 @@ public class RegionCommand extends SWCommand {
 		RegionCommand.flagHelpInternal(p, args);
 	}
 
-	@Register("flag")
+	@Register(value = "flag", description = "Get the applicable values for the given flag.")
 	public void oneArgFlag(final @NotNull Player p, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, null, p);
 	}
 
-	@Register("test")
-	public void test(final @NotNull Player p, final int i) {
-		p.sendMessage("Yoyo stinkt");
-	}
-
-	@Register("flag")
+	@Register(value = "flag", description = "Set a value for the given flag.")
 	public void twoArgsFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
 		de.zeanon.testutils.regionsystem.commands.Flag.execute(null, flag, value, p);
 	}
 
-	@Register("flag")
-	public void twoArgsFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag) {
-		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, null, p);
-	}
-
-	@Register("flag")
+	@Register(value = "flag", description = "Set a value for the given flag in the given region.")
 	public void threeArgsFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
 		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, value, p);
 	}
 
-	@Register("flag")
+	@Register(value = "flag", description = "Set a value for the given flag in the given region.")
 	public void threeArgsFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value, final @NotNull RegionName regionName) {
 		de.zeanon.testutils.regionsystem.commands.Flag.execute(regionName, flag, value, p);
 	}
@@ -101,31 +86,25 @@ public class RegionCommand extends SWCommand {
 		RegionCommand.flagHelpInternal(p, args);
 	}
 
-	@Register("delflag")
-	@Register("removeflag")
+	@Register(value = "delflag", description = "Delete the given flag in the region you are currently standing in.")
+	@Register(value = "removeflag", description = "Delete the given flag in the region you are currently standing in.")
 	public void oneArgRemoveFlag(final @NotNull Player p, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(null, flag, p);
 	}
 
-	@Register("delflag")
-	@Register("removeflag")
-	public void twoArgsRemoveFlag(final @NotNull Player p, final @NotNull Flag flag, final @NotNull Flag.Value<?> value) {
-		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(null, flag, p);
-	}
-
-	@Register("delflag")
-	@Register("removeflag")
+	@Register(value = "delflag", description = "Delete the given flag in the given region.")
+	@Register(value = "removeflag", description = "Delete the given flag in the given region.")
 	public void twoArgsRemoveFlag(final @NotNull Player p, final @NotNull RegionName regionName, final @NotNull Flag flag) {
 		de.zeanon.testutils.regionsystem.commands.RemoveFlag.execute(regionName, flag, p);
 	}
 
 
-	@Register("reload")
+	@Register(value = "reload", description = "Reload all regions from the file-system.")
 	public void noArgsReload(final @NotNull Player p) {
 		Reload.execute(p);
 	}
 
-	@Register("save")
+	@Register(value = "save", description = "Save all region-data manually")
 	public void noArgsSave(final @NotNull Player p) {
 		Save.execute(p);
 	}

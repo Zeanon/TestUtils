@@ -12,7 +12,6 @@ import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -57,9 +56,10 @@ public class Save {
 										 : mappedFile.getName();
 
 			try {
-				final @NotNull Path backupFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString());
-				final @NotNull File folder = backupFolder.resolve(name).toFile();
-				final @NotNull List<File> files = BaseFileUtils.listFolders(backupFolder.toFile());
+				final @NotNull File backupFolder = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toAbsolutePath().toFile();
+				final @NotNull File folder = new File(backupFolder, name);
+				final @Nullable List<File> files = BaseFileUtils.listFolders(backupFolder);
+
 				if (folder.exists()) {
 					CommandRequestUtils.addSaveBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6), null);
 					p.sendMessage(BackupCommand.MESSAGE_HEAD
@@ -67,7 +67,7 @@ public class Save {
 					GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
 														  "/backup save " + name + " -confirm",
 														  "/backup save " + name + " -deny", p);
-				} else if (files.size() >= ConfigUtils.getInt("Backups", "manual")) {
+				} else if (files != null && files.size() >= ConfigUtils.getInt("Backups", "manual")) {
 					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 					if (toBeDeleted.isPresent()) {
 						CommandRequestUtils.addSaveBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6), toBeDeleted.get().getName());
@@ -148,9 +148,8 @@ public class Save {
 				final @NotNull File manualBackup = BackupCommand.BACKUP_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toFile();
 				if (manualBackup.exists() && manualBackup.isDirectory()) {
 					try {
-						@NotNull List<File> files;
-						files = BaseFileUtils.listFolders(manualBackup);
-						while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
+						@Nullable List<File> files = BaseFileUtils.listFolders(manualBackup);
+						while (files != null && files.size() > ConfigUtils.getInt("Backups", "manual")) {
 							final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 							if (toBeDeleted.isPresent()) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
@@ -160,7 +159,7 @@ public class Save {
 							}
 							files = BaseFileUtils.listFolders(manualBackup);
 						}
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						throw new RuntimeIOException(e);
 					}
 				}
