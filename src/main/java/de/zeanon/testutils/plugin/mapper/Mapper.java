@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.mapper;
 import de.steamwar.commandframework.SWCommandUtils;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.*;
@@ -139,18 +140,30 @@ public class Mapper {
 	}
 
 	private @NotNull TypeMapper<RegionName> mapRegionName() {
-		return SWCommandUtils.createMapper(s -> Arrays.stream(Flag.getFlags()).anyMatch(f -> s.equalsIgnoreCase(f.name())) || (!RegionManager.hasRegion(s) && !RegionManager.hasGlobalRegion(s)) ? null : new RegionName(s)
-				, s -> Stream.concat(RegionManager.getRegions().stream().map(Region::getName), RegionManager.getGlobalRegions().values().stream().map(Region::getName)).collect(Collectors.toList()));
+		return SWCommandUtils.createMapper(s -> Arrays.stream(Flag.getFlags())
+													  .anyMatch(f -> s.equalsIgnoreCase(f.name()))
+												|| (!RegionManager.hasDefinedRegion(s)
+													&& !RegionManager.hasGlobalRegion(s))
+												? null
+												: new RegionName(s),
+										   s -> Stream.concat(RegionManager.getRegions()
+																		   .stream()
+																		   .map(Region::getName),
+															  RegionManager.getGlobalRegions()
+																		   .values()
+																		   .stream()
+																		   .map(Region::getName))
+													  .collect(Collectors.toList()));
 	}
 
 	private @NotNull <T extends Enum<T> & Flag.Value<T>> TypeMapper<Flag.Value<T>> mapFlagValue() {
 		return new TypeMapper<Flag.Value<T>>() {
 			@Override
-			public Flag.Value<T> map(final @NotNull String[] previousArguments, final @NotNull String s) {
+			public @Nullable Flag.Value<T> map(final @NotNull String[] previousArguments, final @NotNull String s) {
 				final @Nullable Flag flag = this.getFlag(previousArguments); //NOSONAR
 				if (flag != null) {
-					final Flag.Value<?>[] values = flag.getValues(); //NOSONAR
-					for (final Flag.Value<?> tempEnum : values) { //NOSONAR
+					final @NotNull Flag.Value<?>[] values = flag.getValues(); //NOSONAR
+					for (final @NotNull Flag.Value<?> tempEnum : values) { //NOSONAR
 						if ((tempEnum.getValue().name()).equalsIgnoreCase(s)) {
 							// noinspection unchecked
 							return (T) tempEnum;
@@ -189,18 +202,19 @@ public class Mapper {
 		return new TypeMapper<AreaName>() {
 			@Override
 			public AreaName map(final @NotNull String[] previous, final @NotNull String s) {
-				if (TestAreaUtils.forbiddenFileName(s)) {
-					return null;
-				} else {
-					return new AreaName(s);
-				}
+				return TestAreaUtils.illegalName(s)
+					   ? null
+					   : new AreaName(s);
 			}
 
 			@Override
 			public java.util.List<String> tabCompletes(final @NotNull CommandSender commandSender, final @NotNull String[] previousArguments, final @NotNull String arg) {
 				try {
-					return BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()).stream().map(File::getName).collect(Collectors.toList());
-				} catch (final IOException e) {
+					return Objects.notNull(BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()))
+								  .stream()
+								  .map(File::getName)
+								  .collect(Collectors.toList());
+				} catch (final @NotNull IOException e) {
 					return null;
 				}
 			}

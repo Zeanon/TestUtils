@@ -35,7 +35,7 @@ public class Info {
 			if (RegionManager.isGlobalRegion(regionName.getName())) {
 				Info.sendRegionInfo(RegionManager.getGlobalRegion(p.getWorld()), p);
 			} else {
-				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
+				final @Nullable DefinedRegion region = RegionManager.getDefinedRegion(regionName.getName());
 				if (region != null) {
 					Info.sendRegionInfo(region, p);
 				} else {

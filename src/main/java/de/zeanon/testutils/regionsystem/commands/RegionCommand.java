@@ -25,6 +25,7 @@ public class RegionCommand extends SWCommand {
 		super("region", "rg");
 	}
 
+
 	public static void sendMultipleRegions(final @NotNull List<DefinedRegion> regions, final @NotNull Player p) {
 		p.sendMessage(RegionCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You are standing in multiple regions, please define which one to use: "
@@ -129,7 +130,7 @@ public class RegionCommand extends SWCommand {
 
 			flag = Flag.getFlag(args[1]);
 			if (flag != null) {
-				if (!RegionManager.hasRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
+				if (!RegionManager.hasDefinedRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED
 								  + "'"
@@ -144,7 +145,7 @@ public class RegionCommand extends SWCommand {
 			}
 		}
 
-		if (args.length == 1 && !RegionManager.hasRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
+		if (args.length == 1 && !RegionManager.hasDefinedRegion(args[0]) && !RegionManager.hasGlobalRegion(args[0])) {
 			p.sendMessage(RegionCommand.MESSAGE_HEAD
 						  + ChatColor.RED
 						  + "'"

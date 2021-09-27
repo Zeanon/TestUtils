@@ -4,12 +4,13 @@ import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
+import de.zeanon.testutils.plugin.backup.Backup;
+import de.zeanon.testutils.plugin.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.*;
-import de.zeanon.testutils.plugin.utils.backup.Backup;
-import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
+import de.zeanon.testutils.regionsystem.tags.Tag;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -121,7 +122,8 @@ public class Save {
 					}
 				} else {
 					p.sendMessage(BackupCommand.MESSAGE_HEAD
-								  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " was not overwritten.");
+								  + ChatColor.DARK_RED + mappedFile.getName()
+								  + ChatColor.RED + " was not overwritten.");
 				}
 			}
 		}
@@ -133,8 +135,10 @@ public class Save {
 					  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 					  + ChatColor.RED + "'...");
 		BackupScheduler.getMANUAL_BACKUP().backupSide(tempWorld, tempRegion, folder);
+		tempRegion.removeTag(Tag.CHANGED);
 
 		BackupScheduler.getMANUAL_BACKUP().backupSide(tempWorld, otherRegion, folder);
+		otherRegion.removeTag(Tag.CHANGED);
 
 		p.sendMessage(BackupCommand.MESSAGE_HEAD
 					  + ChatColor.RED + "You registered a new backup for '"

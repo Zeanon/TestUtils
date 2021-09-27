@@ -394,7 +394,7 @@ public class TestUtilsCommand extends SWCommand {
 						} else {
 							return null;
 						}
-					} catch (final IOException e) {
+					} catch (final @NotNull IOException e) {
 						return null;
 					}
 				} else {

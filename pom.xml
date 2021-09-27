@@ -278,12 +278,6 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
-        <!-- Paper Repo -->
-        <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-
         <!-- WorldEdit Repo -->
         <repository>
             <id>enginehub-maven</id>

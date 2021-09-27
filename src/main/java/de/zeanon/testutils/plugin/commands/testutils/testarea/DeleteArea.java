@@ -37,9 +37,9 @@ public class DeleteArea {
 	}
 
 	private boolean remove(final @NotNull String name) {
-		final @Nullable DefinedRegion southRegion = RegionManager.getRegion(name + "_south");
-		final @Nullable DefinedRegion northRegion = RegionManager.getRegion(name + "_north");
-		if (southRegion != null && northRegion != null && RegionManager.removeRegion(southRegion) && RegionManager.removeRegion(northRegion)) {
+		final @Nullable DefinedRegion southRegion = RegionManager.getDefinedRegion(name + "_south");
+		final @Nullable DefinedRegion northRegion = RegionManager.getDefinedRegion(name + "_north");
+		if (southRegion != null && northRegion != null && RegionManager.removeDefinedRegion(southRegion) && RegionManager.removeDefinedRegion(northRegion)) {
 			try {
 				final @NotNull File resetFolder = TestUtilsCommand.TESTAREA_FOLDER.resolve(name).toFile();
 				if (resetFolder.exists() && resetFolder.isDirectory()) {

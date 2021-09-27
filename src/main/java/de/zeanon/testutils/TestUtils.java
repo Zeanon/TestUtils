@@ -2,7 +2,6 @@ package de.zeanon.testutils;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.testutils.init.InitMode;
-import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import java.io.IOException;
 import java.nio.file.Path;
 import lombok.AccessLevel;
@@ -45,7 +44,6 @@ public final class TestUtils extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		InitMode.unregisterCommands();
-		BackupScheduler.terminate();
 		System.out.println("[" + this.getName() + "] >> unloaded.");
 	}
 }

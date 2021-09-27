@@ -48,7 +48,7 @@ public class Flag {
 					RegionManager.getGlobalRegion(p.getWorld()).setFlag(flag, value);
 					Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);
 				} else {
-					final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName()); //NOSONAR
+					final @Nullable DefinedRegion region = RegionManager.getDefinedRegion(regionName.getName()); //NOSONAR
 					if (region != null) {
 						region.setFlag(flag, value);
 						Flag.sendFlagSet(regionName.getName(), flag.toString(), value.getChatValue(), p);

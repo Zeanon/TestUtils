@@ -20,7 +20,11 @@ public class TestAreaUtils {
 	}
 
 	public boolean illegalName(final @NotNull String name) {
-		return name.contains("./") || name.contains(".\\") || name.contains("§") || TestAreaUtils.forbiddenFileName(name);
+		return name.contains("./")
+			   || name.contains(".\\")
+			   || name.contains("§")
+			   || name.contains(String.valueOf('\n'))
+			   || TestAreaUtils.forbiddenFileName(name);
 	}
 
 	public @Nullable DefinedRegion getRegion(final @NotNull Player p) {
@@ -53,10 +57,10 @@ public class TestAreaUtils {
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p) {
 		final @NotNull Optional<DefinedRegion> optionalRegion = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
-		return optionalRegion.map(region -> RegionManager.getRegion(region
+		return optionalRegion.map(region -> RegionManager.getDefinedRegion(region
 																			.getName()
 																			.substring(0, region.getName().length() - 6)
-																	+ (region.getName()
+																		   + (region.getName()
 																			 .substring(region.getName().length() - 6)
 																			 .equalsIgnoreCase("_north") ? "_south" : "_north")))
 							 .orElse(null);
@@ -87,7 +91,7 @@ public class TestAreaUtils {
 			if (temp.get().getName().substring(temp.get().getName().length() - 6).equalsIgnoreCase("_north")) {
 				return temp.get();
 			} else {
-				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_north");
+				return RegionManager.getDefinedRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_north");
 			}
 		} else {
 			return null;
@@ -100,7 +104,7 @@ public class TestAreaUtils {
 			if (temp.get().getName().substring(temp.get().getName().length() - 6).equalsIgnoreCase("_south")) {
 				return temp.get();
 			} else {
-				return RegionManager.getRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_south");
+				return RegionManager.getDefinedRegion(temp.get().getName().substring(0, temp.get().getName().length() - 6) + "_south");
 			}
 		} else {
 			return null;
@@ -108,10 +112,10 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getNorthRegion(final @NotNull String name) {
-		return RegionManager.getRegion(name + "_north");
+		return RegionManager.getDefinedRegion(name + "_north");
 	}
 
 	public @Nullable DefinedRegion getSouthRegion(final @NotNull String name) {
-		return RegionManager.getRegion(name + "_south");
+		return RegionManager.getDefinedRegion(name + "_south");
 	}
 }

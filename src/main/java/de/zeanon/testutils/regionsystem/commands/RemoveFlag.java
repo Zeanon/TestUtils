@@ -33,7 +33,7 @@ public class RemoveFlag {
 				RegionManager.getGlobalRegion(p.getWorld()).removeFlag(flag);
 				RemoveFlag.sendFlagRemoved(regionName.getName(), flag.toString(), p);
 			} else {
-				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName()); //NOSONAR
+				final @Nullable DefinedRegion region = RegionManager.getDefinedRegion(regionName.getName()); //NOSONAR
 				if (region != null) {
 					region.removeFlag(flag);
 					RemoveFlag.sendFlagRemoved(regionName.getName(), flag.toString(), p);

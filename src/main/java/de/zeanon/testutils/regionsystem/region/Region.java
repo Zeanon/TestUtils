@@ -238,6 +238,10 @@ public abstract class Region {
 			return new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		}
 
+		public static @NotNull Point fromBlockVector3(final @NotNull BlockVector3 blockVector3) {
+			return new Point(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getZ());
+		}
+
 		public Point add(final int x, final int y, final int z) {
 			return new Point(this.x + x, this.y + y, this.z + z);
 		}

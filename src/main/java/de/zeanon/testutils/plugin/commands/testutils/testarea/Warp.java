@@ -31,7 +31,7 @@ public class Warp {
 			return;
 		}
 
-		final @Nullable DefinedRegion definedRegion = RegionManager.getRegion(name + "_north");
+		final @Nullable DefinedRegion definedRegion = RegionManager.getDefinedRegion(name + "_north");
 		if (definedRegion == null) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "The given region does not exist.");

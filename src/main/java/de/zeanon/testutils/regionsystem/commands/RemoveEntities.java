@@ -30,7 +30,7 @@ public class RemoveEntities {
 			if (RegionManager.isGlobalRegion(regionName.getName())) {
 				RemoveEntities.sendRemovedEntities(RegionManager.getGlobalRegion(p.getWorld()), p);
 			} else {
-				final @Nullable DefinedRegion region = RegionManager.getRegion(regionName.getName());
+				final @Nullable DefinedRegion region = RegionManager.getDefinedRegion(regionName.getName());
 				if (region != null) {
 					RemoveEntities.sendRemovedEntities(region, p);
 				} else {

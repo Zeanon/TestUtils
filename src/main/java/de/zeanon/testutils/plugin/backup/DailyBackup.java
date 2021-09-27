@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.backup;
+package de.zeanon.testutils.plugin.backup;
 
 
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class DailyBackup extends Backup {
@@ -28,17 +28,19 @@ public class DailyBackup extends Backup {
 		try {
 			final @NotNull File dailyBackup = new File(backupFolder, this.sequence.getPath(null));
 			if (dailyBackup.exists()) {
-				@NotNull List<File> files = BaseFileUtils.listFolders(dailyBackup);
-				while (files.size() > ConfigUtils.getInt("Backups", "daily")) {
-					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
-					if (toBeDeleted.isPresent()) {
-						FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
-						InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), BackupCommand.BACKUP_FOLDER.toFile());
-						files = BaseFileUtils.listFolders(dailyBackup);
-					}
+				final int size = ConfigUtils.getInt("Backups", "daily");
+				final @NotNull File stopHere = BackupCommand.BACKUP_FOLDER.toFile();
+				@Nullable final List<File> files = BaseFileUtils.listFolders(dailyBackup);
+				if (files != null && files.size() > size) {
+					files.sort(Comparator.comparingLong(File::lastModified));
+					do {
+						final @NotNull File file = files.remove(0);
+						FileUtils.deleteDirectory(file);
+						InternalFileUtils.deleteEmptyParent(file, stopHere);
+					} while (files.size() > size);
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

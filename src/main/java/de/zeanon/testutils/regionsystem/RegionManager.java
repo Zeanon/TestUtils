@@ -9,6 +9,7 @@ import de.zeanon.testutils.regionsystem.region.Region;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -77,16 +78,20 @@ public class RegionManager {
 		return RegionManager.regions.stream().filter(region -> region.inRegion(location)).collect(Collectors.toList());
 	}
 
-	public @Nullable DefinedRegion getRegion(final @NotNull String name) {
+	public void executeOnApplicableRegion(final @NotNull Location location, final @NotNull Consumer<DefinedRegion> action) {
+		RegionManager.regions.stream().filter(region -> region.inRegion(location)).forEach(action);
+	}
+
+	public @Nullable DefinedRegion getDefinedRegion(final @NotNull String name) {
 		return RegionManager.regions.stream().filter(region -> region.getName().equals(name)).findFirst().orElse(null);
 	}
 
-	public void addRegion(final @NotNull DefinedRegion region) {
+	public void addDefinedRegion(final @NotNull DefinedRegion region) {
 		RegionManager.regions.add(region);
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
-	public boolean hasRegion(final @NotNull String name) {
+	public boolean hasDefinedRegion(final @NotNull String name) {
 		return RegionManager.regions.stream().anyMatch(region -> region.getName().equals(name));
 	}
 
@@ -94,7 +99,7 @@ public class RegionManager {
 		return RegionManager.getGlobalRegions().containsKey(name);
 	}
 
-	public boolean removeRegion(final @NotNull DefinedRegion region) {
+	public boolean removeDefinedRegion(final @NotNull DefinedRegion region) {
 		if (RegionManager.regions.remove(region)) {
 			region.deleteRegion();
 			return true;
@@ -115,5 +120,25 @@ public class RegionManager {
 
 	public void reloadRegions() throws IOException {
 		RegionManager.initialize();
+	}
+
+	public boolean intersectsCuboid(final @NotNull Region.Point aMin, final @NotNull Region.Point aMax, final @NotNull Region.Point bMin, final @NotNull Region.Point bMax) {
+		if (RegionManager.noIntersect(aMin.getX(), aMax.getX(), bMin.getX(), bMax.getX())) {
+			return false;
+		}
+
+		if (RegionManager.noIntersect(aMin.getY(), aMax.getY(), bMin.getY(), bMax.getY())) {
+			return false;
+		}
+
+		if (RegionManager.noIntersect(aMin.getZ(), aMax.getZ(), bMin.getZ(), bMax.getZ())) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean noIntersect(final int aMin, final int aMax, final int bMin, final int bMax) {
+		return aMin > bMax || aMax < bMin;
 	}
 }

@@ -1,4 +1,4 @@
-package de.zeanon.testutils.plugin.utils.backup;
+package de.zeanon.testutils.plugin.backup;
 
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;

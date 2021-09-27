@@ -3,10 +3,10 @@ package de.zeanon.testutils.plugin.commands.backup;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import de.zeanon.testutils.plugin.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
-import de.zeanon.testutils.plugin.utils.backup.BackupScheduler;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
@@ -67,7 +67,7 @@ public class Load {
 
 				try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
 					if (regionSide != null) {
-						p.sendMessage(BackupCommand.MESSAGE_HEAD + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
+						p.sendMessage(BackupCommand.MESSAGE_HEAD + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode + " " : "") + "backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
 
 						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
 

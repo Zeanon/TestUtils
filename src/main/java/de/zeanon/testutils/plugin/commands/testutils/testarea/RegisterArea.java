@@ -38,19 +38,19 @@ public class RegisterArea {
 	}
 
 	private void generate(final @NotNull World world, final int x, final int y, final int z, final @NotNull String name) {
-		DefinedRegion regionSouth = new DefinedRegion(name + "_south",
-													  new Region.Point(x - 58, y, z + 1),
-													  new Region.Point(x + 58, y + 65, z + 97),
-													  world);
+		final DefinedRegion regionSouth = new DefinedRegion(name + "_south",
+															new Region.Point(x - 58, y, z + 1),
+															new Region.Point(x + 58, y + 65, z + 97),
+															world);
 
 
-		DefinedRegion regionNorth = new DefinedRegion(name + "_north",
-													  new Region.Point(x - 58, y, z),
-													  new Region.Point(x + 58, y + 65, z - 96),
-													  world);
+		final DefinedRegion regionNorth = new DefinedRegion(name + "_north",
+															new Region.Point(x - 58, y, z),
+															new Region.Point(x + 58, y + 65, z - 96),
+															world);
 
-		RegionManager.addRegion(regionSouth);
-		RegionManager.addRegion(regionNorth);
+		RegionManager.addDefinedRegion(regionSouth);
+		RegionManager.addDefinedRegion(regionNorth);
 
 		regionSouth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
 		regionNorth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
