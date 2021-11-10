@@ -96,6 +96,7 @@ public class RegionManager {
 		return RegionManager.regions.stream().anyMatch(region -> region.getName().equals(name));
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean hasGlobalRegion(final @NotNull String name) {
 		return RegionManager.getGlobalRegions().containsKey(name);
 	}
@@ -123,6 +124,7 @@ public class RegionManager {
 		RegionManager.initialize();
 	}
 
+	@SuppressWarnings("unused")
 	public boolean intersectsCuboid(final @NotNull Region.Point aMin, final @NotNull Region.Point aMax, final @NotNull Region.Point bMin, final @NotNull Region.Point bMax) {
 		if (RegionManager.noIntersect(aMin.getX(), aMax.getX(), bMin.getX(), bMax.getX())) {
 			return false;
