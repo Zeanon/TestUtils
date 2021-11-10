@@ -54,8 +54,8 @@ public class RenameFolder {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "These blocks already exist in " + ChatColor.DARK_RED + newMappedFolder + ChatColor.RED + ", they will be overwritten.");
 					int id = 0;
-					for (final @NotNull File oldFile : BaseFileUtils.listFilesOfType(directoryOld, true, "schem")) {
-						for (final @NotNull File newFile : BaseFileUtils.searchFilesOfType(directoryNew, true, BaseFileUtils.removeExtension(oldFile.getName()), "schem")) {
+					for (final @NotNull File oldFile : Objects.notNull(Objects.notNull(BaseFileUtils.listFilesOfType(directoryOld, true, "schem")))) {
+						for (final @NotNull File newFile : Objects.notNull(BaseFileUtils.searchFilesOfType(directoryNew, true, BaseFileUtils.removeExtension(oldFile.getName()), "schem"))) {
 							if (BaseFileUtils.removeExtension(newFile.toPath().relativize(directoryNew.toPath()).toString())
 											 .equalsIgnoreCase(BaseFileUtils.removeExtension(oldFile.toPath().relativize(directoryOld.toPath()).toString()))) {
 
@@ -78,8 +78,8 @@ public class RenameFolder {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "These folders already exist in " + ChatColor.GREEN + newMappedFolder + ChatColor.RED + ", they will be merged.");
 					int i = 0;
-					for (final @NotNull File oldFolder : BaseFileUtils.listFolders(directoryOld, true)) {
-						for (final @NotNull File newFolder : BaseFileUtils.searchFolders(directoryNew, true, oldFolder.getName())) {
+					for (final @NotNull File oldFolder : Objects.notNull(BaseFileUtils.listFolders(directoryOld, true))) {
+						for (final @NotNull File newFolder : Objects.notNull(BaseFileUtils.searchFolders(directoryNew, true, oldFolder.getName()))) {
 							if (BaseFileUtils.removeExtension(newFolder.toPath().relativize(directoryNew.toPath()).toString())
 											 .equalsIgnoreCase(BaseFileUtils.removeExtension(oldFolder.toPath().relativize(directoryOld.toPath()).toString()))) {
 

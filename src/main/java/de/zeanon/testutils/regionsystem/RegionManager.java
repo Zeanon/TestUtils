@@ -2,6 +2,7 @@ package de.zeanon.testutils.regionsystem;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
@@ -42,7 +43,7 @@ public class RegionManager {
 
 	public void initializeDefinedRegions() throws IOException {
 		RegionManager.regions.clear();
-		BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json").forEach(file -> {
+		Objects.notNull(BaseFileUtils.listFilesOfType(RegionManager.DEFINED_REGIONS_FOLDER.toFile(), "json")).forEach(file -> {
 			try {
 				RegionManager.regions.add(new DefinedRegion(file));
 			} catch (final @NotNull ObjectNullException e) {
@@ -131,11 +132,7 @@ public class RegionManager {
 			return false;
 		}
 
-		if (RegionManager.noIntersect(aMin.getZ(), aMax.getZ(), bMin.getZ(), bMax.getZ())) {
-			return false;
-		}
-
-		return true;
+		return !RegionManager.noIntersect(aMin.getZ(), aMax.getZ(), bMin.getZ(), bMax.getZ());
 	}
 
 	public boolean noIntersect(final int aMin, final int aMax, final int bMin, final int bMax) {

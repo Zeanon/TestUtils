@@ -3,6 +3,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -75,7 +76,7 @@ public class TestBlockCommand extends SWCommand {
 						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
-							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+							for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 								final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 								if (!fileName.equalsIgnoreCase("default")) {
 									results.add(fileName);

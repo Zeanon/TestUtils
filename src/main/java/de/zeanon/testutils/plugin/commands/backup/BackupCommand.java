@@ -4,6 +4,7 @@ import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -118,7 +119,7 @@ public class BackupCommand extends SWCommand {
 			case NONE:
 				final @NotNull File manualBackup = new File(regionFolder, "manual/" + p.getUniqueId());
 				if (manualBackup.exists() && manualBackup.isDirectory()) {
-					for (final @NotNull File temp : BaseFileUtils.searchFolders(manualBackup, name)) {
+					for (final @NotNull File temp : Objects.notNull(BaseFileUtils.searchFolders(manualBackup, name))) {
 						if (temp.getName().equals(name)) {
 							return temp;
 						}
@@ -127,7 +128,7 @@ public class BackupCommand extends SWCommand {
 
 				final @NotNull File hourlyBackup = new File(regionFolder, "automatic/hourly");
 				if (hourlyBackup.exists() && hourlyBackup.isDirectory()) {
-					for (final @NotNull File temp : BaseFileUtils.searchFolders(hourlyBackup, name)) {
+					for (final @NotNull File temp : Objects.notNull(BaseFileUtils.searchFolders(hourlyBackup, name))) {
 						if (temp.getName().equals(name)) {
 							return temp;
 						}
@@ -136,7 +137,7 @@ public class BackupCommand extends SWCommand {
 
 				final @NotNull File dailyBackup = new File(regionFolder, "automatic/daily");
 				if (dailyBackup.exists() && dailyBackup.isDirectory()) {
-					for (final @NotNull File temp : BaseFileUtils.searchFolders(dailyBackup, name)) {
+					for (final @NotNull File temp : Objects.notNull(BaseFileUtils.searchFolders(dailyBackup, name))) {
 						if (temp.getName().equals(name)) {
 							return temp;
 						}
@@ -145,7 +146,7 @@ public class BackupCommand extends SWCommand {
 
 				final @NotNull File startupBackup = new File(regionFolder, "automatic/startup");
 				if (startupBackup.exists() && startupBackup.isDirectory()) {
-					for (final @NotNull File temp : BaseFileUtils.searchFolders(startupBackup, name)) {
+					for (final @NotNull File temp : Objects.notNull(BaseFileUtils.searchFolders(startupBackup, name))) {
 						if (temp.getName().equals(name)) {
 							return temp;
 						}
@@ -336,19 +337,19 @@ public class BackupCommand extends SWCommand {
 	}
 
 	private static Optional<File> getLatestManual(final @NotNull File regionFolder, final @NotNull String uuid) throws IOException {
-		return BaseFileUtils.listFolders(new File(regionFolder, "manual/" + uuid)).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+		return Objects.notNull(BaseFileUtils.listFolders(new File(regionFolder, "manual/" + uuid))).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
 	private static Optional<File> getLatestStartup(final @NotNull File regionFolder) throws IOException {
-		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/startup")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+		return Objects.notNull(BaseFileUtils.listFolders(new File(regionFolder, "automatic/startup"))).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
 	private static Optional<File> getLatestHourly(final @NotNull File regionFolder) throws IOException {
-		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/hourly")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+		return Objects.notNull(BaseFileUtils.listFolders(new File(regionFolder, "automatic/hourly"))).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
 	private static Optional<File> getLatestDaily(final @NotNull File regionFolder) throws IOException {
-		return BaseFileUtils.listFolders(new File(regionFolder, "automatic/daily")).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+		return Objects.notNull(BaseFileUtils.listFolders(new File(regionFolder, "automatic/daily"))).stream().min((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 	}
 
 
@@ -412,7 +413,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -429,7 +430,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -446,7 +447,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -463,7 +464,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").toRealPath();
 									if (filePath.startsWith(basePath)) {
 										final @NotNull java.util.List<String> results = new LinkedList<>();
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -480,7 +481,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).resolve(path).toRealPath();
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 									if (filePath.startsWith(basePath)) {
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -495,7 +496,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").resolve(path).toRealPath();
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/hourly").toRealPath();
 									if (filePath.startsWith(basePath)) {
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -510,7 +511,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").resolve(path).toRealPath();
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/daily").toRealPath();
 									if (filePath.startsWith(basePath)) {
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -525,7 +526,7 @@ public class BackupCommand extends SWCommand {
 									final @NotNull Path filePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").resolve(path).toRealPath();
 									final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("automatic/startup").toRealPath();
 									if (filePath.startsWith(basePath)) {
-										for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+										for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 											final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 											results.add(fileName);
 										}
@@ -543,7 +544,7 @@ public class BackupCommand extends SWCommand {
 								final @NotNull Path basePath = BackupCommand.BACKUP_FOLDER.resolve(region.getName().substring(0, region.getName().length() - 6)).resolve("manual").resolve(p.getUniqueId().toString()).toRealPath();
 								if (filePath.startsWith(basePath)) {
 									final @NotNull java.util.List<String> results = new LinkedList<>();
-									for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
+									for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
 										final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 										results.add(fileName);
 									}

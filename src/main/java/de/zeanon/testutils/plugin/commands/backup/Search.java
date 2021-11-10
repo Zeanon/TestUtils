@@ -57,40 +57,40 @@ public class Search {
 					if (backupMode == null) {
 						final @NotNull File manualBackups = new File(regionFolder, "manual/" + p.getUniqueId());
 						if (manualBackups.exists() && manualBackups.isDirectory()) {
-							final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(manualBackups, mappedFile.getName());
-							if (!tempFiles.isEmpty()) {
+							final @NotNull java.util.List<File> tempFiles = Objects.notNull(Objects.notNull(BaseFileUtils.searchFolders(manualBackups, mappedFile.getName())));
+							if (!Objects.notNull(tempFiles).isEmpty()) {
 								files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "manual")).collect(Collectors.toList()));
 							}
 						}
 
 						final @NotNull File hourlyBackups = new File(regionFolder, "automatic/hourly");
 						if (hourlyBackups.exists() && hourlyBackups.isDirectory()) {
-							final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, mappedFile.getName());
-							if (!tempFiles.isEmpty()) {
+							final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(hourlyBackups, mappedFile.getName()));
+							if (!Objects.notNull(tempFiles).isEmpty()) {
 								files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "hourly")).collect(Collectors.toList()));
 							}
 						}
 
 						final @NotNull File dailyBackups = new File(regionFolder, "automatic/daily");
 						if (dailyBackups.exists() && dailyBackups.isDirectory()) {
-							final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, mappedFile.getName());
-							if (!tempFiles.isEmpty()) {
+							final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(dailyBackups, mappedFile.getName()));
+							if (!Objects.notNull(tempFiles).isEmpty()) {
 								files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "daily")).collect(Collectors.toList()));
 							}
 						}
 
 						final @NotNull File startupBackups = new File(regionFolder, "automatic/startup");
 						if (startupBackups.exists() && startupBackups.isDirectory()) {
-							final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, mappedFile.getName());
-							if (!tempFiles.isEmpty()) {
+							final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(startupBackups, mappedFile.getName()));
+							if (!Objects.notNull(tempFiles).isEmpty()) {
 								files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "startup")).collect(Collectors.toList()));
 							}
 						}
 					} else {
 						final @NotNull File backupFolder = new File(regionFolder, backupMode.getPath(p.getUniqueId().toString()));
 						if (backupFolder.exists() && backupFolder.isDirectory()) {
-							final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(backupFolder, mappedFile.getName());
-							if (!tempFiles.isEmpty()) {
+							final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(backupFolder, mappedFile.getName()));
+							if (!Objects.notNull(tempFiles).isEmpty()) {
 								files.addAll(tempFiles.stream().map(f -> new Pair<>(f, backupMode.toString())).collect(Collectors.toList()));
 							}
 						}
@@ -111,7 +111,7 @@ public class Search {
 																p);
 						}
 					}
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					p.sendMessage(BackupCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error, searching the backups for '"
 								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");

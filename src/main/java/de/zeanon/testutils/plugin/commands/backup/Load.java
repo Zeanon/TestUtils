@@ -72,16 +72,16 @@ public class Load {
 						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
 
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
-									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
+									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode + " " : "") + "backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for " + regionSide + " side.");
 					} else {
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
-									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
+									  + ChatColor.RED + "Loading the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode + " " : "") + "backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
 
 						BackupScheduler.getMANUAL_BACKUP().pasteSide(tempRegion, editSession, new File(backupFile, tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
 						BackupScheduler.getMANUAL_BACKUP().pasteSide(otherRegion, editSession, new File(backupFile, otherRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem"));
 
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
-									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode : "") + " backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
+									  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != null ? backupMode + " " : "") + "backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
 					}
 				} catch (final WorldEditException | IOException e) {
 					e.printStackTrace();
