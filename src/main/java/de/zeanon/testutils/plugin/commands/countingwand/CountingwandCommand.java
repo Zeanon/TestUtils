@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class CountingwandCommand extends SWCommand {
 
-	public CountingwandCommand() {
-		super("countingwand", "zollstock", "/zollstock", "/countingwand", "cwand", "/cwand");
-	}
+    public CountingwandCommand() {
+        super("countingwand", "/countingwand", "zollstock", "/zollstock", "cwand", "/cwand");
+    }
 
-	@Register
-	public void genericCommand(final @NotNull Player p) {
-		Countingwand.giveItem(p);
-	}
+    @Register
+    public void genericCommand(final @NotNull Player p) {
+        Countingwand.giveItem(p);
+    }
 }
