@@ -30,7 +30,7 @@ public class TestUtilsCommand extends SWCommand {
 	public static final @NotNull Path TESTAREA_FOLDER = de.zeanon.testutils.TestUtils.getPluginFolder().resolve("TestAreas");
 
 	public TestUtilsCommand() {
-		super("testutils", "tu");
+		super(new Prefix("testutils"), "testutils", "tu");
 	}
 
 	public static TypeMapper<CommandConfirmation> getCommandConfirmationMapper() {
@@ -75,7 +75,7 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
-	@Register(value = {"update"}, help = true)
+	@Register(value = {"update"}, help = true, description = "Help me.")
 	public void updateHelp(final @NotNull Player p, final @NotNull String... args) {
 		Update.sendUpdateUsage(p);
 	}

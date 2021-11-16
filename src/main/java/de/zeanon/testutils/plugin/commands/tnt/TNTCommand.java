@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class TNTCommand extends SWCommand {
 
 	public TNTCommand() {
-		super("tnt");
+		super(new Prefix("testutils"), "tnt");
 	}
 
 	@Register

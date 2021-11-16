@@ -19,7 +19,6 @@
 package de.zeanon.testutils.plugin.commands.gamemode;
 
 import de.steamwar.commandframework.SWCommand;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -29,9 +28,7 @@ import org.bukkit.entity.Player;
 public class GamemodeCommand extends SWCommand {
 
 	public GamemodeCommand() {
-		super("gamemode", "gm", "g");
-
-		this.inject(TestUtils.getInstance());
+		super(new Prefix("testutils"), "gamemode", "gm", "g");
 	}
 
 	@Register(help = true)

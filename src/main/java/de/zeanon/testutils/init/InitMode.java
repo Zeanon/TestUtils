@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 public class InitMode {
 
 
-	final @NotNull Set<SWCommand> registeredCommands = new HashSet<>();
+	private final @NotNull Set<SWCommand> registeredCommands = new HashSet<>();
 
 	public void initPlugin() {
 		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null

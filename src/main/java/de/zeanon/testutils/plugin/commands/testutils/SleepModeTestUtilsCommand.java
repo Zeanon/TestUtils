@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class SleepModeTestUtilsCommand extends SWCommand {
 
 	public SleepModeTestUtilsCommand() {
-		super("testutils", "tu");
+		super(new Prefix("testutils"), "testutils", "tu");
 	}
 
 
@@ -19,17 +19,17 @@ public class SleepModeTestUtilsCommand extends SWCommand {
 		//TODO
 	}
 
-	@Register(value = {"update"}, help = true)
+	@Register(value = {"update"}, help = true, description = "Help me.")
 	public void updateHelp(final @NotNull Player p, final @NotNull String... args) {
 		Update.sendUpdateUsage(p);
 	}
 
-	@Register("update")
+	@Register(value = "update", description = "Update the plugin.")
 	public void noArgsUpdate(final @NotNull Player p) {
 		Update.execute(null, p);
 	}
 
-	@Register("update")
+	@Register(value = "update", description = "Confirm the update.")
 	public void oneArgUpdate(final @NotNull Player p, final @NotNull CommandConfirmation confirmation) {
 		Update.execute(confirmation, p);
 	}

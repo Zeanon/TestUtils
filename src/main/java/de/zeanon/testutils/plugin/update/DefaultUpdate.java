@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 class DefaultUpdate {
 
 	void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
-		System.out.println(instance.getName() + " is updating...");
+		System.out.println("[" + instance.getName() + "] >> Plugin is updating...");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -42,14 +42,14 @@ class DefaultUpdate {
 													  new URL(Update.DOWNLOAD_URL)
 															  .openStream()));
 
-					System.out.println(instance.getName() + " was updated successfully.");
+					System.out.println("[" + instance.getName() + "] >> Plugin was updated successfully.");
 
 					if (autoReload) {
-						System.out.println("Server is reloading.");
+						System.out.println("[" + instance.getName() + "] >> Server is reloading.");
 						reloadRunnable.runTask(instance);
 					}
-				} catch (@NotNull IOException | URISyntaxException e) {
-					System.out.println(instance.getName() + " could not be updated.");
+				} catch (@NotNull final IOException | URISyntaxException e) {
+					System.out.println("[" + instance.getName() + "] >> Plugin could not be updated.");
 					e.printStackTrace();
 				}
 			}
@@ -88,7 +88,7 @@ class DefaultUpdate {
 									  ChatColor.RED + "Server is reloading...");
 						reloadRunnable.runTask(instance);
 					}
-				} catch (@NotNull IOException | URISyntaxException e) {
+				} catch (@NotNull final IOException | URISyntaxException e) {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 								  ChatColor.RED + "Could not update.");
 					e.printStackTrace();

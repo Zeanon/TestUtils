@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class InventoryClean extends SWCommand {
 
 	public InventoryClean() {
-		super("inventoryclean", "invclean", "declutter");
+		super(new Prefix("testutils"), "inventoryclean", "invclean", "declutter");
 	}
 
 
