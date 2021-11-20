@@ -633,6 +633,35 @@ public class RegionListener implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onMobSpawn(final @NotNull CreatureSpawnEvent event) {
+		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(Objects.notNull(event.getEntity().getWorld()));
+
+		boolean ignore = true;
+
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getEntity().getLocation())) {
+			final @Nullable Flag.Value<?> mobSpawn = region.getFlag(Flag.MOB_SPAWN);
+
+			if (mobSpawn != null) {
+				ignore = false;
+			}
+
+			if (mobSpawn == MOB_SPAWN.DENY
+				&& event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.DISPENSE_EGG
+				&& event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		if (ignore
+			&& globalRegion.getFlag(Flag.MOB_SPAWN) == MOB_SPAWN.DENY
+			&& event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.DISPENSE_EGG
+			&& event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
+			event.setCancelled(true);
+		}
+	}
+
 
 	private static boolean doNotDestroyBlock(final @NotNull Block block, final @NotNull GlobalRegion globalRegion) {
 		boolean ignoreDestroy = true;

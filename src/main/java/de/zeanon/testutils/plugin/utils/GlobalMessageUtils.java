@@ -139,14 +139,15 @@ public class GlobalMessageUtils {
 	 * @param target          the player the message is sent to
 	 * @param buttonColor     the color of the buttons
 	 */
-	public void sendScrollMessage(final @Nullable String commandForward,
+	public void sendScrollMessage(final @NotNull String messageHead,
+								  final @Nullable String commandForward,
 								  final @Nullable String commandBackward,
 								  final @NotNull String messageForward,
 								  final @NotNull String messageBackward,
 								  final @NotNull Player target,
 								  final @NotNull ChatColor buttonColor) {
 		final @NotNull TextComponent localMessage = new TextComponent(
-				TextComponent.fromLegacyText(ChatColor.AQUA + "=== "));
+				TextComponent.fromLegacyText(messageHead + ChatColor.RED + "=== "));
 		final @NotNull TextComponent commandPartBackward = new TextComponent(
 				TextComponent.fromLegacyText(buttonColor + "[<<<]"));
 		final @NotNull TextComponent commandPartForward = new TextComponent(
@@ -168,9 +169,9 @@ public class GlobalMessageUtils {
 																		messageForward))).create()));
 
 		localMessage.addExtra(commandPartBackward);
-		localMessage.addExtra(ChatColor.AQUA + " " + ChatColor.BOLD + "|" + ChatColor.AQUA + " ");
+		localMessage.addExtra(ChatColor.RED + " " + ChatColor.BOLD + "|" + ChatColor.RED + " ");
 		localMessage.addExtra(commandPartForward);
-		localMessage.addExtra(ChatColor.AQUA + " ===");
+		localMessage.addExtra(ChatColor.RED + " === " + messageHead);
 		target.spigot().sendMessage(localMessage);
 	}
 

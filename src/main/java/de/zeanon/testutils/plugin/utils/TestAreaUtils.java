@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class TestAreaUtils {
 
-	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup"));
+	final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup", "list", "listblocks", "listfolders", "search", "searchblock", "searchfolder"));
 
 	public boolean forbiddenFileName(final @NotNull String name) {
 		return TestAreaUtils.forbiddenNames.stream().anyMatch(name::equalsIgnoreCase);
@@ -58,11 +58,11 @@ public class TestAreaUtils {
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p) {
 		final @NotNull Optional<DefinedRegion> optionalRegion = RegionManager.getApplicableRegions(p.getLocation()).stream().findFirst();
 		return optionalRegion.map(region -> RegionManager.getDefinedRegion(region
-																			.getName()
-																			.substring(0, region.getName().length() - 6)
+																				   .getName()
+																				   .substring(0, region.getName().length() - 6)
 																		   + (region.getName()
-																			 .substring(region.getName().length() - 6)
-																			 .equalsIgnoreCase("_north") ? "_south" : "_north")))
+																					.substring(region.getName().length() - 6)
+																					.equalsIgnoreCase("_north") ? "_south" : "_north")))
 							 .orElse(null);
 	}
 

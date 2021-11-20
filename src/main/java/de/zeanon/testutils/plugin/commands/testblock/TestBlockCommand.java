@@ -8,6 +8,8 @@ import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
+import de.zeanon.testutils.plugin.utils.enums.CaseSensitive;
+import de.zeanon.testutils.plugin.utils.enums.DeepSearch;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import java.io.File;
@@ -27,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class TestBlockCommand extends SWCommand {
 
 
+	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "TestBlocks" + ChatColor.DARK_GRAY + "] ";
 	public static final @NotNull Path TESTBLOCK_FOLDER = TestUtils.getPluginFolder().resolve("TestBlocks");
 
 
@@ -120,6 +123,435 @@ public class TestBlockCommand extends SWCommand {
 	@Register
 	public void twoArgs(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
 		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
+	}
+
+
+	@Register("listfolders")
+	public void noArgListFolders(final @NotNull Player p) {
+		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch) {
+		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final int page) {
+		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile) {
+		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile, final int page) {
+		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final int page) {
+		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void threeArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
+		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+
+	@Register("list")
+	public void noArgList(final @NotNull Player p) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("list")
+	public void oneArgList(final @NotNull Player p, final @NotNull DeepSearch deepSearch) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("list")
+	public void oneArgList(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("list")
+	public void oneArgList(final @NotNull Player p, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("list")
+	public void twoArgsList(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("list")
+	public void twoArgsList(final @NotNull Player p, final @NotNull MappedFile mappedFile, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("list")
+	public void twoArgsList(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("list")
+	public void threeArgsList(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+
+	@Register("listblocks")
+	public void noArgListBlock(final @NotNull Player p) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listblocks")
+	public void oneArgListBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, null, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listblocks")
+	public void oneArgListBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listblocks")
+	public void oneArgListBlock(final @NotNull Player p, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listblocks")
+	public void twoArgsListBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listblocks")
+	public void twoArgsListBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listblocks")
+	public void twoArgsListBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, null, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listblocks")
+	public void threeArgsListBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+
+	@Register("search")
+	public void oneArgSearch(final @NotNull Player p, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void twoArgSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void twoArgSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void twoArgSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void twoArgSearch(final @NotNull Player p, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void threeArgsSearch(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("search")
+	public void fourArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fiveArgsSearch(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("search")
+	public void fiveArgsSearch(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.Search.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+
+	@Register("searchblock")
+	public void oneArgSearchBlock(final @NotNull Player p, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void twoArgSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, null, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void twoArgSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, null, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void twoArgSearchBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void twoArgSearchBlock(final @NotNull Player p, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, null, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, null, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		SearchBlock.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fourArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fiveArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("searchblock")
+	public void fiveArgsSearchBlock(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		SearchBlock.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+
+	@Register("seachfolder")
+	public void oneArgSearchFolders(final @NotNull Player p, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void twoArgSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void twoArgSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void twoArgSearchFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void twoArgSearchFolders(final @NotNull Player p, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void threeArgsSearchFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, null, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, caseSensitive, 1, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fourArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, DeepSearch.DENY, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fiveArgsSearchFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull CaseSensitive caseSensitive, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
+	}
+
+	@Register("seachfolder")
+	public void fiveArgsSearchFolders(final @NotNull Player p, final @NotNull CaseSensitive caseSensitive, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence, final int page) {
+		de.zeanon.testutils.plugin.commands.testblock.SearchFolder.execute(p, mappedFile, deepSearch, caseSensitive, page, sequence.getName());
 	}
 
 

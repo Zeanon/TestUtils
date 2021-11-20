@@ -37,6 +37,8 @@ public class Mapper {
 		SWCommandUtils.addMapper(RegionName.class, Mapper.mapRegionName());
 		SWCommandUtils.addMapper(Flag.Value.class.getTypeName(), Mapper.mapFlagValue());
 		SWCommandUtils.addMapper(AreaName.class, Mapper.mapAreaName());
+		SWCommandUtils.addMapper(DeepSearch.class, Mapper.mapDeepSearch());
+		SWCommandUtils.addMapper(CaseSensitive.class, Mapper.mapCaseSensitive());
 	}
 
 	private @NotNull TypeMapper<RegionSide> mapRegionSide() {
@@ -219,5 +221,13 @@ public class Mapper {
 				}
 			}
 		};
+	}
+
+	private @NotNull TypeMapper<DeepSearch> mapDeepSearch() {
+		return SWCommandUtils.createMapper(DeepSearch::map, s -> Arrays.asList("-d", "-deep"));
+	}
+
+	private @NotNull TypeMapper<CaseSensitive> mapCaseSensitive() {
+		return SWCommandUtils.createMapper(CaseSensitive::map, s -> Arrays.asList("-c", "-casesensitive"));
 	}
 }

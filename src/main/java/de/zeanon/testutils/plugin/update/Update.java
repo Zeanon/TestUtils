@@ -51,6 +51,8 @@ public class Update {
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Max History")
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Max Back")
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Listmax")
+				|| !ConfigUtils.getConfig().hasKeyUseArray("Space Lists")
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "startup")
 				|| !ConfigUtils.getConfig().hasKeyUseArray("Backups", "hourly")
@@ -58,7 +60,7 @@ public class Update {
 
 				Update.updateConfig();
 			}
-		} catch (ObjectNullException e) {
+		} catch (final ObjectNullException e) {
 			Update.updateConfig();
 		}
 	}
@@ -75,6 +77,13 @@ public class Update {
 
 			final boolean autoReload = !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
 									   || ConfigUtils.getConfig().getBooleanUseArray("Automatic Reload");
+
+			final Integer listmax = ConfigUtils.getConfig().hasKeyUseArray("Listmax")
+									? ConfigUtils.getConfig().getIntUseArray("Listmax")
+									: Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Listmax"));
+
+			final boolean spaceLists = !ConfigUtils.getConfig().hasKeyUseArray("Space Lists")
+									   || ConfigUtils.getConfig().getBooleanUseArray("Space Lists");
 
 			final Integer maxManual = ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
 									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "manual")
@@ -99,13 +108,15 @@ public class Update {
 												   new Pair<>(new String[]{"Max History"}, maxHistory),
 												   new Pair<>(new String[]{"Max Back"}, maxBack),
 												   new Pair<>(new String[]{"Automatic Reload"}, autoReload),
+												   new Pair<>(new String[]{"Listmax"}, listmax),
+												   new Pair<>(new String[]{"Space Lists"}, spaceLists),
 												   new Pair<>(new String[]{"Backups", "manual"}, maxManual),
 												   new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
 												   new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
 												   new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
-		} catch (RuntimeIOException e) {
+		} catch (final RuntimeIOException e) {
 			throw new RuntimeIOException("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be updated.", e);
 		}
 	}
@@ -130,11 +141,11 @@ public class Update {
 
 	private String getGithubVersionTag() {
 		try {
-			HttpURLConnection urlConnect = (HttpURLConnection) new URL(Update.RELEASE_URL).openConnection();
+			final HttpURLConnection urlConnect = (HttpURLConnection) new URL(Update.RELEASE_URL).openConnection();
 			urlConnect.setInstanceFollowRedirects(false);
 			urlConnect.getResponseCode();
 			return urlConnect.getHeaderField("Location").replaceFirst(".*/", "");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return null;
 		}

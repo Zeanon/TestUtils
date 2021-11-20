@@ -16,7 +16,8 @@ public enum Flag {
 	LEAVES_DECAY(de.zeanon.testutils.regionsystem.flags.flagvalues.LEAVES_DECAY.class, de.zeanon.testutils.regionsystem.flags.flagvalues.LEAVES_DECAY.ALLOW),
 	STOPLAG(de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG.class, de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG.INACTIVE),
 	FALL_DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.ALLOW),
-	DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.ALLOW);
+	DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.ALLOW),
+	MOB_SPAWN(de.zeanon.testutils.regionsystem.flags.flagvalues.MOB_SPAWN.class, de.zeanon.testutils.regionsystem.flags.flagvalues.MOB_SPAWN.ALLOW);
 
 
 	@Getter

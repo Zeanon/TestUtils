@@ -29,6 +29,10 @@ Max Back = 20
 # PlugMan: https://dev.bukkit.org/projects/plugman
 Automatic Reload = true
 
+Listmax = 10
+
+Space Lists = true
+
 Backups {
     # Maximum amount of manual backups per player per region(0 means, no backups will be created).
     manual = 10
