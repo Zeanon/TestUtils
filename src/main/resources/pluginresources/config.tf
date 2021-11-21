@@ -24,14 +24,17 @@ Max History = 10
 # Define the amount of back commands someone can perform
 Max Back = 20
 
+# Listmax: The maximum amount of schematics per page to be shown.
+Listmax = 10
+
+# Space Lists: Should there be a blank line before each schem or folder page?
+Space Lists = true
+
 # Should the plugin automatically reload the Server after it got updated?
 # If you have PlugMan installed, it will only reload itself, not the whole server.
 # PlugMan: https://dev.bukkit.org/projects/plugman
 Automatic Reload = true
 
-Listmax = 10
-
-Space Lists = true
 
 Backups {
     # Maximum amount of manual backups per player per region(0 means, no backups will be created).

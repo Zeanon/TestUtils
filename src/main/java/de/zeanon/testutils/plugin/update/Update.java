@@ -75,15 +75,15 @@ public class Update {
 									? ConfigUtils.getConfig().getIntUseArray("Max Back")
 									: Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Max Back"));
 
-			final boolean autoReload = !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
-									   || ConfigUtils.getConfig().getBooleanUseArray("Automatic Reload");
-
 			final Integer listmax = ConfigUtils.getConfig().hasKeyUseArray("Listmax")
 									? ConfigUtils.getConfig().getIntUseArray("Listmax")
 									: Objects.toInt(ConfigUtils.getDefaultValue(Integer.class, "Listmax"));
 
 			final boolean spaceLists = !ConfigUtils.getConfig().hasKeyUseArray("Space Lists")
 									   || ConfigUtils.getConfig().getBooleanUseArray("Space Lists");
+
+			final boolean autoReload = !ConfigUtils.getConfig().hasKeyUseArray("Automatic Reload")
+									   || ConfigUtils.getConfig().getBooleanUseArray("Automatic Reload");
 
 			final Integer maxManual = ConfigUtils.getConfig().hasKeyUseArray("Backups", "manual")
 									  ? ConfigUtils.getConfig().getIntUseArray("Backups", "manual")
@@ -107,9 +107,9 @@ public class Update {
 			ConfigUtils.getConfig().setAllUseArray(new Pair<>(new String[]{"Plugin Version"}, TestUtils.getInstance().getDescription().getVersion()),
 												   new Pair<>(new String[]{"Max History"}, maxHistory),
 												   new Pair<>(new String[]{"Max Back"}, maxBack),
-												   new Pair<>(new String[]{"Automatic Reload"}, autoReload),
 												   new Pair<>(new String[]{"Listmax"}, listmax),
 												   new Pair<>(new String[]{"Space Lists"}, spaceLists),
+												   new Pair<>(new String[]{"Automatic Reload"}, autoReload),
 												   new Pair<>(new String[]{"Backups", "manual"}, maxManual),
 												   new Pair<>(new String[]{"Backups", "startup"}, maxStartup),
 												   new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),

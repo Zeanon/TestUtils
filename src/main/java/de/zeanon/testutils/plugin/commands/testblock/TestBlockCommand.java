@@ -100,70 +100,29 @@ public class TestBlockCommand extends SWCommand {
 	}
 
 
-	@Register
+	@Register("load")
 	public void noArgs(final @NotNull Player p) {
 		PasteBlock.pasteBlock(p, null, TestAreaUtils.getOppositeRegion(p), "the other");
 	}
 
-	@Register
+	@Register("load")
 	public void oneArg(final @NotNull Player p, final @NotNull RegionSide regionSide) {
 		PasteBlock.pasteBlock(p, null, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
 	}
 
-	@Register
+	@Register("load")
 	public void oneArg(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getOppositeRegion(p), "the other");
 	}
 
-	@Register
+	@Register("load")
 	public void twoArgs(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull MappedFile mappedFile) {
 		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
 	}
 
-	@Register
+	@Register("load")
 	public void twoArgs(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull RegionSide regionSide) {
 		PasteBlock.pasteBlock(p, mappedFile, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());
-	}
-
-
-	@Register("listfolders")
-	public void noArgListFolders(final @NotNull Player p) {
-		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
-	}
-
-	@Register("listfolders")
-	public void oneArgListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch) {
-		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, 1, null);
-	}
-
-	@Register("listfolders")
-	public void oneArgListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
-		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
-	}
-
-	@Register("listfolders")
-	public void oneArgListFolders(final @NotNull Player p, final int page) {
-		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, null);
-	}
-
-	@Register("listfolders")
-	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile) {
-		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, null);
-	}
-
-	@Register("listfolders")
-	public void twoArgsListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile, final int page) {
-		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, null);
-	}
-
-	@Register("listfolders")
-	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final int page) {
-		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, page, null);
-	}
-
-	@Register("listfolders")
-	public void threeArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
-		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
 	}
 
 
@@ -246,6 +205,47 @@ public class TestBlockCommand extends SWCommand {
 	@Register("listblocks")
 	public void threeArgsListBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
 		de.zeanon.testutils.plugin.commands.testblock.SearchBlock.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+
+	@Register("listfolders")
+	public void noArgListFolders(final @NotNull Player p) {
+		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch) {
+		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
+		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void oneArgListFolders(final @NotNull Player p, final int page) {
+		SearchFolder.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile) {
+		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, 1, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull MappedFile mappedFile, final int page) {
+		SearchFolder.execute(p, mappedFile, DeepSearch.DENY, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void twoArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final int page) {
+		SearchFolder.execute(p, null, deepSearch, CaseSensitive.DENY, page, null);
+	}
+
+	@Register("listfolders")
+	public void threeArgsListFolders(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final int page) {
+		SearchFolder.execute(p, mappedFile, deepSearch, CaseSensitive.DENY, page, null);
 	}
 
 
@@ -375,7 +375,6 @@ public class TestBlockCommand extends SWCommand {
 	public void twoArgSearchBlock(final @NotNull Player p, final @NotNull MappedFile sequence, final int page) {
 		SearchBlock.execute(p, null, DeepSearch.DENY, CaseSensitive.DENY, page, sequence.getName());
 	}
-
 
 	@Register("searchblock")
 	public void threeArgsSearchBlock(final @NotNull Player p, final @NotNull DeepSearch deepSearch, final @NotNull MappedFile mappedFile, final @NotNull MappedFile sequence) {
