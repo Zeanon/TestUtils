@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-
 public enum CaseSensitive {
 
     CONFIRM(true),

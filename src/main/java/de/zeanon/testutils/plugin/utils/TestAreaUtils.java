@@ -13,7 +13,29 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class TestAreaUtils {
 
-    final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here", "-other", "-north", "-n", "-south", "-s", "-manual", "-hourly", "-daily", "-startup", "list", "listblocks", "listfolders", "search", "searchblock", "searchfolder"));
+    final @NotNull Set<String> forbiddenNames = new HashSet<>(Arrays.asList("-here",
+                                                                            "-other",
+                                                                            "-north",
+                                                                            "-n",
+                                                                            "-south",
+                                                                            "-s",
+                                                                            "-manual",
+                                                                            "-hourly",
+                                                                            "-daily",
+                                                                            "-startup",
+                                                                            "list",
+                                                                            "listblocks",
+                                                                            "listfolders",
+                                                                            "search",
+                                                                            "searchblock",
+                                                                            "searchfolder",
+                                                                            "renamefolder",
+                                                                            "renameblock",
+                                                                            "delfolder",
+                                                                            "deletefolder",
+                                                                            "delblock",
+                                                                            "deleteblock",
+                                                                            "load"));
 
     public boolean forbiddenFileName(final @NotNull String name) {
         return TestAreaUtils.forbiddenNames.stream().anyMatch(name::equalsIgnoreCase);

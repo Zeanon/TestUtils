@@ -4,7 +4,6 @@ import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
-import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlockCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -163,7 +162,7 @@ public class SearchNew {
                 }
             }
         } catch (final @NotNull IOException e) {
-            p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " + ChatColor.RED + "Could not access backups folder, for further information please see [console].");
+            p.sendMessage(BackupCommand.MESSAGE_HEAD + ChatColor.RED + "Could not access backups folder, for further information please see [console].");
             e.printStackTrace();
         }
     }

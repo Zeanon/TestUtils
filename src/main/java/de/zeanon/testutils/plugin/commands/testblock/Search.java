@@ -89,8 +89,8 @@ public class Search {
                 final int previousPage = (page <= 1 ? pageAmount : page - 1);
                 if (pageAmount > 1) {
                     GlobalMessageUtils.sendScrollMessage(TestBlockCommand.MESSAGE_HEAD,
-                                                         "/tb " + (sequence == null ? "list" : "search " + sequence + " ") + nextPage,
-                                                         "/tb  " + (sequence == null ? "list" : "search " + sequence + " ") + previousPage,
+                                                         "/tb " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + (sequence == null ? "list" : "search " + sequence + " ") + nextPage,
+                                                         "/tb " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + (sequence == null ? "list" : "search " + sequence + " ") + previousPage,
                                                          ChatColor.DARK_PURPLE + "Page " + nextPage,
                                                          ChatColor.DARK_PURPLE + "Page " + previousPage, p,
                                                          ChatColor.DARK_RED);
@@ -107,6 +107,60 @@ public class Search {
             p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " + ChatColor.RED + "Could not access blocks folder, for further information please see [console].");
             e.printStackTrace();
         }
+    }
+
+    public @NotNull String searchUsageMessage() {
+        return ChatColor.GRAY + "/tb"
+               + ChatColor.AQUA + " search "
+               + ChatColor.YELLOW + "<"
+               + ChatColor.DARK_RED + "filename"
+               + ChatColor.YELLOW + ">";
+    }
+
+    public @NotNull String searchUsageHoverMessage() {
+        return ChatColor.RED + "e.g. "
+               + ChatColor.GRAY + "/tb"
+               + ChatColor.AQUA + " search "
+               + ChatColor.DARK_RED + "example";
+    }
+
+    public @NotNull String searchUsageCommand() {
+        return "/tb search ";
+    }
+
+    public void searchUsage(final @NotNull Player p) {
+        GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
+                                              + ChatColor.RED + "Usage: ",
+                                              Search.searchUsageMessage(),
+                                              Search.searchUsageHoverMessage(),
+                                              Search.searchUsageCommand(), p);
+    }
+
+    public @NotNull String listUsageMessage() {
+        return ChatColor.GRAY + "/tb"
+               + ChatColor.AQUA + " list "
+               + ChatColor.YELLOW + "<"
+               + ChatColor.DARK_RED + "filename"
+               + ChatColor.YELLOW + ">";
+    }
+
+    public @NotNull String listUsageHoverMessage() {
+        return ChatColor.RED + "e.g. "
+               + ChatColor.GRAY + "/tb"
+               + ChatColor.AQUA + " list "
+               + ChatColor.DARK_RED + "example";
+    }
+
+    public @NotNull String listUsageCommand() {
+        return "/tb list ";
+    }
+
+    public void listUsage(final @NotNull Player p) {
+        GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
+                                              + ChatColor.RED + "Usage: ",
+                                              Search.listUsageMessage(),
+                                              Search.listUsageHoverMessage(),
+                                              Search.listUsageCommand(), p);
     }
 
     private boolean sendListLineFailed(final @NotNull Player p, final @NotNull Path schemFolderPath, final @NotNull Path listPath, final @NotNull File file, final int id, final boolean deepSearch) {
@@ -144,7 +198,7 @@ public class Search {
             }
             return false;
         } catch (final @NotNull IOException e) {
-            p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " +
+            p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD +
                           ChatColor.RED + "An Error occurred while getting the filepaths for the schematics, for further information please see [console].");
             e.printStackTrace();
             return true;
