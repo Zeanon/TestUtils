@@ -11,8 +11,7 @@ public enum RegionType {
 
 	GLOBAL_REGION("GlobalRegion", "resources/global.json"),
 	DEFINED_REGION("DefinedRegion", "resources/region.json"),
-	TESTAREA("TestArea", "resources/testarea.json"),
-	DEFAULT("Default", "resources/region.json");
+	TESTAREA("TestArea", "resources/testarea.json");
 
 
 	private final @NotNull String name;
