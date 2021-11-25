@@ -164,6 +164,10 @@ public abstract class Region {
 		return this.regionType;
 	}
 
+	public @NotNull JsonFile jsonFile() {
+		return this.jsonFile;
+	}
+
 	public void saveData() {
 		this.jsonFile.save();
 	}

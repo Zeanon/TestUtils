@@ -4,8 +4,7 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.regionsystem.RegionManager;
-import de.zeanon.testutils.regionsystem.flags.Flag;
-import de.zeanon.testutils.regionsystem.flags.flagvalues.*;
+import de.zeanon.testutils.regionsystem.RegionType;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.Region;
 import lombok.experimental.UtilityClass;
@@ -41,26 +40,17 @@ public class RegisterArea {
 		final DefinedRegion regionSouth = new DefinedRegion(name + "_south",
 															new Region.Point(x - 58, y, z + 1),
 															new Region.Point(x + 58, y + 65, z + 97),
-															world);
+															world,
+															RegionType.TESTAREA);
 
 
 		final DefinedRegion regionNorth = new DefinedRegion(name + "_north",
 															new Region.Point(x - 58, y, z),
 															new Region.Point(x + 58, y + 65, z - 96),
-															world);
+															world,
+															RegionType.TESTAREA);
 
 		RegionManager.addDefinedRegion(regionSouth);
 		RegionManager.addDefinedRegion(regionNorth);
-
-		regionSouth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
-		regionNorth.setFlag(Flag.LEAVES_DECAY, LEAVES_DECAY.DENY);
-		regionSouth.setFlag(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
-		regionNorth.setFlag(Flag.FALL_DAMAGE, FALL_DAMAGE.DENY);
-		regionSouth.setFlag(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
-		regionNorth.setFlag(Flag.ITEM_DROPS, ITEM_DROPS.DENY);
-		regionSouth.setFlag(Flag.FIRE, FIRE.DENY);
-		regionNorth.setFlag(Flag.FIRE, FIRE.DENY);
-		regionSouth.setFlag(Flag.TNT, TNT.DENY);
-		regionNorth.setFlag(Flag.TNT, TNT.DENY);
 	}
 }

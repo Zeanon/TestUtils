@@ -65,7 +65,11 @@ public class Info {
 		final int flagCount = region.getFlags().size();
 
 		final @NotNull TextComponent flags = new TextComponent(RegionCommand.MESSAGE_HEAD
-															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---" + StringModifiers.LINE_BREAK);
+															   + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Flags" + ChatColor.RED + " ===---");
+		if (!region.getFlags().isEmpty()) {
+			flags.addExtra(StringModifiers.LINE_BREAK.toString());
+		}
+
 		region.getFlags().forEach((flag, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {
@@ -100,35 +104,39 @@ public class Info {
 		currentCount[0] = 0;
 		final int nbtCount = region.getTags().size();
 
-		final @NotNull TextComponent nbts = new TextComponent(RegionCommand.MESSAGE_HEAD
-															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---" + StringModifiers.LINE_BREAK);
+		final @NotNull TextComponent tags = new TextComponent(RegionCommand.MESSAGE_HEAD
+															  + ChatColor.RED + "---=== " + ChatColor.DARK_RED + "Tags" + ChatColor.RED + " ===---");
+		if (!region.getTags().isEmpty()) {
+			tags.addExtra(StringModifiers.LINE_BREAK.toString());
+		}
+
 		region.getTags().forEach((tag, value) -> {
 			currentCount[0]++;
 			if (!lineBreak[0]) {
-				nbts.addExtra(RegionCommand.MESSAGE_HEAD + ChatColor.BLACK + "[");
+				tags.addExtra(RegionCommand.MESSAGE_HEAD + ChatColor.BLACK + "[");
 			}
 
-			final @NotNull TextComponent currentFlag = new TextComponent(ChatColor.DARK_RED + tag.toString() + ChatColor.DARK_GRAY + " : " + value.getChatValue());
-			currentFlag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													 new ComponentBuilder(new TextComponent(
-															 TextComponent.fromLegacyText(
-																	 value.getDescription())))
-															 .create()));
-			nbts.addExtra(currentFlag);
+			final @NotNull TextComponent currentTag = new TextComponent(ChatColor.DARK_RED + tag.toString() + ChatColor.DARK_GRAY + " : " + value.getChatValue());
+			currentTag.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+													new ComponentBuilder(new TextComponent(
+															TextComponent.fromLegacyText(
+																	value.getDescription())))
+															.create()));
+			tags.addExtra(currentTag);
 
 			if (currentCount[0] == nbtCount) {
-				nbts.addExtra(ChatColor.BLACK + "]");
+				tags.addExtra(ChatColor.BLACK + "]");
 			} else {
 				if (lineBreak[0]) {
-					nbts.addExtra(ChatColor.BLACK + "]" + StringModifiers.LINE_BREAK);
+					tags.addExtra(ChatColor.BLACK + "]" + StringModifiers.LINE_BREAK);
 				} else {
-					nbts.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
+					tags.addExtra(ChatColor.BLACK + " " + ChatColor.BOLD + "|" + ChatColor.BLACK + " ");
 				}
 			}
 
 			lineBreak[0] = !lineBreak[0];
 		});
 
-		p.spigot().sendMessage(nbts);
+		p.spigot().sendMessage(tags);
 	}
 }

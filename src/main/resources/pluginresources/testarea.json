@@ -1,15 +1,16 @@
 {
   "regiontype": "TESTAREA",
-  "world": "world",
+  "world": "",
   "points": {},
   "flags": {
+    "damage": "ALLOW",
+    "fall_damage": "DENY",
     "fire": "DENY",
     "item_drops": "DENY",
-    "tnt": "DENY",
     "leaves_decay": "DENY",
-    "fall_damage": "ALLOW",
-    "damage": "ALLOW",
-    "stoplag": "INACTIVE"
+    "mob_spawn": "DENY",
+    "stoplag": "INACTIVE",
+    "tnt": "DENY"
   },
   "tags": {}
 }
