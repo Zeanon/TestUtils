@@ -79,7 +79,7 @@ public class RegionManager {
 		return RegionManager.regions.stream().filter(region -> region.inRegion(location)).collect(Collectors.toList());
 	}
 
-	public void executeOnApplicableRegion(final @NotNull Location location, final @NotNull Consumer<DefinedRegion> action) {
+	public void executeOnApplicableRegions(final @NotNull Location location, final @NotNull Consumer<DefinedRegion> action) {
 		RegionManager.regions.stream().filter(region -> region.inRegion(location)).forEach(action);
 	}
 
