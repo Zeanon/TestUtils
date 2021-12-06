@@ -45,8 +45,8 @@ public class ResetArea {
 
 			try (final @NotNull EditSession editSession = SessionFactory.createSession(p, new BukkitWorld(p.getWorld()))) {
 				final @NotNull File regionFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(tempRegion.getName().substring(tempRegion.getName().length() - 5) + ".schem").toFile();
-				final @NotNull File oppositeFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem").toFile();
-				if (!regionFile.exists() || !oppositeFile.exists()) {
+				final @NotNull File oppositeRegionFile = TestUtilsCommand.TESTAREA_FOLDER.resolve(tempRegion.getName().substring(0, tempRegion.getName().length() - 6)).resolve(oppositeRegion.getName().substring(oppositeRegion.getName().length() - 5) + ".schem").toFile();
+				if (!regionFile.exists() || !oppositeRegionFile.exists()) {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.RED + "There is no reset for '"
 								  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
@@ -54,7 +54,8 @@ public class ResetArea {
 				}
 
 				ResetArea.pasteSide(tempRegion, editSession, regionFile);
-				ResetArea.pasteSide(oppositeRegion, editSession, oppositeFile);
+				ResetArea.pasteSide(oppositeRegion, editSession, oppositeRegionFile);
+				editSession.flushSession();
 
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You pasted the reset for '"
@@ -85,6 +86,7 @@ public class ResetArea {
 				}
 
 				ResetArea.pasteSide(tempRegion, editSession, resetFile);
+				editSession.flushSession();
 
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "You pasted the reset for '"

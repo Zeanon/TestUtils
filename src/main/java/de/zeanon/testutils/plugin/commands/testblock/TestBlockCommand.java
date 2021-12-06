@@ -560,20 +560,20 @@ public class TestBlockCommand extends SWCommand {
 	}
 
 
-	@Register(value = {"delblock"}, help = true)
-	@Register(value = {"deleteblock"}, help = true)
+	@Register(value = {"del"}, help = true)
+	@Register(value = {"delete"}, help = true)
 	public void deleteBlockHelp(final @NotNull Player p, final @NotNull String... args) {
 		DeleteBlock.usage(p);
 	}
 
-	@Register("delblock")
-	@Register("deleteblock")
+	@Register("del")
+	@Register("delete")
 	public void oneArgDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile) {
 		DeleteBlock.execute(mappedFile, null, p);
 	}
 
-	@Register("delblock")
-	@Register("deleteblock")
+	@Register("del")
+	@Register("delete")
 	public void twoArgsDeleteBlock(final @NotNull Player p, final @NotNull MappedFile mappedFile, final @NotNull CommandConfirmation confirmation) {
 		DeleteBlock.execute(mappedFile, confirmation, p);
 	}
@@ -597,17 +597,17 @@ public class TestBlockCommand extends SWCommand {
 	}
 
 
-	@Register(value = {"renameblock"}, help = true)
+	@Register(value = {"rename"}, help = true)
 	public void renameBlockHelp(final @NotNull Player p, final @NotNull String... args) {
 		RenameBlock.usage(p);
 	}
 
-	@Register("renameblock")
+	@Register("rename")
 	public void twoArgsRenameBlock(final @NotNull Player p, final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile) {
 		RenameBlock.execute(oldMappedFile, newMappedFile, null, p);
 	}
 
-	@Register("renameblock")
+	@Register("rename")
 	public void threeArgsRenameBlock(final @NotNull Player p, final @NotNull MappedFile oldMappedFile, final @NotNull MappedFile newMappedFile, final @NotNull CommandConfirmation confirmation) {
 		RenameBlock.execute(oldMappedFile, newMappedFile, confirmation, p);
 	}
@@ -652,7 +652,7 @@ public class TestBlockCommand extends SWCommand {
 				final @NotNull java.util.List<String> tabCompletions = Arrays.asList("-confirm", "-deny");
 				if (commandSender instanceof Player && previousArguments.length > 0) {
 					final @NotNull Player p = (Player) commandSender;
-					if ((previousArguments[0].equalsIgnoreCase("delblock") || previousArguments[0].equalsIgnoreCase("deleteblock"))
+					if ((previousArguments[0].equalsIgnoreCase("del") || previousArguments[0].equalsIgnoreCase("delete"))
 						&& previousArguments.length > 1
 						&& CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1])) {
 						return tabCompletions;
@@ -660,7 +660,7 @@ public class TestBlockCommand extends SWCommand {
 							   && previousArguments.length > 1
 							   && CommandRequestUtils.checkDeleteBlockRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1])) {
 						return tabCompletions;
-					} else if (previousArguments[0].equalsIgnoreCase("renameblock")
+					} else if (previousArguments[0].equalsIgnoreCase("rename")
 							   && previousArguments.length > 1
 							   && CommandRequestUtils.checkRenameBlockRequest(p.getUniqueId(), previousArguments[previousArguments.length - 1])) {
 						return tabCompletions;
