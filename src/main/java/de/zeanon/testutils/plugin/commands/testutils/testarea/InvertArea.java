@@ -15,8 +15,10 @@ import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +56,7 @@ public class InvertArea {
 		} catch (final @NotNull WorldEditException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
-			e.printStackTrace();
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 		}
 	}
 }

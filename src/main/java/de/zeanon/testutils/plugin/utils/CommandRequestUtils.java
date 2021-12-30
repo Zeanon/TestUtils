@@ -17,7 +17,6 @@ public class CommandRequestUtils {
 	private final @NotNull Map<String, String> deleteFolderRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, Pair<String, String>> deleteBackupRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, Pair<String, Pair<String, String>>> timeOutBackupRequests = new ConcurrentHashMap<>();
-	private final @NotNull Map<String, Pair<String, String>> overwriteBackupRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameRequests = new ConcurrentHashMap<>();
 	private final @NotNull Map<String, String> renameFolderRequests = new ConcurrentHashMap<>();
 

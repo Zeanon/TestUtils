@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -48,7 +49,7 @@ public class RegionManager {
 				RegionManager.regions.add(new DefinedRegion(file));
 			} catch (final @NotNull ObjectNullException e) {
 				System.out.println("[" + TestUtils.getInstance().getName() + "] >> TestAreas >> " + file.getName() + " could not be initialized properly, please check the region file.");
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 		});
 	}
@@ -60,7 +61,7 @@ public class RegionManager {
 				RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
 			} catch (final @NotNull ObjectNullException e) {
 				System.out.println("[" + TestUtils.getInstance().getName() + "] >> GlobalRegions >> " + world.getName() + " could not be initialized properly, please check the region file.");
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 		});
 	}

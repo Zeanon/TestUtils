@@ -1,17 +1,19 @@
 package de.zeanon.testutils.plugin.update;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.ObjectNullException;
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -116,8 +118,8 @@ public class Update {
 												   new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
 			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
-		} catch (final RuntimeIOException e) {
-			throw new RuntimeIOException("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be updated.", e);
+		} catch (final UncheckedIOException e) {
+			throw new UncheckedIOException("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be updated.", e.getCause());
 		}
 	}
 
@@ -146,7 +148,7 @@ public class Update {
 			urlConnect.getResponseCode();
 			return urlConnect.getHeaderField("Location").replaceFirst(".*/", "");
 		} catch (final IOException e) {
-			e.printStackTrace();
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			return null;
 		}
 	}

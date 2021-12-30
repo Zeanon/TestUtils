@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +43,7 @@ public class DailyBackup extends Backup {
 				}
 			}
 		} catch (final IOException e) {
-			e.printStackTrace();
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 		}
 	}
 

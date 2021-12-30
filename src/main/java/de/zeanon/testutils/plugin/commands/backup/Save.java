@@ -1,6 +1,5 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
@@ -13,6 +12,7 @@ import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.tags.Tag;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -86,7 +86,7 @@ public class Save {
 					Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
 				}
 			} catch (final @NotNull IOException e) {
-				throw new RuntimeIOException(e);
+				throw new UncheckedIOException(e);
 			}
 		} else {
 			if (mappedFile == null) {
@@ -108,7 +108,7 @@ public class Save {
 							p.sendMessage(BackupCommand.MESSAGE_HEAD
 										  + ChatColor.RED + "'" + ChatColor.DARK_RED + checkedRequest.getValue() + ChatColor.RED + "' was deleted.");
 						} catch (final @NotNull IOException e) {
-							throw new RuntimeIOException(e);
+							throw new UncheckedIOException(e);
 						}
 					}
 
@@ -122,7 +122,7 @@ public class Save {
 					}
 				} else {
 					p.sendMessage(BackupCommand.MESSAGE_HEAD
-								  + ChatColor.DARK_RED + mappedFile.getName()
+								  + ChatColor.DARK_RED + checkedRequest.getValue()
 								  + ChatColor.RED + " was not overwritten.");
 				}
 			}
@@ -164,7 +164,7 @@ public class Save {
 							files = BaseFileUtils.listFolders(manualBackup);
 						}
 					} catch (final IOException e) {
-						throw new RuntimeIOException(e);
+						throw new UncheckedIOException(e);
 					}
 				}
 			}

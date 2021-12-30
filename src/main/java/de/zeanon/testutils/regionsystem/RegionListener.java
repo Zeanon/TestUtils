@@ -8,6 +8,8 @@ import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import de.zeanon.testutils.regionsystem.region.GlobalRegion;
 import de.zeanon.testutils.regionsystem.tags.Tag;
 import de.zeanon.testutils.regionsystem.tags.tagvalues.CHANGED;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -175,21 +177,95 @@ public class RegionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockForm(final @NotNull BlockFormEvent event) {
-		if (RegionManager.getGlobalRegion(event.getBlock().getWorld()).getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
+		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
 			event.setCancelled(true);
 			return;
 		}
 
+		boolean checkGlobal = true;
+		final @Nullable Set<Flag.Value<?>> values = new HashSet<>();
 		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
-			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+			if (event.getBlock().getType() == Material.SNOW || event.getBlock().getType() == Material.SNOW_BLOCK) {
+				values.add(region.getFlag(Flag.SNOW_FORM));
+			}
+			if (event.getBlock().getType() == Material.ICE) {
+				values.add(region.getFlag(Flag.ICE_FORM));
+			}
+
+			if (!values.isEmpty()) {
+				checkGlobal = false;
+			}
+
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || values.contains(SNOW_FORM.DENY) || values.contains(ICE_FORM.DENY)) {
 				event.setCancelled(true);
 				return;
+			}
+		}
+
+		if (checkGlobal) {
+			if (event.getBlock().getType() == Material.SNOW || event.getBlock().getType() == Material.SNOW_BLOCK) {
+				values.add(globalRegion.getFlag(Flag.SNOW_FORM));
+			}
+			if (event.getBlock().getType() == Material.ICE) {
+				values.add(globalRegion.getFlag(Flag.ICE_FORM));
+			}
+
+			if (values.contains(SNOW_FORM.DENY) || values.contains(ICE_FORM.DENY)) {
+				event.setCancelled(true);
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockFormMonitor(final @NotNull BlockFormEvent event) {
+		RegionListener.tagChangedRegions(event.getBlock().getLocation());
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockFade(final @NotNull BlockFadeEvent event) {
+		final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(event.getBlock().getWorld());
+		if (globalRegion.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {
+			event.setCancelled(true);
+			return;
+		}
+
+		boolean checkGlobal = true;
+		final @Nullable Set<Flag.Value<?>> values = new HashSet<>();
+		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
+			if (event.getBlock().getType() == Material.SNOW || event.getBlock().getType() == Material.SNOW_BLOCK) {
+				values.add(region.getFlag(Flag.SNOW_MELT));
+			}
+			if (event.getBlock().getType() == Material.ICE) {
+				values.add(region.getFlag(Flag.ICE_MELT));
+			}
+
+			if (!values.isEmpty()) {
+				checkGlobal = false;
+			}
+
+			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE || values.contains(SNOW_MELT.DENY) || values.contains(ICE_MELT.DENY)) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		if (checkGlobal) {
+			if (event.getBlock().getType() == Material.SNOW || event.getBlock().getType() == Material.SNOW_BLOCK) {
+				values.add(globalRegion.getFlag(Flag.SNOW_MELT));
+			}
+			if (event.getBlock().getType() == Material.ICE) {
+				values.add(globalRegion.getFlag(Flag.ICE_MELT));
+			}
+
+			if (values.contains(SNOW_MELT.DENY) || values.contains(ICE_MELT.DENY)) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBlockFadeMonitor(final @NotNull BlockFadeEvent event) {
 		RegionListener.tagChangedRegions(event.getBlock().getLocation());
 	}
 
@@ -510,6 +586,7 @@ public class RegionListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+
 
 		for (final @NotNull DefinedRegion region : RegionManager.getApplicableRegions(event.getBlock().getLocation())) {
 			if (region.getFlag(Flag.STOPLAG) == STOPLAG.ACTIVE) {

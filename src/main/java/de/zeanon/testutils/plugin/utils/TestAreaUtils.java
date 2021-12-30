@@ -32,11 +32,11 @@ public class TestAreaUtils {
 																			"searchblock",
 																			"searchfolder",
 																			"renamefolder",
-																			"renameblock",
+																			"rename",
 																			"delfolder",
 																			"deletefolder",
-																			"delblock",
-																			"deleteblock",
+																			"del",
+																			"delete",
 																			"load"));
 
 	public boolean forbiddenFileName(final @NotNull String name) {

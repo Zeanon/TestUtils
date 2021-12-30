@@ -12,14 +12,17 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +44,8 @@ public class RegisterReset {
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6)
 							  + ChatColor.RED + "'...");
 				RegisterReset.registerSide(tempRegion);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(TestUtils.getInstance(), () -> {
+				}, 5);
 				RegisterReset.registerSide(oppositeRegion);
 
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
@@ -50,7 +55,7 @@ public class RegisterReset {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, registering a new reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 		}
 	}

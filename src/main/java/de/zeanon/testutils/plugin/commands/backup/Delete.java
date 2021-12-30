@@ -9,9 +9,11 @@ import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,8 +69,8 @@ public class Delete {
 											  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was deleted successfully.");
 							} catch (final IOException e) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
-											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see [console].");
-								e.printStackTrace();
+											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see " + ChatColor.DARK_RED + "[console]" + ChatColor.RED + ".");
+								Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 							}
 						} else {
 							p.sendMessage(BackupCommand.MESSAGE_HEAD

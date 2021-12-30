@@ -9,9 +9,11 @@ import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +48,7 @@ public class DeleteArea {
 					FileUtils.deleteDirectory(resetFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 
 			try {
@@ -55,7 +57,7 @@ public class DeleteArea {
 					FileUtils.deleteDirectory(backUpFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 
 			return true;

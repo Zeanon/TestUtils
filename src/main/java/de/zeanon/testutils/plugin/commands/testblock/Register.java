@@ -20,8 +20,10 @@ import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,94 +32,94 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Register {
 
-    public void execute(final @Nullable MappedFile mappedFile, final @NotNull Player p) {
-        if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
-            p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-                          + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
-            return;
-        }
+	public void execute(final @Nullable MappedFile mappedFile, final @NotNull Player p) {
+		if (mappedFile != null && TestAreaUtils.illegalName(mappedFile.getName())) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "Block '" + mappedFile.getName() + "' resolution error: Name is not allowed.");
+			return;
+		}
 
-        final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
+		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 
-        if (tempRegion == null) {
-            GlobalMessageUtils.sendNotApplicableRegion(p);
-            return;
-        }
+		if (tempRegion == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
+			return;
+		}
 
-        p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-                      + ChatColor.RED + "Registering new testblock as '"
-                      + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile)
-                      + ChatColor.RED + "'...");
-        final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
-        final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
-        final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+		p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+					  + ChatColor.RED + "Registering new testblock as '"
+					  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile)
+					  + ChatColor.RED + "'...");
+		final @NotNull World tempWorld = new BukkitWorld(p.getWorld());
+		final @NotNull CuboidRegion region = new CuboidRegion(tempWorld, tempRegion.getMinimumPoint().toBlockVector3(), tempRegion.getMaximumPoint().toBlockVector3());
+		final @NotNull BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-        final @NotNull BlockVector3 copyPoint;
+		final @NotNull BlockVector3 copyPoint;
 
-        if (tempRegion.getName().endsWith("_south")) {
-            copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
-        } else {
-            copyPoint = region.getMinimumPoint();
-        }
+		if (tempRegion.getName().endsWith("_south")) {
+			copyPoint = BlockVector3.at(region.getMaximumPoint().getBlockX(), region.getMinimumPoint().getBlockY(), region.getMaximumPoint().getBlockZ());
+		} else {
+			copyPoint = region.getMinimumPoint();
+		}
 
-        try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
-            final @NotNull ForwardExtentCopy copy = new ForwardExtentCopy(
-                    editSession, region, clipboard, copyPoint
-            );
+		try (final @NotNull EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(tempWorld, -1)) {
+			final @NotNull ForwardExtentCopy copy = new ForwardExtentCopy(
+					editSession, region, clipboard, copyPoint
+			);
 
-            copy.setCopyingEntities(false);
-            copy.setCopyingBiomes(false);
+			copy.setCopyingEntities(false);
+			copy.setCopyingBiomes(false);
 
-            if (tempRegion.getName().endsWith("_south")) {
-                copy.setTransform(new AffineTransform().rotateY(180));
-            }
+			if (tempRegion.getName().endsWith("_south")) {
+				copy.setTransform(new AffineTransform().rotateY(180));
+			}
 
-            Operations.complete(copy);
+			Operations.complete(copy);
 
-            final @NotNull Path tempFile = mappedFile != null ? TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem")
-                                                              : TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem");
+			final @NotNull Path tempFile = mappedFile != null ? TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve(mappedFile + ".schem")
+															  : TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).resolve("default.schem");
 
-            BaseFileUtils.createFile(tempFile);
+			BaseFileUtils.createFile(tempFile);
 
-            try (final ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(BaseFileUtils.createNewOutputStreamFromFile(tempFile))) {
-                writer.write(clipboard);
-            }
+			try (final ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(BaseFileUtils.createNewOutputStreamFromFile(tempFile))) {
+				writer.write(clipboard);
+			}
 
-            p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-                          + ChatColor.RED + "You registered a new testblock with the name '"
-                          + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
-        } catch (final WorldEditException | IOException e) {
-            p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
-                          + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
-                          + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
-            e.printStackTrace();
-        }
-    }
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "You registered a new testblock with the name '"
+						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
+		} catch (final WorldEditException | IOException e) {
+			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
+						  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
+						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+		}
+	}
 
-    public @NotNull String usageMessage() {
-        return ChatColor.GRAY + "/tb"
-               + ChatColor.AQUA + " register "
-               + ChatColor.YELLOW + "<"
-               + ChatColor.DARK_RED + "filename"
-               + ChatColor.YELLOW + ">";
-    }
+	public @NotNull String usageMessage() {
+		return ChatColor.GRAY + "/tb"
+			   + ChatColor.AQUA + " register "
+			   + ChatColor.YELLOW + "<"
+			   + ChatColor.DARK_RED + "filename"
+			   + ChatColor.YELLOW + ">";
+	}
 
-    public @NotNull String usageHoverMessage() {
-        return ChatColor.RED + "e.g. "
-               + ChatColor.GRAY + "/tb"
-               + ChatColor.AQUA + " register "
-               + ChatColor.DARK_RED + "example";
-    }
+	public @NotNull String usageHoverMessage() {
+		return ChatColor.RED + "e.g. "
+			   + ChatColor.GRAY + "/tb"
+			   + ChatColor.AQUA + " register "
+			   + ChatColor.DARK_RED + "example";
+	}
 
-    public @NotNull String usageCommand() {
-        return "/tb register ";
-    }
+	public @NotNull String usageCommand() {
+		return "/tb register ";
+	}
 
-    public void usage(final @NotNull Player p) {
-        GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
-                                              + ChatColor.RED + "Usage: ",
-                                              Register.usageMessage(),
-                                              Register.usageHoverMessage(),
-                                              Register.usageCommand(), p);
-    }
+	public void usage(final @NotNull Player p) {
+		GlobalMessageUtils.sendSuggestMessage(GlobalMessageUtils.MESSAGE_HEAD
+											  + ChatColor.RED + "Usage: ",
+											  Register.usageMessage(),
+											  Register.usageHoverMessage(),
+											  Register.usageCommand(), p);
+	}
 }

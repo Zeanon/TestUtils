@@ -1,8 +1,8 @@
 package de.zeanon.testutils;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.testutils.init.InitMode;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public final class TestUtils extends JavaPlugin {
 		try {
 			TestUtils.setPluginFolder(TestUtils.getInstance().getDataFolder().toPath().toRealPath());
 		} catch (final IOException e) {
-			throw new RuntimeIOException(e);
+			throw new UncheckedIOException(e);
 		}
 
 		InitMode.initPlugin();

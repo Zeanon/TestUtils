@@ -11,6 +11,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.SessionFactory;
@@ -19,8 +20,10 @@ import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +57,8 @@ public class ResetArea {
 				}
 
 				ResetArea.pasteSide(tempRegion, editSession, regionFile);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(TestUtils.getInstance(), () -> {
+				}, 5);
 				ResetArea.pasteSide(oppositeRegion, editSession, oppositeRegionFile);
 				editSession.flushSession();
 
@@ -64,7 +69,7 @@ public class ResetArea {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 		} else {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
@@ -95,7 +100,7 @@ public class ResetArea {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, pasting the reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				e.printStackTrace();
+				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			}
 		}
 	}

@@ -1,10 +1,12 @@
 package de.zeanon.testutils.regionsystem.commands;
 
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.regionsystem.RegionManager;
+import java.io.UncheckedIOException;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +25,8 @@ public class Save {
 					RegionManager.saveRegions();
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "Saved all region files.");
-				} catch (final @NotNull RuntimeIOException e) {
-					e.printStackTrace();
+				} catch (final @NotNull UncheckedIOException e) {
+					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error saving the region files, for more information please see [console]");
 				}

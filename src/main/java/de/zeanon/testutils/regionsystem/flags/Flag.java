@@ -17,6 +17,10 @@ public enum Flag {
 	STOPLAG(de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG.class, de.zeanon.testutils.regionsystem.flags.flagvalues.STOPLAG.INACTIVE),
 	FALL_DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.FALL_DAMAGE.ALLOW),
 	DAMAGE(de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.class, de.zeanon.testutils.regionsystem.flags.flagvalues.DAMAGE.ALLOW),
+	SNOW_MELT(de.zeanon.testutils.regionsystem.flags.flagvalues.SNOW_MELT.class, de.zeanon.testutils.regionsystem.flags.flagvalues.SNOW_MELT.ALLOW),
+	SNOW_FORM(de.zeanon.testutils.regionsystem.flags.flagvalues.SNOW_FORM.class, de.zeanon.testutils.regionsystem.flags.flagvalues.SNOW_FORM.ALLOW),
+	ICE_MELT(de.zeanon.testutils.regionsystem.flags.flagvalues.ICE_MELT.class, de.zeanon.testutils.regionsystem.flags.flagvalues.ICE_MELT.ALLOW),
+	ICE_FORM(de.zeanon.testutils.regionsystem.flags.flagvalues.ICE_FORM.class, de.zeanon.testutils.regionsystem.flags.flagvalues.ICE_FORM.ALLOW),
 	MOB_SPAWN(de.zeanon.testutils.regionsystem.flags.flagvalues.MOB_SPAWN.class, de.zeanon.testutils.regionsystem.flags.flagvalues.MOB_SPAWN.ALLOW);
 
 

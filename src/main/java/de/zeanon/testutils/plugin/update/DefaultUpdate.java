@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -50,7 +51,7 @@ class DefaultUpdate {
 					}
 				} catch (@NotNull final IOException | URISyntaxException e) {
 					System.out.println("[" + instance.getName() + "] >> Plugin could not be updated.");
-					e.printStackTrace();
+					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
@@ -91,7 +92,7 @@ class DefaultUpdate {
 				} catch (@NotNull final IOException | URISyntaxException e) {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 								  ChatColor.RED + "Could not update.");
-					e.printStackTrace();
+					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

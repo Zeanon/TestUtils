@@ -1,7 +1,6 @@
 package de.zeanon.testutils.plugin.utils;
 
 import de.zeanon.storagemanagercore.internal.base.exceptions.FileParseException;
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.base.settings.Comment;
 import de.zeanon.storagemanagercore.internal.base.settings.Reload;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
@@ -12,8 +11,12 @@ import de.zeanon.thunderfilemanager.ThunderFileManager;
 import de.zeanon.thunderfilemanager.internal.base.exceptions.ThunderException;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import de.zeanon.thunderfilemanager.internal.utility.parser.ThunderFileParser;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.logging.Level;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,14 +39,14 @@ public class ConfigUtils {
 												   .create();
 
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' loaded.");
-		} catch (final @NotNull RuntimeIOException | FileParseException e) {
+		} catch (final @NotNull UncheckedIOException | FileParseException e) {
 			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be loaded.");
-			e.printStackTrace();
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			cause = e;
 		}
 
 		if (cause != null) {
-			throw new RuntimeIOException(cause);
+			throw new UncheckedIOException(new IOException(cause));
 		}
 	}
 
@@ -94,7 +97,7 @@ public class ConfigUtils {
 																					  ConfigUtils.getConfig().getCommentSetting(),
 																					  ConfigUtils.getConfig().getBufferSize()).getUseArray(key), type), "Could not read from the default config.");
 		} catch (final @NotNull ThunderException e) {
-			e.printStackTrace();
+			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 		}
 		return Objects.notNull(Objects.toDef(new Object(), type));
 	}

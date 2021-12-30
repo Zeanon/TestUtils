@@ -6,7 +6,7 @@
 
     <groupId>de.zeanon</groupId>
     <artifactId>testutils</artifactId>
-    <version>1.0.100-Alpha</version>
+    <version>1.0.101-Alpha</version>
     <packaging>jar</packaging>
     <name>TestUtils</name>
     <url>https://github.com/Zeanon/TestUtils</url>
@@ -40,7 +40,7 @@
         <plugin.depends></plugin.depends>
         <plugin.softdepends>[ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]</plugin.softdepends>
 
-        <storagemanager.core.version>1.1.103</storagemanager.core.version>
+        <storagemanager.core.version>1.1.104</storagemanager.core.version>
         <storagemanager.thunderfile.version>${storagemanager.core.version}</storagemanager.thunderfile.version>
         <storagemanager.jsonfile.version>${storagemanager.core.version}</storagemanager.jsonfile.version>
 
@@ -303,7 +303,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>storagemanagercore</artifactId>
-            <version>1.1.103</version>
+            <version>1.1.104</version>
             <scope>compile</scope>
         </dependency>
 
@@ -311,7 +311,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>thunderfilemanager</artifactId>
-            <version>1.1.103</version>
+            <version>1.1.104</version>
             <scope>compile</scope>
         </dependency>
 
@@ -319,7 +319,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>jsonfilemanager</artifactId>
-            <version>1.1.103</version>
+            <version>1.1.104</version>
             <scope>compile</scope>
         </dependency>
 
