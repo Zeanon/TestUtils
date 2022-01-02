@@ -49,7 +49,7 @@ public class RegionManager {
 				RegionManager.regions.add(new DefinedRegion(file));
 			} catch (final @NotNull ObjectNullException e) {
 				System.out.println("[" + TestUtils.getInstance().getName() + "] >> TestAreas >> " + file.getName() + " could not be initialized properly, please check the region file.");
-				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+				TestUtils.getChatLogger().log(Level.SEVERE, "Error while initializing defined regions", e);
 			}
 		});
 	}
@@ -61,7 +61,7 @@ public class RegionManager {
 				RegionManager.globalRegions.put("__" + world.getName() + "__", new GlobalRegion(world));
 			} catch (final @NotNull ObjectNullException e) {
 				System.out.println("[" + TestUtils.getInstance().getName() + "] >> GlobalRegions >> " + world.getName() + " could not be initialized properly, please check the region file.");
-				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+				TestUtils.getChatLogger().log(Level.SEVERE, "Error while initializing global regions", e);
 			}
 		});
 	}

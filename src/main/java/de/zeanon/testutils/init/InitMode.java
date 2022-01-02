@@ -82,9 +82,9 @@ public class InitMode {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Regions...");
 			RegionManager.initialize();
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
-		} catch (final IOException e) {
+		} catch (final UncheckedIOException | IOException e) {
 			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
+			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
 
 			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;

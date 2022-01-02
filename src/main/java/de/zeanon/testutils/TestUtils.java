@@ -1,9 +1,8 @@
 package de.zeanon.testutils;
 
 import de.zeanon.testutils.init.InitMode;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Path;
+import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +19,9 @@ public final class TestUtils extends JavaPlugin {
 	private static TestUtils instance;
 	@Getter
 	@Setter(AccessLevel.PRIVATE)
+	private static Logger chatLogger;
+	@Getter
+	@Setter(AccessLevel.PRIVATE)
 	@SuppressWarnings("CanBeFinal")
 	private static PluginManager pluginManager;
 	@Getter
@@ -30,12 +32,9 @@ public final class TestUtils extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		TestUtils.setInstance(this);
+		TestUtils.setChatLogger(TestUtils.getInstance().getServer().getLogger());
 		TestUtils.setPluginManager(Bukkit.getPluginManager());
-		try {
-			TestUtils.setPluginFolder(TestUtils.getInstance().getDataFolder().toPath().toRealPath());
-		} catch (final IOException e) {
-			throw new UncheckedIOException(e);
-		}
+		TestUtils.setPluginFolder(TestUtils.getInstance().getDataFolder().toPath());
 
 		InitMode.initPlugin();
 	}

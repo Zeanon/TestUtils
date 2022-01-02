@@ -96,7 +96,7 @@ public class Load {
 						}, 5000);
 					}
 				} catch (final WorldEditException | IOException | RuntimeWorldeditException | UncheckedIOException e) {
-					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+					TestUtils.getChatLogger().log(Level.SEVERE, "Error while pasting a backup", e);
 				}
 			} else {
 				p.sendMessage(BackupCommand.MESSAGE_HEAD
@@ -107,7 +107,7 @@ public class Load {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, pasting the backup for '"
 						  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while pasting the backup for " + tempRegion.getName().substring(0, tempRegion.getName().length() - 6), e);
 		}
 	}
 

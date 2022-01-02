@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -13,7 +14,6 @@ import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class DeleteArea {
 			return;
 		}
 
-		if (DeleteArea.remove(name.getName())) {
+		if (DeleteArea.delete(name.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "You deleted the testarea '" + ChatColor.DARK_RED + name + ChatColor.RED + "'.");
 		} else {
@@ -38,7 +38,7 @@ public class DeleteArea {
 		}
 	}
 
-	private boolean remove(final @NotNull String name) {
+	private boolean delete(final @NotNull String name) {
 		final @Nullable DefinedRegion southRegion = RegionManager.getDefinedRegion(name + "_south");
 		final @Nullable DefinedRegion northRegion = RegionManager.getDefinedRegion(name + "_north");
 		if (southRegion != null && northRegion != null && RegionManager.removeDefinedRegion(southRegion) && RegionManager.removeDefinedRegion(northRegion)) {
@@ -48,7 +48,7 @@ public class DeleteArea {
 					FileUtils.deleteDirectory(resetFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+				TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting resets for " + name, e);
 			}
 
 			try {
@@ -57,7 +57,7 @@ public class DeleteArea {
 					FileUtils.deleteDirectory(backUpFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+				TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting backups for " + name, e);
 			}
 
 			return true;

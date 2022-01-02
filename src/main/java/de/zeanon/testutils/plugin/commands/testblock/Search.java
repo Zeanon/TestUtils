@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FilenameUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -107,7 +106,7 @@ public class Search {
 			}
 		} catch (final @NotNull IOException e) {
 			p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + TestUtils.getInstance().getName() + ChatColor.DARK_GRAY + "] " + ChatColor.RED + "Could not access blocks folder, for further information please see [console].");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while accessing blocks folder", e);
 		}
 	}
 
@@ -202,7 +201,7 @@ public class Search {
 		} catch (final @NotNull IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD +
 						  ChatColor.RED + "An Error occurred while getting the filepaths for the schematics, for further information please see [console].");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while getting the filepaths for the schematics", e);
 			return true;
 		}
 	}

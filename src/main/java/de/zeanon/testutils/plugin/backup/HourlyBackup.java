@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +43,7 @@ public class HourlyBackup extends Backup {
 				}
 			}
 		} catch (final IOException e) {
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while performing hourly backup", e);
 		}
 	}
 

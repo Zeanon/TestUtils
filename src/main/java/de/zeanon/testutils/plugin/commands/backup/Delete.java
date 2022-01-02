@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +69,7 @@ public class Delete {
 							} catch (final IOException e) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see " + ChatColor.DARK_RED + "[console]" + ChatColor.RED + ".");
-								Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+								TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting " + mappedFile.getName(), e);
 							}
 						} else {
 							p.sendMessage(BackupCommand.MESSAGE_HEAD

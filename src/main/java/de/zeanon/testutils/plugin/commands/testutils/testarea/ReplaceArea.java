@@ -176,7 +176,7 @@ public class ReplaceArea {
 						  + destination
 						  + ChatColor.RED
 						  + "'.");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while replacing " + source + " to " + destination, e);
 		}
 	}
 
@@ -295,7 +295,7 @@ public class ReplaceArea {
 						  + destination
 						  + ChatColor.RED
 						  + "'.");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while replacing " + source + " to " + destination, e);
 		}
 	}
 }

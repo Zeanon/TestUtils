@@ -4,6 +4,7 @@ import de.zeanon.storagemanagercore.external.browniescollections.GapList;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.testblock.TestBlockCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -18,7 +19,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -165,7 +165,7 @@ public class Search {
 			}
 		} catch (final @NotNull IOException e) {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD + ChatColor.RED + "Could not access backups folder, for further information please see [console].");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while accessing the backups folder", e);
 		}
 	}
 }

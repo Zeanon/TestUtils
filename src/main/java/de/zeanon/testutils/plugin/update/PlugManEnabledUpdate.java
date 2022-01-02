@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,7 +51,7 @@ class PlugManEnabledUpdate {
 				} catch (@NotNull final IOException |
 						URISyntaxException e) {
 					System.out.println("[" + instance.getName() + "] >> Plugin could not be updated.");
-					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+					TestUtils.getChatLogger().log(Level.SEVERE, "Error while updating " + instance.getName(), e);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
@@ -91,7 +90,7 @@ class PlugManEnabledUpdate {
 				} catch (@NotNull final IOException | URISyntaxException e) {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 								  ChatColor.RED + "Could not update.");
-					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+					TestUtils.getChatLogger().log(Level.SEVERE, "Error while updating " + instance.getName(), e);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

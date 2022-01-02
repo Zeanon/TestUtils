@@ -6,7 +6,6 @@ import java.io.UncheckedIOException;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +25,9 @@ public class Save {
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "Saved all region files.");
 				} catch (final @NotNull UncheckedIOException e) {
-					Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 					p.sendMessage(RegionCommand.MESSAGE_HEAD
 								  + ChatColor.RED + "There has been an error saving the region files, for more information please see [console]");
+					TestUtils.getChatLogger().log(Level.SEVERE, "Error while saving the region files", e);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

@@ -10,7 +10,11 @@
     "leaves_decay": "DENY",
     "mob_spawn": "DENY",
     "stoplag": "INACTIVE",
-    "tnt": "DENY"
+    "tnt": "DENY",
+    "ice_form": "DENY",
+    "ice_melt": "DENY",
+    "snow_form": "DENY",
+    "snow_melt": "DENY"
   },
   "tags": {}
 }

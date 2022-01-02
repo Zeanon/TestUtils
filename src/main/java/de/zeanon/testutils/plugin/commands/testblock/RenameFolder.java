@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.testblock;
 
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.*;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.MappedFolder;
@@ -14,7 +15,6 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -139,9 +139,9 @@ public class RenameFolder {
 				}
 			}
 		} catch (final IOException e) {
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "An Error occurred while getting the filepaths for the blocks and folders, for further information please see [console].");
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while getting the filepaths for the blocks and folders", e);
 		}
 	}
 
@@ -191,7 +191,7 @@ public class RenameFolder {
 		} catch (final IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.GREEN + arg + ChatColor.RED + " could not be renamed, for further information please see [console].");
-			Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while renaming " + arg, e);
 			CommandRequestUtils.removeRenameFolderRequest(p.getUniqueId());
 		}
 	}
@@ -214,7 +214,7 @@ public class RenameFolder {
 					}
 				}
 			} catch (final IOException e) {
-				Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+				TestUtils.getChatLogger().log(Level.SEVERE, "Error while merging the folders", e);
 				return false;
 			}
 		}
