@@ -47,12 +47,12 @@ public class StartupBackup extends Backup {
 
 	@Override
 	protected void systemOutStart() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Startup-Backup...");
+		TestUtils.getChatLogger().info(">> Creating Startup-Backup...");
 	}
 
 	@Override
 	protected void systemOutDone() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Startup-Backup.");
+		TestUtils.getChatLogger().info(">> Created Startup-Backup.");
 	}
 
 	@Override

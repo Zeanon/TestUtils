@@ -32,7 +32,7 @@ public final class TestUtils extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		TestUtils.setInstance(this);
-		TestUtils.setChatLogger(TestUtils.getInstance().getServer().getLogger());
+		TestUtils.setChatLogger(TestUtils.getInstance().getLogger());
 		TestUtils.setPluginManager(Bukkit.getPluginManager());
 		TestUtils.setPluginFolder(TestUtils.getInstance().getDataFolder().toPath());
 

@@ -49,12 +49,12 @@ public class HourlyBackup extends Backup {
 
 	@Override
 	protected void systemOutStart() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Hourly-Backup...");
+		TestUtils.getChatLogger().info(">> Creating Hourly-Backup...");
 	}
 
 	@Override
 	protected void systemOutDone() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Hourly-Backup.");
+		TestUtils.getChatLogger().info(">> Created Hourly-Backup.");
 	}
 
 	@Override

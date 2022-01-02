@@ -48,12 +48,12 @@ public class DailyBackup extends Backup {
 
 	@Override
 	protected void systemOutStart() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Creating Daily-Backup...");
+		TestUtils.getChatLogger().info(">> Creating Daily-Backup...");
 	}
 
 	@Override
 	protected void systemOutDone() {
-		System.out.println("[" + TestUtils.getInstance().getName() + "] >> Created Daily-Backup.");
+		TestUtils.getChatLogger().info(">> Created Daily-Backup.");
 	}
 
 	@Override

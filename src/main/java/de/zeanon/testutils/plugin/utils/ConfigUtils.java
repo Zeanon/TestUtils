@@ -37,9 +37,9 @@ public class ConfigUtils {
 												   .concurrentData(true)
 												   .create();
 
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' loaded.");
+			TestUtils.getChatLogger().info(">> [Configs] >> 'config.tf' loaded.");
 		} catch (final @NotNull UncheckedIOException | FileParseException e) {
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be loaded.");
+			TestUtils.getChatLogger().info(">> [Configs] >> 'config.tf' could not be loaded.");
 			TestUtils.getChatLogger().log(Level.SEVERE, "Error while loading configs", e);
 			cause = e;
 		}
@@ -53,9 +53,9 @@ public class ConfigUtils {
 		if (!ConfigUtils.getConfig().hasKeyUseArray("Plugin Version")
 			|| !Objects.notNull(ConfigUtils.getConfig().getStringUseArray("Plugin Version"))
 					   .equals(de.zeanon.testutils.TestUtils.getInstance().getDescription().getVersion())) {
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Updating Configs...");
+			TestUtils.getChatLogger().info(">> Updating Configs...");
 			Update.checkConfigUpdate();
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config files are updated successfully.");
+			TestUtils.getChatLogger().info(">> Config files are updated successfully.");
 		}
 	}
 

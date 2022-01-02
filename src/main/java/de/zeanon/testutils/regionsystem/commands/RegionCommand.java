@@ -22,7 +22,7 @@ public class RegionCommand extends SWCommand {
 
 
 	public RegionCommand() {
-		super("region", "rg");
+		super(new Prefix("testutils"), "region", "rg");
 	}
 
 

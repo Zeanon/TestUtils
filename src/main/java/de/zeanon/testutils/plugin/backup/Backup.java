@@ -15,7 +15,6 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import de.zeanon.storagemanagercore.internal.base.exceptions.RuntimeIOException;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
@@ -30,9 +29,11 @@ import de.zeanon.testutils.regionsystem.tags.Tag;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.logging.Level;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
@@ -93,7 +94,7 @@ public abstract class Backup extends BukkitRunnable {
 																							InternalFileUtils.deleteEmptyParent(backupFolder[0], BackupCommand.BACKUP_FOLDER.toFile());
 																						}
 																					} catch (final @NotNull IOException e) {
-																						throw new RuntimeIOException(e);
+																						throw new UncheckedIOException(e);
 																					}
 																				}
 																			}.runTaskAsynchronously(TestUtils.getInstance());
@@ -127,11 +128,11 @@ public abstract class Backup extends BukkitRunnable {
 						}
 					}.runTaskAsynchronously(TestUtils.getInstance());
 				}
-			}.runTaskTimer(TestUtils.getInstance(), 0, 100);
+			}.runTaskTimer(TestUtils.getInstance(), 0, 20);
 
 			Backup.this.systemOutDone();
-		} catch (final @NotNull IOException | RuntimeIOException e) {
-			e.printStackTrace();
+		} catch (final @NotNull IOException | UncheckedIOException e) {
+			TestUtils.getChatLogger().log(Level.SEVERE, "Error while backing up", e);
 		}
 	}
 

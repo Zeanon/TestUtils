@@ -116,7 +116,7 @@ public class Update {
 												   new Pair<>(new String[]{"Backups", "hourly"}, maxHourly),
 												   new Pair<>(new String[]{"Backups", "daily"}, maxDaily));
 
-			System.out.println("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' updated.");
+			TestUtils.getChatLogger().info(">> [Configs] >> 'config.tf' updated.");
 		} catch (final UncheckedIOException e) {
 			throw new UncheckedIOException("[" + TestUtils.getInstance().getName() + "] >> [Configs] >> 'config.tf' could not be updated.", e.getCause());
 		}

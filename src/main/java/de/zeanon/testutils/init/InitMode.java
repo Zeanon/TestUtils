@@ -53,38 +53,38 @@ public class InitMode {
 		}
 
 		try {
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Loading Config...");
+			TestUtils.getChatLogger().info(">> Loading Config...");
 			ConfigUtils.loadConfigs();
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config file are loaded successfully.");
+			TestUtils.getChatLogger().info(">> Config file are loaded successfully.");
 		} catch (final UncheckedIOException e) {
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not load config file.");
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Maybe try to delete the config file and reload the plugin.");
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
+			TestUtils.getChatLogger().info(">> Could not load config file.");
+			TestUtils.getChatLogger().info(">> Maybe try to delete the config file and reload the plugin.");
+			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
 			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
 		try {
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Config...");
+			TestUtils.getChatLogger().info(">> Initializing Config...");
 			ConfigUtils.initConfigs();
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Config file is initialized successfully.");
+			TestUtils.getChatLogger().info(">> Config file is initialized successfully.");
 		} catch (final UncheckedIOException e) {
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not update config file.");
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Maybe try to delete the config file and reload the plugin.");
-			System.err.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
+			TestUtils.getChatLogger().info(">> Could not update config file.");
+			TestUtils.getChatLogger().info(">> Maybe try to delete the config file and reload the plugin.");
+			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
 			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
 		}
 
 		try {
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initializing Regions...");
+			TestUtils.getChatLogger().info(">> Initializing Regions...");
 			RegionManager.initialize();
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Initialized Regions.");
+			TestUtils.getChatLogger().info(">> Initialized Regions.");
 		} catch (final UncheckedIOException | IOException e) {
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not initialize Regions");
-			System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Unloading Plugin...");
+			TestUtils.getChatLogger().info(">> Could not initialize Regions");
+			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
 			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
 			return;
@@ -131,17 +131,17 @@ public class InitMode {
 		InitMode.registeredCommands.add(new SleepModeTestUtilsCommand());
 		InitMode.registerEvents(new WakeupListener());
 
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Could not load plugin, it needs FastAsyncWorldEdit or WorldEdit to work.");
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + TestUtils.getInstance().getName() + " will automatically activate when one of the above gets enabled.");
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Rudimentary function like updating and disabling will still work.");
+		TestUtils.getChatLogger().info(">> Could not load plugin, it needs FastAsyncWorldEdit or WorldEdit to work.");
+		TestUtils.getChatLogger().info(">> " + TestUtils.getInstance().getName() + " will automatically activate when one of the above gets enabled.");
+		TestUtils.getChatLogger().info(">> Rudimentary function like updating and disabling will still work.");
 	}
 
 	private void enableSleepModeWorldGuard() {
 		InitMode.registeredCommands.add(new SleepModeTestUtilsCommand());
 		InitMode.registerEvents(new WakeupListener());
 
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> WorldGuard detected, this plugin replaces WorldGuard, please only use one.");
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> " + TestUtils.getInstance().getName() + " will automatically activate when WorldGuard gets disabled.");
-		System.out.println("[" + de.zeanon.testutils.TestUtils.getInstance().getName() + "] >> Rudimentary function like updating and disabling will still work.");
+		TestUtils.getChatLogger().info(">> WorldGuard detected, this plugin replaces WorldGuard, please only use one.");
+		TestUtils.getChatLogger().info(">> " + TestUtils.getInstance().getName() + " will automatically activate when WorldGuard gets disabled.");
+		TestUtils.getChatLogger().info(">> Rudimentary function like updating and disabling will still work.");
 	}
 }

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FileUtils;
@@ -80,7 +81,7 @@ public class Save {
 					} else {
 						p.sendMessage(BackupCommand.MESSAGE_HEAD
 									  + ChatColor.RED + "There has been an error saving the Backup, please see [console] for further information.");
-						System.err.println("Could not determine oldest file to delete.");
+						TestUtils.getChatLogger().log(Level.SEVERE, "Could not determine oldest file to delete.");
 					}
 				} else {
 					Save.save(p.getWorld(), tempRegion, otherRegion, name, folder, p);
