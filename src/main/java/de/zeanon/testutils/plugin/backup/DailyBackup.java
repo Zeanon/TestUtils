@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,11 +31,11 @@ public class DailyBackup extends Backup {
 				final int size = ConfigUtils.getInt("Backups", "daily");
 				final @NotNull File stopHere = BackupCommand.BACKUP_FOLDER.toFile();
 				@Nullable final List<File> files = BaseFileUtils.listFolders(dailyBackup);
-				if (files != null && files.size() > size) {
+				if (files.size() > size) {
 					files.sort(Comparator.comparingLong(File::lastModified));
 					do {
 						final @NotNull File file = files.remove(0);
-						FileUtils.deleteDirectory(file);
+						BaseFileUtils.deleteDirectory(file);
 						InternalFileUtils.deleteEmptyParent(file, stopHere);
 					} while (files.size() > size);
 				}

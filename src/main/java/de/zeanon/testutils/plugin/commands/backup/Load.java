@@ -107,7 +107,7 @@ public class Load {
 			p.sendMessage(BackupCommand.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, pasting the backup for '"
 						  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while pasting the backup for " + tempRegion.getName().substring(0, tempRegion.getName().length() - 6), e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while pasting the backup for %s", tempRegion.getName().substring(0, tempRegion.getName().length() - 6)), e);
 		}
 	}
 

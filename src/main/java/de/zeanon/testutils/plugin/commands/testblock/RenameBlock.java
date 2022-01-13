@@ -131,7 +131,7 @@ public class RenameBlock {
 		} catch (final IOException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.DARK_RED + fileName + ChatColor.RED + " could not be renamed, for further information please see [console].");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while renaming " + fileName, e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while renaming %s", fileName), e);
 		}
 	}
 }

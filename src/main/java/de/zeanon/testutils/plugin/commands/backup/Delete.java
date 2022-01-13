@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.commands.backup;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,13 +63,13 @@ public class Delete {
 						final @NotNull File folder = BackupCommand.BACKUP_FOLDER.resolve(region).resolve("manual").resolve(p.getUniqueId().toString()).resolve(mappedFile.getName()).toFile();
 						if (folder.exists() && folder.isDirectory()) {
 							try {
-								FileUtils.deleteDirectory(folder);
+								BaseFileUtils.deleteDirectory(folder);
 								p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " was deleted successfully.");
 							} catch (final IOException e) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.DARK_RED + mappedFile.getName() + ChatColor.RED + " could not be deleted, for further information please see " + ChatColor.DARK_RED + "[console]" + ChatColor.RED + ".");
-								TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting " + mappedFile.getName(), e);
+								TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while deleting %s", mappedFile.getName()), e);
 							}
 						} else {
 							p.sendMessage(BackupCommand.MESSAGE_HEAD

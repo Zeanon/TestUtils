@@ -62,7 +62,7 @@ public class Search {
 			if (backupMode == BackupMode.NONE) {
 				final @NotNull File manualBackups = new File(regionFolder, "manual/" + p.getUniqueId());
 				if (manualBackups.exists() && manualBackups.isDirectory()) {
-					final @NotNull java.util.List<File> tempFiles = Objects.notNull(Objects.notNull(BaseFileUtils.searchFolders(manualBackups, sequence, caseSensitive.confirm())));
+					final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(manualBackups, sequence, caseSensitive.confirm());
 					if (!Objects.notNull(tempFiles).isEmpty()) {
 						files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "manual")).collect(Collectors.toList()));
 					}
@@ -70,7 +70,7 @@ public class Search {
 
 				final @NotNull File hourlyBackups = new File(regionFolder, "automatic/hourly");
 				if (hourlyBackups.exists() && hourlyBackups.isDirectory()) {
-					final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(hourlyBackups, sequence, caseSensitive.confirm()));
+					final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(hourlyBackups, sequence, caseSensitive.confirm());
 					if (!Objects.notNull(tempFiles).isEmpty()) {
 						files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "hourly")).collect(Collectors.toList()));
 					}
@@ -78,7 +78,7 @@ public class Search {
 
 				final @NotNull File dailyBackups = new File(regionFolder, "automatic/daily");
 				if (dailyBackups.exists() && dailyBackups.isDirectory()) {
-					final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(dailyBackups, sequence, caseSensitive.confirm()));
+					final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(dailyBackups, sequence, caseSensitive.confirm());
 					if (!Objects.notNull(tempFiles).isEmpty()) {
 						files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "daily")).collect(Collectors.toList()));
 					}
@@ -86,7 +86,7 @@ public class Search {
 
 				final @NotNull File startupBackups = new File(regionFolder, "automatic/startup");
 				if (startupBackups.exists() && startupBackups.isDirectory()) {
-					final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(startupBackups, sequence, caseSensitive.confirm()));
+					final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(startupBackups, sequence, caseSensitive.confirm());
 					if (!Objects.notNull(tempFiles).isEmpty()) {
 						files.addAll(tempFiles.stream().map(f -> new Pair<>(f, "startup")).collect(Collectors.toList()));
 					}
@@ -94,7 +94,7 @@ public class Search {
 			} else {
 				final @NotNull File backupFolder = new File(regionFolder, backupMode.getPath(p.getUniqueId().toString()));
 				if (backupFolder.exists() && backupFolder.isDirectory()) {
-					final @NotNull java.util.List<File> tempFiles = Objects.notNull(BaseFileUtils.searchFolders(backupFolder, sequence, caseSensitive.confirm()));
+					final @NotNull java.util.List<File> tempFiles = BaseFileUtils.searchFolders(backupFolder, sequence, caseSensitive.confirm());
 					if (!Objects.notNull(tempFiles).isEmpty()) {
 						files.addAll(tempFiles.stream().map(f -> new Pair<>(f, backupMode.toString())).collect(Collectors.toList()));
 					}

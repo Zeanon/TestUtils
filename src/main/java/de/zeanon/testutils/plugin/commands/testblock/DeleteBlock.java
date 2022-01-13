@@ -70,7 +70,7 @@ public class DeleteBlock {
 				} catch (final IOException e) {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFile + ChatColor.RED + " could not be deleted, for further information please see [console].");
-					TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting " + mappedFile, e);
+					TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while deleting %s", mappedFile), e);
 				}
 			} else {
 				CommandRequestUtils.removeDeleteBlockRequest(p.getUniqueId());

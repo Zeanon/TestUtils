@@ -176,7 +176,7 @@ public class ReplaceArea {
 						  + destination
 						  + ChatColor.RED
 						  + "'.");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while replacing " + source + " to " + destination, e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while replacing %s to %s", source, destination), e);
 		}
 	}
 
@@ -295,7 +295,7 @@ public class ReplaceArea {
 						  + destination
 						  + ChatColor.RED
 						  + "'.");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while replacing " + source + " to " + destination, e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while replacing %s to %s", source, destination), e);
 		}
 	}
 }

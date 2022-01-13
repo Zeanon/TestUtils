@@ -55,7 +55,7 @@ public class RegisterReset {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error, registering a new reset for '"
 							  + ChatColor.DARK_RED + tempRegion.getName().substring(0, tempRegion.getName().length() - 6) + ChatColor.RED + "'.");
-				TestUtils.getChatLogger().log(Level.SEVERE, "Error while registering reset for " + tempRegion.getName().substring(0, tempRegion.getName().length() - 6), e);
+				TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while registering reset for %s", tempRegion.getName().substring(0, tempRegion.getName().length() - 6)), e);
 			}
 		}
 	}

@@ -3,7 +3,6 @@ package de.zeanon.testutils.plugin.commands.testblock;
 import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
 import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
-import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
@@ -29,9 +28,13 @@ import org.jetbrains.annotations.Nullable;
 public class TestBlockCommand extends SWCommand {
 
 
-	public static final @NotNull String MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "TestBlocks" + ChatColor.DARK_GRAY + "] ";
-	public static final @NotNull Path TESTBLOCK_FOLDER = TestUtils.getPluginFolder().resolve("TestBlocks");
+	public static final @NotNull String MESSAGE_HEAD;
+	public static final @NotNull Path TESTBLOCK_FOLDER;
 
+	static {
+		MESSAGE_HEAD = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "TestBlocks" + ChatColor.DARK_GRAY + "] ";
+		TESTBLOCK_FOLDER = TestUtils.getPluginFolder().resolve("TestBlocks");
+	}
 
 	public TestBlockCommand() {
 		super(new Prefix("testutils"), "testblock", "tb");
@@ -702,7 +705,7 @@ public class TestBlockCommand extends SWCommand {
 						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
-							for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile()))) {
+							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile())) {
 								final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 								results.add(fileName);
 							}
@@ -744,7 +747,7 @@ public class TestBlockCommand extends SWCommand {
 						final @NotNull Path basePath = TestBlockCommand.TESTBLOCK_FOLDER.resolve(p.getUniqueId().toString()).toRealPath();
 						if (filePath.startsWith(basePath)) {
 							final @NotNull List<String> results = new LinkedList<>();
-							for (final @NotNull File file : Objects.notNull(BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem"))) {
+							for (final @NotNull File file : BaseFileUtils.listFilesOfTypeAndFolders(filePath.toFile(), "schem")) {
 								final @NotNull String fileName = FilenameUtils.separatorsToUnix(BaseFileUtils.removeExtension(basePath.relativize(file.toPath()).toString()));
 								if (!fileName.equalsIgnoreCase("default")) {
 									results.add(fileName);

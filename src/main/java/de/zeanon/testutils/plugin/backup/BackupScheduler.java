@@ -14,7 +14,11 @@ import org.jetbrains.annotations.NotNull;
 public class BackupScheduler {
 
 	@Getter
-	private final @NotNull Backup MANUAL_BACKUP = new ManualBackup();
+	private final @NotNull Backup MANUAL_BACKUP;
+
+	static {
+		MANUAL_BACKUP = new ManualBackup();
+	}
 
 	public void initialize() {
 		new BukkitRunnable() {

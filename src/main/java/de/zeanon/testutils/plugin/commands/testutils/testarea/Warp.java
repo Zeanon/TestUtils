@@ -22,7 +22,11 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Warp {
 
-	private final @NotNull Map<String, SizedStack<Location>> backLocations = new HashMap<>();
+	private final @NotNull Map<String, SizedStack<Location>> backLocations;
+
+	static {
+		backLocations = new HashMap<>();
+	}
 
 	public void execute(final @NotNull AreaName name, final @NotNull Player p) {
 		if (TestAreaUtils.illegalName(name.getName())) {
@@ -79,7 +83,7 @@ public class Warp {
 
 	private void registerBackLocation(final @NotNull Player p, final @NotNull Location location) {
 		if (Warp.backLocations.containsKey(p.getUniqueId().toString())) {
-			SizedStack<Location> tempStack = Warp.backLocations.get(p.getUniqueId().toString());
+			final SizedStack<Location> tempStack = Warp.backLocations.get(p.getUniqueId().toString());
 			if (tempStack.getMaxSize() != ConfigUtils.getInt("Max Back")) {
 				tempStack.resize(ConfigUtils.getInt("Max Back"));
 			}

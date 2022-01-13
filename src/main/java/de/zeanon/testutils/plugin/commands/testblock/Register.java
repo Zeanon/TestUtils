@@ -92,7 +92,7 @@ public class Register {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, registering a new testblock with the name '"
 						  + ChatColor.DARK_RED + (mappedFile == null ? "default" : mappedFile) + ChatColor.RED + "'.");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while registering " + (mappedFile == null ? "default" : mappedFile) + " as a testblock", e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while registering %s as a testblock", (mappedFile == null ? "default" : mappedFile)), e);
 		}
 	}
 

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
-import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,10 +16,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 
-@UtilityClass
-class DefaultUpdate {
+class PlugManDisabledUpdater implements Updater {
 
-	void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
+	@Override
+	public void updatePlugin(final boolean autoReload, final @NotNull JavaPlugin instance) {
 		System.out.println("[" + instance.getName() + "] >> Plugin is updating...");
 		new BukkitRunnable() {
 			@Override
@@ -51,13 +50,14 @@ class DefaultUpdate {
 					}
 				} catch (@NotNull final IOException | URISyntaxException e) {
 					System.out.println("[" + instance.getName() + "] >> Plugin could not be updated.");
-					TestUtils.getChatLogger().log(Level.SEVERE, "Error while updating " + instance.getName(), e);
+					TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while updating %s", instance.getName()), e);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());
 	}
 
-	void updatePlugin(final @NotNull Player p, final boolean autoReload, final @NotNull JavaPlugin instance) {
+	@Override
+	public void updatePlugin(final @NotNull Player p, final boolean autoReload, final @NotNull JavaPlugin instance) {
 		p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 					  ChatColor.RED + "Updating plugin...");
 		new BukkitRunnable() {
@@ -92,7 +92,7 @@ class DefaultUpdate {
 				} catch (@NotNull final IOException | URISyntaxException e) {
 					p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + instance.getName() + ChatColor.DARK_GRAY + "] " +
 								  ChatColor.RED + "Could not update.");
-					TestUtils.getChatLogger().log(Level.SEVERE, "Error while updating " + instance.getName(), e);
+					TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while updating %s", instance.getName()), e);
 				}
 			}
 		}.runTaskAsynchronously(TestUtils.getInstance());

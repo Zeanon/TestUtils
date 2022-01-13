@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testblock;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.utils.CommandRequestUtils;
@@ -14,7 +15,6 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public class DeleteFolder {
 			CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());
 			if (confirmation.confirm()) { //NOSONAR
 				try {
-					FileUtils.deleteDirectory(file);
+					BaseFileUtils.deleteDirectory(file);
 					final @Nullable String parentName = Objects.notNull(file.getAbsoluteFile().getParentFile().listFiles()).length == 0
 														? InternalFileUtils.deleteEmptyParent(file, filePath.toFile())
 														: null;
@@ -70,7 +70,7 @@ public class DeleteFolder {
 				} catch (final IOException e) {
 					p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 								  + ChatColor.DARK_RED + mappedFolder + ChatColor.RED + " could not be deleted, for further information please see [console].");
-					TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting " + mappedFolder, e);
+					TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while deleting %s", mappedFolder), e);
 				}
 			} else {
 				CommandRequestUtils.removeDeleteFolderRequest(p.getUniqueId());

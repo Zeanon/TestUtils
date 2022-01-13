@@ -1,5 +1,6 @@
 package de.zeanon.testutils.plugin.commands.testutils.testarea;
 
+import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.backup.BackupCommand;
 import de.zeanon.testutils.plugin.commands.testutils.TestUtilsCommand;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,19 +45,19 @@ public class DeleteArea {
 			try {
 				final @NotNull File resetFolder = TestUtilsCommand.TESTAREA_FOLDER.resolve(name).toFile();
 				if (resetFolder.exists() && resetFolder.isDirectory()) {
-					FileUtils.deleteDirectory(resetFolder);
+					BaseFileUtils.deleteDirectory(resetFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting resets for " + name, e);
+				TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while deleting resets for %s", name), e);
 			}
 
 			try {
 				final @NotNull File backUpFolder = BackupCommand.BACKUP_FOLDER.resolve(name).toFile();
 				if (backUpFolder.exists() && backUpFolder.isDirectory()) {
-					FileUtils.deleteDirectory(backUpFolder);
+					BaseFileUtils.deleteDirectory(backUpFolder);
 				}
 			} catch (final @NotNull IOException e) {
-				TestUtils.getChatLogger().log(Level.SEVERE, "Error while deleting backups for " + name, e);
+				TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while deleting backups for %s", name), e);
 			}
 
 			return true;

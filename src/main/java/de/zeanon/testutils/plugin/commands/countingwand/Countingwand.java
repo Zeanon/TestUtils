@@ -21,10 +21,13 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Countingwand {
 
-	public final @NotNull ItemStack WAND_ITEM = new ItemStack(Material.STICK);
-	private final @NotNull Map<String, Pair<Region.Point, Region.Point>> selections = new HashMap<>();
+	public final @NotNull ItemStack WAND_ITEM;
+	private final @NotNull Map<String, Pair<Region.Point, Region.Point>> selections;
 
 	static {
+		selections = new HashMap<>();
+		WAND_ITEM = new ItemStack(Material.STICK);
+
 		Countingwand.WAND_ITEM.setAmount(1);
 		final @NotNull ItemMeta wandMeta = Objects.notNull(Countingwand.WAND_ITEM.getItemMeta());
 		wandMeta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.ITALIC + "Zollstock");

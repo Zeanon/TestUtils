@@ -20,7 +20,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class TestUtilsCommand extends SWCommand {
 
-	public static final @NotNull Path TESTAREA_FOLDER = de.zeanon.testutils.TestUtils.getPluginFolder().resolve("TestAreas");
+	public static final @NotNull Path TESTAREA_FOLDER;
+
+	static {
+		TESTAREA_FOLDER = de.zeanon.testutils.TestUtils.getPluginFolder().resolve("TestAreas");
+	}
 
 	public TestUtilsCommand() {
 		super(new Prefix("testutils"), "testutils", "tu");

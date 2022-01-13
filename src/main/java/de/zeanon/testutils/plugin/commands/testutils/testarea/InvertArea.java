@@ -56,7 +56,7 @@ public class InvertArea {
 		} catch (final @NotNull WorldEditException e) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "There has been an error, inverting the testarea on " + area + " side.");
-			TestUtils.getChatLogger().log(Level.SEVERE, "Error while inverting " + tempRegion.getName(), e);
+			TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while inverting %s", tempRegion.getName()), e);
 		}
 	}
 }

@@ -16,13 +16,15 @@
 ################################################################################################################
 
 
+# Defines the version of the plugin (mostly used to check whether the config needs to be updated)
 Plugin Version = ${project.version}
 
-# Define the maximum amount of undos possible for the "/tu undo" command
-Max History = 10
 
 # Define the amount of back commands someone can perform
 Max Back = 20
+
+# Define the maximum amount of undos possible for the "/tu undo" command
+Max History = 10
 
 # Listmax: The maximum amount of schematics per page to be shown.
 Listmax = 10
@@ -30,12 +32,7 @@ Listmax = 10
 # Space Lists: Should there be a blank line before each schem or folder page?
 Space Lists = true
 
-# Should the plugin automatically reload the Server after it got updated?
-# If you have PlugMan installed, it will only reload itself, not the whole server.
-# PlugMan: https://dev.bukkit.org/projects/plugman
-Automatic Reload = true
-
-
+# Define the parameters for the backups
 Backups {
     # Maximum amount of manual backups per player per region(0 means, no backups will be created).
     manual = 10
@@ -49,3 +46,8 @@ Backups {
     # Maximum amount of backups per region created on a daily basis(0 means, no backups will be created).
     daily = 7
 }
+
+# Should the plugin automatically reload the Server after it got updated?
+# If you have PlugMan installed, it will only reload itself, not the whole server.
+# PlugMan: https://dev.bukkit.org/projects/plugman
+Automatic Reload = true

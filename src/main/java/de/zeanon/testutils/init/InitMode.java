@@ -33,7 +33,11 @@ import org.jetbrains.annotations.NotNull;
 public class InitMode {
 
 
-	private final @NotNull Set<SWCommand> registeredCommands = new HashSet<>();
+	private final @NotNull Set<SWCommand> registeredCommands;
+
+	static {
+		registeredCommands = new HashSet<>();
+	}
 
 	public void initPlugin() {
 		if (de.zeanon.testutils.TestUtils.getPluginManager().getPlugin("WorldGuard") != null
@@ -61,7 +65,20 @@ public class InitMode {
 			TestUtils.getChatLogger().info(">> Maybe try to delete the config file and reload the plugin.");
 			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
-			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
+			return;
+		}
+
+		try {
+			TestUtils.getChatLogger().info(">> Initializing default Configs...");
+			ConfigUtils.initDefaultConfigs();
+			TestUtils.getChatLogger().info(">> Default config is initialized successfully.");
+		} catch (final UncheckedIOException e) {
+			TestUtils.getChatLogger().info(">> Could not initialize default config.");
+			TestUtils.getChatLogger().info(">> Maybe try to reload the plugin.");
+			TestUtils.getChatLogger().info(">> Unloading Plugin...");
+
+			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 			return;
 		}
 
@@ -74,7 +91,7 @@ public class InitMode {
 			TestUtils.getChatLogger().info(">> Maybe try to delete the config file and reload the plugin.");
 			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
-			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 			return;
 		}
 
@@ -86,7 +103,7 @@ public class InitMode {
 			TestUtils.getChatLogger().info(">> Could not initialize Regions");
 			TestUtils.getChatLogger().info(">> Unloading Plugin...");
 
-			TestUtils.getPluginManager().disablePlugin(de.zeanon.testutils.TestUtils.getInstance());
+			TestUtils.getPluginManager().disablePlugin(TestUtils.getInstance());
 			return;
 		}
 

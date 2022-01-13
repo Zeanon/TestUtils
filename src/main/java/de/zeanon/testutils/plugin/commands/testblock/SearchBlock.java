@@ -47,7 +47,7 @@ public class SearchBlock {
 
 			final @Nullable java.util.List<File> list = BaseFileUtils.searchFilesOfType(folderPath.toFile(), deepSearch.confirm(), sequence, caseSensitive.confirm(), "schem");
 
-			final double count = list == null ? 0 : list.size();
+			final double count = list.size();
 			final int pageAmount = (int) (((count / listmax) % 1 != 0) ? (count / listmax) + 1 : (count / listmax));
 			final String baseFolder = mappedFile == null ? "default" : "default/" + mappedFile.getName();
 

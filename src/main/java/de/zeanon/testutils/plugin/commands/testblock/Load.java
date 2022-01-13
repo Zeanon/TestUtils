@@ -73,7 +73,7 @@ public class Load {
 			} catch (final IOException | WorldEditException e) {
 				p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 							  + ChatColor.RED + "There has been an error pasting '" + ChatColor.DARK_RED + testBlock.getKey() + ChatColor.RED + "' on " + area + " side.");
-				TestUtils.getChatLogger().log(Level.SEVERE, "Error while pasting " + testBlock.getKey() + " on " + area, e);
+				TestUtils.getChatLogger().log(Level.SEVERE, String.format("Error while pasting %s on %s", testBlock.getKey(), area), e);
 			}
 		}
 	}

@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,7 +68,7 @@ public class Save {
 					GlobalMessageUtils.sendBooleanMessage(ChatColor.RED + "Do you want to overwrite " + ChatColor.DARK_RED + name + ChatColor.RED + "?",
 														  "/backup save " + name + " -confirm",
 														  "/backup save " + name + " -deny", p);
-				} else if (files != null && files.size() >= ConfigUtils.getInt("Backups", "manual")) {
+				} else if (files.size() >= ConfigUtils.getInt("Backups", "manual")) {
 					final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 					if (toBeDeleted.isPresent()) {
 						CommandRequestUtils.addSaveBackupRequest(p.getUniqueId(), name, tempRegion.getName().substring(0, tempRegion.getName().length() - 6), toBeDeleted.get().getName());
@@ -104,7 +103,7 @@ public class Save {
 					if (checkedRequest.getValue() != null) {
 						try {
 							final @NotNull File toBeDeleted = BackupCommand.BACKUP_FOLDER.resolve(checkedRequest.getKey()).resolve("manual").resolve(p.getUniqueId().toString()).resolve(checkedRequest.getValue()).toFile();
-							FileUtils.deleteDirectory(toBeDeleted); //NOSONAR
+							BaseFileUtils.deleteDirectory(toBeDeleted); //NOSONAR
 							InternalFileUtils.deleteEmptyParent(toBeDeleted, BackupCommand.BACKUP_FOLDER.toFile());
 							p.sendMessage(BackupCommand.MESSAGE_HEAD
 										  + ChatColor.RED + "'" + ChatColor.DARK_RED + checkedRequest.getValue() + ChatColor.RED + "' was deleted.");
@@ -154,12 +153,12 @@ public class Save {
 				if (manualBackup.exists() && manualBackup.isDirectory()) {
 					try {
 						@Nullable List<File> files = BaseFileUtils.listFolders(manualBackup);
-						while (files != null && files.size() > ConfigUtils.getInt("Backups", "manual")) {
+						while (files.size() > ConfigUtils.getInt("Backups", "manual")) {
 							final @NotNull Optional<File> toBeDeleted = files.stream().min(Comparator.comparingLong(File::lastModified));
 							if (toBeDeleted.isPresent()) {
 								p.sendMessage(BackupCommand.MESSAGE_HEAD
 											  + ChatColor.RED + "You have more than " + ConfigUtils.getInt("Backups", "manual") + " backups, deleting '" + ChatColor.DARK_RED + toBeDeleted.get().getName() + ChatColor.RED + "' due to it being the oldest."); //NOSONAR
-								FileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
+								BaseFileUtils.deleteDirectory(toBeDeleted.get()); //NOSONAR
 								InternalFileUtils.deleteEmptyParent(toBeDeleted.get(), BackupCommand.BACKUP_FOLDER.toFile());
 							}
 							files = BaseFileUtils.listFolders(manualBackup);
