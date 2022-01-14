@@ -40,7 +40,7 @@
         <plugin.depends></plugin.depends>
         <plugin.softdepends>[ WorldEdit, FastAsyncWorldEdit, WorldGuard, PlugMan ]</plugin.softdepends>
 
-        <storagemanager.version>1.1.104</storagemanager.version>
+        <storagemanager.version>1.1.105</storagemanager.version>
         <storagemanager.core.version>${storagemanager.version}</storagemanager.core.version>
         <storagemanager.thunderfile.version>${storagemanager.version}</storagemanager.thunderfile.version>
         <storagemanager.jsonfile.version>${storagemanager.version}</storagemanager.jsonfile.version>
