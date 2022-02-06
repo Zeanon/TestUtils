@@ -32,8 +32,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class ResetArea {
 
-	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
-		if (regionSide == null) {
+	public void execute(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		if (regionSide == RegionSide.NONE) {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion oppositeRegion = TestAreaUtils.getOppositeRegion(p);
 

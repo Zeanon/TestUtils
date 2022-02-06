@@ -29,8 +29,13 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class ReplaceArea {
 
-	public void execute(final @Nullable RegionSide regionSide, final @NotNull Material source, final @NotNull Material destination, final @NotNull Player p) {
-		ReplaceArea.replaceArea(p, TestAreaUtils.getRegion(p, regionSide), TestAreaUtils.getOppositeRegion(p, regionSide), regionSide == null ? "your" : regionSide.getName(), source, destination);
+	public void execute(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull Material source, final @NotNull Material destination) {
+		ReplaceArea.replaceArea(p,
+								TestAreaUtils.getRegion(p, regionSide),
+								TestAreaUtils.getOppositeRegion(p, regionSide),
+								regionSide == RegionSide.NONE ? "your" : regionSide.getName(),
+								source,
+								destination);
 
 		final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p, regionSide);
 		final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p, regionSide);
@@ -53,7 +58,7 @@ public class ReplaceArea {
 							  + source
 							  + ChatColor.RED
 							  + " on "
-							  + (regionSide == null ? "your" : regionSide.getName())
+							  + (regionSide == RegionSide.NONE ? "your" : regionSide.getName())
 							  + " side due to '"
 							  + ChatColor.DARK_RED
 							  + source
@@ -74,7 +79,7 @@ public class ReplaceArea {
 							  + destination
 							  + ChatColor.RED
 							  + " on "
-							  + (regionSide == null ? "your" : regionSide.getName())
+							  + (regionSide == RegionSide.NONE ? "your" : regionSide.getName())
 							  + " side due to '"
 							  + ChatColor.DARK_RED
 							  + destination
@@ -83,7 +88,7 @@ public class ReplaceArea {
 				return;
 			}
 
-			if (regionSide == null) {
+			if (regionSide == RegionSide.NONE) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(TestUtils.getInstance(), () -> {
 				}, 5);
 				final @NotNull CuboidRegion otherCuboidRegion = new CuboidRegion(bukkitWorld, otherRegion.getMinimumPoint().toBlockVector3(), otherRegion.getMaximumPoint().toBlockVector3());
@@ -170,7 +175,7 @@ public class ReplaceArea {
 						  + source
 						  + ChatColor.RED
 						  + "'s on "
-						  + (regionSide == null ? "your" : regionSide.getName())
+						  + (regionSide == RegionSide.NONE ? "your" : regionSide.getName())
 						  + " side to '"
 						  + ChatColor.DARK_RED
 						  + destination

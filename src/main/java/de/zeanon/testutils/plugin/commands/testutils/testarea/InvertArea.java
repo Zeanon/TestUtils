@@ -27,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class InvertArea {
 
-	public void execute(final @Nullable RegionSide regionSide, final @NotNull Player p) {
-		if (regionSide == null) {
+	public void execute(final @NotNull Player p, final @NotNull RegionSide regionSide) {
+		if (regionSide == RegionSide.NONE) {
 			InvertArea.invertArea(p, TestAreaUtils.getOppositeRegion(p), "the other");
 		} else {
 			InvertArea.invertArea(p, TestAreaUtils.getRegion(p, regionSide), regionSide.getName());

@@ -28,7 +28,7 @@ public class Warp {
 		backLocations = new HashMap<>();
 	}
 
-	public void execute(final @NotNull AreaName name, final @NotNull Player p) {
+	public void execute(final @NotNull Player p, final @NotNull AreaName name) {
 		if (TestAreaUtils.illegalName(name.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Area '" + name.getName() + "' resolution error: Name is not allowed.");

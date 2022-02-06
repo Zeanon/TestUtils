@@ -26,20 +26,16 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Count {
 
-	public void execute(final @NotNull Material material, final @Nullable RegionSide regionSide, final @NotNull Player p) {
+	public void execute(final @NotNull Player p, final @NotNull Material material, final @NotNull RegionSide regionSide) {
 		final @Nullable DefinedRegion region = TestAreaUtils.getRegion(p, regionSide);
-		if (regionSide == null) {
-			if (region == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				Count.count(p, region, "your", material);
-			}
+		if (region == null) {
+			GlobalMessageUtils.sendNotApplicableRegion(p);
+			return;
+		}
+		if (regionSide == RegionSide.NONE) {
+			Count.count(p, region, "your", material);
 		} else {
-			if (region == null) {
-				GlobalMessageUtils.sendNotApplicableRegion(p);
-			} else {
-				Count.count(p, region, regionSide.getName(), material);
-			}
+			Count.count(p, region, regionSide.getName(), material);
 		}
 	}
 

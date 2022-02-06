@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -47,9 +46,13 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Backup extends BukkitRunnable {
 
 	@Getter
-	private static final @NotNull DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
-	protected final @NotNull BackupMode sequence;
+	private static final @NotNull DateTimeFormatter formatter;
 
+	static {
+		formatter = DateTimeFormatter.ofPattern("HH-mm-ss'#'dd-MM-yyyy");
+	}
+
+	protected final @NotNull BackupMode sequence;
 
 	@Override
 	public void run() {
@@ -72,37 +75,37 @@ public abstract class Backup extends BukkitRunnable {
 			final @NotNull World[] tempWorld = new World[1];
 			final @NotNull RegionStorage[] regionStorage = new RegionStorage[1];
 
-			final @NotNull Iterator<RegionStorage> regions = Objects.notNull(BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile()))
-																	.stream()
-																	.map(regionFolder -> new RegionStorage(RegionManager.getDefinedRegion(regionFolder.getName() + "_south"), RegionManager.getDefinedRegion(regionFolder.getName() + "_north"), regionFolder))
-																	.filter(internalRegionStorage -> {
-																		if (internalRegionStorage.southRegion != null && internalRegionStorage.northRegion != null) {
-																			return true;
-																		} else {
-																			new BukkitRunnable() {
-																				@Override
-																				public void run() {
-																					try {
-																						backupFolder[0] = BackupCommand.BACKUP_FOLDER.resolve(internalRegionStorage.regionFolder.getName()).toFile();
-																						if (internalRegionStorage.regionFolder.exists() && internalRegionStorage.regionFolder.isDirectory()) {
-																							FileUtils.deleteDirectory(internalRegionStorage.regionFolder);
-																							InternalFileUtils.deleteEmptyParent(internalRegionStorage.regionFolder, TestUtilsCommand.TESTAREA_FOLDER.toFile());
-																						}
+			final @NotNull Iterator<RegionStorage> regions = BaseFileUtils.listFolders(TestUtilsCommand.TESTAREA_FOLDER.toRealPath().toFile())
+																		  .stream()
+																		  .map(regionFolder -> new RegionStorage(RegionManager.getDefinedRegion(regionFolder.getName() + "_south"), RegionManager.getDefinedRegion(regionFolder.getName() + "_north"), regionFolder))
+																		  .filter(internalRegionStorage -> {
+																			  if (internalRegionStorage.southRegion != null && internalRegionStorage.northRegion != null) {
+																				  return true;
+																			  } else {
+																				  new BukkitRunnable() {
+																					  @Override
+																					  public void run() {
+																						  try {
+																							  backupFolder[0] = BackupCommand.BACKUP_FOLDER.resolve(internalRegionStorage.regionFolder.getName()).toFile();
+																							  if (internalRegionStorage.regionFolder.exists() && internalRegionStorage.regionFolder.isDirectory()) {
+																								  BaseFileUtils.deleteDirectory(internalRegionStorage.regionFolder);
+																								  InternalFileUtils.deleteEmptyParent(internalRegionStorage.regionFolder, TestUtilsCommand.TESTAREA_FOLDER.toFile());
+																							  }
 
-																						if (backupFolder[0].exists() && backupFolder[0].isDirectory()) {
-																							FileUtils.deleteDirectory(backupFolder[0]);
-																							InternalFileUtils.deleteEmptyParent(backupFolder[0], BackupCommand.BACKUP_FOLDER.toFile());
-																						}
-																					} catch (final @NotNull IOException e) {
-																						throw new UncheckedIOException(e);
-																					}
-																				}
-																			}.runTaskAsynchronously(TestUtils.getInstance());
-																			return false;
-																		}
-																	})
-																	.filter(internalRegionStorage -> Backup.this.doBackup(internalRegionStorage.southRegion, internalRegionStorage.northRegion))
-																	.iterator();
+																							  if (backupFolder[0].exists() && backupFolder[0].isDirectory()) {
+																								  BaseFileUtils.deleteDirectory(backupFolder[0]);
+																								  InternalFileUtils.deleteEmptyParent(backupFolder[0], BackupCommand.BACKUP_FOLDER.toFile());
+																							  }
+																						  } catch (final @NotNull IOException e) {
+																							  throw new UncheckedIOException(e);
+																						  }
+																					  }
+																				  }.runTaskAsynchronously(TestUtils.getInstance());
+																				  return false;
+																			  }
+																		  })
+																		  .filter(internalRegionStorage -> Backup.this.doBackup(internalRegionStorage.southRegion, internalRegionStorage.northRegion))
+																		  .iterator();
 			new BukkitRunnable() {
 				@Override
 				public void run() {

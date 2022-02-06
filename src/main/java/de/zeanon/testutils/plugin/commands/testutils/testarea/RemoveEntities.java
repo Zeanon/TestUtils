@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RemoveEntities {
 
-	public void execute(final @NotNull Player p, final @Nullable RegionSide regionSide, final boolean global) {
+	public void execute(final @NotNull Player p, final @NotNull RegionSide regionSide, final boolean global) {
 		if (global) {
 			final @NotNull GlobalRegion globalRegion = RegionManager.getGlobalRegion(p.getWorld());
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
@@ -26,7 +26,7 @@ public class RemoveEntities {
 			return;
 		}
 
-		if (regionSide == null) {
+		if (regionSide == RegionSide.NONE) {
 			final @Nullable DefinedRegion tempRegion = TestAreaUtils.getRegion(p);
 			final @Nullable DefinedRegion otherRegion = TestAreaUtils.getOppositeRegion(p);
 			if (tempRegion == null || otherRegion == null) {

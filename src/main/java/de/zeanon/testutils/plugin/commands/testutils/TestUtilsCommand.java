@@ -97,17 +97,17 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register(value = "count", description = "Count the amount of the given blocks in the region you are currently standing in.")
 	public void oneArgCount(final @NotNull Player p, final @NotNull Material material) {
-		Count.execute(material, null, p);
+		Count.execute(p, material, RegionSide.NONE);
 	}
 
 	@Register("count")
 	public void twoArgsCount(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull Material material) {
-		Count.execute(material, regionSide, p);
+		Count.execute(p, material, regionSide);
 	}
 
 	@Register("count")
 	public void twoArgsCount(final @NotNull Player p, final @NotNull Material material, final @NotNull RegionSide regionSide) {
-		Count.execute(material, regionSide, p);
+		Count.execute(p, material, regionSide);
 	}
 
 
@@ -119,69 +119,69 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("resetarea")
 	public void noArgsResetArea(final @NotNull Player p) {
-		ResetArea.execute(null, p);
+		ResetArea.execute(p, RegionSide.NONE);
 	}
 
 	@Register("resetarea")
 	public void oneArgResetArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		ResetArea.execute(regionSide, p);
+		ResetArea.execute(p, regionSide);
 	}
 
 
 	@Register("invarea")
 	@Register("invertarea")
 	public void noArgsInvertArea(final @NotNull Player p) {
-		InvertArea.execute(null, p);
+		InvertArea.execute(p, RegionSide.NONE);
 	}
 
 	@Register("invarea")
 	@Register("invertarea")
 	public void oneArgInvertArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		InvertArea.execute(regionSide, p);
+		InvertArea.execute(p, regionSide);
 	}
 
 
 	@Register("reparea")
 	@Register("replacearea")
 	public void noArgsReplaceArea(final @NotNull Player p) {
-		ReplaceArea.execute(null, Material.OBSIDIAN, Material.TNT, p);
+		ReplaceArea.execute(p, RegionSide.NONE, Material.OBSIDIAN, Material.TNT);
 	}
 
 	@Register("reparea")
 	@Register("replacearea")
 	public void oneArgReplaceArea(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		ReplaceArea.execute(regionSide, Material.OBSIDIAN, Material.TNT, p);
+		ReplaceArea.execute(p, regionSide, Material.OBSIDIAN, Material.TNT);
 	}
 
 	@Register("reparea")
 	@Register("replacearea")
 	public void twoArgsReplaceArea(final @NotNull Player p, final @NotNull Material source, final @NotNull Material destination) {
-		ReplaceArea.execute(null, source, destination, p);
+		ReplaceArea.execute(p, RegionSide.NONE, source, destination);
 	}
 
 	@Register("reparea")
 	@Register("replacearea")
 	public void threeArgsReplaceArea(final @NotNull Player p, final @NotNull RegionSide regionSide, final @NotNull Material source, final @NotNull Material destination) {
-		ReplaceArea.execute(regionSide, source, destination, p);
+		ReplaceArea.execute(p, regionSide, source, destination);
 	}
 
 	@Register("reparea")
 	@Register("replacearea")
 	public void threeArgsReplaceArea(final @NotNull Player p, final @NotNull Material source, final @NotNull Material destination, final @NotNull RegionSide regionSide) {
-		ReplaceArea.execute(regionSide, source, destination, p);
+		ReplaceArea.execute(p, regionSide, source, destination);
 	}
 
 
 	@Register("reptnt")
 	@Register("replacetnt")
 	public void noArgsReplaceTNT(final @NotNull Player p) {
-		ReplaceArea.execute(null, Material.TNT, Material.OBSIDIAN, p);
+		ReplaceArea.execute(p, RegionSide.NONE, Material.TNT, Material.OBSIDIAN);
 	}
 
 	@Register("reptnt")
 	@Register("replacetnt")
 	public void oneArgReplaceTNT(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		ReplaceArea.execute(regionSide, Material.TNT, Material.OBSIDIAN, p);
+		ReplaceArea.execute(p, regionSide, Material.TNT, Material.OBSIDIAN);
 	}
 
 
@@ -192,12 +192,12 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("registerarea")
 	public void noArgsRegisterArea(final @NotNull Player p) {
-		RegisterArea.execute(null, p);
+		RegisterArea.execute(p, null);
 	}
 
 	@Register("registerarea")
 	public void oneArgRegisterArea(final @NotNull Player p, final @NotNull AreaName areaName) {
-		RegisterArea.execute(areaName, p);
+		RegisterArea.execute(p, areaName);
 	}
 
 
@@ -210,7 +210,7 @@ public class TestUtilsCommand extends SWCommand {
 	@Register("delarea")
 	@Register("deletearea")
 	public void oneArgDeleteArea(final @NotNull Player p, final @NotNull AreaName areaName) {
-		DeleteArea.execute(areaName, p);
+		DeleteArea.execute(p, areaName);
 	}
 
 
@@ -221,7 +221,7 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("warp")
 	public void oneArgWarp(final @NotNull Player p, final @NotNull AreaName areaName) {
-		Warp.execute(areaName, p);
+		Warp.execute(p, areaName);
 	}
 
 
@@ -238,17 +238,17 @@ public class TestUtilsCommand extends SWCommand {
 
 	@Register("removeentities")
 	public void noArgsRemoveEntities(final @NotNull Player p) {
-		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, null, false);
+		RemoveEntities.execute(p, RegionSide.NONE, false);
 	}
 
 	@Register("removeentities")
 	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull RegionSide regionSide) {
-		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, regionSide, false);
+		RemoveEntities.execute(p, regionSide, false);
 	}
 
 	@Register("removeentities")
 	public void oneArgRemoveEntities(final @NotNull Player p, final @NotNull GlobalToggle globalToggle) {
-		de.zeanon.testutils.plugin.commands.testutils.testarea.RemoveEntities.execute(p, null, true);
+		RemoveEntities.execute(p, RegionSide.NONE, true);
 	}
 
 

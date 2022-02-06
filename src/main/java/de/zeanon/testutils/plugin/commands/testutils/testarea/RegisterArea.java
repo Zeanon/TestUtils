@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class RegisterArea {
 
-	public void execute(final @Nullable AreaName name, final @NotNull Player p) {
+	public void execute(final @NotNull Player p, final @Nullable AreaName name) {
 		if (name != null && TestAreaUtils.illegalName(name.getName())) {
 			p.sendMessage(GlobalMessageUtils.MESSAGE_HEAD
 						  + ChatColor.RED + "Area '" + name.getName() + "' resolution error: Name is not allowed.");

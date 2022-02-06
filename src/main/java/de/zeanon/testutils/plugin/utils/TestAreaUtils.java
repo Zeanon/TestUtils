@@ -4,8 +4,10 @@ import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.RegionType;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -56,18 +58,14 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getRegion(final @NotNull Player p) {
-		final @NotNull List<DefinedRegion> regions = RegionManager.getApplicableRegions(p.getLocation())
-																  .stream().filter(region -> region.getType() == RegionType.TESTAREA)
-																  .collect(Collectors.toList());
-		if (regions.isEmpty()) {
-			return null;
-		} else {
-			return regions.get(0);
-		}
+		final @NotNull Optional<DefinedRegion> optionalRegion = RegionManager.getApplicableRegions(p.getLocation())
+																			 .stream().filter(region -> region.getType() == RegionType.TESTAREA)
+																			 .findFirst();
+		return optionalRegion.orElse(null);
 	}
 
 	public @Nullable DefinedRegion getRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
-		if (regionSide == null) {
+		if (regionSide == null || regionSide == RegionSide.NONE) {
 			return TestAreaUtils.getRegion(p);
 		} else {
 			switch (regionSide) {
@@ -100,7 +98,7 @@ public class TestAreaUtils {
 	}
 
 	public @Nullable DefinedRegion getOppositeRegion(final @NotNull Player p, final @Nullable RegionSide regionSide) {
-		if (regionSide == null) {
+		if (regionSide == null || regionSide == RegionSide.NONE) {
 			return TestAreaUtils.getOppositeRegion(p);
 		} else {
 			switch (regionSide) {
