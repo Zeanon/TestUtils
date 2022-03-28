@@ -69,7 +69,6 @@ public abstract class Backup extends BukkitRunnable {
 	public void execute() {
 		Backup.this.systemOutStart();
 		try {
-			final @NotNull String name = LocalDateTime.now().format(Backup.getFormatter());
 			final @NotNull File[] folder = new File[1];
 			final @NotNull File[] backupFolder = new File[1];
 			final @NotNull World[] tempWorld = new World[1];
@@ -117,7 +116,7 @@ public abstract class Backup extends BukkitRunnable {
 					regionStorage[0] = regions.next();
 					backupFolder[0] = BackupCommand.BACKUP_FOLDER.resolve(regionStorage[0].regionFolder.getName()).toFile();
 					tempWorld[0] = Objects.notNull(regionStorage[0].southRegion).getWorld();
-					folder[0] = BackupCommand.BACKUP_FOLDER.resolve(regionStorage[0].regionFolder.getName()).resolve(Backup.this.sequence.getPath(null)).resolve(name).toFile();
+					folder[0] = BackupCommand.BACKUP_FOLDER.resolve(regionStorage[0].regionFolder.getName()).resolve(Backup.this.sequence.getPath(null)).resolve(LocalDateTime.now().format(Backup.getFormatter())).toFile();
 
 					Backup.this.backupSide(tempWorld[0], regionStorage[0].southRegion, folder[0]);
 					regionStorage[0].southRegion.removeTag(Tag.CHANGED);

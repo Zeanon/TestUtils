@@ -5,7 +5,6 @@ import de.zeanon.storagemanagercore.internal.utility.basic.BaseFileUtils;
 import de.zeanon.storagemanagercore.internal.utility.basic.Objects;
 import de.zeanon.storagemanagercore.internal.utility.basic.Pair;
 import de.zeanon.testutils.TestUtils;
-import de.zeanon.testutils.plugin.commands.testblock.TestBlockCommand;
 import de.zeanon.testutils.plugin.utils.ConfigUtils;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.TestAreaUtils;
@@ -148,7 +147,7 @@ public class Search {
 				final int nextPage = page >= pageAmount ? 1 : page + 1;
 				final int previousPage = (page <= 1 ? pageAmount : page - 1);
 				if (pageAmount > 1) {
-					GlobalMessageUtils.sendScrollMessage(TestBlockCommand.MESSAGE_HEAD,
+					GlobalMessageUtils.sendScrollMessage(BackupCommand.MESSAGE_HEAD,
 														 "/backup " + (caseSensitive.confirm() ? " -c " : "") + (backupMode == BackupMode.NONE ? "" : " " + backupMode.getCommand() + " ") + (sequence == null ? "list " : "search " + sequence + " ") + nextPage,
 														 "/backup  " + (caseSensitive.confirm() ? " -c " : "") + (backupMode == BackupMode.NONE ? "" : " " + backupMode.getCommand() + " ") + (sequence == null ? "list " : "search " + sequence + " ") + previousPage,
 														 ChatColor.RED + "Page " + nextPage,
