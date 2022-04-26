@@ -194,6 +194,22 @@
                             <goal>install-file</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <id>install-steamedit</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>de.steamwar</groupId>
+                            <artifactId>steamedit</artifactId>
+                            <version>1.0.0</version>
+                            <file>src/main/resources/dependencies/SteamEdit.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -291,12 +307,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-
-        <!-- WorldEdit Repo -->
-        <repository>
-            <id>enginehub-maven</id>
-            <url>https://maven.enginehub.org/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -304,7 +314,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>storagemanagercore</artifactId>
-            <version>1.1.104</version>
+            <version>${storagemanager.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -312,7 +322,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>thunderfilemanager</artifactId>
-            <version>1.1.104</version>
+            <version>${storagemanager.thunderfile.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -320,7 +330,7 @@
         <dependency>
             <groupId>de.zeanon</groupId>
             <artifactId>jsonfilemanager</artifactId>
-            <version>1.1.104</version>
+            <version>${storagemanager.jsonfile.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -340,11 +350,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- WorldEdit API -->
+        <!-- SteamEdit -->
         <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-bukkit</artifactId>
-            <version>7.1.0-SNAPSHOT</version>
+            <groupId>de.steamwar</groupId>
+            <artifactId>steamedit</artifactId>
+            <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
 
