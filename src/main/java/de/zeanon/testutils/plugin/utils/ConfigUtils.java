@@ -13,15 +13,16 @@ import de.zeanon.thunderfilemanager.internal.base.cache.filedata.ThunderFileData
 import de.zeanon.thunderfilemanager.internal.base.exceptions.ThunderException;
 import de.zeanon.thunderfilemanager.internal.files.config.ThunderConfig;
 import de.zeanon.thunderfilemanager.internal.utility.parser.ThunderFileParser;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.List;
-import java.util.logging.Level;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.List;
+import java.util.logging.Level;
 
 
 @UtilityClass
@@ -43,7 +44,6 @@ public class ConfigUtils {
 												   .commentSetting(Comment.PRESERVE)
 												   .concurrentData(true)
 												   .create();
-			System.out.println(ConfigUtils.config.fileData().size());
 
 			TestUtils.getChatLogger().info(">> [Configs] >> 'config.tf' loaded.");
 		} catch (final @NotNull UncheckedIOException | FileParseException e) {

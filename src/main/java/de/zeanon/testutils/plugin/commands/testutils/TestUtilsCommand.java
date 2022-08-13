@@ -2,6 +2,7 @@ package de.zeanon.testutils.plugin.commands.testutils;
 
 import de.steamwar.commandframework.SWCommand;
 import de.steamwar.commandframework.TypeMapper;
+import de.zeanon.testutils.TestUtils;
 import de.zeanon.testutils.plugin.commands.testutils.testarea.*;
 import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.testutils.plugin.utils.GlobalRequestUtils;
@@ -9,13 +10,14 @@ import de.zeanon.testutils.plugin.utils.enums.AreaName;
 import de.zeanon.testutils.plugin.utils.enums.CommandConfirmation;
 import de.zeanon.testutils.plugin.utils.enums.GlobalToggle;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
-import java.nio.file.Path;
-import java.util.Arrays;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
+import java.util.Arrays;
 
 
 public class TestUtilsCommand extends SWCommand {
@@ -27,7 +29,7 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 	public TestUtilsCommand() {
-		super(new Prefix("testutils"), "testutils", "tu");
+		super(TestUtils.getInstance(), new Prefix("testutils"), "testutils", "tu");
 	}
 
 	public static TypeMapper<CommandConfirmation> getCommandConfirmationMapper() {
@@ -56,7 +58,18 @@ public class TestUtilsCommand extends SWCommand {
 	}
 
 
-	@Register(value = {"update"}, help = true, description = "Help me.")
+	@Register(value = "help", description = "Help me.")
+	public void help(final @NotNull Player p) {
+		Help.execute(p);
+	}
+
+	@Register(help = true, description = "Help me.")
+	public void def(final @NotNull Player p, final @NotNull String... args) {
+		Help.execute(p);
+	}
+
+
+	@Register(value = "update", help = true, description = "Help me.")
 	public void updateHelp(final @NotNull Player p, final @NotNull String... args) {
 		Update.sendUpdateUsage(p);
 	}

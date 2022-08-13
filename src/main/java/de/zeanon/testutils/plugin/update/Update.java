@@ -10,17 +10,18 @@ import de.zeanon.testutils.plugin.utils.GlobalMessageUtils;
 import de.zeanon.thunderfilemanager.internal.base.cache.filedata.ThunderFileData;
 import de.zeanon.thunderfilemanager.internal.base.exceptions.ThunderException;
 import de.zeanon.thunderfilemanager.internal.utility.parser.ThunderFileParser;
+import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
-import lombok.experimental.UtilityClass;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 
 @SuppressWarnings("unused")
@@ -112,7 +113,7 @@ public class Update {
 	}
 
 	public boolean checkForUpdate() {
-		return !(TestUtils.getInstance().getDescription().getVersion()).equalsIgnoreCase(Update.getGithubVersionTag());
+		return !("v" + TestUtils.getInstance().getDescription().getVersion()).equalsIgnoreCase(Update.getGithubVersionTag());
 	}
 
 	private String getGithubVersionTag() {
@@ -120,7 +121,7 @@ public class Update {
 			final HttpURLConnection urlConnect = (HttpURLConnection) new URL(Update.RELEASE_URL).openConnection();
 			urlConnect.setInstanceFollowRedirects(false);
 			urlConnect.getResponseCode();
-			return "v" + urlConnect.getHeaderField("Location").replaceFirst(".*/", "");
+			return urlConnect.getHeaderField("Location").replaceFirst(".*/", "");
 		} catch (final IOException e) {
 			TestUtils.getChatLogger().log(Level.SEVERE, "Error while getting newest version tag from Github", e);
 			return null;

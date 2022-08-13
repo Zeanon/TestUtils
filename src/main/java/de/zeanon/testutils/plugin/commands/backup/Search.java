@@ -11,16 +11,16 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.CaseSensitive;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.io.File;
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 
 @UtilityClass
@@ -100,7 +100,7 @@ public class Search {
 				}
 			}
 
-			files.sort(Comparator.comparingLong(file -> Objects.notNull(file.getKey()).lastModified()));
+			files.sort((a, b) -> Long.compare(Objects.notNull(b.getKey()).lastModified(), Objects.notNull(a.getKey()).lastModified()));
 
 			final double count = files.size();
 			final int pageAmount = (int) (((count / listmax) % 1 != 0) ? (count / listmax) + 1 : (count / listmax));

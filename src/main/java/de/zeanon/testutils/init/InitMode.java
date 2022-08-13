@@ -20,13 +20,14 @@ import de.zeanon.testutils.plugin.utils.ScoreBoard;
 import de.zeanon.testutils.regionsystem.RegionListener;
 import de.zeanon.testutils.regionsystem.RegionManager;
 import de.zeanon.testutils.regionsystem.commands.RegionCommand;
+import lombok.experimental.UtilityClass;
+import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.experimental.UtilityClass;
-import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
 
 
 @UtilityClass
@@ -107,9 +108,6 @@ public class InitMode {
 			return;
 		}
 
-
-		InitMode.registerCommands();
-
 		InitMode.registerEvents(new EventListener());
 		InitMode.registerEvents(new RegionListener());
 
@@ -118,6 +116,9 @@ public class InitMode {
 
 
 		BackupScheduler.initialize();
+
+
+		InitMode.registerCommands();
 	}
 
 	public void registerCommands() {

@@ -12,17 +12,18 @@ import de.zeanon.testutils.plugin.utils.enums.BackupMode;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
 import de.zeanon.testutils.plugin.utils.enums.RegionSide;
 import de.zeanon.testutils.regionsystem.region.DefinedRegion;
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Optional;
-import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Optional;
+import java.util.logging.Level;
 
 
 @UtilityClass
@@ -93,7 +94,7 @@ public class Load {
 
 							p.sendMessage(BackupCommand.MESSAGE_HEAD
 										  + ChatColor.RED + "You pasted the " + (mappedFile == null ? "latest " + (backupMode != BackupMode.NONE ? backupMode + " " : "") + "backup" : "backup '" + ChatColor.DARK_RED + mappedFile + ChatColor.RED + "'") + " for your Testarea.");
-						}, 5000);
+						}, 5);
 					}
 				} catch (final WorldEditException | IOException | RuntimeWorldeditException | UncheckedIOException e) {
 					TestUtils.getChatLogger().log(Level.SEVERE, "Error while pasting a backup", e);
