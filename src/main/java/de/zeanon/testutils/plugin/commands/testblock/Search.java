@@ -9,16 +9,17 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CaseSensitive;
 import de.zeanon.testutils.plugin.utils.enums.DeepSearch;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 
 @UtilityClass
@@ -90,8 +91,8 @@ public class Search {
 				final int previousPage = (page <= 1 ? pageAmount : page - 1);
 				if (pageAmount > 1) {
 					GlobalMessageUtils.sendScrollMessage(TestBlockCommand.MESSAGE_HEAD,
-														 "/tb " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + (sequence == null ? "list " : "search " + sequence + " ") + nextPage,
-														 "/tb " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + (sequence == null ? "list " : "search " + sequence + " ") + previousPage,
+														 "/tb " + (sequence == null ? "list " + (deepSearch.confirm() ? " -d " : "") : "search " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + sequence + " ") + nextPage,
+														 "/tb " + (sequence == null ? "list " + (deepSearch.confirm() ? " -d " : "") : "search " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + sequence + " ") + previousPage,
 														 ChatColor.RED + "Page " + nextPage,
 														 ChatColor.RED + "Page " + previousPage, p,
 														 ChatColor.DARK_RED);
@@ -189,12 +190,12 @@ public class Search {
 					GlobalMessageUtils.sendCommandMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + (id + 1) + ChatColor.DARK_GRAY + "]: ",
 														  ChatColor.DARK_RED + name + ChatColor.DARK_GRAY + " [" + ChatColor.GRAY + shortenedRelativePath + ChatColor.DARK_GRAY + "]",
 														  ChatColor.RED + "paste " + ChatColor.DARK_RED + path + ChatColor.RED + " on the opposite side.",
-														  "/tb " + path, p);
+														  "/tb load " + path, p);
 				} else {
 					GlobalMessageUtils.sendCommandMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + (id + 1) + ChatColor.DARK_GRAY + "]: ",
 														  ChatColor.DARK_RED + name,
 														  ChatColor.RED + "paste " + ChatColor.DARK_RED + path + ChatColor.RED + " on the opposite side.",
-														  "/tb " + path, p);
+														  "/tb load " + path, p);
 				}
 			}
 			return false;

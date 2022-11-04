@@ -9,16 +9,17 @@ import de.zeanon.testutils.plugin.utils.TestAreaUtils;
 import de.zeanon.testutils.plugin.utils.enums.CaseSensitive;
 import de.zeanon.testutils.plugin.utils.enums.DeepSearch;
 import de.zeanon.testutils.plugin.utils.enums.MappedFile;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 
 @UtilityClass
@@ -90,8 +91,8 @@ public class SearchFolder {
 				final int previousPage = (page <= 1 ? pageAmount : page - 1);
 				if (pageAmount > 1) {
 					GlobalMessageUtils.sendScrollMessage(TestBlockCommand.MESSAGE_HEAD,
-														 "/tb list " + nextPage,
-														 "/tb list " + previousPage,
+														 "/tb " + (sequence == null ? "listfolders " + (deepSearch.confirm() ? " -d " : "") : "searchfolder " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + sequence + " ") + nextPage,
+														 "/tb " + (sequence == null ? "listfolders " + (deepSearch.confirm() ? " -d " : "") : "searchfolder " + (caseSensitive.confirm() ? " -c " : "") + (deepSearch.confirm() ? " -d " : "") + sequence + " ") + previousPage,
 														 ChatColor.DARK_PURPLE + "Page " + nextPage,
 														 ChatColor.DARK_PURPLE + "Page " + previousPage, p,
 														 ChatColor.DARK_RED);
